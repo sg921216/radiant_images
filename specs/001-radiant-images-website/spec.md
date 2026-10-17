@@ -8,6 +8,16 @@
 
 **Input**: User description: "Radiant Images MVP Technical Feature Specification — a photography business website for Rebekah (owner) offering maternity, newborn, and family photo shoots, with public information pages, a responsive portfolio gallery, pricing (printable + PDF), FAQs, a CAPTCHA-protected inquiry form that emails a configurable recipient, and an authenticated owner administration area for gallery, banner scheduling, and contact-form configuration."
 
+## Clarifications
+
+### Session 2026-10-17
+
+- Q: How do visitors reach pricing, given the header has only six fixed links? → A: Pricing is a section inside each service page (no separate pricing page); print and PDF from any service page cover all three shoot types.
+- Q: How is pricing structured for each shoot type? → A: Multiple named packages per shoot type, each with a name, price, description, and list of inclusions; no add-ons for MVP.
+- Q: Do gallery images appear only on the home page, or also on service pages? → A: Each image is tagged with a shoot type (Maternity, Newborn, Family, or General); the home gallery shows all images and each service page shows the images tagged for it.
+- Q: Which account does Rebekah use to sign in to Admin? → A: Sign in with Google; authorization is granted only to allow-listed Google account email address(es), initially Rebekah's.
+- Q: What address are client emails and inquiry notifications sent from? → A: An owner-configurable sender address (no custom domain exists yet); it will be set to Rebekah's business Gmail address once created.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Discover Services and Submit an Inquiry (Priority: P1)
@@ -35,37 +45,38 @@ A prospective client (typically an expecting mother or a parent) lands on the Ra
 
 ### User Story 2 - Review, Print, and Download Pricing (Priority: P2)
 
-A visitor who is comparing photographers wants to see what Radiant Images charges for maternity, newborn, and family sessions. They open the pricing page, read the packages for all three shoot types, and either print the page or download a PDF to share with a partner or keep for later. From the pricing page they can select **Book Now** to start an inquiry.
+A visitor who is comparing photographers wants to see what Radiant Images charges. On any service page (Maternity, Newborn, or Family) they scroll to that page's Pricing section, read the packages for that shoot type, and can either print or download a PDF — both of which contain the full pricing schedule for all three shoot types so they can share or keep it. From the Pricing section they can select **Book Now** to start an inquiry.
 
 **Why this priority**: Pricing transparency is a primary decision input for clients and a frequent pre-inquiry question; the print/PDF capability was explicitly requested. It is secondary only because inquiries can still be made without it.
 
-**Independent Test**: Can be tested by publishing pricing content, opening the pricing page, verifying all three shoot types are covered, invoking print and confirming a readable printed layout, and invoking PDF download and confirming the downloaded document contains the same pricing.
+**Independent Test**: Can be tested by publishing pricing content, opening each service page and verifying its Pricing section shows that shoot type's pricing, invoking print and confirming a readable printed schedule covering all three shoot types, and invoking PDF download and confirming the downloaded document contains the same full schedule.
 
 **Acceptance Scenarios**:
 
-1. **Given** pricing is published, **When** a visitor opens the pricing page, **Then** pricing information is shown for maternity, newborn, and family sessions.
-2. **Given** the pricing page is open, **When** the visitor invokes Print, **Then** a readable, print-formatted pricing schedule is produced without navigation chrome.
-3. **Given** the pricing page is open, **When** the visitor invokes Download PDF, **Then** a PDF containing the same pricing schedule as the web page is downloaded.
-4. **Given** PDF generation fails, **When** the visitor invokes Download PDF, **Then** a clear error is shown and the web pricing page and Print action remain available.
-5. **Given** the pricing page is open, **When** the visitor selects **Book Now**, **Then** the Contact page opens.
+1. **Given** pricing is published, **When** a visitor opens the Maternity, Newborn, or Family page, **Then** a Pricing section on that page shows the pricing for that shoot type, with Print and Download PDF actions.
+2. **Given** a visitor is on any service page, **When** they invoke Print, **Then** a readable, print-formatted pricing schedule covering all three shoot types is produced without navigation chrome or other page content.
+3. **Given** a visitor is on any service page, **When** they invoke Download PDF, **Then** a PDF containing the full pricing schedule for all three shoot types, matching the published web pricing, is downloaded.
+4. **Given** PDF generation fails, **When** the visitor invokes Download PDF, **Then** a clear error is shown and the on-page Pricing section and Print action remain available.
+5. **Given** a visitor is in a Pricing section, **When** they select **Book Now**, **Then** the Contact page opens.
 
 ---
 
 ### User Story 3 - Owner Manages the Gallery (Priority: P3)
 
-Rebekah signs in through the OAuth login at the private admin route, opens the gallery management section, uploads new session images, removes images she no longer wants shown, and optionally reorders them. The public home page gallery reflects her changes.
+Rebekah signs in through the OAuth login at the private admin route, opens the gallery management section, uploads new session images, tags each with a shoot type (Maternity, Newborn, Family, or General), removes images she no longer wants shown, and optionally reorders them. The public home page gallery shows all images; each service page shows the images tagged for that shoot type.
 
 **Why this priority**: Fresh portfolio imagery is central to a photography business and the brief explicitly requires that Rebekah can add/remove images "at any time" without developer involvement. It depends on the authenticated admin area existing.
 
-**Independent Test**: Can be tested by signing in as the owner, adding an image, confirming it appears on the public home page, removing it, and confirming it disappears; plus confirming an unauthenticated or non-owner user cannot reach the gallery controls.
+**Independent Test**: Can be tested by signing in as the owner, adding an image tagged "Newborn", confirming it appears on the public home page and on the Newborn page but not on Maternity or Family, removing it, and confirming it disappears from both; plus confirming an unauthenticated or non-owner user cannot reach the gallery controls.
 
 **Acceptance Scenarios**:
 
-1. **Given** Rebekah is authenticated and authorized, **When** she adds a valid image, **Then** the image appears in the public gallery within the publishing window (see SC-005).
-2. **Given** Rebekah is authenticated and authorized, **When** she removes an image, **Then** it no longer appears in the public gallery.
+1. **Given** Rebekah is authenticated and authorized, **When** she adds a valid image with a shoot-type tag, **Then** the image appears in the public home gallery and in the tagged service page's gallery within the publishing window (see SC-005).
+2. **Given** Rebekah is authenticated and authorized, **When** she removes an image or changes its tag, **Then** the home gallery and the affected service page galleries reflect the change.
 3. **Given** an image upload fails (file too large, unsupported type, or save error), **When** the failure occurs, **Then** the previously published gallery is unchanged and Rebekah sees an actionable error.
 4. **Given** the gallery has zero images, **When** a visitor opens Home, **Then** the page renders cleanly with a friendly placeholder instead of a broken or empty area.
-5. **Given** the gallery has one image or many (up to the configured maximum), **When** a visitor opens Home, **Then** the gallery renders responsively.
+5. **Given** a service page has no images tagged for it, **When** a visitor opens that page, **Then** the page's gallery area is omitted or shows a friendly placeholder, and the rest of the page is unaffected.
+6. **Given** the gallery has one image or many (up to the configured maximum), **When** a visitor opens Home or a service page, **Then** the gallery renders responsively.
 
 ---
 
@@ -115,7 +126,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 
 1. **Given** Rebekah is authenticated and authorized, **When** she opens Admin, **Then** the Email Templates, Session Checklist, and Client Questionnaire sections are present and navigable.
 2. **Given** Rebekah is in Admin, **When** she creates a client record (name, email, optional phone, shoot type, optional session date), **Then** the client appears in her client list and can be opened.
-3. **Given** Rebekah has at least one saved email template, **When** she selects a client, chooses a template, optionally edits the message, and sends, **Then** the email is delivered to the client's address from the business sender identity and the send is recorded on the client's history.
+3. **Given** Rebekah has at least one saved email template, **When** she selects a client, chooses a template, optionally edits the message, and sends, **Then** the email is delivered to the client's address from the configured sender address and the send is recorded on the client's history.
 4. **Given** Rebekah opens a client's checklist, **When** she marks items complete or incomplete, **Then** the state is saved for that client only and shown on return.
 5. **Given** Rebekah edits the master checklist (add, remove, rename, reorder items), **When** she saves, **Then** new clients receive the updated list; existing clients keep their recorded progress for items that still exist.
 6. **Given** Rebekah sends the questionnaire to a client, **When** the client opens the unique link and submits answers, **Then** the responses are stored against that client and visible to Rebekah; the link cannot be used to view another client's data.
@@ -126,7 +137,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 
 ### Edge Cases
 
-- **Gallery sizing**: zero images shows a placeholder; one image renders responsively; the gallery is capped at a configured maximum (default 60) with uploads beyond it rejected with a clear message.
+- **Gallery sizing**: zero images shows a placeholder on Home; a service page with no images for its tag omits its gallery area or shows a placeholder; one image renders responsively; the gallery is capped at a configured maximum (default 60 total) with uploads beyond it rejected with a clear message.
 - **Banner boundaries**: windows are evaluated in the owner's configured timezone (default America/New_York); start is inclusive, end is exclusive. Overlapping banners resolve to the most recently started.
 - **Date selection**: the preferred-day picker rejects dates in the past and dates more than 18 months in the future.
 - **Numeric bounds**: session length is selectable from 1 to 4 hours in 1-hour steps; number of people is selectable from 1 to 12. Out-of-range values are rejected server-side even if the browser control is bypassed.
@@ -148,16 +159,16 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **FR-002**: System MUST provide a collapsed (menu-toggle) navigation on narrow viewports that exposes all six links.
 - **FR-003**: System MUST provide a dedicated page for each shoot type (Maternity, Newborn, Family) containing a service description and a "How It Works" section, written in a consistent, welcoming voice.
 - **FR-004**: System MUST provide an About page and an FAQ page; the FAQ MUST cover what to expect, what to wear, when payment is due, and deposits.
-- **FR-005**: System MUST display a responsive image gallery on the home page that adapts to desktop, tablet, and mobile viewports.
-- **FR-006**: System MUST display a **Book Now** control on the home page, each service page, and the pricing page, which routes to the Contact page.
+- **FR-005**: System MUST display a responsive image gallery on the home page showing all published gallery images, and a responsive gallery on each service page showing only the images tagged with that shoot type; all galleries adapt to desktop, tablet, and mobile viewports.
+- **FR-006**: System MUST display a **Book Now** control on the home page and on each service page (including within its Pricing section), which routes to the Contact page.
 - **FR-007**: System MUST render all public pages using the specified warm organic palette (Soft Sage `#9CAF88`, Muted Olive `#6E7A5F`, Warm Cream `#F9F6F0`, Charcoal `#2F3431`, Soft Linen Rose `#EADBC8`) with a bright, airy presentation that emphasizes photography.
 
 **Pricing**
 
-- **FR-008**: System MUST provide a pricing page covering maternity, newborn, and family sessions.
-- **FR-009**: System MUST allow visitors to print the pricing page in a readable print layout free of navigation chrome.
-- **FR-010**: System MUST allow visitors to download the pricing schedule as a PDF whose content matches the currently published web pricing.
-- **FR-011**: Owner MUST be able to edit the pricing schedule (packages, descriptions, and prices for each shoot type) in Admin; the web pricing page, print layout, and downloadable PDF MUST all be produced from that single published pricing revision so they can never diverge.
+- **FR-008**: System MUST include a Pricing section on each service page (Maternity, Newborn, Family) showing that shoot type's pricing; there is no separate pricing page in the public navigation.
+- **FR-009**: System MUST allow visitors to print the pricing schedule from any service page's Pricing section; the printed output MUST cover all three shoot types in a readable layout free of navigation chrome and other page content.
+- **FR-010**: System MUST allow visitors to download the pricing schedule as a PDF from any service page's Pricing section; the PDF MUST cover all three shoot types and match the currently published web pricing.
+- **FR-011**: Owner MUST be able to edit the pricing schedule in Admin: for each shoot type, an ordered list of one or more named packages, each with a name, price, short description, and list of inclusions (optional add-on pricing is out of scope for MVP). The on-page Pricing sections, print layout, and downloadable PDF MUST all be produced from that single published pricing revision so they can never diverge.
 
 **Promotion / alert banner**
 
@@ -171,7 +182,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **FR-016**: System MUST require first name, last name, email, preferred contact method, type of photo shoot, and CAPTCHA; phone number MUST be required when preferred contact method is Call or Text. All other fields are optional.
 - **FR-017**: System MUST validate every submission on the server regardless of browser-side validation, enforcing field formats, lengths (max 2,000 characters for free-text fields), the date window, and numeric ranges defined in Edge Cases.
 - **FR-018**: System MUST verify the CAPTCHA response before any email dispatch and MUST NOT provide a path to submit that bypasses CAPTCHA.
-- **FR-019**: System MUST email the submitted inquiry to the single owner-configured recipient address (initially `tbd@gmail.com`, to be confirmed before launch). Visitors MUST NOT be able to influence the destination address.
+- **FR-019**: System MUST email the submitted inquiry to the single owner-configured recipient address (initially `tbd@gmail.com`, to be confirmed before launch), sent from the owner-configured sender address with Reply-To set to the visitor's email. Visitors MUST NOT be able to influence the destination or sender address.
 - **FR-020**: System MUST show the visitor feedback that reflects the actual outcome: success only when the email provider has accepted the message; a retryable error otherwise. Feedback MUST NOT describe the inquiry as a confirmed booking.
 - **FR-021**: System MUST preserve valid entered values when a submission fails validation, CAPTCHA, or dispatch.
 - **FR-022**: System MUST prevent duplicate dispatch from repeated clicks or rapid resubmission (see Edge Cases).
@@ -179,15 +190,15 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 
 **Owner administration**
 
-- **FR-024**: System MUST expose owner administration at a private route and MUST require sign-in through an OAuth-based identity provider that yields a verified identity.
-- **FR-025**: System MUST authorize only the configured owner account(s) for administration; authenticated non-owner identities MUST be denied both the admin pages and all underlying owner operations.
+- **FR-024**: System MUST expose owner administration at a private route and MUST require "Sign in with Google" (OAuth-based) so that the owner's identity is a verified Google account email address.
+- **FR-025**: System MUST authorize only Google account email addresses present on a configured owner allow-list (initially Rebekah's address only); authenticated identities not on the allow-list MUST be denied both the admin pages and all underlying owner operations. The allow-list is maintained by the deployer, not through the admin UI, for MVP.
 - **FR-026**: System MUST expire owner sessions after 24 hours of inactivity and provide an explicit sign-out.
-- **FR-027**: Owner MUST be able to add images to and remove images from the home-page gallery, and reorder them; uploads are limited to JPEG/PNG/WebP up to 10 MB each, and the gallery is capped at 60 images.
-- **FR-028**: Owner MUST be able to configure the inquiry recipient address, the shoot-location options, and the referral-source options; referral-source options MUST initially include Business Card, Word of Mouth, and Social Media.
+- **FR-027**: Owner MUST be able to add images to and remove images from the gallery, assign each image exactly one shoot-type tag (Maternity, Newborn, Family, or General), set alternative text, and reorder images; uploads are limited to JPEG/PNG/WebP up to 10 MB each, and the gallery is capped at 60 images in total.
+- **FR-028**: Owner MUST be able to configure the inquiry recipient address, the outgoing sender address (used for inquiry notifications, client template emails, and questionnaire links), the shoot-location options, and the referral-source options; referral-source options MUST initially include Business Card, Word of Mouth, and Social Media.
 - **FR-029**: System MUST reject invalid configuration (e.g., malformed email, empty option list) and retain the previously saved configuration.
 - **FR-030**: System MUST apply owner changes atomically — a failed save MUST NOT partially publish.
 - **FR-031**: Owner MUST be able to create, edit, and delete client records (name, email, optional phone, shoot type, optional session date, notes) and view each client's activity history (emails sent, checklist state, questionnaire status).
-- **FR-031a**: Owner MUST be able to maintain a library of email templates (name, subject, body with simple placeholders such as client first name and session date) and send a template-based email to a selected client, editing the message before sending; each send MUST be recorded on the client's history.
+- **FR-031a**: Owner MUST be able to maintain a library of email templates (name, subject, body with simple placeholders such as client first name and session date) and send a template-based email to a selected client, editing the message before sending; emails are sent from the configured sender address with Reply-To set to the same address, and each send MUST be recorded on the client's history.
 - **FR-031b**: Owner MUST be able to maintain a master session checklist (ordered items) and mark items complete/incomplete per client; per-client progress MUST persist independently.
 - **FR-031c**: Owner MUST be able to maintain the client questionnaire (ordered questions with short-text, long-text, or single-choice answers), send a unique questionnaire link to a client, and review that client's responses. Links MUST be single-use, expire after 30 days, and MUST NOT expose any other client's data.
 - **FR-031d**: Owner MUST be able to create a client record pre-filled from an inquiry email's details by manual entry; automatic import from inquiries is not required (inquiries are not stored — see FR-023).
@@ -202,12 +213,12 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 ### Key Entities
 
 - **Shoot Type**: One of Maternity, Newborn, Family. Each has a public service page with description and "How It Works" content and corresponding pricing.
-- **Gallery Image**: An owner-uploaded photograph shown on the home page; has display order, alternative text, and published status.
+- **Gallery Image**: An owner-uploaded photograph; has exactly one shoot-type tag (Maternity, Newborn, Family, or General), display order, alternative text, and published status. Shown on the home gallery and, when tagged with a specific shoot type, on that service page.
 - **Banner**: An owner-authored promotion or alert with message text, start date/time, end date/time, and optional link; displayed beneath the header when active.
-- **Pricing Schedule**: The published pricing content for all three shoot types; the same revision drives the web page, print view, and PDF.
+- **Pricing Schedule / Package**: The published pricing content for all three shoot types. Each shoot type has an ordered list of one or more Packages (name, price, short description, list of inclusions). The same published revision drives each service page's Pricing section, the print view, and the PDF.
 - **Inquiry**: A visitor's submitted contact form — contact details, preferred contact method, postal code, shoot type, preferred day, special requests, session length, number of people, shoot location, referral source, and message. Transient: delivered by email and not stored.
-- **Site Configuration**: Owner-editable settings — inquiry recipient address, shoot-location options, referral-source options, timezone.
-- **Owner Account**: The verified OAuth identity (or identities) authorized to administer the site.
+- **Site Configuration**: Owner-editable settings — inquiry recipient address, outgoing sender address, shoot-location options, referral-source options, timezone.
+- **Owner Account**: A verified Google account email address on the owner allow-list, authorized to administer the site.
 - **FAQ Entry**: A question and answer shown on the FAQ page.
 - **Client**: A person Rebekah is actively working with — name, email, optional phone, shoot type, optional session date, notes — with an activity history of emails sent, checklist progress, and questionnaire status.
 - **Email Template**: A reusable owner-authored email (name, subject, body with placeholders) used to compose messages to clients.
@@ -228,27 +239,27 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **SC-008**: At least 90% of acceptance-test participants complete an inquiry on the first attempt without assistance.
 - **SC-009**: All public pages pass automated WCAG 2.1 AA checks with zero critical violations and are fully operable by keyboard.
 - **SC-010**: Rebekah can add an image, remove an image, and schedule a banner without documentation or developer assistance in under 5 minutes total.
-- **SC-011**: Rebekah can update a price in Admin and see the change reflected identically on the web page, print view, and PDF within 60 seconds.
+- **SC-011**: Rebekah can update a price in Admin and see the change reflected identically in the service-page Pricing sections, print view, and PDF within 60 seconds.
 - **SC-012**: Rebekah can create a client, send a template email, and send a questionnaire in under 3 minutes; 100% of questionnaire links used in testing resolve only to the intended client's record.
 
 ## Assumptions
 
-- Rebekah is the sole administrator at launch; support for additional admin accounts is not required for MVP but must not be precluded.
+- Rebekah is the sole administrator at launch; additional owners can be added by extending the allow-list, but no admin UI for managing owners is required for MVP.
 - **Book Now** starts an inquiry; there is no appointment confirmation, availability calendar, online payment, client account, proofing/delivery gallery, or automated marketing in scope.
 - No existing live site, URLs, content, or customer records need to be migrated or preserved.
 - `tbd@gmail.com` is a placeholder recipient; the production address will be confirmed and set by Rebekah before launch.
 - Final copy, photographs, logo, pricing, deposit terms, and session policies will be supplied or approved by Rebekah; reference sites inform tone and structure only, and no reference wording or assets will be reproduced.
 - Rebekah holds the rights and client consent for every image she publishes; the system does not verify this.
-- Each shoot type has its own public page; pricing lives on a single shared pricing page linked from each service page and the main navigation footer.
+- Each shoot type has its own public page containing its description, "How It Works", and a Pricing section; there is no standalone pricing page. Print and PDF always output the complete three-type schedule regardless of which service page they are invoked from.
 - Pricing is owner-edited in Admin; web, print, and PDF are all rendered from the same published revision (no separately uploaded PDF).
 - Inquiries are not stored; the inquiry email is the system of record. Client records in Admin are created manually by Rebekah (typically by copying details from an inquiry email).
-- Client-facing emails and questionnaire links are sent from the business sender identity using the same email delivery service as inquiries; client email addresses are entered by Rebekah and not independently verified.
+- Radiant Images does not yet own a custom domain. All outgoing email (inquiry notifications, client template emails, questionnaire links) is sent from a single owner-configurable sender address, to be set to Rebekah's business Gmail address once created; the email delivery service must be able to send on behalf of that address. Client email addresses are entered by Rebekah and not independently verified.
 - Client, checklist, and questionnaire data are retained until Rebekah deletes the client record; no automatic purge for MVP.
 - Banner schedules use the owner's configured timezone (default America/New_York), inclusive start / exclusive end, and overlapping banners resolve to the most recently started.
 - Contact-form defaults: phone required only for Call/Text; postal code free-text (US format expected but not enforced for MVP); preferred day limited to today through 18 months ahead; session length 1–4 hours in 1-hour steps; party size 1–12; free-text fields limited to 2,000 characters.
 - Visitors do not receive an automatic acknowledgment email for MVP; on-screen confirmation is sufficient.
 - Email delivery is considered successful when the email provider accepts the message; end-to-end delivery tracking is not required.
-- Gallery limits: JPEG/PNG/WebP, 10 MB per image, 60 images maximum; images are displayed in owner-defined order with optional alternative text; no cropping or captions for MVP.
+- Gallery limits: JPEG/PNG/WebP, 10 MB per image, 60 images maximum in total; images are displayed in owner-defined order with a required shoot-type tag and optional alternative text; no cropping or captions for MVP.
 - Owner sessions expire after 24 hours of inactivity.
 - Browser support targets the current and previous major versions of mainstream desktop and mobile browsers.
 - Standard web-hosting availability is acceptable; no formal uptime guarantee is required for MVP, but daily backups of owner-managed content and configuration are expected.
