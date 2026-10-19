@@ -1,0 +1,634 @@
+openapi: 3.1.0
+info:
+  title: Radiant Images API
+  version: 0.1.0
+  description: |
+    Cloudflare Worker API consumed by the Radiant Images SPA (GitHub Pages).
+    Public endpoints are anonymous. Admin endpoints require `Authorization: Bearer <session token>`
+    issued to an allow-listed Google account. All request/response bodies are JSON unless noted.
+    Error shape everywhere: `{ "error": { "code": string, "message": string, "fields"?: { [name]: string } } }`.
+servers:
+  - url: https://radiant-images-api.<account>.workers.dev
+    description: production
+  - url: http://localhost:8787
+    description: wrangler dev
+
+tags:
+  - name: public
+  - name: inquiry
+  - name: auth
+  - name: admin-gallery
+  - name: admin-banners
+  - name: admin-pricing
+  - name: admin-content
+  - name: admin-config
+  - name: admin-clients
+  - name: questionnaire
+
+components:
+  securitySchemes:
+    ownerSession:
+      type: http
+      scheme: bearer
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^[0-9A-HJKMNP-TV-Z]{26}$' }
+  responses:
+    BadRequest:
+      description: Validation failed; `fields` maps field name to message.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Unauthorized:
+      description: Missing/expired session.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Forbidden:
+      description: Authenticated but not on owner allow-list.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    NotFound:
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    TooManyRequests:
+      description: Rate limit exceeded (see research R-09). `Retry-After` header set.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Conflict:
+      description: Invariant violated (e.g. gallery cap, duplicate inquiry, questionnaire already submitted).
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    BadGateway:
+      description: Upstream provider (Gmail, Turnstile, Google) failed; safe to retry.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, examples: [validation_failed, captcha_failed, duplicate, gallery_full, stale_option, email_failed, forbidden] }
+            message: { type: string }
+            fields: { type: object, additionalProperties: { type: string } }
+
+    ShootType: { type: string, enum: [maternity, newborn, family] }
+    GalleryTag: { type: string, enum: [maternity, newborn, family, general] }
+
+    GalleryImage:
+      type: object
+      required: [id, tag, altText, sortOrder, width, height, urls]
+      properties:
+        id: { type: string }
+        tag: { $ref: '#/components/schemas/GalleryTag' }
+        altText: { type: string, maxLength: 200 }
+        sortOrder: { type: integer }
+        width: { type: integer }
+        height: { type: integer }
+        urls:
+          type: object
+          required: [full, card, thumb]
+          properties:
+            full: { type: string, format: uri }
+            card: { type: string, format: uri }
+            thumb: { type: string, format: uri }
+
+    Banner:
+      type: object
+      required: [id, message, linkUrl, startsAt, endsAt]
+      properties:
+        id: { type: string }
+        message: { type: string, minLength: 1, maxLength: 200 }
+        linkUrl: { type: [string, 'null'], format: uri }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+    BannerInput:
+      type: object
+      required: [message, startsAt, endsAt]
+      properties:
+        message: { type: string, minLength: 1, maxLength: 200 }
+        linkUrl: { type: [string, 'null'], format: uri }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+
+    Package:
+      type: object
+      required: [id, shootType, sortOrder, name, priceCents, description, inclusions]
+      properties:
+        id: { type: string }
+        shootType: { $ref: '#/components/schemas/ShootType' }
+        sortOrder: { type: integer }
+        name: { type: string, minLength: 1, maxLength: 60 }
+        priceCents: { type: integer, minimum: 0 }
+        description: { type: string, maxLength: 500 }
+        inclusions: { type: array, minItems: 1, maxItems: 15, items: { type: string, maxLength: 120 } }
+    PricingRevision:
+      type: object
+      required: [revisionId, publishedAt, packages]
+      properties:
+        revisionId: { type: string }
+        publishedAt: { type: string, format: date-time }
+        packages: { type: array, items: { $ref: '#/components/schemas/Package' } }
+    PricingDraftInput:
+      type: object
+      required: [packages]
+      description: Full replacement; must include ≥1 package per shoot type.
+      properties:
+        packages:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Package'
+              - type: object
+                properties: { id: { type: string, description: 'ignored on publish' } }
+
+    HowItWorksStep:
+      type: object
+      required: [title, body]
+      properties:
+        title: { type: string, maxLength: 80 }
+        body: { type: string, maxLength: 600 }
+    PageContent:
+      type: object
+      required: [page, introMd, howItWorks]
+      properties:
+        page: { type: string, enum: [about, maternity, newborn, family] }
+        introMd: { type: string, maxLength: 4000 }
+        howItWorks: { type: array, minItems: 0, maxItems: 8, items: { $ref: '#/components/schemas/HowItWorksStep' } }
+    FaqEntry:
+      type: object
+      required: [id, question, answer, sortOrder]
+      properties:
+        id: { type: string }
+        question: { type: string, maxLength: 200 }
+        answer: { type: string, maxLength: 2000 }
+        sortOrder: { type: integer }
+
+    PublicConfig:
+      type: object
+      description: Subset of site config safe for anonymous visitors.
+      required: [shootLocations, referralSources, timezone]
+      properties:
+        shootLocations: { type: array, items: { type: string } }
+        referralSources: { type: array, items: { type: string } }
+        timezone: { type: string }
+    SiteConfig:
+      allOf:
+        - $ref: '#/components/schemas/PublicConfig'
+        - type: object
+          required: [inquiryRecipient, senderAddress]
+          properties:
+            inquiryRecipient: { type: string, format: email }
+            senderAddress: { type: string, format: email }
+
+    InquirySubmission:
+      type: object
+      required: [firstName, lastName, email, contactMethod, shootType, turnstileToken]
+      properties:
+        firstName: { type: string, minLength: 1, maxLength: 80 }
+        lastName: { type: string, minLength: 1, maxLength: 80 }
+        email: { type: string, format: email, maxLength: 254 }
+        phone: { type: string, minLength: 7, maxLength: 20, description: 'required when contactMethod is call or text' }
+        contactMethod: { type: string, enum: [email, call, text] }
+        postalCode: { type: string, minLength: 3, maxLength: 12 }
+        shootType: { $ref: '#/components/schemas/ShootType' }
+        preferredDay: { type: string, format: date, description: 'today..today+18 months in site timezone' }
+        specialRequests: { type: string, maxLength: 2000 }
+        sessionLengthHours: { type: integer, minimum: 1, maximum: 4 }
+        numberOfPeople: { type: integer, minimum: 1, maximum: 12 }
+        shootLocation: { type: string, description: 'must be a current configured option' }
+        referralSource: { type: string, description: 'must be a current configured option' }
+        message: { type: string, maxLength: 2000 }
+        turnstileToken: { type: string }
+
+    Session:
+      type: object
+      required: [email, expiresAt]
+      properties:
+        email: { type: string, format: email }
+        expiresAt: { type: string, format: date-time }
+
+    Client:
+      type: object
+      required: [id, firstName, lastName, email, phone, shootType, sessionDate, notes, createdAt]
+      properties:
+        id: { type: string }
+        firstName: { type: string, maxLength: 80 }
+        lastName: { type: string, maxLength: 80 }
+        email: { type: string, format: email }
+        phone: { type: [string, 'null'] }
+        shootType: { $ref: '#/components/schemas/ShootType' }
+        sessionDate: { type: [string, 'null'], format: date }
+        notes: { type: string, maxLength: 4000 }
+        createdAt: { type: string, format: date-time }
+    ClientInput:
+      type: object
+      required: [firstName, lastName, email, shootType]
+      properties:
+        firstName: { type: string, minLength: 1, maxLength: 80 }
+        lastName: { type: string, minLength: 1, maxLength: 80 }
+        email: { type: string, format: email }
+        phone: { type: [string, 'null'] }
+        shootType: { $ref: '#/components/schemas/ShootType' }
+        sessionDate: { type: [string, 'null'], format: date }
+        notes: { type: string, maxLength: 4000 }
+    ClientDetail:
+      allOf:
+        - $ref: '#/components/schemas/Client'
+        - type: object
+          required: [emails, checklist, questionnaires]
+          properties:
+            emails: { type: array, items: { $ref: '#/components/schemas/ClientEmail' } }
+            checklist: { type: array, items: { $ref: '#/components/schemas/ChecklistState' } }
+            questionnaires: { type: array, items: { $ref: '#/components/schemas/QuestionnaireInvite' } }
+    ClientEmail:
+      type: object
+      required: [id, templateId, subject, body, sentAt]
+      properties:
+        id: { type: string }
+        templateId: { type: [string, 'null'] }
+        subject: { type: string }
+        body: { type: string }
+        sentAt: { type: string, format: date-time }
+    SendEmailInput:
+      type: object
+      required: [subject, body]
+      properties:
+        templateId: { type: string, description: 'recorded for history; body is sent as provided' }
+        subject: { type: string, minLength: 1, maxLength: 200 }
+        body: { type: string, minLength: 1, maxLength: 10000 }
+
+    EmailTemplate:
+      type: object
+      required: [id, name, subject, body, sortOrder]
+      properties:
+        id: { type: string }
+        name: { type: string, maxLength: 80 }
+        subject: { type: string, maxLength: 200 }
+        body: { type: string, maxLength: 10000 }
+        sortOrder: { type: integer }
+    ChecklistItem:
+      type: object
+      required: [id, label, sortOrder]
+      properties:
+        id: { type: string }
+        label: { type: string, maxLength: 120 }
+        sortOrder: { type: integer }
+    ChecklistState:
+      type: object
+      required: [itemId, label, completedAt]
+      properties:
+        itemId: { type: string }
+        label: { type: string }
+        completedAt: { type: [string, 'null'], format: date-time }
+    Question:
+      type: object
+      required: [id, prompt, kind, options, required, sortOrder]
+      properties:
+        id: { type: string }
+        prompt: { type: string, maxLength: 300 }
+        kind: { type: string, enum: [short_text, long_text, single_choice] }
+        options: { type: [array, 'null'], items: { type: string }, minItems: 2, maxItems: 10 }
+        required: { type: boolean }
+        sortOrder: { type: integer }
+    QuestionnaireInvite:
+      type: object
+      required: [id, sentAt, expiresAt, submittedAt, status]
+      properties:
+        id: { type: string }
+        sentAt: { type: string, format: date-time }
+        expiresAt: { type: string, format: date-time }
+        submittedAt: { type: [string, 'null'], format: date-time }
+        status: { type: string, enum: [pending, submitted, expired] }
+        answers: { type: [object, 'null'], additionalProperties: true }
+    QuestionnairePublic:
+      type: object
+      required: [clientFirstName, questions, status]
+      properties:
+        clientFirstName: { type: string }
+        questions: { type: array, items: { $ref: '#/components/schemas/Question' } }
+        status: { type: string, enum: [pending, submitted, expired] }
+
+    OrderInput:
+      type: object
+      required: [ids]
+      properties:
+        ids: { type: array, items: { type: string }, description: 'complete ordered list of ids' }
+
+paths:
+  # ───────────── Public ─────────────
+  /public/bootstrap:
+    get:
+      tags: [public]
+      summary: Everything a public page needs in one call
+      responses:
+        '200':
+          description: OK (edge-cacheable 60 s)
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [banner, config, gallery, pages, faq, pricing]
+                properties:
+                  banner: { oneOf: [{ $ref: '#/components/schemas/Banner' }, { type: 'null' }] }
+                  config: { $ref: '#/components/schemas/PublicConfig' }
+                  gallery: { type: array, items: { $ref: '#/components/schemas/GalleryImage' } }
+                  pages: { type: array, items: { $ref: '#/components/schemas/PageContent' } }
+                  faq: { type: array, items: { $ref: '#/components/schemas/FaqEntry' } }
+                  pricing: { $ref: '#/components/schemas/PricingRevision' }
+  /pricing:
+    get:
+      tags: [public]
+      summary: Current published pricing revision (source for sections, print, PDF)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PricingRevision' } } } }
+  /images/{id}/{variant}:
+    get:
+      tags: [public]
+      summary: Serve an image variant from R2 (immutable cache)
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - { name: variant, in: path, required: true, schema: { type: string, enum: [full, card, thumb] } }
+      responses:
+        '200': { description: image/webp }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ───────────── Inquiry ─────────────
+  /inquiries:
+    post:
+      tags: [inquiry]
+      summary: Submit contact-form inquiry (CAPTCHA → validate → dedupe → Gmail send)
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/InquirySubmission' } } }
+      responses:
+        '202':
+          description: Email accepted by Gmail API. NOT a booking confirmation.
+          content: { application/json: { schema: { type: object, required: [status], properties: { status: { const: sent } } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '502': { $ref: '#/components/responses/BadGateway' }
+
+  # ───────────── Auth ─────────────
+  /auth/google/start:
+    get:
+      tags: [auth]
+      summary: Begin Google OIDC (PKCE) — 302 to Google
+      responses: { '302': { description: redirect }, '429': { $ref: '#/components/responses/TooManyRequests' } }
+  /auth/google/callback:
+    get:
+      tags: [auth]
+      summary: Google redirect target; validates ID token + allow-list; 302 to SPA /admin/callback#code=…
+      parameters:
+        - { name: code, in: query, required: true, schema: { type: string } }
+        - { name: state, in: query, required: true, schema: { type: string } }
+      responses:
+        '302': { description: redirect to SPA with one-time exchange code, or to /admin/denied }
+  /auth/exchange:
+    post:
+      tags: [auth]
+      summary: Swap one-time code for bearer session token
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [code], properties: { code: { type: string } } } } } }
+      responses:
+        '200':
+          description: OK
+          content: { application/json: { schema: { type: object, required: [token, session], properties: { token: { type: string }, session: { $ref: '#/components/schemas/Session' } } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /auth/session:
+    get:
+      tags: [auth]
+      security: [{ ownerSession: [] }]
+      summary: Current session (also extends sliding expiry)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Session' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /auth/logout:
+    post:
+      tags: [auth]
+      security: [{ ownerSession: [] }]
+      responses: { '204': { description: session deleted } }
+
+  # ───────────── Admin: gallery ─────────────
+  /admin/gallery:
+    get:
+      tags: [admin-gallery]
+      security: [{ ownerSession: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/GalleryImage' } } } } }
+    post:
+      tags: [admin-gallery]
+      security: [{ ownerSession: [] }]
+      summary: Upload image (browser-resized variants) — multipart
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [tag, altText, full, card, thumb, width, height, originalMime, originalBytes]
+              properties:
+                tag: { $ref: '#/components/schemas/GalleryTag' }
+                altText: { type: string, maxLength: 200 }
+                full: { type: string, format: binary, description: 'image/webp ≤ 2000px' }
+                card: { type: string, format: binary }
+                thumb: { type: string, format: binary }
+                width: { type: integer }
+                height: { type: integer }
+                originalMime: { type: string, enum: [image/jpeg, image/png, image/webp] }
+                originalBytes: { type: integer, maximum: 10485760 }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/GalleryImage' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/gallery/order:
+    put:
+      tags: [admin-gallery]
+      security: [{ ownerSession: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OrderInput' } } } }
+      responses: { '204': { description: reordered }, '400': { $ref: '#/components/responses/BadRequest' } }
+  /admin/gallery/{id}:
+    parameters: [{ $ref: '#/components/parameters/id' }]
+    patch:
+      tags: [admin-gallery]
+      security: [{ ownerSession: [] }]
+      summary: Update tag / altText
+      requestBody: { required: true, content: { application/json: { schema: { type: object, properties: { tag: { $ref: '#/components/schemas/GalleryTag' }, altText: { type: string, maxLength: 200 } } } } } }
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/GalleryImage' } } } }, '404': { $ref: '#/components/responses/NotFound' } }
+    delete:
+      tags: [admin-gallery]
+      security: [{ ownerSession: [] }]
+      responses: { '204': { description: deleted (row + R2 objects) }, '404': { $ref: '#/components/responses/NotFound' } }
+
+  # ───────────── Admin: banners ─────────────
+  /admin/banners:
+    get:
+      tags: [admin-banners]
+      security: [{ ownerSession: [] }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Banner' } } } } } }
+    post:
+      tags: [admin-banners]
+      security: [{ ownerSession: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/BannerInput' } } } }
+      responses: { '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Banner' } } } }, '400': { $ref: '#/components/responses/BadRequest' } }
+  /admin/banners/{id}:
+    parameters: [{ $ref: '#/components/parameters/id' }]
+    put:
+      tags: [admin-banners]
+      security: [{ ownerSession: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/BannerInput' } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' }, '404': { $ref: '#/components/responses/NotFound' } }
+    delete:
+      tags: [admin-banners]
+      security: [{ ownerSession: [] }]
+      responses: { '204': { description: deleted }, '404': { $ref: '#/components/responses/NotFound' } }
+
+  # ───────────── Admin: pricing ─────────────
+  /admin/pricing:
+    get:
+      tags: [admin-pricing]
+      security: [{ ownerSession: [] }]
+      summary: Current published revision (same as public) for editing
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/PricingRevision' } } } } }
+    put:
+      tags: [admin-pricing]
+      security: [{ ownerSession: [] }]
+      summary: Publish a new revision (atomic full replacement)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PricingDraftInput' } } } }
+      responses:
+        '200': { description: New revision, content: { application/json: { schema: { $ref: '#/components/schemas/PricingRevision' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  # ───────────── Admin: content ─────────────
+  /admin/pages/{page}:
+    parameters: [{ name: page, in: path, required: true, schema: { type: string, enum: [about, maternity, newborn, family] } }]
+    put:
+      tags: [admin-content]
+      security: [{ ownerSession: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PageContent' } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' } }
+  /admin/faq:
+    put:
+      tags: [admin-content]
+      security: [{ ownerSession: [] }]
+      summary: Full replacement of FAQ list (ordered)
+      requestBody: { required: true, content: { application/json: { schema: { type: array, minItems: 4, items: { $ref: '#/components/schemas/FaqEntry' } } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' } }
+
+  # ───────────── Admin: config ─────────────
+  /admin/config:
+    get:
+      tags: [admin-config]
+      security: [{ ownerSession: [] }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SiteConfig' } } } } }
+    put:
+      tags: [admin-config]
+      security: [{ ownerSession: [] }]
+      summary: Atomic save; senderAddress validated against Gmail send-as list
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SiteConfig' } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' }, '502': { $ref: '#/components/responses/BadGateway' } }
+
+  # ───────────── Admin: clients & workflow ─────────────
+  /admin/clients:
+    get:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      parameters: [{ name: q, in: query, schema: { type: string }, description: 'name/email contains' }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Client' } } } } } }
+    post:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } } }
+      responses: { '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Client' } } } }, '400': { $ref: '#/components/responses/BadRequest' } }
+  /admin/clients/{id}:
+    parameters: [{ $ref: '#/components/parameters/id' }]
+    get:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/ClientDetail' } } } }, '404': { $ref: '#/components/responses/NotFound' } }
+    put:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' }, '404': { $ref: '#/components/responses/NotFound' } }
+    delete:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      responses: { '204': { description: deleted with cascade }, '404': { $ref: '#/components/responses/NotFound' } }
+  /admin/clients/{id}/emails:
+    parameters: [{ $ref: '#/components/parameters/id' }]
+    post:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      summary: Send email to client via Gmail (placeholders already expanded client-side; server re-expands {{questionnaireLink}} if present)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SendEmailInput' } } } }
+      responses: { '201': { description: Sent & recorded, content: { application/json: { schema: { $ref: '#/components/schemas/ClientEmail' } } } }, '400': { $ref: '#/components/responses/BadRequest' }, '502': { $ref: '#/components/responses/BadGateway' } }
+  /admin/clients/{id}/checklist/{itemId}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - { name: itemId, in: path, required: true, schema: { type: string } }
+    put:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [completed], properties: { completed: { type: boolean } } } } } }
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/ChecklistState' } } } }, '404': { $ref: '#/components/responses/NotFound' } }
+  /admin/clients/{id}/questionnaires:
+    parameters: [{ $ref: '#/components/parameters/id' }]
+    post:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      summary: Create invite (snapshot questions, 30-day expiry) and email the /q/{token} link
+      responses: { '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/QuestionnaireInvite' } } } }, '502': { $ref: '#/components/responses/BadGateway' } }
+
+  /admin/templates:
+    get:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/EmailTemplate' } } } } } }
+    put:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      summary: Full ordered replacement
+      requestBody: { required: true, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/EmailTemplate' } } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' } }
+  /admin/checklist:
+    get:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ChecklistItem' } } } } } }
+    put:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      summary: Full ordered replacement; existing ids keep per-client state
+      requestBody: { required: true, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ChecklistItem' } } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' } }
+  /admin/questionnaire:
+    get:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      responses: { '200': { description: OK, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Question' } } } } } }
+    put:
+      tags: [admin-clients]
+      security: [{ ownerSession: [] }]
+      summary: Full ordered replacement; sent invites keep their snapshot
+      requestBody: { required: true, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Question' } } } } }
+      responses: { '200': { description: OK }, '400': { $ref: '#/components/responses/BadRequest' } }
+
+  # ───────────── Public questionnaire ─────────────
+  /questionnaire/{token}:
+    parameters: [{ name: token, in: path, required: true, schema: { type: string, minLength: 32 } }]
+    get:
+      tags: [questionnaire]
+      summary: Load questionnaire for a client link (no other client data exposed)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/QuestionnairePublic' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      tags: [questionnaire]
+      summary: Submit answers (single-use; rejected if submitted or expired)
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [answers], properties: { answers: { type: object, additionalProperties: true } } } } } }
+      responses:
+        '201': { description: Recorded }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
