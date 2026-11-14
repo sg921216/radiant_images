@@ -823,3 +823,51 @@ retain all failures, reproduce the behavioral cause before a product change, and
 the complete functional engine matrix and remote CI. Reinstalling WebKit alone cannot solve
 the independent bundler access error or establish a fix for input loss. No launch gate closes;
 51/63 tasks remain complete.
+
+### WebKit execution resumed and probe locator corrected (2026-11-14)
+
+The later follow-up session can read the ancestor profile directory and launch the existing
+WebKit 27.2/build 2388 with Playwright 1.65.1 and Node 24.14.0. `pnpm build` passed, including
+the production frontend and API dry run, and both local E2E servers started. The earlier
+filesystem/cache restrictions do not apply to this session. No WebKit reinstall, access-control
+change, security exclusion, paid service or deployment was needed.
+
+The predeclared command in quickstart.md executed three scenarios × two projects × ten
+repetitions, with one worker and zero retries. Separate output/report directories preserve
+the initial and corrected runs; tokenized journeys still disable screenshots and traces.
+
+- **Initial execution: 20 passed / 40 failed**, zero skipped or flaky classifications,
+  394.80 seconds. All complete owner-workflow repetitions passed. Every new probe failed
+  after saving the first synthetic client because `getByLabel('Client email', { exact: true })`
+  selected both the actual email input and the email-composer region. The diagnostic showed
+  the expected saved email in the input. This was a probe locator defect. All outcomes are
+  retained in [local-webkit-access-followup-summary.json](./evidence/local-webkit-access-followup-summary.json).
+- **Correction:** only the new probe's two post-save/reload email assertions now share
+  `getByRole('textbox', { name: 'Client email', exact: true })`. The real client-creation helper,
+  consecutive entry calls, pre-submit assertions, timeouts and retry policy are unchanged.
+  The failing browser assertions precede this test correction; no product fix is claimed.
+- **Corrected execution: 59 passed / 1 failed**, zero skipped or flaky classifications,
+  460.37 seconds. All 30 desktop cases, 10 mobile typing cases and 10 mobile owner workflows
+  passed. One of ten mobile `fill` probes failed before submission: the first name was empty
+  after the three consecutive fills. The expected value was the synthetic name Avery.
+  This reproduces an input-loss symptom in a different field from the historical email
+  failure; a common cause is not established. Zero flaky classifications with retries
+  disabled does not establish that the intermittent behavior is resolved.
+- **Bounded diagnosis:** 50 fresh WebKit-mobile contexts using native HTML inputs passed
+  consecutive fills; this does not establish the application's cause. One additional
+  ten-case mobile diagnostic series recorded native focus/input/change events, field values
+  and DOM identities passively, without modifying events or adding inter-field waits. All
+  ten passed, so no failing event sequence was captured. The ignored local diagnostic files
+  are `.wrangler/client-input-diagnostic.spec.ts` and `.wrangler/client-input-diagnostic.config.ts`;
+  they are workstation investigation aids, not required CI files. No additional repeat-until-green
+  run was used to replace the failed result.
+
+The corrected outcomes and diagnostic summary are retained in
+[local-webkit-locator-corrections-summary.json](./evidence/local-webkit-locator-corrections-summary.json).
+Scoped ESLint, tools TypeScript and test-file formatting checks passed after the selector edit.
+Artifact privacy scanned 51 files and repository privacy scanned 382 files, with zero blocked
+findings. Product code remains unchanged because the evidence does not distinguish a missing browser input event, a remount,
+or an application state overwrite. The next useful evidence is a failing event sequence or
+a deterministic component reproduction, followed by a targeted correction and full engine
+verification. **Browser execution is unblocked; input-loss diagnosis, the clean combined
+matrix, remote CI and T059 remain open. The task count stays 51/63.**

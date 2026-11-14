@@ -39,13 +39,18 @@ owner content/privacy and remote release tasks remain open under the approved ex
 **WebKit investigation follow-up (2026-11-14)**: Consecutive `input` events and deferred
 client-list responses before/after email entry preserve the draft through blur and submission
 in all 8 client component tests; the web component suite passes 15 files / 44 tests.
-Two focused browser probes now compare `fill` and `pressSequentially`, create three clients,
-and verify persisted values after reload. The 60-case WebKit investigation selection is
-validated with `--list` only. Execution is **BLOCKED** in the current restricted session:
-the bundler cannot read an ancestor directory, the browser cache is inaccessible, and a
-workspace-local browser download is denied by network policy. No browser case executed,
-no product defect was reproduced or fixed, and T059 remains open. See acceptance.md and
-`evidence/local-webkit-investigation-summary.json`; the count remains 51/63.
+Two focused browser probes compare `fill` and `pressSequentially`, create three clients,
+and verify persisted values after reload. The initial restricted session could only list
+60 cases; its access failures remain in `evidence/local-webkit-investigation-summary.json`.
+A later session built the app and launched the existing WebKit 27.2 without reinstalling
+the browser or changing security settings. Actual execution exposed an ambiguous detail-page
+email locator: 40 probe failures / 20 owner-workflow passes. Correcting only the post-save/reload
+assertions to target the textbox produced **59/60 passes**, with one WebKit mobile `fill`
+case losing the first name before submission. A single ten-case passive-event diagnostic
+run passed but did not establish the cause or erase that failure. **Execution is unblocked;
+input-loss investigation and T059 remain OPEN.** No product code changed. See acceptance.md,
+`evidence/local-webkit-access-followup-summary.json`, and
+`evidence/local-webkit-locator-corrections-summary.json`; the count remains 51/63.
 
 ## Phase 1: Setup
 

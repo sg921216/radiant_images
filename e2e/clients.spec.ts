@@ -34,15 +34,13 @@ for (const entry of ['fill', 'pressSequentially'] as const)
     for (const firstName of ['Avery', 'Blake', 'Casey']) {
       await test.step(`Create and reload ${firstName}`, async () => {
         await createClient(page, firstName, entry);
-        await expect(page.getByLabel('Client email', { exact: true })).toHaveValue(
-          `${firstName.toLowerCase()}@example.invalid`,
-        );
+        // The detail page also has a region named "Client email"; target the form control.
+        const email = page.getByRole('textbox', { name: 'Client email', exact: true });
+        await expect(email).toHaveValue(`${firstName.toLowerCase()}@example.invalid`);
         await page.reload();
         await expect(page.getByLabel('Client first name')).toHaveValue(firstName);
         await expect(page.getByLabel('Client last name')).toHaveValue('Example');
-        await expect(page.getByLabel('Client email', { exact: true })).toHaveValue(
-          `${firstName.toLowerCase()}@example.invalid`,
-        );
+        await expect(email).toHaveValue(`${firstName.toLowerCase()}@example.invalid`);
       });
     }
   });

@@ -111,13 +111,28 @@ provider isolation, one-worker execution, fail-on-flaky policy, sanitized report
 disabled screenshots/traces for tokenized workflows remain in force. Run the artifact privacy
 gate afterward. These tests make no live email sends.
 
-The 2026-11-14 restricted session could list the selection and run component probes, but
+The initial 2026-11-14 restricted session could list the selection and run component probes, but
 could not start the local bundler or access the existing browser cache. A workspace-local
 WebKit download was also blocked by network policy. These are setup blockers, not failed
-browser assertions or evidence that the cached browser is missing. Resume the command in a
-session with authorized access to the project/toolchain and pinned browser cache. Installing
-WebKit alone does not address the separate ancestor-directory bundling failure. Reproduce
-the defect before changing product code, then run the full functional engine matrix.
+browser assertions or evidence that the cached browser is missing. A later session on the
+same date could read the ancestor directory, build the application, launch the existing
+WebKit 27.2/build 2388, and start both local servers without reinstalling WebKit or changing
+security settings. If these access errors recur, use a session with authorized access to
+the project/toolchain and pinned browser cache; reinstalling WebKit alone does not address
+the separate ancestor-directory bundling failure.
+
+Actual execution then exposed a probe defect: on the client detail page, `getByLabel('Client
+email', { exact: true })` matches both the email input and the email-composer region. The
+post-save/reload assertions now use `getByRole('textbox', { name: 'Client email', exact: true })`.
+The creation helper and original owner workflow retain their consecutive fills and timing.
+See acceptance.md for the preserved failures and follow-up results. The corrected 60-case
+run passed 59 cases and reproduced input loss in the first-name field on WebKit mobile before
+submission. A single ten-case diagnostic with passive native event recording passed without
+capturing a cause; it does not erase the failure. The historical email loss and newly observed
+first-name loss have no established common cause. Identify whether an input event is missing,
+the form remounts, or state overwrites a received value before selecting a product fix; then
+verify the complete functional engine matrix. Do not substitute typing, sleeps or retries to
+turn the failing `fill` scenario into a claimed pass.
 
 T063 additionally executes every browser/OS N/N-1 cell in plan.md's release matrix. Freeze
 exact stable versions at release, use actual desktop browsers and physical mobile devices
