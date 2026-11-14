@@ -1,0 +1,23 @@
+name = "radiant-images-api"
+main = "src/index.ts"
+compatibility_date = "2026-11-13"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+[vars]
+WEB_ORIGIN = "http://127.0.0.1:5173"
+API_ORIGIN = "http://127.0.0.1:8787"
+[[d1_databases]]
+binding = "DB"
+database_name = "radiant-images-local"
+database_id = "00000000-0000-0000-0000-000000000001"
+migrations_dir = "src/db/migrations"
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "radiant-images-local-media"
+[[r2_buckets]]
+binding = "RECOVERY"
+bucket_name = "radiant-images-local-recovery"
+[triggers]
+crons = ["*/5 * * * *", "0 3 * * *"]
+[observability]
+enabled = false

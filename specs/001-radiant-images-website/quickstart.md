@@ -2,15 +2,11 @@
 
 This guide proves the feature works against the [spec](./spec.md) acceptance scenarios. It is a run/validation guide — implementation detail lives in `tasks.md` and the code.
 
-**Status (2026-11-13)**: Planned validation commands; application packages and test suites
-have not been implemented. Constitution v1.0.0 requires red-green-refactor for executable
-behavior and the E2E policy below. T002/T006 implement these scripts and browser projects.
-
-The owner has selected Cloudflare Workers Static Assets for the frontend and completed R2
-enrollment. T001's remaining work is technical feasibility verification in research R-16;
-no additional frontend-host confirmation is needed. The commands below remain planned,
-not successful execution evidence. Gmail consent requires both `gmail.send` and
-`gmail.settings.basic`; sending permission alone cannot perform the required sender lookup.
+**Status (2026-11-14)**: Local application, migration, synthetic provider adapters and automated
+suites are implemented under the approved T001 exception. See acceptance.md for actual
+commands/results and remaining gates. Production decoder/expiry feasibility, owner content,
+real email, human/device acceptance and deployment remain open. Gmail consent needs both
+`gmail.send` and `gmail.settings.basic` for sending and verified sender lookup.
 
 ## Prerequisites
 
@@ -28,46 +24,46 @@ not successful execution evidence. Gmail consent requires both `gmail.send` and
 ```bash
 pnpm install --frozen-lockfile
 pnpm exec playwright install --with-deps
-pnpm test:setup   # T006: reset/seed disposable local data and select controlled providers
+pnpm test:setup   # Apply local E2E migrations; browser fixtures reset/seed each test
 ```
 
-T006 MUST make setup/cleanup repeatable, reject production targets, assign unique per-test
-data, and ensure test-provider/seeding modes cannot be enabled in production. Controlled
+The harness makes setup/cleanup repeatable, rejects nonlocal targets, resets synthetic data
+per test, and keeps test-provider/seeding endpoints outside the production entry point. Controlled
 time covers banners, expiry, and date boundaries. Test fixtures MUST preserve the real
 React-to-Worker-to-D1/R2 path rather than intercepting the application's own API.
 
-## One-time provider-connected setup
-
-The following setup is for separate live-provider acceptance/deployment, after T001
-verifies account requirements. It is not required for routine CI.
-
-```bash
-pnpm install
-
-# API bindings (creates D1 db + R2 bucket, writes ids into wrangler.toml)
-cd apps/api
-pnpm dlx wrangler d1 create radiant-images
-pnpm dlx wrangler r2 bucket create radiant-images-media
-
-# Local secrets (git-ignored)
-cat > .dev.vars <<'EOF'
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-GMAIL_REFRESH_TOKEN=...          # from: pnpm run gmail:consent
-TURNSTILE_SECRET=1x0000000000000000000000000000000AA
-OWNER_ALLOWLIST=rebekah@example.com
-WEB_ORIGIN=http://localhost:5173
-EOF
-
-pnpm run db:migrate:local        # drizzle-kit → wrangler d1 migrations apply --local
-pnpm run db:seed:local           # FAQ topics, referral sources, sample pricing, page stubs
-```
-
 ## Run locally
 
+Use Node 24.14.0 and pnpm 12.18.0. The isolated browser suite starts its own built frontend
+at 127.0.0.1:4173 and synthetic API at 127.0.0.1:8787; it needs no live secrets:
+
 ```bash
-pnpm dev          # concurrently: wrangler dev (http://localhost:8787) + vite (http://localhost:5173)
+pnpm build
+pnpm e2e:smoke
 ```
+
+For interactive development, copy `apps/api/.dev.vars.example` to `apps/api/.dev.vars` and
+`apps/web/.env.example` to `apps/web/.env`, then from the repository root:
+
+```bash
+pnpm --filter @radiant/api db:migrate:local
+pnpm --filter @radiant/api db:seed:local
+pnpm dev
+```
+
+The frontend uses 127.0.0.1:5173 and the API 127.0.0.1:8787. Ordinary development does not
+install the E2E provider endpoints; placeholder credentials cannot sign in or send mail.
+The local-only decoder belongs to the isolated E2E server. Production gallery publication
+fails closed until an approved authoritative provider is configured.
+
+## Separate provider-connected setup
+
+T001 and separately scoped authorization must be resolved first. Provision the approved D1,
+media and recovery buckets using the pinned `pnpm exec wrangler`, record the returned IDs,
+and configure the release inventory described below. Creation commands do not automatically
+update Wrangler configuration. Do not replace the checked-in local resource IDs with live
+ones. Use `pnpm gmail:consent` only during the separately authorized consent procedure;
+its runtime secrets remain outside browser builds and source control.
 
 ## Automated validation
 
@@ -83,6 +79,22 @@ and before release. Include 320/768/1280 px layouts, mobile emulation, and WCAG 
 of public/admin/questionnaire routes. Record the tested engine versions; emulation is not
 evidence of real-device or previous-version browser support.
 
+On the current Windows workstation, the owner manually extracted Playwright's pinned
+Firefox 159.0 / build 1572 into
+`C:/Users/My PC/Downloads/playwright-firefox-1572-win64/firefox`. The executable hash
+matches the official archive and a headless launch succeeded. The ignored, machine-local
+`.wrangler/firefox-local.config.ts` selects this executable for the existing Firefox project:
+
+```bash
+pnpm exec playwright test --config=.wrangler/firefox-local.config.ts
+```
+
+Run that command from the repository root after building. It starts the same local stack
+and runs all 28 Firefox functional cases; the separate Chromium-only performance profile
+is excluded. This local config is not committed and is not required by CI's normal pinned
+browser installation. Mozilla's standard Firefox installation is separate from this patched
+Playwright browser. Results and the preserved initial failure are recorded in acceptance.md.
+
 T063 additionally executes every browser/OS N/N-1 cell in plan.md's release matrix. Freeze
 exact stable versions at release, use actual desktop browsers and physical mobile devices
 or a real-device service, and record versions/date plus each required journey's result.
@@ -92,7 +104,9 @@ or claim full support/release without resolving the gate or an explicit governan
 Tests MUST use role/label locators and retrying assertions, fresh contexts, deterministic
 seed/cleanup, and controlled time; fixed sleeps and shared mutable fixtures are prohibited.
 CI rejects focused tests and flaky results even after a diagnostic retry (maximum one).
-Capture sanitized traces/failure screenshots with seven-day retention. Any quarantine must
+Traces are disabled because they retain HTTP tokens. Synthetic failure screenshots are
+disabled on tokenized journeys; sanitized text/HTML artifacts require the privacy gate and
+have seven-day retention. Any quarantine must
 record an owner, issue, expiry, and alternative evidence; critical checks cannot disappear.
 
 For each behavioral change, record the focused red command/failure, green command/result,
@@ -265,11 +279,12 @@ full SC-004 benchmark. Step 2 verifies layout only, not the three-second timing 
     questionnaire URLs in template/message input before persistence/send. Check both the
     template and dedicated invitation endpoints, including uncertain/history-write-failed
     outcomes that preserve the invitation without leaking its token. — US6-AS10, FR-031a/c
+
 27. After collecting answers, edit/reorder master prompts and single-choice options and delete a master question. Reload the client's history: the owner API supplies `questionsSnapshot` plus `answers`, and the UI retains the original prompts, answer types, choices and order. Send a new invitation and verify it uses the updated master; public links must not expose owner history. — US6-AS7, FR-031c
 
 ### Observability (FR-032)
 
-28. `pnpm dlx wrangler d1 execute radiant-images --local --command "select action,outcome from audit_events order by at desc limit 20"` → shows the actions from steps 9–26 with **no** visitor message bodies or emails.
+28. `pnpm exec wrangler d1 execute DB --local --config apps/api/wrangler.toml --command "select action,outcome from audit_events order by at desc limit 20"` → shows the actions from steps 9–26 with **no** visitor message bodies or emails.
 
 ### Public recovery address launch check
 
@@ -296,17 +311,94 @@ prerendered public routes and the generated SPA fallback for admin/callback/ques
 direct loads and refreshes. Check missing assets return 404 and both static/fallback
 responses carry the intended security headers. A Vite dev-server pass alone is insufficient.
 
-```bash
-# Secrets (once per environment)
-cd apps/api && for s in GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GMAIL_REFRESH_TOKEN TURNSTILE_SECRET OWNER_ALLOWLIST WEB_ORIGIN; do pnpm dlx wrangler secret put $s; done
-
-# CI does this on push to main; manual equivalent:
-pnpm --filter api run db:migrate:remote && pnpm --filter api run deploy
-pnpm --filter web run build   # public frontend/API origins and Turnstile site key from CI variables
-pnpm --filter web run deploy  # pinned Wrangler + apps/web/wrangler.toml → Workers Static Assets
-```
+Deployment is manual, with separate API/web workflows, exact acceptance-commit checking,
+required environment review, and the release guard below. Pushes to main run CI only.
+There is no ungated package deploy command. Runtime secrets are provisioned only after
+separate release authorization; use the checked-in examples to identify required names.
 
 Post-deploy smoke: check public navigation and approved test-account sign-in. Any email
 or gallery mutation requires a designated test mailbox/image and cleanup; do not blindly
 repeat data-changing walkthroughs against production. Deployment workflows MUST depend on
 passing applicable CI, the complete browser matrix, and documented release evidence.
+
+## Local recovery rehearsal (T058)
+
+Stop development servers before operating on synthetic state. These commands use only
+`e2e/wrangler.toml`, `.wrangler/e2e/v3`, and disabled remote bindings. They accept no account,
+config, remote flag, or arbitrary storage path. Run `pnpm test:setup` first.
+
+1. `pnpm operations:local backup` returns a private `backups/ID.json` key.
+2. `pnpm operations:local list` lists keys/expiry without recovery payloads.
+3. `pnpm operations:local restore backups/ID.json` closes API access with 503, including
+   after restart. Import is atomic and checks/replays independent deletion receipts. Missing
+   receipts, corrupt/expired copies, or incomplete media refuse access. Correct the cause
+   and repeat restore after a failure.
+4. Inspect restored synthetic data offline and run the operations integration suite. Then
+   `pnpm operations:local reopen` verifies the ledger again; it cannot reopen a failed restore.
+5. `pnpm operations:local cleanup` exercises transient cleanup and verified recovery expiry.
+
+The deletion rehearsal is `pnpm exec vitest run apps/api/tests/operations.test.ts`: capture
+before deletion, delete a client, restore the older copy, prove deleted data stays absent and
+retained history keeps invitation associations. Import/storage faults verify closed access.
+
+Production restore remains blocked by T001 and release authorization. Detach ingress and
+pause cron before database replacement; preserve the independent R2 ledger and lifecycle
+identity outside the restore set; apply migrations offline; use the same verification and
+reconciliation services. A fresh database must not silently initialize a new ledger. Never
+use Time Travel on an exposed database. Replay receipts and clear sessions/grants before
+reopening. Refuse copies at day-28 expiry. Never copy real recovery payloads into CI.
+
+`health/latest.json` is private: Gmail sender status and inquiry/auth/image failure counts,
+without mail content or addresses. Monitor independent provider job failures and backup
+freshness as well: a stale health file does not mean success. External alerting and physical
+expiry during outages remain unverified release gates.
+
+## Deployment and rollback preparation (T060)
+
+The API and frontend have separate manually dispatched workflows. Both require the Quality
+workflow on the same commit, an exact acceptance commit input, and the `production` GitHub
+environment. Configure that environment with required owner review before enabling releases.
+`scripts/prepare-release.ts` refuses any unchecked task (including T001/T063), non-HTTPS
+origins, test CAPTCHA keys, and placeholder contact addresses. The refusal was exercised
+locally. No deployment was attempted.
+
+Store `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` only as environment secrets. Use the
+least permissions required for the named Workers, D1 and R2 resources. Configure the variables
+named in the workflow from the approved deployment inventory; never reuse local zero IDs or
+synthetic buckets. Runtime Gmail/Google/Turnstile/auth secrets, including `OWNER_ALLOWLIST`
+and `GOOGLE_CLIENT_ID`, must be provisioned as Worker secrets; the generated deployment
+configuration omits them. They must never become VITE variables. `VITE_*` values are
+deliberately public. API CORS permits the exact frontend
+origin; both workers must be reached over HTTPS before live acceptance.
+
+Before an eventual authorized release, record deployed Worker version IDs, schema version,
+latest verified private backup key/expiry and independent ledger identity. API migrations
+are forward-only and run before the API deployment. A code rollback may use the prior
+Worker version only when its database schema remains compatible. For incompatible data
+changes, detach ingress, pause cron and use the offline restore/reconciliation procedure;
+never roll back the deletion ledger. Rebuild/redeploy the matching prior frontend artifact
+and verify direct public/admin/callback/questionnaire navigation, CORS and HTTPS. Do not
+describe the local fallback checks as a remote rollback or HTTPS rehearsal.
+
+## Release acceptance register (T063; all live/human rows OPEN)
+
+The local-development exception excludes live provider acceptance and recruitment. Prepare
+the following record before a separately authorized run:
+
+| Check                              | Predeclared sample or inventory                                                                                            | Current evidence                                        |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| Initial inquiry mailbox delivery   | 10 distinct eligible inquiries with healthy providers; keep every started eligible attempt                                 | No live attempts                                        |
+| Changed-recipient mailbox delivery | A separate 10 distinct inquiries after saving settings                                                                     | No live attempts                                        |
+| First-time usability SC-008        | 10 adults: 5 desktop, 5 mobile; unassisted; at least ceil(0.9 × started) successes; all started attempts retained          | No participants enrolled                                |
+| Discovery SC-001                   | Goal-to-visible-acceptance time, under four minutes; same participant records                                              | No human timings                                        |
+| Owner workflow SC-012              | Loaded dashboard through required workflow, under three minutes without coaching                                           | Synthetic automation only                               |
+| Accessibility                      | Keyboard plus representative screen-reader and meaningful photo-alt review                                                 | Automated axe/keyboard evidence only                    |
+| Print/PDF                          | Physical print plus owner content/readability review                                                                       | Local PDF rendering evidence only                       |
+| Live browser matrix                | Exact N/N-1 versions at release freeze, every plan.md browser/OS/device cell                                               | Every actual-browser/device cell BLOCKED pending access |
+| Deployed freshness/performance     | Live providers and deployed cache/clock/HTTPS observations                                                                 | Local controlled results only                           |
+| Content/privacy                    | Logo, 60 approved photo assets, copy, pricing, privacy/deposit terms, usage/guardian permissions, monitored public contact | Owner approval/assets pending                           |
+
+For each participant record started/completed/abandoned, device, first Submit result, any
+assistance and elapsed time. For email record provider health, first Submit, API outcome,
+mailbox receipt and latency; negative/fault runs remain separate. Unknown delivery requires
+the documented manual receipt check and must never be counted as successful receipt.

@@ -2,8 +2,7 @@
 
 ## 2026-11-13 — T001 feasibility checkpoint
 
-**Current status: Hosting clarification complete; T001 technical verification open; 0 of 63 implementation tasks complete.** No application code, build,
-runtime test suite, deployment, mailbox delivery or human acceptance is claimed.
+**Initial checkpoint:** T001 was blocked on strict recovery expiry and production image-decoder feasibility; the local-development exception was approved on 2026-11-13. Hosting and R2 enrollment were resolved. At that checkpoint no application code or runtime evidence existed. Current local implementation evidence follows; deployment, real mailbox delivery and human acceptance remain open.
 T001 findings and primary-source links are in [research R-16](./research.md#r-16-t001-feasibility-checkpoint--2026-11-13).
 
 **Clarification follow-up (2026-11-13)**: Zero new questions asked; one explicit owner
@@ -21,21 +20,21 @@ without execution. This is documentation validation, not runtime or deployment a
 
 ### Checks actually performed
 
-| Check | Command / method | Result |
-|-------|------------------|--------|
-| Feature prerequisites | `python .specify/scripts/python/check_prerequisites.py --json --require-tasks --include-tasks` | PASS; feature `specs/001-radiant-images-website`; research, data model, contracts, quickstart, tasks available |
-| Requirements checklist | Count Markdown checkboxes in `checklists/requirements.md` | PASS; 16 total, 16 complete, 0 incomplete |
-| Repository instructions | Read parent `AGENTS.md`, current plan and constitution v1.0.0 | React/Workers stack and test-first requirements retained |
-| Hosting/provider feasibility | Review current primary documentation linked in R-16 | Initial checkpoint blocked on hosting; owner later selected Workers Static Assets and completed R2 enrollment. Expiry/decoder evidence remains incomplete |
-| Local tools | `node --version`; `npm --version`; `pnpm --version` | 24.14.0; 11.12.0; 9.15.0; no compatibility/build pass inferred |
-| Registry metadata | `npm view` with process-local `NODE_OPTIONS=--use-system-ca`, retries disabled | Initial certificate failure resolved using OS trust; Router 7.15.1 peers, Workers test pool 0.23.0/Vitest 4.1 peers, Wrangler 4.162.0 and pnpm 12.18.0 retrieved; installation not run |
-| OpenAPI 3.1 structure | PyYAML 6.0.3 + openapi-spec-validator 0.7.2 | PASS; contract 0.2.0, 40 operations |
-| Reference resolution | Walk all local `$ref` JSON pointers in the parsed contract | PASS; 261 references resolve |
-| Protected-operation declarations | Inspect every operation with `security` | PASS; all 31 declare both 401 and 403; declaration check only |
-| Revised upload/429 declarations | Inspect required original part, gallery 413 and required Retry-After | PASS; runtime enforcement remains unimplemented |
-| Patch whitespace | `git diff --check` | PASS |
-| Ignore behavior | `git check-ignore --no-index` for `.dev.vars`, `.env`, Python cache, editor settings and Wrangler SQLite fixtures | PASS; root `.gitignore` added |
-| Extension hooks | Parse `.specify/extensions.yml` | Both implementation hooks optional; surfaced, not executed; no mandatory hook |
+| Check                            | Command / method                                                                                                  | Result                                                                                                                                                                                 |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Feature prerequisites            | `python .specify/scripts/python/check_prerequisites.py --json --require-tasks --include-tasks`                    | PASS; feature `specs/001-radiant-images-website`; research, data model, contracts, quickstart, tasks available                                                                         |
+| Requirements checklist           | Count Markdown checkboxes in `checklists/requirements.md`                                                         | PASS; 16 total, 16 complete, 0 incomplete                                                                                                                                              |
+| Repository instructions          | Read parent `AGENTS.md`, current plan and constitution v1.0.0                                                     | React/Workers stack and test-first requirements retained                                                                                                                               |
+| Hosting/provider feasibility     | Review current primary documentation linked in R-16                                                               | Initial checkpoint blocked on hosting; owner later selected Workers Static Assets and completed R2 enrollment. Expiry/decoder evidence remains incomplete                              |
+| Local tools                      | `node --version`; `npm --version`; `pnpm --version`                                                               | 24.14.0; 11.12.0; 9.15.0; no compatibility/build pass inferred                                                                                                                         |
+| Registry metadata                | `npm view` with process-local `NODE_OPTIONS=--use-system-ca`, retries disabled                                    | Initial certificate failure resolved using OS trust; Router 7.15.1 peers, Workers test pool 0.23.0/Vitest 4.1 peers, Wrangler 4.162.0 and pnpm 12.18.0 retrieved; installation not run |
+| OpenAPI 3.1 structure            | PyYAML 6.0.3 + openapi-spec-validator 0.7.2                                                                       | PASS; contract 0.2.0, 40 operations                                                                                                                                                    |
+| Reference resolution             | Walk all local `$ref` JSON pointers in the parsed contract                                                        | PASS; 261 references resolve                                                                                                                                                           |
+| Protected-operation declarations | Inspect every operation with `security`                                                                           | PASS; all 31 declare both 401 and 403; declaration check only                                                                                                                          |
+| Revised upload/429 declarations  | Inspect required original part, gallery 413 and required Retry-After                                              | PASS; runtime enforcement remains unimplemented                                                                                                                                        |
+| Patch whitespace                 | `git diff --check`                                                                                                | PASS                                                                                                                                                                                   |
+| Ignore behavior                  | `git check-ignore --no-index` for `.dev.vars`, `.env`, Python cache, editor settings and Wrangler SQLite fixtures | PASS; root `.gitignore` added                                                                                                                                                          |
+| Extension hooks                  | Parse `.specify/extensions.yml`                                                                                   | Both implementation hooks optional; surfaced, not executed; no mandatory hook                                                                                                          |
 
 Temporary validation packages were installed under `%TEMP%/radiant-images-contract-validation`,
 outside the repository and without changing the global Python environment. Reproduce the
@@ -83,3 +82,672 @@ Once those dependencies are resolved, continue T002 in task order. Keep T001 unc
 until its obligations are satisfied. Red/green behavior evidence begins with executable
 implementation; documentation-only work does not require an artificial failing test.
 All SC-001–SC-012 and QR acceptance results remain **NOT RUN**.
+
+## 2026-11-13 — implementation feasibility follow-up
+
+Invoked `speckit-implement`; followed the active feature branch and mandatory T001 ordering.
+The owner-selected host and completed R2 enrollment were not reopened. No paid service,
+external message, deployment, credential access or production-data operation was performed.
+The pre-existing `.specify` integration changes were left untouched and uncommitted.
+
+### Work completed within T001
+
+- Verified current provider documentation for Workers/Static Assets/D1/R2 budgets, actual
+  cost controls, rate-limit windows, Images binding/pricing, Gmail scopes/verification
+  exceptions, and data-recovery behavior. Source links and limitations are in research R-16.
+- Calculated the portfolio/request/storage planning envelope, including media replacement
+  churn, staged objects and independent database exports. Account allowance consumption
+  and application enforcement remain unmeasured; no $0 invoice guarantee is claimed.
+- Queried exact candidate dependency engines/peers and resolved the candidate in an isolated
+  temporary directory. The npm operation wrote only a manifest/lockfile outside the repo;
+  it did not install application dependencies or establish a working application/toolchain.
+- Clarified existing upload validation invariants in data-model.md and the OpenAPI
+  description without changing schemas, endpoint signatures, byte/pixel bounds or version.
+- Prepared `feasibility-decision.md`: a bounded, explicitly unapproved proposal to continue
+  local work while preserving production feasibility/deployment gates. No privacy rule,
+  constitution or task dependency has been waived by writing the proposal.
+
+### Validation actually run
+
+| Check                                 | Command / method                                                                                                        | Result                                                                                                                                                  |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prerequisites                         | `python .specify/scripts/python/check_prerequisites.py --json --require-tasks --include-tasks`                          | PASS; same active feature and required documents                                                                                                        |
+| Checklist/tasks                       | Parse Markdown checkboxes                                                                                               | PASS; requirements 16/16; all 63 tasks still unchecked                                                                                                  |
+| Exact dependency metadata             | `npm view <package>@<version> engines peerDependencies peerDependenciesMeta --json`                                     | Retrieved candidate versions recorded in R-16; OS certificate trust enabled, verification not disabled                                                  |
+| Dependency resolution                 | `npm install --prefix <probe> --package-lock-only --ignore-scripts --strict-peer-deps --no-audit --no-fund`             | PASS, exit 0, approximately 12 seconds; no runtime/build/vulnerability result inferred                                                                  |
+| OpenAPI                               | `openapi_spec_validator.validate` using the existing temporary PyYAML 6.0.3 / openapi-spec-validator 0.7.2 installation | PASS; version 0.2.0; 40 operations                                                                                                                      |
+| Contract references/auth declarations | Walk local JSON pointers and inspect protected operations                                                               | PASS; all 261 references resolve; all 31 protected operations declare 401 and 403                                                                       |
+| Ignore setup                          | `git rev-parse --git-dir`, config inventory, `git check-ignore --no-index`                                              | Git repository; secrets/dependencies/SQLite/Wrangler/test artifacts/editor fixtures ignored; no Docker/ESLint/Prettier/Helm/Terraform/package setup yet |
+| Whitespace                            | `git diff --check`                                                                                                      | PASS                                                                                                                                                    |
+| Hooks                                 | Parse `.specify/extensions.yml`                                                                                         | Both eligible implementation hooks optional; no mandatory hook. Optional commit not executed.                                                           |
+
+The unique probe directory was
+`%TEMP%/radiant-t001-toolchain-1bd130375489476db90bb9b9af06a0b9`.
+It used Node 24.14.0/npm 11.12.0 and the exact dependency candidate in R-16. No global
+package-manager change was made. Re-run installation/build with pnpm in T002 after the
+gate is resolved; this temporary npm resolution does not replace a committed pnpm lockfile.
+
+### Remaining gate
+
+R2 documentation does not establish the unconditional 30/31-day deletion deadlines.
+The Images candidate still needs subscription-eligibility and authoritative decoding
+evidence; offline emulation cannot establish either. T001 therefore remains incomplete.
+Requested the owner's decision on the proposed local-development exception. Until an
+explicit approval arrives, dependent implementation is not started. No behavioral red/green
+run was applicable to these documentation and dependency-resolution changes. Runtime,
+real-provider, human and release acceptance remain NOT RUN.
+
+## 2026-11-13 — approved exception and setup
+
+Owner explicitly approved the local-development exception: "yes, apply the exception and
+continue with implementation". It is now active; T001 remains a deployment gate.
+
+T002–T005 completed. Pinned pnpm 12.18.0 installed successfully, lockfile generated;
+`pnpm typecheck`, `pnpm lint`, and `pnpm build` pass. Public route stubs prerender and the
+SPA fallback is generated. These are test-harness placeholders, not implemented pages.
+Current maintained tooling corrections: `@cloudflare/vitest-plugin@1.8.2` replaces the
+deprecated pool package; ESLint 10.15.0 replaces deprecated 9.x; `oauth4webapi@3.8.8` and
+`jose@6.2.17` replace unsupported Arctic. Same architecture/provider/test boundaries.
+pnpm 12 uses `allowBuilds` and workspace settings; exact esbuild/workerd/sharp build
+approvals are recorded. The initial native-build-policy and Router runtime configuration
+errors were fixed; they are setup failures, not behavioral red evidence.
+
+T006 red: `pnpm exec vitest run --project=tooling` observed seven behavioral failures
+(wrong email retry flag accepted, missing 401/403 accepted, remote test targets allowed).
+Green: implemented strict response/status/header checking and explicit loopback protection.
+Provider/clock red: `pnpm exec vitest run --project=api apps/api/tests/providers.test.ts`
+observed 200 instead of requested 503 and epoch instead of controlled time. Green after
+fixture implementation. `pnpm test`: 14 tests pass across tooling, workerd D1/R2 and RTL.
+`pnpm e2e:smoke`: two local built-HTML/API-boundary smoke tests pass in Chromium desktop
+and mobile emulation (Chrome for Testing 159.0.8154.6, Playwright 1.65.1). This proves
+harness execution only, not functional UX, performance, physical-device or release criteria.
+Schema-specific reset/seeding and additional CI integrity checks are being completed.
+
+## 2026-11-13 - local foundation and inquiry implementation
+
+All evidence below is synthetic and local under the approved exception. No live email,
+production deployment, physical-device, image-decoder or strict retention proof is claimed.
+The prior “not started until approval” entry is historical and superseded by the approval.
+
+Commands use the pinned pnpm 12.18.0 runner, Node 24.14.0, Windows, with OS CA trust
+(`NODE_OPTIONS=--use-system-ca`) and Wrangler metrics disabled.
+
+| Tasks                     | Behavioral red observed before implementation                                                                                                       | Green evidence                                                                                                                                           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T007                      | Six migration/seed/constraint failures against the empty schema                                                                                     | db.test.ts: 6 pass; 22 tables, cascades, singleton pricing pointer, rollback, image cap, local-only seed                                                 |
+| T008                      | Shared bounds/public projection/error retry-flag failures                                                                                           | common.test.ts: 7 pass                                                                                                                                   |
+| T009                      | CORS, bounded-body, sanitized error/audit and atomic-rate failures                                                                                  | middleware.test.ts: 6 pass                                                                                                                               |
+| T010-T011                 | Identity grant/session, replay, rollback, claims and expiry failures; signing-key outage returned 400 instead of 502                                | auth.test.ts: 15 pass; signing-key outage corrected to 502                                                                                               |
+| T012                      | Four browser failures: no exchange, fragment retained, no expiry clearing, missing recovery link                                                    | web auth.test.tsx: 4 pass; no exchange retry; local logout survives outage                                                                               |
+| T013                      | Eight provider failures: unsafe MIME accepted, no dispatch, wrong delivery classifications, missing abort/verification                              | providers.test.ts: 8 pass; consent.test.ts: 1 pass after loopback/PKCE/scope red                                                                         |
+| T014                      | Bootstrap/published variants returned 404                                                                                                           | public.test.ts: 2 pass; private config and originals excluded                                                                                            |
+| T015                      | Missing landmarks, refresh and metadata                                                                                                             | publicContent.test.tsx: 3 pass; 25-second polling + 20-second edge cache + 10-second request deadline; visibility/focus refresh; last good data retained |
+| T018-T019                 | Three schema and seven inquiry failures (permissive validation / 404 instead of expected outcomes)                                                  | shared inquiry.test.ts: 3 pass; API inquiries.test.ts: 7 pass                                                                                            |
+| T020-T023 local UI        | Browser navigation/contact lacked headings/form; component tests lacked draft recovery, errors and gallery; trailing-slash metadata wrongly private | web inquiry.test.tsx: 5 pass; six Chromium desktop/mobile discovery/recovery-address smoke cases pass                                                    |
+| T024                      | Page/FAQ writes returned 404; editor lacked draft field                                                                                             | API content.test.ts: 3 pass; web content.test.tsx: 1 pass; failed FAQ batch retains previous rows                                                        |
+| T006 additional isolation | Synthetic reset accepted a remote origin and did not seed/clear state                                                                               | e2e-adapter.test.ts: 1 pass; separate local test D1/R2, pre/post-case reset, controlled time, provider-only doubles                                      |
+
+`pnpm test`: 18 files / 84 tests pass. `pnpm typecheck`, `pnpm lint`, and production
+build (API dry-run only) pass at this checkpoint. Built public HTML, route bundles,
+SPA fallback and sitemap are generated. Later changes must be verified again.
+
+Gmail/Turnstile adapters were checked against primary documentation:
+
+- https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/send
+- https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs/list
+- https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+
+T006 remains partial pending final CI/contract coverage and diagnostic artifact policy.
+Raw Playwright traces are currently disabled because they retain bearer/token HTTP data;
+synthetic screenshots remain enabled. Do not describe these as sanitized traces.
+T016/T017 retain additional integration/browser assertions; T023 still needs owner-approved
+privacy copy. T025 real-mail denominator, participant timings and content approval are NOT RUN.
+T060 direct-load tests observed 501 responses for admin deep links/missing assets before
+fallback implementation; final green verification is in progress. No workflow deployment occurred.
+
+### US1 browser and routing follow-up
+
+`pnpm exec playwright test e2e/inquiry.spec.ts e2e/deployment.spec.ts
+--project=chromium-desktop --project=chromium-mobile`: 22 pass in a clean 29.2-second run.
+The preceding run had 21 pass / one reset ECONNRESET while formatting reloaded the watched
+Worker; no feature assertion failed in that run. The clean run followed cessation of edits.
+Cases include real local API delivery, provider and browser response loss, no timer-based
+resend, fresh-CAPTCHA acknowledged restart, confirmed-receipt finish, typed definite failure,
+phone validation/error focus, all seven routes at 320/768/1280 pixels, private fallback
+loads and missing-asset 404. These layout fixtures do not yet contain 60 portfolio images.
+T060 fallback uses the generated __spa-fallback.html through the Static Assets canonical
+path and applies no-store/noindex/no-referrer. Deployment workflows/HTTPS/rollback remain open.
+Routine browser CAPTCHA is now always doubled at the external script boundary, including
+read-only navigation cases; no live verification is needed for routine tests.
+
+### T026-T030 local pricing
+
+API pricing.test.ts: four initial behavioral failures (404), followed by an ordering defect
+between PUT and GET responses. Green after implementing immutable batch publication and
+consistent Maternity/Newborn/Family order: 4 pass. Equal-time concurrent publication selects
+the last committed complete revision; failed pointer mutation rolls back rows and pointer.
+Web pricing.test.tsx: two initial missing-control failures, then 2 pass (failed publish
+preserves edits, missing-type validation, failed PDF keeps web and print available).
+Tooling pricing-pdf.test.ts: initially empty Blob, then 1 pass (%PDF header, nonempty PDF).
+
+Built Chromium desktop/mobile pricing suite: 4 pass. Initial browser print assertions used
+the wrong `hidden` option; corrected to Playwright `includeHidden` after adding tools/E2E
+typechecking. This was a test defect, not a print-layout product defect.
+Owner publication browser journey passes through the real callback/exchange/session and
+pricing endpoints with a synthetic preverified identity grant fixture; it does not establish
+live Google consent. An already-open Family page updates from $250.00 to $350.50 within the
+60-second budget (full journey 26.3 seconds). No real pricing or receipt evidence is claimed.
+
+PDF review used pypdf 7.1.0 and MuPDF 2.1 in ignored .venv (Poppler not installed). Text
+extraction initially found revision text, but page rendering revealed an off-page absolute
+footer. A visible-text/bounds assertion reproduced the defect before changing the footer to
+normal document flow. Rebuilt browser download: 2 desktop cases pass; read-only
+`scripts/check-pricing-pdf.py <download> --revision 01K00000000000000000000001` passes.
+All three PNG pages were visually inspected: no clipping; each shows the $250.00 fixture,
+correct shoot type and visible publication/revision footer. Physical print review, final
+owner content and the wider release matrix remain open in T031/T063.
+
+Expanded `pnpm typecheck` to tsconfig.tools.json. This exposed unsupported Vitest `forbidOnly`.
+A temporary `.only` probe initially passed (defect); replacing it with per-project
+`allowOnly:false` makes it fail with “Unexpected .only modifier”. A root-only setting did
+not propagate. The temporary probe was removed after verification. All four Vitest projects
+now enforce the policy, and tooling/browser typechecks pass.
+
+## US3 gallery implementation: local red/green evidence
+
+- T032/T034: `pnpm exec vitest run --project=api apps/api/tests/gallery.test.ts`
+  first failed all seven cases with missing routes (404); after implementation seven
+  passed against real local D1/R2. Covered staged upload compensation, concurrent cap
+  of 60, required/trimmed alt, forged metadata/claims, tag-only edit, atomic order,
+  private originals, failed deletion preservation, and unconfigured production decoder
+  rejecting publication. Production decoder proof remains OPEN under T001.
+- T033/T035: browser conversion and editor tests first failed on missing behavior;
+  four then passed for orientation-aware sizing, format rejection before decoding,
+  unsupported encoder recovery, required alt and failed-upload draft preservation.
+- Local image service: a behavioral 503-to-200 red/green test verifies the loopback
+  HTTP adapter with actual Sharp decoding and malformed-input rejection. Synthetic
+  fixtures contain only generated solid colors. The service is excluded from the
+  production Worker and does not prove Cloudflare Images entitlement or feasibility.
+- The first complete browser journey caught a real list-response mismatch; the next
+  caught Chromium canvas output carrying ICC metadata. Added a failing metadata
+  stripping test before the fix; strict ancillary-chunk removal now follows the
+  [WebP RIFF specification](https://developers.google.com/speed/webp/docs/riff_container).
+  Public canvas output uses sRGB. A full-decode test corrupts PNG pixel data while
+  preserving valid header dimensions/chunk lengths; the local decoder rejects it.
+  The focused browser/tool suites pass 10 tests. Full-stack rerun is in progress.
+- Recovery manifests retain deleted-image originals and derivatives privately with
+  a 28-day target expiry. Scheduled reconciliation/cleanup is still T058; the R2
+  unconditional physical deletion deadline remains the approved T001 release gate.
+
+### US3 local completion checkpoint
+
+- Full-stack Chromium desktop/mobile upload → oriented public image → reorder/edit →
+  remove journeys passed (2/2). Each already-open publication/removal assertion completed
+  within its 60-second bound; whole journeys took approximately 60 and 51 seconds.
+- A separate real API/D1/R2/decoder run uploaded 60 synthetic images, disabled upload at
+  capacity, and verified Home ordering, Newborn filtering, empty Maternity, and no horizontal
+  overflow at 320/768/1280px (passed, 5.2 seconds). No production entitlement was exercised.
+- API suite expanded to 9 passing cases: omitted alt, all gallery operations with missing,
+  expired and removed-owner credentials, and D1 delete failure after R2 deletion restoring
+  all four stored objects. Strict operation-level contract coverage remains in T059.
+- T033/T035/T036 local obligations are complete. T034 remains partial because production
+  authoritative decoding and scheduled interrupted-operation reconciliation are still open.
+
+## US4 banners: local red/green checkpoint
+
+- API tests first failed 3 behavioral cases with 404 (authorization already denied by
+  the shared guard). Shared schema/timezone tests failed 2 cases before implementation.
+  Six then passed covering UTC normalization, exclusive end, overlap/creation priority,
+  safe links, invalid calendars, DST gaps/folds, non-hour offsets, atomic audit rollback,
+  and missing/expired/removed-owner sessions.
+- UI tests first failed missing editor/banner behavior. Additional regressions reproduced
+  a stale local clock after resume and rendering saved banners before timezone loading;
+  all 4 component tests pass after fixes. Local expiry removes the banner even if the
+  API cannot refresh it. The editor preserves failed-save drafts.
+- The initial full-stack Chromium desktop scheduling/resume/overlap/delete/outage expiry
+  journey passed (1.1 seconds with a controlled browser/Worker clock). The expanded
+  desktop/mobile journey adds edits and every public route; results recorded next.
+
+## US5 settings: local red/green checkpoint
+
+- Three API tests first failed with 404; all pass after protected configuration routes.
+  Invalid addresses/options/timezones, missing public contact, unverified sender, provider
+  outage, and audit failure leave the old complete configuration intact. Sender verification
+  now distinguishes unavailable (502) from unverified (400). A subsequent synthetic inquiry
+  uses the saved private recipient/sender; the public projection exposes only approved fields.
+- The UI test failed on missing fields, then passed. Public contact is explicitly labeled
+  as displayed and monitored; empty options are blocked and failed-save edits are preserved.
+- At this checkpoint the full Vitest suite passes 31 files / 124 tests; typecheck, lint and
+  web production build pass. Browser settings/expanded banners are running. Live-mail and
+  human acceptance remain OPEN under the local-only exception (T046/T063).
+
+### US4/US5 browser completion (local)
+
+- Expanded banner checks passed on Chromium desktop/mobile, including editing, next-load
+  display on all seven public pages, overlap/deletion, background resume, and local expiry
+  during a bootstrap outage. The controlled clock measures scheduling behavior; it does not
+  replace deployed clock/cache evidence or human comprehension review.
+- Settings journeys passed on Chromium desktop/mobile (26.1/26.0 seconds for the complete
+  workflows). Already-open recovery-email/options updates were each strictly under 60 seconds.
+  Removed selected locations remain labeled “no longer available”; submission requires a
+  current selection while preserving the draft. Synthetic dispatch then used the new private
+  recipient and unchanged sender. Unverified sender saves were rejected and reload restored
+  the last saved settings. Real mailbox delivery is still OPEN (T046/T063).
+
+## US6 backend red/green checkpoint (2026-11-14)
+
+- `clients.test.ts`: five initial behavioral 404 failures, then seven passing cases including
+  manually entered CRUD/search, complete ordered checklist propagation/rollback, new-client
+  initialization, ID/time-only deletion receipts, interrupted deletion/retry, concurrent
+  ledger entries, fail-closed missing ledger/receipts, and retained template references.
+  Search first exposed an SQL ESCAPE defect; fixed using a literal ! escape, retaining
+  bound parameters and literal wildcard handling.
+- `workflow.test.ts`: five behavioral failures against runnable placeholders, then five
+  passing validation/expansion/snapshot tests. Optional session dates preview as “Not
+  scheduled”; optional phone/date persist as null. Expansion is single-pass and previews
+  retain {{questionnaireLink}}. Questions are capped at 40; short/long answers at 300/4000
+  trimmed characters, within the shared 64 KiB request envelope.
+- Migration `0002_lifecycle.sql` followed a failing schema inventory test. It records the
+  independent recovery-ledger identity and one-way initialization state. The ledger head
+  uses R2 conditional ETag writes; receipt keys contain only client ID/deletion time. A
+  missing initialized ledger is never recreated implicitly. Restore and retention replay
+  remain T058, and physical expiry guarantees remain T001.
+- `questionnaire.test.ts`: six initial behavioral 404 failures; eight tests now pass for
+  immutable snapshots, concurrent single-use submission, exact expiry, deletion/isolation,
+  validation, rollback of answers plus claim, ordinary email, shared invitation expansion,
+  all-occurrence history redaction, rejected/uncertain delivery, and known acceptance with
+  history failure. Tokens remain transient in the provider double; assertions use booleans
+  for token comparisons to avoid diagnostic disclosure.
+- The current focused API run passes 21 tests across clients/questionnaires/migrations.
+  Typecheck and lint pass. US6 browser/editor work and full release gates remain open.
+
+## US6 interface and local workflow checkpoint (2026-11-14)
+
+- Master-editor, client-detail and public-questionnaire component checks pass (3, 5 and 2
+  cases respectively). Draft preservation, immutable invitation labels, delivery uncertainty,
+  accepted-but-unrecorded sends, and explicit submission-status recovery are covered.
+- The first full browser journey exposed a controlled checkbox reverting before server
+  acknowledgment. A focused component reproduction failed; optimistic state with rollback
+  made it pass. A subsequent run started while the web build was still completing and timed
+  out loading client details. After build completion, all six Chromium desktop/mobile
+  client journeys passed without retry (40.8 seconds total). Complete workflow times were
+  24.8/5.3 seconds, synthetic automation only; human three-minute acceptance remains OPEN.
+- The workflow covers independent clients, checklist addition/rename/reorder, failed
+  propagation, all-incomplete new-client initialization, placeholder preview, transient
+  invitation delivery, visitor submission, immutable question/choice history, safe invitation-ID
+  navigation, isolation, and deletion invalidating the public link. T054–T056 are implemented.
+  T057 still needs actual mailbox receipt and owner timing.
+- Tokenized journeys disable screenshots/traces. A deliberate failing diagnostic probe
+  confirmed raw synthetic tokens were absent from console output and the decoded HTML-report
+  archive after reporter sanitization. The probe was removed. Full artifact/security gates
+  remain T059/T062; this is not a blanket artifact guarantee.
+
+## Operations checkpoint (2026-11-14, local exception)
+
+- Four initial behavioral failures covered backup absence, unsafe restore acceptance,
+  missing-ledger acceptance, and missing transient cleanup. Nine cases now pass: private
+  snapshots excluding transient credentials/dedupe/rates; deletion replay before reopening;
+  missing/incomplete ledger refusal; expiry/checksum refusal; atomic import rollback;
+  cleanup outage/retry; private original/variant recovery; and bounded health signals.
+  Another red case caught token-bearing history entering a backup; capture/restore now reject it.
+- Focused operations/client/questionnaire/migration: 30 tests passed. Typecheck passes.
+  `operations:local backup`, `restore <returned-key>`, and `reopen` were rehearsed successfully
+  against isolated synthetic .wrangler/e2e state. No remote operation ran.
+- Migration 0003 preserves ledger identity and adds durable restore status: live, blocked,
+  verified-but-closed. Failed restore stays blocked; success still needs explicit reopen.
+  No HTTP restore endpoint exists. Cron runs cleanup every five minutes, backup/health daily.
+- Recovery copies target day 28 and restore refuses them at expiry. Receipt retirement
+  starts at day 31 after overdue copies are deleted and absence verified. ETag updates and
+  a resumable retirement list preserve concurrent deletions/interrupted cleanup. These local
+  controls do not prove unconditional physical expiry during provider outages; T001/T058
+  production retention and monitoring validation remain OPEN.
+- D1 batch transactions and current per-invocation accounting were verified in
+  [binding documentation](https://developers.cloudflare.com/d1/worker-api/d1-database/) and
+  [limits](https://developers.cloudflare.com/d1/platform/limits/). Snapshot/import uses atomic
+  batches, bound values, and a fixed table/column allowlist. Snapshots are capped at 16 MiB;
+  larger-database operational feasibility requires separate validation.
+- Initial expanded contract run: 18 files / 104 checks pass. Existing API response witnesses
+  now pass through operation-specific OpenAPI assertions. All operations declare maintenance;
+  all body-bearing methods declare 413. Exhaustive authorization inventory is still in progress.
+
+## Release-check progress (2026-11-14)
+
+- The authorization inventory now verifies all 31 protected operations against missing,
+  expired, non-owner and removed-owner sessions. Auth plus declaration/contract checks passed
+  57 tests. Response assertions are applied to real local API integration responses, including
+  the three distinct email failure contracts. Maintenance and all applicable body-size errors
+  are declared per operation. No raw response payload is printed on a contract mismatch.
+- Public and owner automated axe WCAG 2/2.1/2.2 A/AA checks and public keyboard skip-link
+  navigation passed on Chromium. All seven public prerenders expose headings, descriptions,
+  canonical metadata and sitemap entries; private routes have no canonical and are noindex.
+  Screen-reader, physical-print and owner photo-alt review remain OPEN.
+- Header tests first failed because CSP was absent. Static assets now use a generated policy
+  with exact inline-script hashes; Worker fallback responses independently apply the same
+  policy. API responses deny script execution. Chromium and WebKit hydration checks passed.
+  Firefox exposed Zod's optional eval-based JIT probe; configuration now disables it before
+  shared schema construction, following [Zod's CSP guidance](https://zod.dev/compile).
+  Firefox's executable disappeared after launch on this runner, including after a normal
+  Playwright reinstall; the final Firefox rerun is not yet verified. No security settings
+  were disabled or exclusions added.
+- `pnpm audit` initially reported two moderate development-only transitive vulnerabilities.
+  Scoped overrides use esbuild 0.25.12 and minimatch 11.0.8. Audit now reports no known
+  vulnerabilities; lint and types pass. Primary advisories:
+  [esbuild](https://github.com/advisories/GHSA-67mh-4wv8-2f99),
+  [minimatch](https://github.com/advisories/GHSA-g3hv-75wg-m249).
+- Privacy gates followed failing token/archive tests. They inspect repository secret patterns,
+  decoded HTML-report ZIP text and diagnostic text, reject raw trace ZIP uploads, and only
+  allow artifact upload after a passing scan (seven-day retention). Both local scans pass.
+  Binary screenshots remain limited to synthetic non-tokenized journeys; live traces are
+  excluded. This gate does not replace content review or justify introducing real data.
+- Separate API/web deployment workflows are prepared, with same-commit Quality checks,
+  manual dispatch, production-environment review configuration and an exact evidence commit.
+  The release guard was observed rejecting current unchecked tasks before preparing any
+  remote configuration. No deploy/migration/secret upload was attempted.
+
+### Provisional performance evidence
+
+The owner-approved photograph fixture is unavailable. The versioned manifest explicitly
+records `approvedPhotos: false` and `kind: synthetic-load-only`. Sixty distinct deterministic
+textures meet the prescribed 2000/800/320 dimensions and 150–160/56–64/12–16 KiB envelopes,
+with exact sizes and SHA-256 hashes. These measurements are provisional local engineering
+evidence; they do not satisfy the approved-photo, deployed-provider, or field-data gates.
+
+The profile seeds 200 synthetic clients, nine pricing packages, four required FAQs, service
+content, contact options, an active banner and one immutable ten-question invitation. A bad
+How It Works fixture shape initially caused a bootstrap 500; a failing API reproduction
+preceded correcting the fixture to title/body objects. No failed timing sample was relabeled
+as a successful run.
+
+All 13 JSON GET operations passed ten warm-ups then 100 samples at concurrency five, expected
+200 bodies fully read and caches bypassed. Nearest-rank p95 ranged from 37 to 311 ms, all
+strictly below 500 ms. Raw samples and runner details are retained in
+[local-api-latency.json](./evidence/local-api-latency.json). Mobile cold-load and inquiry
+measurements are still in progress; no full SC-004/009 pass is claimed.
+
+The 20 independent mobile inquiry samples passed, each between 888 and 913 ms from first
+Submit to visible acceptance, with a cold refresh token and fixed 200 ms CAPTCHA/provider
+boundaries per run. Raw timings are in [local-inquiry-latency.json](./evidence/local-inquiry-latency.json).
+This does not measure mailbox receipt, live Turnstile, deployed latency or human typing.
+
+The first cold-load interaction attempt found that the prerendered mobile Menu could accept
+a click before hydration installed its handler. A component test reproduced the missing
+disabled state. The Header now uses React's server/client store snapshots to enable the
+button only once hydrated; the component check passes, including open/Escape/focus behavior.
+The cold-load suite is being rerun against the rebuilt frontend; its earlier failure remains
+recorded and is not a passing timing sample.
+
+The completed first 40-run cold baseline is retained in
+[local-mobile-baseline.json](./evidence/local-mobile-baseline.json). Service-route usable
+medians were 3448–3527 ms, exceeding 3000 ms; service/contact layout shift reached 0.877
+and About reached 0.142. These are failures. Focused component tests then reproduced a
+redundant initial fetch and incorrect empty-gallery state. The prerender now starts a bounded
+public bootstrap request before hydration; the provider consumes it once, retaining periodic
+refresh. Pending galleries, service copy and the contact form reserve layout space. Both
+component checks now pass. The unchanged 40-run profile is being repeated after rebuilding.
+
+Additional inquiry API validation checks passed for conditional phone, forged recipient,
+date/numeric/message bounds and blank optional fields (18 inquiry API cases in the focused
+run). Browser coverage for the full optional form and API-outage contact recovery is pending.
+
+The second cold run recorded 33 samples before the runner reported a 2.8-hour elapsed test
+and hit its 600-second timeout; the retained partial data is
+[local-mobile-layout-fix.json](./evidence/local-mobile-layout-fix.json). It contains the
+20,544 ms Home LCP outlier and service medians 3298–3386 ms; no samples were discarded.
+Service, About and Contact layout shift dropped to 0.056, while FAQ revealed a separate
+0.244 shift. The FAQ now reserves its answer region. A failing preload test preceded adding
+a responsive, same-API-origin preload for the first service photograph, with its bytes still
+included in the viewport transfer budget. Another complete profile is required.
+
+Generated 404/405/503 web responses initially failed three security-header tests; they now
+retain no-store, noindex, no-referrer, nosniff and a deny-all script policy. A valid 80-character
+client search returned 500 in the real local D1 test, matching the documented
+[50-byte LIKE/GLOB pattern limit](https://developers.cloudflare.com/d1/platform/limits/).
+Bound literal substring search now handles the accepted 200-character range, case folding
+and wildcard-looking text. Focused search/preload/header checks pass 13 tests.
+
+## Final local verification in progress (2026-11-14)
+
+- The complete Vitest run passed 49 files / 224 tests in 68.97 seconds, including real local
+  Worker/D1/R2 transactions, failure injection, strict operation contracts and all protected
+  operations. Formatting, lint and TypeScript passed; web production prerenders/security
+  generation and API dry-run build passed. Earlier typecheck issues in test options and
+  optional bootstrap state were corrected before this run.
+- Repository privacy scan checked 371 files with no blocked findings. Dependency audit
+  reports no known vulnerabilities after scoped development dependency overrides.
+- A normal pinned Firefox reinstall repeatedly failed with Windows EPERM while opening
+  firefox.exe. After repeated installer attempts it was stopped. Firefox remains BLOCKED on
+  this runner, not passed or removed from CI. No security configuration was changed.
+- The full non-performance Chromium desktop/mobile and WebKit desktop/mobile matrix is
+  running 112 cases. Performance runs separately to avoid concurrent CPU contention.
+
+The first complete browser matrix exposed two regressions. A repeated banner save retained
+the preceding success message while its request was pending; a focused component test failed
+before adding explicit saving/deleting status and now passes (5 banner cases). The pricing
+PDF failed because CSP blocked Yoga's bundled WebAssembly data URI. The policy now allows
+that embedded data fetch and the narrower `wasm-unsafe-eval`, while continuing to exclude
+JavaScript `unsafe-eval` and additional network origins. This distinction follows
+[the browser CSP documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src#unsafe_webassembly_execution).
+A policy assertion failed before the change and passes afterward; built browser reruns are
+still required. A diagnostic response-header interception could not verify the PDF because
+Chromium classified the fulfilled document outside the loopback address space; this is not
+accepted as product verification.
+
+WebKit's keyboard run then reproduced an unfocusable skip link under its default link-tabbing
+behavior. A direct page probe confirmed that explicit tabindex=0 makes Tab reach the link;
+the component assertion failed before adding that attribute and all four public-content
+component tests now pass. The browser keyboard/axe rerun will verify Enter reaches main.
+The quickstart now reflects implemented local scripts, separate synthetic and normal dev
+servers, trace restrictions, and manual gated deployment instead of obsolete planned commands.
+
+During the matrix the tool host timed out/restarted and wall time jumped about 50 minutes.
+WebKit mobile's keyboard test recorded 49.7 minutes and the following questionnaire/detail
+case timed out on initial navigation. These failures remain recorded; the changed keyboard,
+PDF and banner paths plus affected WebKit accessibility cases will be rerun after rebuild.
+
+The next performance run tightens the readiness probe: loaded FAQ/About content and the
+active fixture banner are asserted; viewport decode/paint precedes the first input so LCP
+observation is not ended early. Earlier timing files remain historical partial evidence.
+Browser Date is fixed to the API fixture instant while performance timers/RAF run normally,
+preventing a long local session from expiring the fixture banner. Navigation phase timings
+are retained to diagnose future startup outliers. All thresholds and five cold runs remain.
+
+The first four-project non-performance matrix completed with 104 passing / 8 failing /
+0 flaky / 0 skipped cases. Counts are retained in
+[local-browser-baseline-summary.json](./evidence/local-browser-baseline-summary.json).
+All contact, gallery, client, settings, SEO and deep-link cases passed on these four projects;
+known failures and the runner interruption are described above. Artifact privacy checked
+18 generated files with zero blocked findings before starting the corrective run.
+A rebuilt 44-case run now covers accessibility, banners, pricing, CSP hydration and client
+workflows in all four projects. The client history journey additionally deletes/reorders
+master questions after submission and checks original prompts, choices, answer values and
+order across three captured question types.
+
+The JS budget now also counts inline script bytes (uncompressed, a conservative addition to
+encoded external-resource sizes), including the new early bootstrap/preload script. This
+avoids excluding executable inline code from the transfer check. No threshold was increased.
+
+The rebuilt correction matrix passed 43/44 cases. All eight original failing paths now
+pass, including PDF/print, banners, and WebKit keyboard/axe. Its summary is retained in
+[local-browser-corrections-summary.json](./evidence/local-browser-corrections-summary.json).
+The expanded WebKit mobile owner workflow saw an empty email after the automation fill;
+other project runs and its earlier complete journey passed. A consecutive-field component
+probe passed without a product change. The browser helper now explicitly verifies all three
+entered values before Submit; a single diagnostic rerun is pending. The original failure
+is not removed or treated as a clean matrix pass.
+
+Final formatting/lint/types passed, and the complete regression suite passed 49 files /
+225 tests in 67.96 seconds after the banner, CSP and skip-link fixes. The additional
+consecutive-field probe passed in the six-case client component run.
+
+The single diagnostic WebKit mobile owner-workflow rerun passed in 12.2 seconds with the
+entered-value assertions. Across the initial/corrective runs, all 112 non-performance
+project/case combinations have passing evidence, but the intermittent input failure remains
+recorded and T059 is not marked complete. Firefox also remains blocked by Windows EPERM.
+The release guard and CI fail-on-flaky policy remain unchanged. T048 and T062's implemented
+local coverage is complete; this is not a real-device, real-mail or production approval.
+
+A measurement-harness defect was detected before any new cold-load sample was recorded:
+Playwright's fixed-time helper replaced Performance entries, leaving navigation timing absent.
+The failed attempt is not timing evidence. The profile now sets the API fixture date to the
+runner's current date immediately after each reset and leaves browser Date/Performance APIs
+native. Each cold result records its fixture instant; banners and invitations stay valid
+without changing browser measurement behavior. A complete native-clock rerun follows.
+
+## Final local performance and release gates (2026-11-14)
+
+The native-clock mobile rerun completed all 40 cold samples: five per public route, with
+fresh browser contexts, caches disabled, 375×812 viewport at DPR 1, 4× CPU slowdown,
+1.6 Mbps down / 750 kbps up / 150 ms RTT, and the full synthetic fixture. No other heavy
+verification ran concurrently. The unchanged usable, LCP, CLS and transfer thresholds all
+passed. Raw samples, navigation phases, runner/browser versions and fixture instants are in
+[local-mobile-final.json](./evidence/local-mobile-final.json).
+
+| Route                          | Usable median (ms) | Maximum LCP (ms) | Maximum CLS | Maximum JS bytes | Maximum viewport image bytes |
+| ------------------------------ | -----------------: | ---------------: | ----------: | ---------------: | ---------------------------: |
+| Home                           |               1823 |              836 |       0.056 |           150657 |                            0 |
+| Maternity                      |               2488 |             2304 |       0.056 |           187584 |                        59572 |
+| Newborn                        |               2497 |             2304 |       0.056 |           187577 |                        57580 |
+| Family                         |               2481 |             2316 |       0.056 |           187573 |                        59804 |
+| About                          |               2007 |              940 |       0.056 |           184938 |                            0 |
+| FAQ                            |               1988 |              948 |       0.056 |           184837 |                            0 |
+| Contact                        |               2093 |              952 |       0.056 |           154432 |                            0 |
+| Questionnaire (token redacted) |               1876 |             1616 |       0.006 |           147236 |                            0 |
+
+Scripted interaction elapsed times were 16.2–68.3 ms; these are lab probes, not field INP.
+JS totals include inline code. Images are deterministic load textures, not approved portfolio
+photographs. These are provisional local results and do not close T061 or SC-004/009's
+remaining approved-content, deployed-provider and field-data requirements. The earlier
+failures and interrupted runs remain retained above.
+
+The latest JSON-read profile again passed all 13 operations, each with ten warm-ups and
+100 fully read responses at concurrency five. Nearest-rank p95 ranged from 30.9 to 197.0 ms,
+strictly below 500 ms; see [local-api-latency-final.json](./evidence/local-api-latency-final.json).
+Twenty further independent mobile inquiry submissions took 889.9–927.6 ms, all below five
+seconds; see [local-inquiry-latency-clock-run.json](./evidence/local-inquiry-latency-clock-run.json).
+Those two files precede the native-browser-clock correction: the read profile has no browser,
+and inquiry elapsed time uses Node's native performance clock. The inquiry run is valid
+Submit-to-visible-provider-acceptance evidence, not browser resource timing or mailbox receipt.
+Its historical runner clock description does not imply that browser Performance entries were
+usable. Both runs use external-provider doubles with the specified delays.
+
+Two final deployment regressions were reproduced before fixes: reserved example/test origins
+were accepted, and the actual prepare-release CLI wrote the owner allowlist into plaintext
+configuration. The release guard now rejects reserved domains and literal IP hosts for public
+origins/contact configuration. The CLI omits `OWNER_ALLOWLIST` and `GOOGLE_CLIENT_ID`, which
+remain separately provisioned Worker secrets. Both regression tests pass. A Windows test-loader
+setup error was fixed before observing the real failing assertion; it is not counted as red.
+
+### Outstanding task evidence
+
+The approved exception's independent local implementation is complete. **51 of 63 tasks are
+checked; 12 remain open** because their full acceptance requirements are not met:
+
+| Task | Completed local portion                                                                             | Evidence still required                                                                                                            |
+| ---- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| T001 | Provider research, fail-closed boundaries and approved exception                                    | Unconditional physical recovery/receipt expiry and production decoder entitlement/resource proof                                   |
+| T023 | Complete validated contact and uncertain-delivery recovery flow                                     | Owner privacy copy and approved, monitored public contact address                                                                  |
+| T025 | US1 API/component/browser and controlled inquiry timing                                             | Real mailbox delivery and predeclared human acceptance                                                                             |
+| T031 | Pricing parity, navigation, browser print/PDF and local PDF inspection                              | Physical print and owner content/readability acceptance                                                                            |
+| T034 | Local authoritative decoding, upload/publication, metadata removal and failure cleanup              | Production authoritative decoder evidence under T001                                                                               |
+| T046 | Settings, stale-form and controlled propagation checks                                              | Changed-recipient real-mailbox acceptance                                                                                          |
+| T057 | Integrated owner workflow, isolation and immutable history                                          | Actual mailbox receipt and unassisted three-minute owner timing                                                                    |
+| T058 | Private backup, restore/deletion reconciliation, media recovery, cleanup and health tests/rehearsal | Physical expiry guarantees and production monitoring/alerting proof                                                                |
+| T059 | CI definition, strict contracts, privacy gates and local browser evidence                           | Clean combined engine matrix and remote CI execution; Firefox now passes locally, earlier failures and WebKit input issue retained |
+| T060 | Separate guarded workflows and built local fallback/security checks                                 | Real HTTPS deployment and remote rollback rehearsal                                                                                |
+| T061 | Automated axe/keyboard, SEO, responsive layouts and provisional lab performance                     | Screen-reader/photo-alt review, approved photo fixture and deployed/field evidence                                                 |
+| T063 | Local quickstart coverage and release acceptance register                                           | Actual browser/device matrix, live/human acceptance and owner content/privacy approvals                                            |
+
+No live messages, real-client imports, paid subscriptions or public deployments were performed.
+The release guard continues to refuse deployment while any task is unchecked. The exception
+does not relax retention, privacy, image validation or hosting requirements.
+
+Final regression validation passed **50 files / 227 tests** in 125.22 seconds. Formatting,
+ESLint, all TypeScript projects, the seven-route production prerender/security build and API
+dry-run build passed (`pnpm check`, exit 0). The lazy PDF bundle still emits a build-size
+warning; it is loaded on download and the measured initial-route JS budgets pass. The first
+final-check attempt reported two tooling
+lint issues (an unnecessary regex escape and a throw inside finally); both were corrected
+before this passing regression run. Repository privacy scanned 377 files and artifact privacy
+scanned five files with zero blocked findings. The dependency audit found no known
+vulnerabilities. These results do not erase the separate browser failures recorded above.
+
+### Firefox installation retry requested by owner (2026-11-14)
+
+The owner requested another Firefox installation attempt while preparing a Norton rule.
+`pnpm exec playwright install firefox` downloaded pinned Firefox 159.0 / build 1572,
+but all five installer attempts failed with Windows `EPERM` when opening
+`%LOCALAPPDATA%\ms-playwright\firefox-1572\firefox\firefox.exe`; the command exited 1.
+The executable was absent on inspection. Norton rule activation has not been confirmed;
+no Firefox test run or successful installation is claimed. No antivirus settings were
+changed by the agent. The existing Firefox verification gate remains open.
+
+The owner then confirmed an exclusion for the exact executable path. A new normal installer
+run still failed all five attempts with the same `EPERM` and exited 1. The browser cache's
+ACL grants the current user FullControl, and no Firefox process was running; the installer
+removed its incomplete target directory. The error alone does not identify the blocking
+security component. Norton Security History details and the exclusion type were requested
+before further changes. Firefox installation and browser verification remain blocked.
+
+After the owner reported temporarily disabling malware protection, another requested normal
+installation retry again failed all five attempts with `EPERM` at the same executable and
+exited 1. The executable remained absent. Read-only checks showed Windows Defender was not
+running and no matching recent Defender detection/block events were found. The owner was
+advised to re-enable Norton because the temporary pause did not resolve installation. No
+security settings were changed by the agent and no Firefox suite was started; the exact
+blocking component remains unconfirmed.
+
+On the owner's next request, the normal Playwright installation again ended with `EPERM`
+at the same path (exit 1). A separate direct download from Playwright's official CDN succeeded:
+`Downloads/playwright-firefox-1572-win64.zip`, 132,237,406 bytes, SHA-256
+`17abdb829293f482dae4c85be9e0dff5995a66457d8b3ca7a7efc6f5ef9c08c5`.
+ZIP inspection found 77 entries, including the 1,139,712-byte `firefox/firefox.exe` entry;
+this verifies the executable is present in the downloaded archive, not that it is installed
+or runnable. The blocked executable was not relocated or renamed to bypass protection.
+
+The additionally requested Windows executable was downloaded through Mozilla's official
+[Firefox download page](https://www.firefox.com/en-US/download/windows/) into
+`Downloads/Firefox Installer.exe` (508,216 bytes). Windows Authenticode reported **Valid**,
+signed by **Mozilla Corporation**; SHA-256
+`339f43cab6f09f5cfa815807561487e6277d22296e9e363408335f3cdea08426`.
+This is Mozilla's standard installer, separate from Playwright's pinned browser. It was not
+executed, and its successful download does not close the Firefox automation gate.
+
+### Manually extracted Firefox verification (2026-11-14)
+
+The owner installed standard Firefox and manually extracted the pinned Playwright archive
+into `C:/Users/My PC/Downloads/playwright-firefox-1572-win64/firefox`. The extracted
+`firefox.exe` is 1,139,712 bytes with SHA-256
+`a8fa6c08d8a9e8cb961e74a626dd2f4c5064a853de38bcde3df3cb145ec44530`, exactly matching
+the executable entry read directly from the downloaded archive. A Playwright headless launch
+reported **Firefox 159.0** and rendered the local launch-check document successfully.
+
+An ignored machine-local config, `.wrangler/firefox-local.config.ts`, imports the existing
+Playwright configuration and supplies that explicit executable path to `firefox-desktop`.
+It preserves one worker, zero automatic local retries, strict flake/focus checks, privacy
+reporting and the real built web/Worker/D1/R2 servers. The three Chromium-only performance
+cases are excluded; all 28 Firefox functional cases are selected. Command:
+`pnpm exec playwright test --config=.wrangler/firefox-local.config.ts`.
+
+The first run passed **27/28**, with zero skipped or flaky classifications, in 162.54 seconds.
+The owner workflow failed with `NS_BINDING_ABORTED` at the first navigation after the failed
+checklist-write/reload check. Its assertion only checked that a removed third item was absent,
+which also passes while the entire checklist is still loading. The test now first verifies
+that the two persisted labels are loaded, then checks the removed item is absent, before
+navigating away. No product behavior, timeout, retry count or expected result was weakened.
+The initial result is retained in
+[local-firefox-baseline-summary.json](./evidence/local-firefox-baseline-summary.json).
+Its four diagnostic files passed the privacy gate with zero blocked findings.
+
+The single complete verification run with the stronger readiness assertions passed
+**28/28**, zero failed, skipped or flaky classifications, in **161.68 seconds**. Its summary
+is retained in
+[local-firefox-corrections-summary.json](./evidence/local-firefox-corrections-summary.json).
+The two resulting diagnostic files and 379 repository files passed privacy scanning with
+zero blocked findings. Formatting and ESLint passed for the changed browser test, and
+`tsc -p tsconfig.tools.json` passed. No application code or build changed in this follow-up.
+
+Firefox availability is now resolved for this workstation through the owner's extracted
+browser and the explicit local launch configuration. The historical installer failures and
+first test failure remain evidence. T059 is still open for a clean combined engine matrix,
+the recorded WebKit input issue and remote CI execution; T063's actual-device/previous-version
+matrix and other live/human acceptance gates remain open. The task count stays 51/63.

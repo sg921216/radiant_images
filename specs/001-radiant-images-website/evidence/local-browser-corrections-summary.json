@@ -1,0 +1,14 @@
+{
+  "stats": {
+    "total": 44,
+    "expected": 43,
+    "unexpected": 1,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": false
+  },
+  "projects": ["chromium-desktop", "chromium-mobile", "webkit-desktop", "webkit-mobile"],
+  "started": 1794650378485,
+  "duration": 302469.159,
+  "limitations": "All original regressions pass. One expanded WebKit mobile workflow saw an empty client email after fill; investigation remains separate."
+}

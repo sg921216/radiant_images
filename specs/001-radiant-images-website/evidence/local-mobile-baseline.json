@@ -1,0 +1,654 @@
+{
+  "runner": {
+    "os": "win32 10.0.26200",
+    "cpu": "12th Gen Intel(R) Core(TM) i9-12900K",
+    "logicalCpus": 24,
+    "memoryGiB": 64,
+    "playwright": "1.65.1",
+    "fixture": "synthetic-load-only; approved-photo gate OPEN",
+    "captcha": "deterministic adapter; 200 ms readiness; not live Turnstile"
+  },
+  "browser": "159.0.8154.6",
+  "results": [
+    {
+      "route": "/",
+      "run": 0,
+      "usable": 1794.8469,
+      "interactionMs": 42.31760000000031,
+      "lcp": 796,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146175,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 1,
+      "usable": 1805.7206999999999,
+      "interactionMs": 82.76130000000012,
+      "lcp": 772,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146175,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "usable": 1780.2734999999993,
+      "interactionMs": 40.57519999999931,
+      "lcp": 780,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146175,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "usable": 1814.6094000000012,
+      "interactionMs": 78.0248999999967,
+      "lcp": 780,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146175,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 4,
+      "usable": 1775.4127000000008,
+      "interactionMs": 36.85599999999977,
+      "lcp": 776,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146175,
+      "imageBytes": 0
+    },
+    {
+      "route": "/maternity",
+      "run": 0,
+      "usable": 3471.506000000001,
+      "interactionMs": 56.52440000000206,
+      "lcp": 940,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183084,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 1,
+      "usable": 3479.2400999999954,
+      "interactionMs": 59.53490000000602,
+      "lcp": 912,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183084,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 2,
+      "usable": 3477.6895000000004,
+      "interactionMs": 44.885699999998906,
+      "lcp": 944,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183084,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 3,
+      "usable": 3471.190999999999,
+      "interactionMs": 48.24669999999605,
+      "lcp": 924,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183084,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 4,
+      "usable": 3476.5782000000036,
+      "interactionMs": 51.746500000001106,
+      "lcp": 944,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183084,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/newborn",
+      "run": 0,
+      "usable": 3487.6647999999986,
+      "interactionMs": 50.915399999998044,
+      "lcp": 940,
+      "cls": 0.8768472906403941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 1,
+      "usable": 3448.4681999999957,
+      "interactionMs": 63.30100000000675,
+      "lcp": 932,
+      "cls": 0.8768472906403941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 2,
+      "usable": 3447.62999999999,
+      "interactionMs": 65.58750000000873,
+      "lcp": 916,
+      "cls": 0.8768472906403941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 3,
+      "usable": 3437.4446999999927,
+      "interactionMs": 66.07489999999234,
+      "lcp": 936,
+      "cls": 0.8768472906403941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 4,
+      "usable": 3467.2045999999973,
+      "interactionMs": 55.93890000000829,
+      "lcp": 936,
+      "cls": 0.8768472906403941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/family",
+      "run": 0,
+      "usable": 3504.1025999999983,
+      "interactionMs": 71.35549999999057,
+      "lcp": 940,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 1,
+      "usable": 3502.031600000002,
+      "interactionMs": 54.84879999999248,
+      "lcp": 972,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 2,
+      "usable": 3531.4986999999965,
+      "interactionMs": 48.510800000003655,
+      "lcp": 948,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 3,
+      "usable": 3527.4091999999946,
+      "interactionMs": 57.30329999999958,
+      "lcp": 944,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 4,
+      "usable": 3560.2198999999964,
+      "interactionMs": 64.5737999999983,
+      "lcp": 960,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "SECTION.how-it-works"]
+        }
+      ],
+      "jsBytes": 183083,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/about",
+      "run": 0,
+      "usable": 1944.1172000000079,
+      "interactionMs": 69.07910000000265,
+      "lcp": 928,
+      "cls": 0,
+      "lcpElement": "P.",
+      "shifts": [],
+      "jsBytes": 180502,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 1,
+      "usable": 1951.3712999999989,
+      "interactionMs": 56.29690000000119,
+      "lcp": 968,
+      "cls": 0,
+      "lcpElement": "P.",
+      "shifts": [],
+      "jsBytes": 180502,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 2,
+      "usable": 2447.0786999999837,
+      "interactionMs": 58.2723999999871,
+      "lcp": 948,
+      "cls": 0.14163054490523916,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.14163054490523916,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180502,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 3,
+      "usable": 1931.0884000000078,
+      "interactionMs": 67.96979999999166,
+      "lcp": 916,
+      "cls": 0,
+      "lcpElement": "P.",
+      "shifts": [],
+      "jsBytes": 180502,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 4,
+      "usable": 2337.704700000002,
+      "interactionMs": 43.12940000000526,
+      "lcp": 840,
+      "cls": 0.14163054490523916,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.14163054490523916,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180502,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 0,
+      "usable": 1926.0966999999946,
+      "interactionMs": 63.726399999985006,
+      "lcp": 928,
+      "cls": 0,
+      "lcpElement": "H1.",
+      "shifts": [],
+      "jsBytes": 180405,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 1,
+      "usable": 1911.4108000000124,
+      "interactionMs": 57.093699999997625,
+      "lcp": 912,
+      "cls": 0,
+      "lcpElement": "H1.",
+      "shifts": [],
+      "jsBytes": 180405,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 2,
+      "usable": 1907.8752999999851,
+      "interactionMs": 65.4543999999878,
+      "lcp": 908,
+      "cls": 0,
+      "lcpElement": "H1.",
+      "shifts": [],
+      "jsBytes": 180405,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 3,
+      "usable": 1946.913099999976,
+      "interactionMs": 59.79639999999199,
+      "lcp": 932,
+      "cls": 0,
+      "lcpElement": "H1.",
+      "shifts": [],
+      "jsBytes": 180405,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 4,
+      "usable": 1929.7466999999888,
+      "interactionMs": 63.61699999999837,
+      "lcp": 912,
+      "cls": 0,
+      "lcpElement": "H1.",
+      "shifts": [],
+      "jsBytes": 180405,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 0,
+      "usable": 2148.8306000000157,
+      "interactionMs": 61.93369999999413,
+      "lcp": 932,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 149989,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 1,
+      "usable": 2210.8364,
+      "interactionMs": 53.475399999995716,
+      "lcp": 912,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 149989,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 2,
+      "usable": 2147.8693000000203,
+      "interactionMs": 74.97870000000694,
+      "lcp": 932,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 149989,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 3,
+      "usable": 2217.6152,
+      "interactionMs": 49.342299999989336,
+      "lcp": 936,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 149989,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 4,
+      "usable": 2218.4456000000064,
+      "interactionMs": 116.88219999999274,
+      "lcp": 904,
+      "cls": 0.8768472906403941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.8768472906403941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 149989,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 0,
+      "usable": 1864.3506000000052,
+      "interactionMs": 18.99810000002617,
+      "lcp": 1588,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": ["BODY."]
+        }
+      ],
+      "jsBytes": 146437,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 1,
+      "usable": 1863.0458999999973,
+      "interactionMs": 17.00889999998617,
+      "lcp": 1592,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": ["BODY."]
+        }
+      ],
+      "jsBytes": 146437,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 2,
+      "usable": 1879.3652999999758,
+      "interactionMs": 18.394999999989523,
+      "lcp": 1592,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": ["BODY."]
+        }
+      ],
+      "jsBytes": 146437,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 3,
+      "usable": 1889.9580000000133,
+      "interactionMs": 19.847500000003492,
+      "lcp": 1580,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": ["BODY."]
+        }
+      ],
+      "jsBytes": 146437,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 4,
+      "usable": 1893.2452999999805,
+      "interactionMs": 18.390600000013364,
+      "lcp": 1604,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": ["BODY."]
+        }
+      ],
+      "jsBytes": 146437,
+      "imageBytes": 0
+    }
+  ]
+}

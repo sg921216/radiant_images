@@ -1,0 +1,28 @@
+name = "radiant-synthetic-tests"
+main = "worker.ts"
+compatibility_date = "2026-11-13"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+[vars]
+WEB_ORIGIN = "http://127.0.0.1:4173"
+API_ORIGIN = "http://127.0.0.1:8787"
+OWNER_ALLOWLIST = "owner@example.invalid"
+GOOGLE_CLIENT_ID = "synthetic-client"
+GOOGLE_CLIENT_SECRET = "synthetic-client-secret"
+GMAIL_REFRESH_TOKEN = "synthetic-refresh"
+TURNSTILE_SECRET = "synthetic-turnstile"
+RATE_LIMIT_KEY = "synthetic-rate-key-only"
+AUTH_KEY = "synthetic-auth-key-only"
+[[d1_databases]]
+binding = "DB"
+database_name = "radiant-e2e"
+database_id = "00000000-0000-0000-0000-000000000002"
+migrations_dir = "../apps/api/src/db/migrations"
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "radiant-e2e-media"
+[[r2_buckets]]
+binding = "RECOVERY"
+bucket_name = "radiant-e2e-recovery"
+[observability]
+enabled = false

@@ -51,47 +51,96 @@ components:
       description: Requested resource was not found.
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     TooManyRequests:
-      description: Application fixed-window rate limit exceeded (see research R-09/R-16). Seconds until the active window resets; does not authorize retrying an uncertain email send.
+      description: Application fixed-window rate limit exceeded (see research
+        R-09/R-16). Seconds until the active window resets; does not authorize
+        retrying an uncertain email send.
       headers:
         Retry-After:
           required: true
           schema: { type: integer, minimum: 1 }
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     PayloadTooLarge:
-      description: Upload body or binary part exceeds its byte ceiling; published gallery remains unchanged.
+      description: Upload body or binary part exceeds its byte ceiling; published
+        gallery remains unchanged.
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     Conflict:
-      description: Invariant violated (e.g. gallery cap, duplicate inquiry, questionnaire already submitted).
+      description: Invariant violated (e.g. gallery cap, duplicate inquiry,
+        questionnaire already submitted).
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     BadGateway:
-      description: Upstream dependency failed before email dispatch. Never use this response for an uncertain or accepted send; follow the operation-specific recovery guidance.
+      description: Upstream dependency failed before email dispatch. Never use this
+        response for an uncertain or accepted send; follow the
+        operation-specific recovery guidance.
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     InternalError:
-      description: Internal operation failed. Do not infer that repeating a side-effecting request is safe; verify its outcome first.
+      description: Internal operation failed. Do not infer that repeating a
+        side-effecting request is safe; verify its outcome first.
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     EmailNotSent:
-      description: Definite non-delivery (provider rejected the send or failure occurred before dispatch). Preserve the draft; an explicit user retry is allowed. No automatic resend.
-      content: { application/json: { schema: { $ref: '#/components/schemas/EmailNotSentError' } } }
+      description: Definite non-delivery (provider rejected the send or failure
+        occurred before dispatch). Preserve the draft; an explicit user retry is
+        allowed. No automatic resend.
+      content:
+        {
+          application/json: { schema: { $ref: '#/components/schemas/EmailNotSentError' } }
+        }
     EmailOutcomeUnknown:
-      description: Dispatch may have reached the provider but acceptance cannot be confirmed. Preserve the draft and any possibly delivered invitation; manual mailbox/owner verification is required before an explicit new send. No immediate or automatic retry.
-      content: { application/json: { schema: { $ref: '#/components/schemas/EmailOutcomeUnknownError' } } }
+      description: Dispatch may have reached the provider but acceptance cannot be
+        confirmed. Preserve the draft and any possibly delivered invitation;
+        manual mailbox/owner verification is required before an explicit new
+        send. No immediate or automatic retry.
+      content:
+        {
+          application/json: { schema: { $ref: '#/components/schemas/EmailOutcomeUnknownError' } }
+        }
     EmailHistoryFailed:
-      description: Provider acceptance is confirmed but recording owner send history failed. Report acceptance and the recording failure separately; require manual reconciliation and never resend to repair history.
-      content: { application/json: { schema: { $ref: '#/components/schemas/EmailHistoryFailedError' } } }
+      description: Provider acceptance is confirmed but recording owner send history
+        failed. Report acceptance and the recording failure separately; require
+        manual reconciliation and never resend to repair history.
+      content:
+        {
+          application/json: { schema: { $ref: '#/components/schemas/EmailHistoryFailedError' } }
+        }
+    Maintenance:
+      description: Offline recovery is in progress. Access resumes only after verified
+        reconciliation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
 
   schemas:
     Error:
       type: object
-      required: [error]
+      required: [ error ]
       properties:
         error:
           type: object
-          required: [code, message]
+          required: [ code, message ]
           properties:
-            code: { type: string, examples: [validation_failed, captcha_failed, duplicate, gallery_full, stale_option, email_failed, forbidden] }
+            code:
+              {
+                type: string,
+                examples:
+                  [
+                    validation_failed,
+                    captcha_failed,
+                    duplicate,
+                    gallery_full,
+                    stale_option,
+                    email_failed,
+                    forbidden
+                  ]
+              }
             message: { type: string }
             fields: { type: object, additionalProperties: { type: string } }
-            retryable: { type: boolean, description: 'Whether an explicit user retry is permitted after recovery; never authorizes automatic email resend. Absence does not establish retry safety.' }
+            retryable:
+              {
+                type: boolean,
+                description: 'Whether an explicit user retry is permitted after recovery; never
+                  authorizes automatic email resend. Absence does not establish
+                  retry safety.'
+              }
 
     EmailNotSentError:
       allOf:
@@ -100,7 +149,7 @@ components:
           properties:
             error:
               type: object
-              required: [retryable]
+              required: [ retryable ]
               properties:
                 code: { const: email_not_sent }
                 retryable: { const: true }
@@ -111,7 +160,7 @@ components:
           properties:
             error:
               type: object
-              required: [retryable]
+              required: [ retryable ]
               properties:
                 code: { const: email_outcome_unknown }
                 retryable: { const: false }
@@ -122,27 +171,35 @@ components:
           properties:
             error:
               type: object
-              required: [retryable]
+              required: [ retryable ]
               properties:
                 code: { const: email_history_failed }
                 retryable: { const: false }
 
-    ShootType: { type: string, enum: [maternity, newborn, family] }
-    GalleryTag: { type: string, enum: [maternity, newborn, family, general] }
+    ShootType: { type: string, enum: [ maternity, newborn, family ] }
+    GalleryTag: { type: string, enum: [ maternity, newborn, family, general ] }
 
     GalleryImage:
       type: object
-      required: [id, tag, altText, sortOrder, width, height, urls]
+      required: [ id, tag, altText, sortOrder, width, height, urls ]
       properties:
         id: { type: string }
         tag: { $ref: '#/components/schemas/GalleryTag' }
-        altText: { type: string, minLength: 1, maxLength: 200, pattern: '\S', description: 'Required descriptive alternative for an informative portfolio photograph; trim before validation/storage.' }
+        altText:
+          {
+            type: string,
+            minLength: 1,
+            maxLength: 200,
+            pattern: '\S',
+            description: 'Required descriptive alternative for an informative portfolio
+              photograph; trim before validation/storage.'
+          }
         sortOrder: { type: integer }
         width: { type: integer, minimum: 1, maximum: 2000 }
         height: { type: integer, minimum: 1, maximum: 2000 }
         urls:
           type: object
-          required: [full, card, thumb]
+          required: [ full, card, thumb ]
           properties:
             full: { type: string, format: uri }
             card: { type: string, format: uri }
@@ -150,25 +207,25 @@ components:
 
     Banner:
       type: object
-      required: [id, message, linkUrl, startsAt, endsAt]
+      required: [ id, message, linkUrl, startsAt, endsAt ]
       properties:
         id: { type: string }
         message: { type: string, minLength: 1, maxLength: 200 }
-        linkUrl: { type: [string, 'null'], format: uri }
+        linkUrl: { type: [ string, 'null' ], format: uri }
         startsAt: { type: string, format: date-time }
         endsAt: { type: string, format: date-time }
     BannerInput:
       type: object
-      required: [message, startsAt, endsAt]
+      required: [ message, startsAt, endsAt ]
       properties:
         message: { type: string, minLength: 1, maxLength: 200 }
-        linkUrl: { type: [string, 'null'], format: uri }
+        linkUrl: { type: [ string, 'null' ], format: uri }
         startsAt: { type: string, format: date-time }
         endsAt: { type: string, format: date-time }
 
     Package:
       type: object
-      required: [id, shootType, sortOrder, name, priceCents, description, inclusions]
+      required: [ id, shootType, sortOrder, name, priceCents, description, inclusions ]
       properties:
         id: { type: string }
         shootType: { $ref: '#/components/schemas/ShootType' }
@@ -176,17 +233,23 @@ components:
         name: { type: string, minLength: 1, maxLength: 60 }
         priceCents: { type: integer, minimum: 0 }
         description: { type: string, maxLength: 500 }
-        inclusions: { type: array, minItems: 1, maxItems: 15, items: { type: string, maxLength: 120 } }
+        inclusions:
+          {
+            type: array,
+            minItems: 1,
+            maxItems: 15,
+            items: { type: string, maxLength: 120 }
+          }
     PricingRevision:
       type: object
-      required: [revisionId, publishedAt, packages]
+      required: [ revisionId, publishedAt, packages ]
       properties:
         revisionId: { type: string }
         publishedAt: { type: string, format: date-time }
         packages: { type: array, items: { $ref: '#/components/schemas/Package' } }
     PricingDraftInput:
       type: object
-      required: [packages]
+      required: [ packages ]
       description: Full replacement; must include ≥1 package per shoot type.
       properties:
         packages:
@@ -199,20 +262,26 @@ components:
 
     HowItWorksStep:
       type: object
-      required: [title, body]
+      required: [ title, body ]
       properties:
         title: { type: string, maxLength: 80 }
         body: { type: string, maxLength: 600 }
     PageContent:
       type: object
-      required: [page, introMd, howItWorks]
+      required: [ page, introMd, howItWorks ]
       properties:
-        page: { type: string, enum: [about, maternity, newborn, family] }
+        page: { type: string, enum: [ about, maternity, newborn, family ] }
         introMd: { type: string, maxLength: 4000 }
-        howItWorks: { type: array, minItems: 0, maxItems: 8, items: { $ref: '#/components/schemas/HowItWorksStep' } }
+        howItWorks:
+          {
+            type: array,
+            minItems: 0,
+            maxItems: 8,
+            items: { $ref: '#/components/schemas/HowItWorksStep' }
+          }
     FaqEntry:
       type: object
-      required: [id, question, answer, sortOrder]
+      required: [ id, question, answer, sortOrder ]
       properties:
         id: { type: string }
         question: { type: string, maxLength: 200 }
@@ -221,34 +290,64 @@ components:
 
     PublicConfig:
       type: object
-      description: Public settings, including an explicitly owner-approved recovery email. Private recipient/sender addresses are never inferred or exposed through this schema.
-      required: [shootLocations, referralSources, timezone, publicContactEmail]
+      description: Public settings, including an explicitly owner-approved recovery
+        email. Private recipient/sender addresses are never inferred or exposed
+        through this schema.
+      required: [ shootLocations, referralSources, timezone, publicContactEmail ]
       properties:
         shootLocations: { type: array, items: { type: string } }
         referralSources: { type: array, items: { type: string } }
         timezone: { type: string }
-        publicContactEmail: { type: string, format: email, minLength: 1, maxLength: 254, description: 'Required public business contact address for manual inquiry recovery; separately owner-approved. Local example.invalid fixtures are not valid launch configuration.' }
+        publicContactEmail:
+          {
+            type: string,
+            format: email,
+            minLength: 1,
+            maxLength: 254,
+            description: 'Required public business contact address for manual inquiry
+              recovery; separately owner-approved. Local example.invalid
+              fixtures are not valid launch configuration.'
+          }
     SiteConfig:
       allOf:
         - $ref: '#/components/schemas/PublicConfig'
         - type: object
-          required: [inquiryRecipient, senderAddress]
+          required: [ inquiryRecipient, senderAddress ]
           properties:
             inquiryRecipient: { type: string, format: email }
-            senderAddress: { type: string, format: email, description: 'Must match the Gmail primary identity or an accepted verified send-as alias. Server lookup requires gmail.settings.basic in addition to gmail.send; failed verification leaves the entire configuration unchanged.' }
+            senderAddress:
+              {
+                type: string,
+                format: email,
+                description: 'Must match the Gmail primary identity or an accepted verified
+                  send-as alias. Server lookup requires gmail.settings.basic in
+                  addition to gmail.send; failed verification leaves the entire
+                  configuration unchanged.'
+              }
 
     InquirySubmission:
       type: object
-      required: [firstName, lastName, email, contactMethod, shootType, turnstileToken]
+      required: [ firstName, lastName, email, contactMethod, shootType, turnstileToken ]
       properties:
         firstName: { type: string, minLength: 1, maxLength: 80 }
         lastName: { type: string, minLength: 1, maxLength: 80 }
         email: { type: string, format: email, maxLength: 254 }
-        phone: { type: string, minLength: 7, maxLength: 20, description: 'required when contactMethod is call or text' }
-        contactMethod: { type: string, enum: [email, call, text] }
+        phone:
+          {
+            type: string,
+            minLength: 7,
+            maxLength: 20,
+            description: 'required when contactMethod is call or text'
+          }
+        contactMethod: { type: string, enum: [ email, call, text ] }
         postalCode: { type: string, minLength: 3, maxLength: 12 }
         shootType: { $ref: '#/components/schemas/ShootType' }
-        preferredDay: { type: string, format: date, description: 'today..today+18 months in site timezone' }
+        preferredDay:
+          {
+            type: string,
+            format: date,
+            description: 'today..today+18 months in site timezone'
+          }
         specialRequests: { type: string, maxLength: 2000 }
         sessionLengthHours: { type: integer, minimum: 1, maximum: 4 }
         numberOfPeople: { type: integer, minimum: 1, maximum: 12 }
@@ -259,68 +358,106 @@ components:
 
     Session:
       type: object
-      required: [email, expiresAt]
+      required: [ email, expiresAt ]
       properties:
         email: { type: string, format: email }
         expiresAt: { type: string, format: date-time }
 
     Client:
       type: object
-      required: [id, firstName, lastName, email, phone, shootType, sessionDate, notes, createdAt]
+      required:
+        [
+          id,
+          firstName,
+          lastName,
+          email,
+          phone,
+          shootType,
+          sessionDate,
+          notes,
+          createdAt
+        ]
       properties:
         id: { type: string }
         firstName: { type: string, maxLength: 80 }
         lastName: { type: string, maxLength: 80 }
         email: { type: string, format: email }
-        phone: { type: [string, 'null'] }
+        phone: { type: [ string, 'null' ] }
         shootType: { $ref: '#/components/schemas/ShootType' }
-        sessionDate: { type: [string, 'null'], format: date }
+        sessionDate: { type: [ string, 'null' ], format: date }
         notes: { type: string, maxLength: 4000 }
         createdAt: { type: string, format: date-time }
     ClientInput:
       type: object
-      required: [firstName, lastName, email, shootType]
+      required: [ firstName, lastName, email, shootType ]
       properties:
         firstName: { type: string, minLength: 1, maxLength: 80 }
         lastName: { type: string, minLength: 1, maxLength: 80 }
         email: { type: string, format: email }
-        phone: { type: [string, 'null'] }
+        phone: { type: [ string, 'null' ] }
         shootType: { $ref: '#/components/schemas/ShootType' }
-        sessionDate: { type: [string, 'null'], format: date }
+        sessionDate: { type: [ string, 'null' ], format: date }
         notes: { type: string, maxLength: 4000 }
     ClientDetail:
       allOf:
         - $ref: '#/components/schemas/Client'
         - type: object
-          required: [emails, checklist, questionnaires]
+          required: [ emails, checklist, questionnaires ]
           properties:
             emails: { type: array, items: { $ref: '#/components/schemas/ClientEmail' } }
             checklist: { type: array, items: { $ref: '#/components/schemas/ChecklistState' } }
             questionnaires: { type: array, items: { $ref: '#/components/schemas/QuestionnaireInvite' } }
     ClientEmail:
       type: object
-      description: Accepted-send history with every questionnaire link omitted; never returns raw invitation tokens or token-bearing MIME.
-      required: [id, templateId, questionnaireInviteId, subject, body, sentAt]
+      description: Accepted-send history with every questionnaire link omitted; never
+        returns raw invitation tokens or token-bearing MIME.
+      required: [ id, templateId, questionnaireInviteId, subject, body, sentAt ]
       properties:
         id: { type: string }
-        templateId: { type: [string, 'null'] }
-        questionnaireInviteId: { type: [string, 'null'], description: 'Same-client invitation associated with this send; null for ordinary email. Owner UI uses this ID to open authenticated invitation detail, never a public token URL.' }
-        subject: { type: string, description: 'Rendered subject with every questionnaire link replaced by [questionnaire link omitted].' }
-        body: { type: string, description: 'Rendered body with every questionnaire link replaced by [questionnaire link omitted].' }
+        templateId: { type: [ string, 'null' ] }
+        questionnaireInviteId:
+          {
+            type: [ string, 'null' ],
+            description: 'Same-client invitation associated with this send; null for
+              ordinary email. Owner UI uses this ID to open authenticated
+              invitation detail, never a public token URL.'
+          }
+        subject:
+          {
+            type: string,
+            description: 'Rendered subject with every questionnaire link replaced by
+              [questionnaire link omitted].'
+          }
+        body:
+          {
+            type: string,
+            description: 'Rendered body with every questionnaire link replaced by
+              [questionnaire link omitted].'
+          }
         sentAt: { type: string, format: date-time }
     SendEmailInput:
       type: object
-      description: Literal application questionnaire URLs are rejected with 400 and a field error; use the questionnaireLink placeholder. Server expansion creates one new invitation for the selected client and occurs only in transient dispatch content.
-      required: [subject, body]
+      description: Literal application questionnaire URLs are rejected with 400 and a
+        field error; use the questionnaireLink placeholder. Server expansion
+        creates one new invitation for the selected client and occurs only in
+        transient dispatch content.
+      required: [ subject, body ]
       properties:
-        templateId: { type: string, description: 'Recorded for history; questionnaireLink placeholders are resolved server-side in subject/body, with only redacted content retained.' }
+        templateId:
+          {
+            type: string,
+            description: 'Recorded for history; questionnaireLink placeholders are resolved
+              server-side in subject/body, with only redacted content retained.'
+          }
         subject: { type: string, minLength: 1, maxLength: 200 }
         body: { type: string, minLength: 1, maxLength: 10000 }
 
     EmailTemplate:
       type: object
-      description: Subject/body may contain approved placeholders, including questionnaireLink, but must reject literal application questionnaire URLs before persistence.
-      required: [id, name, subject, body, sortOrder]
+      description: Subject/body may contain approved placeholders, including
+        questionnaireLink, but must reject literal application questionnaire
+        URLs before persistence.
+      required: [ id, name, subject, body, sortOrder ]
       properties:
         id: { type: string }
         name: { type: string, maxLength: 80 }
@@ -329,131 +466,221 @@ components:
         sortOrder: { type: integer }
     ChecklistItem:
       type: object
-      required: [id, label, sortOrder]
+      required: [ id, label, sortOrder ]
       properties:
         id: { type: string }
         label: { type: string, maxLength: 120 }
         sortOrder: { type: integer }
     ChecklistState:
       type: object
-      required: [itemId, label, completedAt]
+      required: [ itemId, label, completedAt ]
       properties:
         itemId: { type: string }
         label: { type: string }
-        completedAt: { type: [string, 'null'], format: date-time }
+        completedAt: { type: [ string, 'null' ], format: date-time }
     Question:
       type: object
-      required: [id, prompt, kind, options, required, sortOrder]
+      required: [ id, prompt, kind, options, required, sortOrder ]
       properties:
         id: { type: string }
         prompt: { type: string, maxLength: 300 }
-        kind: { type: string, enum: [short_text, long_text, single_choice] }
-        options: { type: [array, 'null'], items: { type: string }, minItems: 2, maxItems: 10 }
+        kind: { type: string, enum: [ short_text, long_text, single_choice ] }
+        options:
+          {
+            type: [ array, 'null' ],
+            items: { type: string },
+            minItems: 2,
+            maxItems: 10
+          }
         required: { type: boolean }
         sortOrder: { type: integer }
     QuestionnaireInvite:
       type: object
-      required: [id, sentAt, expiresAt, submittedAt, status, questionsSnapshot, answers]
+      required: [ id, sentAt, expiresAt, submittedAt, status, questionsSnapshot, answers ]
       properties:
         id: { type: string }
         sentAt: { type: string, format: date-time }
         expiresAt: { type: string, format: date-time }
-        submittedAt: { type: [string, 'null'], format: date-time }
-        status: { type: string, enum: [pending, submitted, expired] }
+        submittedAt: { type: [ string, 'null' ], format: date-time }
+        status: { type: string, enum: [ pending, submitted, expired ] }
         questionsSnapshot:
           type: array
-          description: 'Immutable questions captured when this invitation was sent; render owner history from these IDs, prompts, types, choices, required flags and sortOrder, never from the current master. Included in owner-authorized invitation responses only.'
+          description: 'Immutable questions captured when this invitation was sent; render
+            owner history from these IDs, prompts, types, choices, required
+            flags and sortOrder, never from the current master. Included in
+            owner-authorized invitation responses only.'
           items: { $ref: '#/components/schemas/Question' }
         answers:
-          type: [object, 'null']
-          description: 'Null before submission; otherwise values keyed by question ID from questionsSnapshot. Historical answer labels and choices come from that same snapshot.'
+          type: [ object, 'null' ]
+          description: 'Null before submission; otherwise values keyed by question ID from
+            questionsSnapshot. Historical answer labels and choices come from
+            that same snapshot.'
           additionalProperties: true
     QuestionnairePublic:
       type: object
-      required: [clientFirstName, questions, status]
+      required: [ clientFirstName, questions, status ]
       properties:
         clientFirstName: { type: string }
         questions: { type: array, items: { $ref: '#/components/schemas/Question' } }
-        status: { type: string, enum: [pending, submitted, expired] }
+        status: { type: string, enum: [ pending, submitted, expired ] }
 
     OrderInput:
       type: object
-      required: [ids]
+      required: [ ids ]
       properties:
-        ids: { type: array, items: { type: string }, description: 'complete ordered list of ids' }
+        ids:
+          {
+            type: array,
+            items: { type: string },
+            description: 'complete ordered list of ids'
+          }
 
 paths:
   # ───────────── Public ─────────────
   /public/bootstrap:
     get:
-      tags: [public]
+      tags: [ public ]
       summary: Everything a public page needs in one call
       responses:
-        '200': {"description": "OK (edge-cacheable 60 s)", "content": {"application/json": {"schema": {"type": "object", "required": ["banner", "config", "gallery", "pages", "faq", "pricing"], "properties": {"banner": {"oneOf": [{"$ref": "#/components/schemas/Banner"}, {"type": "null"}]}, "config": {"$ref": "#/components/schemas/PublicConfig"}, "gallery": {"type": "array", "items": {"$ref": "#/components/schemas/GalleryImage"}}, "pages": {"type": "array", "items": {"$ref": "#/components/schemas/PageContent"}}, "faq": {"type": "array", "items": {"$ref": "#/components/schemas/FaqEntry"}}, "pricing": {"$ref": "#/components/schemas/PricingRevision"}}}}}}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK (edge-cacheable 60 s)",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema":
+                      {
+                        "type": "object",
+                        "required": [ "banner", "config", "gallery", "pages", "faq", "pricing" ],
+                        "properties":
+                          {
+                            "banner": { "oneOf": [ { "$ref": "#/components/schemas/Banner" }, { "type": "null" } ] },
+                            "config": { "$ref": "#/components/schemas/PublicConfig" },
+                            "gallery": { "type": "array", "items": { "$ref": "#/components/schemas/GalleryImage" } },
+                            "pages": { "type": "array", "items": { "$ref": "#/components/schemas/PageContent" } },
+                            "faq": { "type": "array", "items": { "$ref": "#/components/schemas/FaqEntry" } },
+                            "pricing": { "$ref": "#/components/schemas/PricingRevision" }
+                          }
+                      }
+                  }
+              }
+          }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
   /pricing:
     get:
-      tags: [public]
+      tags: [ public ]
       summary: Current published pricing revision (source for sections, print, PDF)
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PricingRevision"}}}}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/PricingRevision" } }
+              }
+          }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
   /images/{id}/{variant}:
     get:
-      tags: [public]
+      tags: [ public ]
       summary: Serve an image variant from R2 (immutable cache)
       parameters:
         - $ref: '#/components/parameters/id'
-        - { name: variant, in: path, required: true, schema: { type: string, enum: [full, card, thumb] } }
+        - {
+            name: variant,
+            in: path,
+            required: true,
+            schema: { type: string, enum: [ full, card, thumb ] }
+          }
       responses:
-        '200': {"description": "image/webp"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "image/webp" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
 
   # ───────────── Inquiry ─────────────
   /inquiries:
     post:
-      tags: [inquiry]
+      tags: [ inquiry ]
       summary: Submit contact-form inquiry (CAPTCHA → validate → dedupe → Gmail send)
       requestBody:
         required: true
-        content: { application/json: { schema: { $ref: '#/components/schemas/InquirySubmission' } } }
+        content:
+          {
+            application/json: { schema: { $ref: '#/components/schemas/InquirySubmission' } }
+          }
       responses:
-        '202': {"description": "Email accepted by Gmail API. NOT a booking confirmation.", "content": {"application/json": {"schema": {"type": "object", "required": ["status"], "properties": {"status": {"const": "sent"}}}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '409': {"$ref": "#/components/responses/Conflict"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
-        '502': {"$ref": "#/components/responses/EmailNotSent"}
-        '504': {"$ref": "#/components/responses/EmailOutcomeUnknown"}
+        '202':
+          {
+            "description": "Email accepted by Gmail API. NOT a booking confirmation.",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema":
+                      {
+                        "type": "object",
+                        "required": [ "status" ],
+                        "properties": { "status": { "const": "sent" } }
+                      }
+                  }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '409': { "$ref": "#/components/responses/Conflict" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        '502': { "$ref": "#/components/responses/EmailNotSent" }
+        '504': { "$ref": "#/components/responses/EmailOutcomeUnknown" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Auth ─────────────
   /auth/google/start:
     get:
-      tags: [auth]
+      tags: [ auth ]
       summary: Begin Google OIDC (PKCE) — 302 to Google
       responses:
-        '302': {"description": "redirect"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '302': { "description": "redirect" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
   /auth/google/callback:
     get:
-      tags: [auth]
-      summary: Google redirect target; validates ID token + allow-list; 302 to SPA /admin/callback#code=…
-      description: Consumes browser-bound OAuth state and stores only a hashed 60-second exchange grant for the verified owner identity. Creates no session or bearer token. Raw codes must not enter logs or response caches.
+      tags: [ auth ]
+      summary: Google redirect target; validates ID token + allow-list; 302 to SPA
+        /admin/callback#code=…
+      description: Consumes browser-bound OAuth state and stores only a hashed
+        60-second exchange grant for the verified owner identity. Creates no
+        session or bearer token. Raw codes must not enter logs or response
+        caches.
       parameters:
         - { name: code, in: query, required: true, schema: { type: string } }
         - { name: state, in: query, required: true, schema: { type: string } }
       responses:
-        '302': {"description": "redirect to SPA with one-time exchange code, or to /admin/denied"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
-        '502': {"$ref": "#/components/responses/BadGateway"}
+        '302':
+          {
+            "description": "redirect to SPA with one-time exchange code, or to /admin/denied"
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        '502': { "$ref": "#/components/responses/BadGateway" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
   /auth/exchange:
     post:
-      tags: [auth]
+      tags: [ auth ]
       summary: Atomically redeem a one-time identity grant and create a bearer session
       description: |
         Recheck the owner allow-list. Atomically consume exactly one unexpired grant and
@@ -463,7 +690,17 @@ paths:
         and their grant is invalidated. Transaction failure leaves no session and preserves
         the grant. After a lost response the SPA starts a fresh Google sign-in, not a replay
         or token-recovery request. Raw codes/bearers are excluded from logs and backups.
-      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [code], properties: { code: { type: string } } } } } }
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema: { type: object, required: [ code ], properties: { code: { type: string } } }
+                }
+            }
+        }
       responses:
         '200':
           description: New session committed; raw bearer returned once.
@@ -475,48 +712,75 @@ paths:
             application/json:
               schema:
                 type: object
-                required: [token, session]
+                required: [ token, session ]
                 properties:
                   token: { type: string }
                   session: { $ref: '#/components/schemas/Session' }
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /auth/session:
     get:
-      tags: [auth]
-      security: [{ ownerSession: [] }]
+      tags: [ auth ]
+      security: [ { ownerSession: [] } ]
       summary: Current session (also extends sliding expiry)
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Session"}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Session" } } }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
   /auth/logout:
     post:
-      tags: [auth]
-      security: [{ ownerSession: [] }]
+      tags: [ auth ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '204': {"description": "session deleted"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '204': { "description": "session deleted" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Admin: gallery ─────────────
   /admin/gallery:
     get:
-      tags: [admin-gallery]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-gallery ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/GalleryImage"}}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema": { "type": "array", "items": { "$ref": "#/components/schemas/GalleryImage" } }
+                  }
+              }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     post:
-      tags: [admin-gallery]
-      security: [{ ownerSession: [] }]
-      summary: Upload private original and browser-prepared variants for server validation — multipart
+      tags: [ admin-gallery ]
+      security: [ { ownerSession: [] } ]
+      summary: Upload private original and browser-prepared variants for server
+        validation — multipart
       description: |
         Original bytes are required for authoritative validation and private recovery.
         MIME, byte counts, dimensions, full decoding and safe derivative metadata are verified
@@ -529,6 +793,10 @@ paths:
         Byte ceilings are enforced while reading, regardless of Content-Length. Oversized
         requests return 413; invalid content/dimensions/claims return 400 with field errors.
         T001's bounded decoder feasibility proof is still required before implementation.
+        Header inspection alone does not establish full decoding. Flattening an animation
+        is not rejection of animated input. Provider failure must never publish unvalidated
+        bytes or fall back to exposing the private original. See research R-16's follow-up;
+        local development is owner-approved, but no image-provider subscription is approved.
       x-upload-limits:
         requestBytes: 16777216
         originalBytes: 10485760
@@ -543,390 +811,880 @@ paths:
           multipart/form-data:
             schema:
               type: object
-              required: [tag, altText, original, full, card, thumb, width, height, originalMime, originalBytes]
+              required:
+                [
+                  tag,
+                  altText,
+                  original,
+                  full,
+                  card,
+                  thumb,
+                  width,
+                  height,
+                  originalMime,
+                  originalBytes
+                ]
               properties:
                 tag: { $ref: '#/components/schemas/GalleryTag' }
-                altText: { type: string, minLength: 1, maxLength: 200, pattern: '\S', description: 'Required descriptive alternative; trim before validation/storage.' }
-                original: { type: string, format: binary, description: 'Actual JPEG/PNG/WebP source, 1–10485760 bytes; private storage only. Dimensions and full content are independently checked.' }
-                full: { type: string, format: binary, description: 'Static metadata-clean WebP, long edge ≤ 2000px, 1–2097152 bytes.' }
-                card: { type: string, format: binary, description: 'Static metadata-clean WebP, long edge ≤ 800px, 1–1048576 bytes.' }
-                thumb: { type: string, format: binary, description: 'Static metadata-clean WebP, long edge ≤ 320px, 1–262144 bytes.' }
-                width: { type: integer, minimum: 1, maximum: 2000, description: 'Claimed full-variant width; must match decoded content.' }
-                height: { type: integer, minimum: 1, maximum: 2000, description: 'Claimed full-variant height; must match decoded content.' }
-                originalMime: { type: string, enum: [image/jpeg, image/png, image/webp] }
-                originalBytes: { type: integer, minimum: 1, maximum: 10485760, description: 'Claim must equal actual original byte length.' }
+                altText:
+                  {
+                    type: string,
+                    minLength: 1,
+                    maxLength: 200,
+                    pattern: '\S',
+                    description: 'Required descriptive alternative; trim before validation/storage.'
+                  }
+                original:
+                  {
+                    type: string,
+                    format: binary,
+                    description: 'Actual JPEG/PNG/WebP source, 1–10485760 bytes; private storage
+                      only. Dimensions and full content are independently
+                      checked.'
+                  }
+                full:
+                  {
+                    type: string,
+                    format: binary,
+                    description: 'Static metadata-clean WebP, long edge ≤ 2000px, 1–2097152 bytes.'
+                  }
+                card:
+                  {
+                    type: string,
+                    format: binary,
+                    description: 'Static metadata-clean WebP, long edge ≤ 800px, 1–1048576 bytes.'
+                  }
+                thumb:
+                  {
+                    type: string,
+                    format: binary,
+                    description: 'Static metadata-clean WebP, long edge ≤ 320px, 1–262144 bytes.'
+                  }
+                width:
+                  {
+                    type: integer,
+                    minimum: 1,
+                    maximum: 2000,
+                    description: 'Claimed full-variant width; must match decoded content.'
+                  }
+                height:
+                  {
+                    type: integer,
+                    minimum: 1,
+                    maximum: 2000,
+                    description: 'Claimed full-variant height; must match decoded content.'
+                  }
+                originalMime: { type: string, enum: [ image/jpeg, image/png, image/webp ] }
+                originalBytes:
+                  {
+                    type: integer,
+                    minimum: 1,
+                    maximum: 10485760,
+                    description: 'Claim must equal actual original byte length.'
+                  }
       responses:
-        '201': {"description": "Created", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/GalleryImage"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '413': {"$ref": "#/components/responses/PayloadTooLarge"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '409': {"$ref": "#/components/responses/Conflict"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '201':
+          {
+            "description": "Created",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/GalleryImage" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '413':
+          $ref: "#/components/responses/PayloadTooLarge"
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '409': { "$ref": "#/components/responses/Conflict" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
   /admin/gallery/order:
     put:
-      tags: [admin-gallery]
-      security: [{ ownerSession: [] }]
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/OrderInput' } } } }
+      tags: [ admin-gallery ]
+      security: [ { ownerSession: [] } ]
+      requestBody:
+        {
+          required: true,
+          content: { application/json: { schema: { $ref: '#/components/schemas/OrderInput' } } }
+        }
       responses:
-        '204': {"description": "reordered"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '204': { "description": "reordered" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/gallery/{id}:
-    parameters: [{ $ref: '#/components/parameters/id' }]
+    parameters: [ { $ref: '#/components/parameters/id' } ]
     patch:
-      tags: [admin-gallery]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-gallery ]
+      security: [ { ownerSession: [] } ]
       summary: Update tag / altText
-      requestBody: { required: true, content: { application/json: { schema: { type: object, properties: { tag: { $ref: '#/components/schemas/GalleryTag' }, altText: { type: string, minLength: 1, maxLength: 200, pattern: '\S', description: 'When provided, must remain descriptive and nonblank after trimming; omission preserves existing text.' } } } } } }
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema:
+                    {
+                      type: object,
+                      properties:
+                        {
+                          tag: { $ref: '#/components/schemas/GalleryTag' },
+                          altText:
+                            {
+                              type: string,
+                              minLength: 1,
+                              maxLength: 200,
+                              pattern: '\S',
+                              description: 'When provided, must remain descriptive and nonblank after
+                                trimming; omission preserves existing text.'
+                            }
+                        }
+                    }
+                }
+            }
+        }
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/GalleryImage"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/GalleryImage" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
     delete:
-      tags: [admin-gallery]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-gallery ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '204': {"description": "deleted (row + R2 objects)"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '204': { "description": "deleted (row + R2 objects)" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Admin: banners ─────────────
   /admin/banners:
     get:
-      tags: [admin-banners]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-banners ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/Banner"}}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Banner" } }
+                  }
+              }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     post:
-      tags: [admin-banners]
-      security: [{ ownerSession: [] }]
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/BannerInput' } } } }
+      tags: [ admin-banners ]
+      security: [ { ownerSession: [] } ]
+      requestBody:
+        {
+          required: true,
+          content: { application/json: { schema: { $ref: '#/components/schemas/BannerInput' } } }
+        }
       responses:
-        '201': {"description": "Created", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Banner"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '201':
+          {
+            "description": "Created",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Banner" } } }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/banners/{id}:
-    parameters: [{ $ref: '#/components/parameters/id' }]
+    parameters: [ { $ref: '#/components/parameters/id' } ]
     put:
-      tags: [admin-banners]
-      security: [{ ownerSession: [] }]
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/BannerInput' } } } }
+      tags: [ admin-banners ]
+      security: [ { ownerSession: [] } ]
+      requestBody:
+        {
+          required: true,
+          content: { application/json: { schema: { $ref: '#/components/schemas/BannerInput' } } }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
     delete:
-      tags: [admin-banners]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-banners ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '204': {"description": "deleted"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '204': { "description": "deleted" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Admin: pricing ─────────────
   /admin/pricing:
     get:
-      tags: [admin-pricing]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-pricing ]
+      security: [ { ownerSession: [] } ]
       summary: Current published revision (same as public) for editing
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PricingRevision"}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/PricingRevision" } }
+              }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     put:
-      tags: [admin-pricing]
-      security: [{ ownerSession: [] }]
-      summary: Publish a complete immutable revision and atomically replace the singleton current-revision pointer; last committed publication wins even with equal timestamps
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PricingDraftInput' } } } }
+      tags: [ admin-pricing ]
+      security: [ { ownerSession: [] } ]
+      summary: Publish a complete immutable revision and atomically replace the
+        singleton current-revision pointer; last committed publication wins even
+        with equal timestamps
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json: { schema: { $ref: '#/components/schemas/PricingDraftInput' } }
+            }
+        }
       responses:
-        '200': {"description": "New revision", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PricingRevision"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "New revision",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/PricingRevision" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Admin: content ─────────────
   /admin/pages/{page}:
-    parameters: [{ name: page, in: path, required: true, schema: { type: string, enum: [about, maternity, newborn, family] } }]
+    parameters:
+      [
+        {
+            name: page,
+            in: path,
+            required: true,
+            schema: { type: string, enum: [ about, maternity, newborn, family ] }
+          }
+      ]
     put:
-      tags: [admin-content]
-      security: [{ ownerSession: [] }]
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PageContent' } } } }
+      tags: [ admin-content ]
+      security: [ { ownerSession: [] } ]
+      requestBody:
+        {
+          required: true,
+          content: { application/json: { schema: { $ref: '#/components/schemas/PageContent' } } }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/faq:
     put:
-      tags: [admin-content]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-content ]
+      security: [ { ownerSession: [] } ]
       summary: Full replacement of FAQ list (ordered)
-      requestBody: { required: true, content: { application/json: { schema: { type: array, minItems: 4, items: { $ref: '#/components/schemas/FaqEntry' } } } } }
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema: { type: array, minItems: 4, items: { $ref: '#/components/schemas/FaqEntry' } }
+                }
+            }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Admin: config ─────────────
   /admin/config:
     get:
-      tags: [admin-config]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-config ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SiteConfig"}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/SiteConfig" } }
+              }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     put:
-      tags: [admin-config]
-      security: [{ ownerSession: [] }]
-      summary: Atomic save; validate senderAddress and required owner-approved publicContactEmail
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SiteConfig' } } } }
+      tags: [ admin-config ]
+      security: [ { ownerSession: [] } ]
+      summary: Atomic save; validate senderAddress and required owner-approved
+        publicContactEmail
+      requestBody:
+        {
+          required: true,
+          content: { application/json: { schema: { $ref: '#/components/schemas/SiteConfig' } } }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
-        '502': {"$ref": "#/components/responses/BadGateway"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        '502': { "$ref": "#/components/responses/BadGateway" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Admin: clients & workflow ─────────────
   /admin/clients:
     get:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
-      parameters: [{ name: q, in: query, schema: { type: string }, description: 'name/email contains' }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
+      parameters:
+        [
+          {
+              name: q,
+              in: query,
+              schema: { type: string },
+              description: 'name/email contains'
+            }
+        ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/Client"}}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Client" } }
+                  }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     post:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } } }
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
+      requestBody:
+        {
+          required: true,
+          content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } }
+        }
       responses:
-        '201': {"description": "Created", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Client"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '201':
+          {
+            "description": "Created",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Client" } } }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/clients/{id}:
-    parameters: [{ $ref: '#/components/parameters/id' }]
+    parameters: [ { $ref: '#/components/parameters/id' } ]
     get:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ClientDetail"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/ClientDetail" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     put:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } } }
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
+      requestBody:
+        {
+          required: true,
+          content: { application/json: { schema: { $ref: '#/components/schemas/ClientInput' } } }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
     delete:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '204': {"description": "deleted with cascade"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '204': { "description": "deleted with cascade" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/clients/{id}/emails:
-    parameters: [{ $ref: '#/components/parameters/id' }]
+    parameters: [ { $ref: '#/components/parameters/id' } ]
     post:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
-      summary: Send client email; expand questionnaireLink server-side and retain token-redacted history
-      description: Ordinary placeholders are expanded before preview. Each explicit send with questionnaireLink in subject/body creates one new same-client invitation and substitutes the same URL for every occurrence only in transient dispatch data. Reject literal application questionnaire URLs. Store the omission marker and invitation ID in history; never return a raw token. Existing uncertain-delivery rules apply.
-      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SendEmailInput' } } } }
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
+      summary: Send client email; expand questionnaireLink server-side and retain
+        token-redacted history
+      description: Ordinary placeholders are expanded before preview. Each explicit
+        send with questionnaireLink in subject/body creates one new same-client
+        invitation and substitutes the same URL for every occurrence only in
+        transient dispatch data. Reject literal application questionnaire URLs.
+        Store the omission marker and invitation ID in history; never return a
+        raw token. Existing uncertain-delivery rules apply.
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json: { schema: { $ref: '#/components/schemas/SendEmailInput' } }
+            }
+        }
       responses:
-        '201': {"description": "Sent & recorded", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ClientEmail"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/EmailHistoryFailed"}
-        '502': {"$ref": "#/components/responses/EmailNotSent"}
-        '504': {"$ref": "#/components/responses/EmailOutcomeUnknown"}
+        '201':
+          {
+            "description": "Sent & recorded",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/ClientEmail" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500':
+          description: Internal failure before dispatch or known acceptance with failed
+            history; never infer retry safety.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EmailHistoryFailedError"
+                  - allOf:
+                      - $ref: "#/components/schemas/Error"
+                      - properties:
+                          error:
+                            properties:
+                              code:
+                                not:
+                                  const: email_history_failed
+        '502': { "$ref": "#/components/responses/EmailNotSent" }
+        '504': { "$ref": "#/components/responses/EmailOutcomeUnknown" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/clients/{id}/checklist/{itemId}:
     parameters:
       - $ref: '#/components/parameters/id'
       - { name: itemId, in: path, required: true, schema: { type: string } }
     put:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
-      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [completed], properties: { completed: { type: boolean } } } } } }
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema:
+                    {
+                      type: object,
+                      required: [ completed ],
+                      properties: { completed: { type: boolean } }
+                    }
+                }
+            }
+        }
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ChecklistState"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/ChecklistState" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/clients/{id}/questionnaires:
-    parameters: [{ $ref: '#/components/parameters/id' }]
+    parameters: [ { $ref: '#/components/parameters/id' } ]
     post:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
-      summary: Create invite (snapshot questions, 30-day expiry) and email the /q/{token} link
-      description: Uses the same server-only link expansion and token-redacted email-history path as template sends. Retain the invitation ID and omitted-link marker; expose no raw token in the response, history, logs, or backups.
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
+      summary: Create invite (snapshot questions, 30-day expiry) and email the
+        /q/{token} link
+      description: Uses the same server-only link expansion and token-redacted
+        email-history path as template sends. Retain the invitation ID and
+        omitted-link marker; expose no raw token in the response, history, logs,
+        or backups.
       responses:
-        '201': {"description": "Created", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/QuestionnaireInvite"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/EmailHistoryFailed"}
-        '502': {"$ref": "#/components/responses/EmailNotSent"}
-        '504': {"$ref": "#/components/responses/EmailOutcomeUnknown"}
+        '201':
+          {
+            "description": "Created",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/QuestionnaireInvite" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500':
+          description: Internal failure before dispatch or known acceptance with failed
+            history; never infer retry safety.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EmailHistoryFailedError"
+                  - allOf:
+                      - $ref: "#/components/schemas/Error"
+                      - properties:
+                          error:
+                            properties:
+                              code:
+                                not:
+                                  const: email_history_failed
+        '502': { "$ref": "#/components/responses/EmailNotSent" }
+        '504': { "$ref": "#/components/responses/EmailOutcomeUnknown" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   /admin/templates:
     get:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/EmailTemplate"}}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema": { "type": "array", "items": { "$ref": "#/components/schemas/EmailTemplate" } }
+                  }
+              }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     put:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       summary: Full ordered replacement
-      requestBody: { required: true, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/EmailTemplate' } } } } }
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema: { type: array, items: { $ref: '#/components/schemas/EmailTemplate' } }
+                }
+            }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/checklist:
     get:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/ChecklistItem"}}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ChecklistItem" } }
+                  }
+              }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     put:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       summary: Full ordered replacement; existing ids keep per-client state
       description: >-
-        Atomically apply the updated master to all retained clients. Added items receive
-        incomplete per-client state (completedAt null); retained item IDs preserve each
-        client's completion state through renaming, reordering, and repeated saves.
-        Removed items and their per-client state are deleted. Repeated saves never
-        duplicate state or reset progress, and a failed save leaves the master and all
-        per-client state unchanged. New clients receive every current master item as
-        incomplete.
-      requestBody: { required: true, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ChecklistItem' } } } } }
+        Atomically apply the updated master to all retained clients. Added items
+        receive incomplete per-client state (completedAt null); retained item
+        IDs preserve each client's completion state through renaming,
+        reordering, and repeated saves. Removed items and their per-client state
+        are deleted. Repeated saves never duplicate state or reset progress, and
+        a failed save leaves the master and all per-client state unchanged. New
+        clients receive every current master item as incomplete.
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema: { type: array, items: { $ref: '#/components/schemas/ChecklistItem' } }
+                }
+            }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
   /admin/questionnaire:
     get:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"type": "array", "items": {"$ref": "#/components/schemas/Question"}}}}}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json":
+                  {
+                    "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Question" } }
+                  }
+              }
+          }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     put:
-      tags: [admin-clients]
-      security: [{ ownerSession: [] }]
+      tags: [ admin-clients ]
+      security: [ { ownerSession: [] } ]
       summary: Full ordered replacement; sent invites keep their snapshot
-      requestBody: { required: true, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Question' } } } } }
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Question' } } }
+            }
+        }
       responses:
-        '200': {"description": "OK"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '401': {"$ref": "#/components/responses/Unauthorized"}
-        '403': {"$ref": "#/components/responses/Forbidden"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200': { "description": "OK" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '401': { "$ref": "#/components/responses/Unauthorized" }
+        '403': { "$ref": "#/components/responses/Forbidden" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
 
   # ───────────── Public questionnaire ─────────────
   /questionnaire/{token}:
-    parameters: [{ name: token, in: path, required: true, schema: { type: string, minLength: 32 } }]
+    parameters:
+      [
+        {
+            name: token,
+            in: path,
+            required: true,
+            schema: { type: string, minLength: 32 }
+          }
+      ]
     get:
-      tags: [questionnaire]
+      tags: [ questionnaire ]
       summary: Load questionnaire for a client link (no other client data exposed)
       responses:
-        '200': {"description": "OK", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/QuestionnairePublic"}}}}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '200':
+          {
+            "description": "OK",
+            "content":
+              {
+                "application/json": { "schema": { "$ref": "#/components/schemas/QuestionnairePublic" } }
+              }
+          }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
     post:
-      tags: [questionnaire]
+      tags: [ questionnaire ]
       summary: Submit answers (single-use; rejected if submitted or expired)
-      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [answers], properties: { answers: { type: object, additionalProperties: true } } } } } }
+      requestBody:
+        {
+          required: true,
+          content:
+            {
+              application/json:
+                {
+                  schema:
+                    {
+                      type: object,
+                      required: [ answers ],
+                      properties: { answers: { type: object, additionalProperties: true } }
+                    }
+                }
+            }
+        }
       responses:
-        '201': {"description": "Recorded"}
-        '400': {"$ref": "#/components/responses/BadRequest"}
-        '404': {"$ref": "#/components/responses/NotFound"}
-        '409': {"$ref": "#/components/responses/Conflict"}
-        '429': {"$ref": "#/components/responses/TooManyRequests"}
-        '500': {"$ref": "#/components/responses/InternalError"}
+        '201': { "description": "Recorded" }
+        '400': { "$ref": "#/components/responses/BadRequest" }
+        '404': { "$ref": "#/components/responses/NotFound" }
+        '409': { "$ref": "#/components/responses/Conflict" }
+        '429': { "$ref": "#/components/responses/TooManyRequests" }
+        '500': { "$ref": "#/components/responses/InternalError" }
+        "503":
+          $ref: "#/components/responses/Maintenance"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"

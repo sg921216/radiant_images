@@ -1,0 +1,52 @@
+{
+  "name": "radiant-images",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=24.14.0 <25"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"pnpm --filter @radiant/api dev\" \"pnpm --filter @radiant/web dev\"",
+    "build": "pnpm -r build",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm -r typecheck && tsc -p tsconfig.tools.json",
+    "test": "vitest run",
+    "test:setup": "tsx scripts/test-setup.ts",
+    "e2e": "playwright test",
+    "e2e:smoke": "playwright test --project=chromium-desktop --project=chromium-mobile --grep @smoke",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "gmail:consent": "tsx scripts/gmail-consent.ts",
+    "operations:local": "tsx scripts/operations-local.ts",
+    "security:secrets": "tsx scripts/check-privacy.ts",
+    "security:artifacts": "tsx scripts/check-privacy.ts --artifacts",
+    "security:dependencies": "pnpm audit --audit-level=moderate"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@cloudflare/vitest-plugin": "1.8.2",
+    "@cloudflare/workers-types": "5.20261114.1",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.1",
+    "@types/node": "24.19.2",
+    "@vitest/runner": "4.1.12",
+    "@vitest/snapshot": "4.1.12",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "concurrently": "10.0.7",
+    "eslint": "10.15.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "prettier": "3.10.1",
+    "sharp": "0.35.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.2",
+    "vite": "8.3.8",
+    "vitest": "4.1.12",
+    "wrangler": "4.162.0",
+    "yaml": "2.9.1"
+  }
+}

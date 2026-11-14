@@ -1,0 +1,50 @@
+name: Deploy web (gated)
+on:
+  workflow_dispatch:
+    inputs:
+      acceptance_commit:
+        description: Commit with completed acceptance evidence and approved release
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: radiant-production-web
+  cancel-in-progress: false
+jobs:
+  verify:
+    uses: ./.github/workflows/ci.yml
+  deploy:
+    needs: verify
+    if: inputs.acceptance_commit == github.sha
+    environment: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+      API_ORIGIN: ${{ vars.API_ORIGIN }}
+      PUBLIC_CONTACT_EMAIL: ${{ vars.PUBLIC_CONTACT_EMAIL }}
+      TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+      WEB_WORKER_NAME: ${{ vars.WEB_WORKER_NAME }}
+      VITE_WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+      VITE_API_ORIGIN: ${{ vars.API_ORIGIN }}
+      VITE_PUBLIC_CONTACT_EMAIL: ${{ vars.PUBLIC_CONTACT_EMAIL }}
+      VITE_TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '12.18.0'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm security:dependencies && pnpm security:secrets
+      - run: pnpm exec tsx scripts/prepare-release.ts web
+      - name: Deploy web with pinned Wrangler
+        run: pnpm exec wrangler deploy --config .wrangler/release-web.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

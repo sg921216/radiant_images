@@ -6,13 +6,20 @@
 
 **Governance update**: 2026-11-13 — constitution v1.0.0. React + Cloudflare Workers
 confirmed by the user; Hono, D1, R2, and the existing hosting design remain selected.
-No application code exists yet; all implementation/CI evidence remains pending.
+At this initial checkpoint no application code existed. Local implementation and evidence
+are now recorded in acceptance.md under the approved exception; remote release remains blocked.
 
 **Hosting clarification (2026-11-13)**: The owner selected Cloudflare Workers Static Assets
 for the frontend and reports the R2 account is set up. The hosting-choice/account-enrollment
 blocker is resolved. T001 remains open for technical feasibility verification (decoder,
 retention, toolchain and usage budgets); no further hosting confirmation is required.
 See spec.md Clarifications, research R-16 and acceptance.md.
+
+**Implementation follow-up (2026-11-13)**: Research R-16 verifies allowance/control limits
+and an exact dependency-resolution candidate. T001 remains blocked on strict recovery
+expiry and production image-decoder feasibility. `feasibility-decision.md` proposes a
+bounded exception for local work, explicitly approved by the owner on 2026-11-13.
+T001 remains a deployment gate; local implementation may proceed under that exception.
 
 ## Summary
 
@@ -34,6 +41,7 @@ for local use and CI. The dependency majors below are prior design candidates, n
 that their support status has been revalidated on 2026-11-13.
 
 **Primary Dependencies**:
+
 - Web: React 19, React Router v7 (framework mode, `ssr: false`, prerendered public routes), Vite 6, Tailwind CSS 4, `@react-pdf/renderer` (pricing PDF), `@marsidev/react-turnstile`
 - API: Hono 4, Drizzle ORM (D1 driver) + drizzle-kit migrations, Zod (shared validation), `arctic` (Google OAuth 2.0/OIDC client), `@oslojs/crypto` (tokens)
 - Shared: `packages/shared` — Zod schemas and TypeScript types used by both web and API
@@ -116,8 +124,7 @@ check receipt. After her reply, a visitor who confirms receipt can finish withou
 otherwise they must explicitly acknowledge "Rebekah checked and asked me to send again"
 and select "Start a new submission". That action retains the draft, resets CAPTCHA, and
 requires a fresh manual Submit. It does not dispatch automatically or bypass validation,
-rate limits, or the two-minute duplicate claim; a still-active claim returns the normal
-409. Opening the email link or waiting alone never unlocks submission. If receipt remains
+rate limits, or the two-minute duplicate claim; a still-active claim returns the normal 409. Opening the email link or waiting alone never unlocks submission. If receipt remains
 unknown, keep the uncertain state. Confirmation is a visitor acknowledgement, not a new
 server-side delivery-verification mechanism. T017/T023 cover this recovery interaction;
 T043–T046 cover public-address validation/propagation; T063 verifies an approved, monitored
@@ -179,15 +186,15 @@ At release freeze, T063 records the exact latest stable major (`N`) and previous
 major (`N-1`) for every row below, with full browser/OS versions and test date. These
 relative labels define a release-time selection rule, not unverified version numbers.
 
-| Browser | OS/device | Required versions | Verification |
-|---------|-----------|-------------------|--------------|
-| Chrome | Windows 11 desktop | N and N-1 | Actual installed browser |
-| Edge | Windows 11 desktop | N and N-1 | Actual installed browser |
-| Firefox | Windows 11 desktop | N and N-1 | Actual installed browser |
-| Safari | Compatible supported macOS desktop | N and N-1 | Actual Safari/OS combination |
-| Chrome | Supported Android phone | N and N-1 | Physical device or real-device service |
-| Firefox | Supported Android phone | N and N-1 | Physical device or real-device service |
-| Safari | iPhone with compatible supported iOS | N and N-1 | Physical device or real-device service |
+| Browser | OS/device                            | Required versions | Verification                           |
+| ------- | ------------------------------------ | ----------------- | -------------------------------------- |
+| Chrome  | Windows 11 desktop                   | N and N-1         | Actual installed browser               |
+| Edge    | Windows 11 desktop                   | N and N-1         | Actual installed browser               |
+| Firefox | Windows 11 desktop                   | N and N-1         | Actual installed browser               |
+| Safari  | Compatible supported macOS desktop   | N and N-1         | Actual Safari/OS combination           |
+| Chrome  | Supported Android phone              | N and N-1         | Physical device or real-device service |
+| Firefox | Supported Android phone              | N and N-1         | Physical device or real-device service |
+| Safari  | iPhone with compatible supported iOS | N and N-1         | Physical device or real-device service |
 
 Use the browser vendor's supported OS pairing; record the exact pairing rather than
 substituting a Playwright engine. In each cell verify discovery/inquiry and retained-input
@@ -270,21 +277,21 @@ data/media implementation; it does not silently extend retention.
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 Governing document: [constitution v1.0.0](../../.specify/memory/constitution.md).
 PASS below means design evidence exists; it does not claim implementation verification.
 OPEN items must be resolved before the affected implementation or release.
 
-| Principle | Design status | Evidence / outstanding verification |
-|-----------|---------------|-------------------------------------|
-| I. Business value | PASS | Six prioritized stories; FR traceability in contracts/README.md; T025–T057 acceptance |
-| II. React + Workers | OPEN | React/Hono/D1/R2 selected; T001 must verify provider/cost feasibility; T002 pins supported dependencies |
-| III. TDD | PASS | Mandatory behavioral red/green evidence, including foundation, specified in tasks.md; execution pending |
-| IV. E2E | PASS | Matrix, isolated fixtures, external-provider boundaries, and flake policy above; T006/T059 implement |
-| V. Privacy/security | OPEN | QR-002/data-model.md define deletion and recovery; T001 verifies provider retention/pixel limits; T007–T014, T032–T036, T050/T058/T062 enforce and verify boundaries |
-| VI. UX/performance | PASS | WCAG 2.2 AA, lab/field budgets, SEO/media obligations; T003/T021/T061 verify |
-| VII. Operations | OPEN | T006/T059 CI; T058/T060/T063 must establish monitoring, recovery, and release evidence |
+| Principle           | Design status | Evidence / outstanding verification                                                                                                                                  |
+| ------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| I. Business value   | PASS          | Six prioritized stories; FR traceability in contracts/README.md; T025–T057 acceptance                                                                                |
+| II. React + Workers | OPEN          | React/Hono/D1/R2 selected; T001 must verify provider/cost feasibility; T002 pins supported dependencies                                                              |
+| III. TDD            | PASS          | Mandatory behavioral red/green evidence, including foundation, specified in tasks.md; execution pending                                                              |
+| IV. E2E             | PASS          | Matrix, isolated fixtures, external-provider boundaries, and flake policy above; T006/T059 implement                                                                 |
+| V. Privacy/security | OPEN          | QR-002/data-model.md define deletion and recovery; T001 verifies provider retention/pixel limits; T007–T014, T032–T036, T050/T058/T062 enforce and verify boundaries |
+| VI. UX/performance  | PASS          | WCAG 2.2 AA, lab/field budgets, SEO/media obligations; T003/T021/T061 verify                                                                                         |
+| VII. Operations     | OPEN          | T006/T059 CI; T058/T060/T063 must establish monitoring, recovery, and release evidence                                                                               |
 
 ## Project Structure
 
@@ -354,12 +361,14 @@ loads/refreshes against the built Worker. T060 replaces the former copied-404 fa
 
 ## Complexity Tracking
 
-No governance exceptions are approved. Open obligations are tracked above. Two deliberate
+The local-development sequencing exception in `feasibility-decision.md` was approved
+by the owner on 2026-11-13. Production feasibility, live-provider acceptance and release
+remain gated. Open obligations are tracked above. Two deliberate
 complexity choices are recorded below; rationale does not waive security or test gates:
 
-| Choice | Why Needed | Simpler Alternative Rejected Because |
-|--------|------------|-------------------------------------|
-| Separate frontend and API deployments | Preserve independent static-content/API rollout and existing service boundaries | Combining deployments is unnecessary for the requested frontend-host change |
+| Choice                                  | Why Needed                                                                               | Simpler Alternative Rejected Because                                                          |
+| --------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Separate frontend and API deployments   | Preserve independent static-content/API rollout and existing service boundaries          | Combining deployments is unnecessary for the requested frontend-host change                   |
 | Bearer-token session instead of cookies | Preserve verified identity-grant/session behavior across configured frontend/API origins | A cookie migration changes authentication and browser tests beyond this hosting clarification |
 
 ## Post-Design Constitution Re-check

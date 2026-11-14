@@ -1,0 +1,54 @@
+name: Quality
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: '0 6 * * *'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '12.18.0'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm security:dependencies
+      - run: pnpm security:secrets
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm test:setup
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
+      - name: Pull request Chromium smoke
+        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        run: pnpm e2e:smoke
+      - name: Nightly and release browser matrix
+        if: github.event_name != 'pull_request' && github.event_name != 'push'
+        run: pnpm e2e
+      - name: Verify diagnostic privacy
+        id: diagnostic_privacy
+        if: always()
+        run: pnpm security:artifacts
+      - uses: actions/upload-artifact@v4
+        if: failure() && steps.diagnostic_privacy.outcome == 'success'
+        with:
+          name: synthetic-browser-diagnostics
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

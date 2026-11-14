@@ -15,8 +15,11 @@ Static Assets** for the frontend and has set up R2. The **Cloudflare Workers** b
 email via **Rebekah's Gmail** remain selected, targeting $0 usage within included allowances.
 Open technical feasibility and governance obligations are tracked in T001 and plan.md.
 
-**T001 checkpoint (2026-11-13): PARTIAL.** Hosting selection and R2 enrollment are resolved;
-decoder, retention, toolchain and usage-budget verification remain open. R-16 supersedes
+**T001 checkpoint (2026-11-13): BLOCKED.** Hosting selection and R2 enrollment are resolved.
+The follow-up below verifies usage allowances, cost-control limitations and a dependency
+resolution candidate. Strict recovery expiry and production image-decoder feasibility remain
+unresolved. See [the approved local-development exception](./feasibility-decision.md).
+R-16 supersedes
 historical feasibility claims where noted. No additional hosting confirmation is required.
 
 ---
@@ -45,9 +48,10 @@ links. `_headers` does not apply to Worker-generated responses. Source:
 [Workers asset headers](https://developers.cloudflare.com/workers/static-assets/headers/).
 
 **Alternatives considered**:
-- *Next.js App Router* — needs a Node/edge server or `output: 'export'`, which disables most of what makes Next attractive; not Vite.
-- *Astro + React islands* — excellent for static content, but the admin SPA would be a second mental model; build-time image optimization doesn't help owner-uploaded runtime images.
-- *GitHub Pages* — previous host selection, superseded by the owner's explicit Workers
+
+- _Next.js App Router_ — needs a Node/edge server or `output: 'export'`, which disables most of what makes Next attractive; not Vite.
+- _Astro + React islands_ — excellent for static content, but the admin SPA would be a second mental model; build-time image optimization doesn't help owner-uploaded runtime images.
+- _GitHub Pages_ — previous host selection, superseded by the owner's explicit Workers
   Static Assets instruction. GitHub remains the repository/CI service.
 
 ## R-02 Backend runtime & framework
@@ -128,9 +132,9 @@ design and test review; it is not part of this frontend hosting change.
 
 **Decision (scope correction, T001)**: **Gmail API** (`users.messages.send`) called from the Worker using a stored OAuth 2.0 **refresh token** for Rebekah's Google account with both `https://www.googleapis.com/auth/gmail.send` and `https://www.googleapis.com/auth/gmail.settings.basic`. Sending permission alone cannot list send-as identities. The `From` header is the owner-configured sender address (must be the authenticated Gmail account or one of its verified "Send mail as" aliases — the Worker validates this on save). Inquiry notifications set `Reply-To` to the visitor's email; client emails set `Reply-To` to the sender address. See R-16 for consent and verification limits.
 
-**Setup (one-time, documented in quickstart)**: create a Google Cloud project; configure the OAuth consent screen as *External* and **publish it to Production** (unverified-app warning is shown only to Rebekah during the single consent); run `scripts/gmail-consent.ts` locally to obtain the refresh token; store as `GMAIL_REFRESH_TOKEN` secret. The same OAuth client is reused for owner sign-in (R-06).
+**Setup (one-time, documented in quickstart)**: create a Google Cloud project; configure the OAuth consent screen as _External_ and **publish it to Production** (unverified-app warning is shown only to Rebekah during the single consent); run `scripts/gmail-consent.ts` locally to obtain the refresh token; store as `GMAIL_REFRESH_TOKEN` secret. The same OAuth client is reused for owner sign-in (R-06).
 
-**Known risk**: a consent screen left in *Testing* status expires refresh tokens after 7 days → emails silently stop. Mitigation: publish the app (above) and add a health check endpoint that attempts a token refresh daily (Workers Cron Trigger, free) and writes an audit event on failure.
+**Known risk**: a consent screen left in _Testing_ status expires refresh tokens after 7 days → emails silently stop. Mitigation: publish the app (above) and add a health check endpoint that attempts a token refresh daily (Workers Cron Trigger, free) and writes an audit event on failure.
 
 **Quota**: consumer Gmail sends ≤ 500 messages/day via API — far above the ≤ 20 inquiries/day scale.
 
@@ -163,7 +167,7 @@ in stored templates/composed input. Admin previews/history expose placeholders a
 authenticated invitation-detail link, not raw tokens. See plan.md and data-model.md for
 the T048/T053 redaction, association and failure cases.
 
-**Alternatives considered**: Resend/Postmark free tiers (cannot legitimately send *from* a gmail.com address — DMARC fails; would require a custom domain the business does not have), SMTP via Workers TCP sockets (no mature library, Gmail requires app passwords), MailChannels (Workers integration discontinued).
+**Alternatives considered**: Resend/Postmark free tiers (cannot legitimately send _from_ a gmail.com address — DMARC fails; would require a custom domain the business does not have), SMTP via Workers TCP sockets (no mature library, Gmail requires app passwords), MailChannels (Workers integration discontinued).
 
 ## R-08 Pricing PDF & print (FR-009–011)
 
@@ -188,12 +192,12 @@ Use atomic D1 counters for the application policy; an optional binding may provi
 additional short-window abuse filter. Never configure a binding with `period = 600` or
 silently replace ten-minute limits with one-minute limits. See R-16 and data-model.md.
 
-| Endpoint group | Limit |
-|----------------|-------|
-| `POST /inquiries` | 5 per 10 min per IP |
-| `GET /auth/google/*`, `POST /auth/exchange` | 10 per 10 min per IP |
-| `POST /questionnaire/{token}` | 5 per 10 min per IP |
-| Admin mutations | 120 per min per session |
+| Endpoint group                              | Limit                   |
+| ------------------------------------------- | ----------------------- |
+| `POST /inquiries`                           | 5 per 10 min per IP     |
+| `GET /auth/google/*`, `POST /auth/exchange` | 10 per 10 min per IP    |
+| `POST /questionnaire/{token}`               | 5 per 10 min per IP     |
+| Admin mutations                             | 120 per min per session |
 
 Plus the duplicate-inquiry guard (same normalised email + message hash within 2 min) stored in D1 with a 2-minute TTL cleanup.
 
@@ -209,6 +213,7 @@ for the stated application windows despite write cost; provider binding alone is
 ## R-11 Testing strategy
 
 **Decision**:
+
 - **Process**: Mandatory red-green-refactor for all executable behavior, including shared
   foundation, migrations, UI interactions, validation, and defect fixes. Record meaningful
   failing and passing runs; do not defer tests to the final phase.
@@ -231,6 +236,7 @@ for the stated application windows despite write cost; provider binding alone is
 ## R-12 CI/CD & environments
 
 **Decision**: GitHub Actions.
+
 - `ci.yml` on PR: formatting/lint, typecheck, production build, unit/component/integration/
   contract tests, Chromium E2E smoke, dependency/secret checks; full browser matrix nightly
   and before release. Establish these gates in T006 and complete them in T059.
@@ -286,35 +292,35 @@ keys, and EXIF/GPS-free public derivatives under constitution Principles V–VI.
 
 ## R-15 Launch-time configuration (not design decisions)
 
-| Item | Where set | Initial value |
-|------|-----------|---------------|
-| Inquiry recipient | Admin → Settings (D1 `site_config`) | `tbd@gmail.com` (placeholder; confirm) |
-| Sender address | Admin → Settings; must match Gmail account/alias | Rebekah's business Gmail once created |
-| Public contact email | Admin → Settings; explicitly labeled public, independent of private addresses | Owner-approved monitored business address before launch; local fixtures use `hello@example.invalid` |
-| Owner allow-list | `wrangler secret OWNER_ALLOWLIST` | Rebekah's Google account email |
-| Admin route | SPA `/admin` (unguessable path adds nothing — auth is the control) | `/admin` |
-| Timezone | Admin → Settings | `America/New_York` |
-| Turnstile keys, Google client id/secret, Gmail refresh token | `wrangler secret` / `VITE_TURNSTILE_SITE_KEY` | per environment |
+| Item                                                         | Where set                                                                     | Initial value                                                                                       |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Inquiry recipient                                            | Admin → Settings (D1 `site_config`)                                           | `tbd@gmail.com` (placeholder; confirm)                                                              |
+| Sender address                                               | Admin → Settings; must match Gmail account/alias                              | Rebekah's business Gmail once created                                                               |
+| Public contact email                                         | Admin → Settings; explicitly labeled public, independent of private addresses | Owner-approved monitored business address before launch; local fixtures use `hello@example.invalid` |
+| Owner allow-list                                             | `wrangler secret OWNER_ALLOWLIST`                                             | Rebekah's Google account email                                                                      |
+| Admin route                                                  | SPA `/admin` (unguessable path adds nothing — auth is the control)            | `/admin`                                                                                            |
+| Timezone                                                     | Admin → Settings                                                              | `America/New_York`                                                                                  |
+| Turnstile keys, Google client id/secret, Gmail refresh token | `wrangler secret` / `VITE_TURNSTILE_SITE_KEY`                                 | per environment                                                                                     |
 
-## Resolved unknowns summary
+## Design choices summary
 
-| Technical Context field | Resolution |
-|-------------------------|-----------|
-| Language/Version | TypeScript 5, Node 22 tooling, Workers runtime |
-| Primary dependencies | R-01, R-02, R-03, R-05, R-06, R-08 |
-| Storage | D1 + R2 (R-03, R-04) |
-| Testing | R-11 |
-| Target platform | Cloudflare Workers Static Assets frontend + separate API Worker (R-01, R-02) |
-| Performance / constraints | plan.md Technical Context; provider budgets/entitlements require T001 verification |
-| Email, CAPTCHA, identity provider | R-07, R-05, R-06 |
-| Rate limits, audit, backups, a11y | R-09, R-10, R-13, R-14 |
+| Technical Context field           | Resolution                                                                         |
+| --------------------------------- | ---------------------------------------------------------------------------------- |
+| Language/Version                  | TypeScript 5; Node 24 candidate verified below; Workers runtime                    |
+| Primary dependencies              | R-01, R-02, R-03, R-05, R-06, R-08                                                 |
+| Storage                           | D1 + R2 (R-03, R-04)                                                               |
+| Testing                           | R-11                                                                               |
+| Target platform                   | Cloudflare Workers Static Assets frontend + separate API Worker (R-01, R-02)       |
+| Performance / constraints         | plan.md Technical Context; provider budgets/entitlements require T001 verification |
+| Email, CAPTCHA, identity provider | R-07, R-05, R-06                                                                   |
+| Rate limits, audit, backups, a11y | R-09, R-10, R-13, R-14                                                             |
 
 Design choices remain documented; T001 feasibility/data-lifecycle decisions and all
 implementation/release evidence remain open. These are tracked obligations, not passes.
 
 ## R-16 T001 feasibility checkpoint — 2026-11-13
 
-Status: **PARTIAL — hosting decision resolved; technical verification pending**. This is
+Status: **BLOCKED — hosting resolved; two feasibility gates remain**. This is
 documentation/source verification, not a deployed-account, image-decoder, installation,
 or production-performance test. The agent has not enabled subscriptions, accessed payment
 details/credentials, or deployed infrastructure.
@@ -427,3 +433,119 @@ instructions now reflect Workers Static Assets. Continue T001's retention/decode
 compatible-toolchain and usage-budget checks, then mark it complete. T002–T063 remain unchecked until
 their work and required evidence exist. The approved 30-day recovery/31-day receipt policy
 and no-persisted-inquiry rule have not been relaxed.
+
+### Implementation follow-up — verified allowances and controls
+
+The following are documentation-backed allowances, not measured application consumption
+or evidence of remaining allowance in the owner's account. All account-shared usage must
+be included before deployment.
+
+| Resource      | Included allowance / constraint                                                | Project planning envelope                                                                                                                                                                              |
+| ------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Workers Free  | 100,000 requests/day; 10 ms CPU per HTTP request and cron; 128 MB per isolate  | 5,000 monthly visits × 60 cold image reads = 300,000 image requests/month. At 31 days, approximately 9,678/day on average; daily spikes, API calls, frontend fallback and other Workers must also fit. |
+| Static Assets | Static asset delivery is free; invoking Worker code consumes Workers allowance | Serve existing public HTML/assets directly; count fallback execution separately.                                                                                                                       |
+| D1 Free       | 5 million rows read/day; 100,000 rows written/day; 5 GB total storage          | Indexed public reads; count indexes, counters, audit, cleanup and rejected traffic in measured D1 metadata. Keep the application's planning target below 25,000 row writes/day.                        |
+| R2 Standard   | 10 GB-month; 1 million Class A and 10 million Class B operations/month         | 60 × (10 + 2 + 1 + 0.25) MiB = 795 MiB for maximum-sized current originals/variants. A 300,000-read baseline uses 3% of Class B allowance.                                                             |
+
+Sources: [Workers limits](https://developers.cloudflare.com/workers/platform/limits/),
+[Static Assets billing](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/),
+[D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/),
+[R2 pricing](https://developers.cloudflare.com/r2/pricing/).
+
+**Design controls to implement and measure**: Reserve a combined 6 GiB R2 application
+envelope, including staged/orphaned files, recovery media, backups and deletion receipts.
+Budget before writes and reconcile actual storage; a 60-image live cap alone does not cap
+replacement churn or orphan storage. Daily JSON exports must exclude binary media; retain
+each generated original/variant object once and reference it from manifests. Thirty copies
+of the maximum-sized gallery would alone consume about 23.3 GiB, exceeding the included
+storage. A provisional 25 MiB daily JSON export ceiling uses at most 750 MiB over 30 copies;
+exceeding it must raise an operational failure rather than silently skip data. These are
+technical planning limits, not new accepted user-facing limits or implemented controls.
+
+Budget alerts notify but do not stop R2 usage. Cloudflare's newly documented product spending
+limits cover Workers/Durable Objects, exclude R2, and do not guarantee an invoice ceiling.
+Therefore the existing $0 **target** is feasible at the estimated scale, but it is not an
+enforceable $0 account cap. No billing setting, subscription or paid upgrade was changed.
+Sources: [budget alerts](https://developers.cloudflare.com/billing/manage/budget-alerts/),
+[spending controls](https://developers.cloudflare.com/billing/manage/spend-management/).
+
+The existing ten-minute D1 window design remains necessary: the provider binding supports
+only 10/60-second windows and local approximate counters. Account quotas do not replace
+application limits. [Rate Limiting binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/).
+
+### Implementation follow-up — image feasibility boundary
+
+The Images byte-stream binding is the strongest candidate for moving decoding out of the
+application isolate. Its transformation performs decoding/re-encoding; `.info()` is only
+inspection. Offline Wrangler/Vitest uses a reduced-feature implementation and cannot prove
+production entitlement, full validation, metadata or CPU behavior.
+[Images binding](https://developers.cloudflare.com/images/optimization/binding/).
+
+Provider documentation is inconsistent about subscription eligibility: the pricing page
+(updated October 19) describes 5,000 free monthly transformations and rejection without
+charges beyond that allowance; the upload-to-R2 tutorial (updated June 10) explicitly
+requires Images Paid to bind the API. Do not treat either an offline test or the pricing
+table alone as evidence that this account can use private-byte transforms without a new
+subscription. No upgrade is authorized. Sources: [Images pricing](https://developers.cloudflare.com/images/pricing/),
+[upload tutorial prerequisites](https://developers.cloudflare.com/images/tutorials/optimize-user-uploaded-image/).
+
+An in-isolate full-frame decoder is not an established fallback: 40,000,000 pixels × four
+RGBA bytes = 160,000,000 bytes (152.6 MiB), already above the 128 MB isolate limit before
+input buffers/runtime allocations. This calculation rules out that allocation strategy,
+not every possible streaming decoder; no streaming implementation has been benchmarked.
+The 10 ms Free CPU budget must also be measured, not inferred from local wall time.
+
+Required proof before accepting the candidate: validate synthetic JPEG/PNG/WebP at the
+contract's byte/pixel boundaries; reject truncation, misleading headers, MIME mismatch and
+animation; preserve EXIF orientation; verify final WebP metadata; exhaust/read all decoder
+output before publication; verify fail-closed behavior on provider errors/quota exhaustion.
+Flattening animation with `anim:false` does not satisfy the specified rejection requirement.
+Count at least four transform operations per attempted upload if the original and all
+three supplied variants are decoded separately (240 for a 60-image initial portfolio);
+retries, distinct inputs and additional output variants consume further allowance. The
+test must keep originals private and must not fall back to serving an original on errors.
+This is a proposed proof protocol, **not a completed decoder test**.
+
+### Implementation follow-up — retention and Gmail
+
+D1 Free's documented seven-day recovery window fits the existing maximum. R2 documents
+typical lifecycle deletion timing, not an unconditional upper bound. Explicit deletion at
+day 28, hourly retries, independent alerts, and refusal to restore expired backups would
+reduce operational risk but still cannot establish physical deletion by day 30 during an
+extended provider outage. Receipt deletion at day 31 has the same limitation. Do not
+discard receipts while overdue recoverable copies remain: that could resurrect deleted
+clients. No automatic extension of either deadline is approved. This is an unresolved
+requirement/provider mismatch, not work that can be closed by adding a cron expression.
+Sources: [D1 recovery](https://developers.cloudflare.com/d1/reference/time-travel/),
+[R2 lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/).
+
+Gmail sender lookup still requires `gmail.settings.basic` alongside `gmail.send`.
+Google documents a verification exception when only the developer or a small number of
+personally known users grant account access. Applying it to an owner-only Gmail integration
+is a reasonable design inference, not approval of this OAuth project; anonymous visitors
+do not grant Gmail access. Confirm the account/consent configuration before live email
+acceptance, retain the unverified-app warning and user-cap caveats, and request no mailbox
+read scope. Sources: [sendAs.list scopes](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs/list),
+[scope classifications](https://developers.google.com/workspace/gmail/api/auth/scopes),
+[verification exceptions](https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification#exceptions_to_verification_requirements).
+
+### Implementation follow-up — toolchain resolution evidence
+
+Candidate exact versions: Node 24.14.0 (installed), pnpm 12.18.0 (registry metadata only),
+React/react-dom 19.3.1, React Router/@react-router/dev 7.18.5, Vite 8.3.8, TypeScript 5.9.3,
+Tailwind/@tailwindcss/vite 4.3.5, Vitest/@vitest/runner/@vitest/snapshot 4.1.12,
+@cloudflare/vitest-pool-workers 0.23.0 and Wrangler 4.162.0.
+
+Read exact `engines`, `peerDependencies` and optional-peer metadata with `npm view` using
+the OS certificate store (`NODE_OPTIONS=--use-system-ca`). Node 24 is a supported LTS line;
+Vite 8.3 receives regular patches. The Router and Tailwind plugins accept Vite 8; the
+Workers pool requires Vitest ^4.1.0. Sources: [Node support](https://nodejs.org/en/about/previous-releases),
+[Vite support](https://vite.dev/releases), [pnpm installation](https://pnpm.io/installation).
+
+A temporary manifest containing these application/build/test packages passed
+`npm install --package-lock-only --ignore-scripts --strict-peer-deps --no-audit --no-fund`
+on Node 24.14.0/npm 11.12.0. No application dependencies were installed in the repository;
+this proves dependency resolution only. pnpm installation, lockfile, runtime imports,
+builds, vulnerability scanning and Workers integration tests remain T002/T006/T059 work.
+The pool itself pins a different Wrangler/Miniflare pair; do not override its internal
+versions merely to deduplicate dependencies. Tests must establish compatibility.

@@ -1,0 +1,8 @@
+# Server-only. Copy to .dev.vars locally; never put these in VITE_* variables.
+GOOGLE_CLIENT_ID=replace-me
+GOOGLE_CLIENT_SECRET=replace-me
+GMAIL_REFRESH_TOKEN=replace-me
+TURNSTILE_SECRET=replace-me
+OWNER_ALLOWLIST=owner@example.invalid
+RATE_LIMIT_KEY=replace-with-a-random-32-byte-secret
+AUTH_KEY=replace-with-a-separate-random-32-byte-secret
