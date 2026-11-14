@@ -1,0 +1,151 @@
+{
+  "date": "2026-11-14",
+  "status": "completed_with_test_locator_failures",
+  "task": "T059",
+  "runtime": {
+    "node": "24.14.0",
+    "playwright": "1.65.1",
+    "webkit": "27.2",
+    "webkitBuild": "2388"
+  },
+  "environment": {
+    "ancestorDirectoryReadable": true,
+    "existingBrowserLaunched": true,
+    "productionBuild": "passed",
+    "localServersStarted": true,
+    "browserReinstalled": false,
+    "securitySettingsChanged": false
+  },
+  "selection": {
+    "projects": [
+      "webkit-desktop",
+      "webkit-mobile"
+    ],
+    "scenarios": 3,
+    "repetitions": 10,
+    "retries": 0,
+    "executed": 60
+  },
+  "stats": {
+    "startTime": "2026-11-14T15:27:20.770Z",
+    "duration": 394801.84599999996,
+    "expected": 20,
+    "skipped": 0,
+    "unexpected": 40,
+    "flaky": 0
+  },
+  "failureCounts": {
+    "ambiguousClientEmailLocator": 40
+  },
+  "cases": [
+    {
+      "project": "webkit-desktop",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "outcomes": [
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected"
+      ],
+      "attempts": 10,
+      "errorCategory": "ambiguous_client_email_locator"
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "outcomes": [
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected"
+      ],
+      "attempts": 10,
+      "errorCategory": "ambiguous_client_email_locator"
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "outcomes": [
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected"
+      ],
+      "attempts": 10,
+      "errorCategory": "ambiguous_client_email_locator"
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "outcomes": [
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected",
+        "unexpected"
+      ],
+      "attempts": 10,
+      "errorCategory": "ambiguous_client_email_locator"
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "outcomes": [
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10,
+      "errorCategory": null
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "outcomes": [
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10,
+      "errorCategory": null
+    }
+  ],
+  "limitations": "All original complete-owner-workflow repetitions passed. The new probes failed after saving Avery because getByLabel also matched the email region. This is a test locator defect, not reproduction of the historical empty-email issue. Results are retained before the selector correction. No task completion, remote CI or release pass is claimed."
+}

@@ -1,0 +1,1882 @@
+{
+  "date": "2026-11-14",
+  "task": "T059",
+  "status": "passed",
+  "command": "pnpm exec playwright test --config=.wrangler/implementation-matrix.config.ts",
+  "runtime": {
+    "node": "24.14.0",
+    "playwright": "1.65.1",
+    "chromium": "159.0.8154.6",
+    "firefox": "159.0",
+    "webkit": "27.2",
+    "platform": "Windows desktop; mobile projects use Playwright emulation",
+    "firefoxExecutable": "Owner-extracted pinned build 1572; same previously verified executable"
+  },
+  "selection": {
+    "projects": [
+      "chromium-desktop",
+      "chromium-mobile",
+      "firefox-desktop",
+      "webkit-desktop",
+      "webkit-mobile"
+    ],
+    "functionalCasesPerProject": 30,
+    "total": 150,
+    "workers": 1,
+    "retries": 0,
+    "performanceIncluded": false,
+    "failOnFlakyTests": true,
+    "forbidOnly": true
+  },
+  "stats": {
+    "startTime": "2026-11-14T15:53:14.920Z",
+    "duration": 821734.348,
+    "expected": 150,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "projects": {
+    "chromium-desktop": {
+      "expected": 30
+    },
+    "chromium-mobile": {
+      "expected": 30
+    },
+    "firefox-desktop": {
+      "expected": 30
+    },
+    "webkit-desktop": {
+      "expected": 30
+    },
+    "webkit-mobile": {
+      "expected": 30
+    }
+  },
+  "productCodeChanged": false,
+  "testChange": "Passive client-input failure diagnostics; no contact values, input-sequence changes, inter-field waits, assertion weakening or timeout increases.",
+  "checks": {
+    "pnpmCheck": "passed: formatting, lint, types, 50 files/229 tests, production builds",
+    "scopedDiagnosticsLintTypesFormatting": "passed",
+    "diagnosticRecorderProbe": "1/1 passed under Playwright; standalone tsx attempt failed on unavailable __name transpiler helper",
+    "dependencyAudit": "no known vulnerabilities",
+    "remoteWorkflowRuns": 0,
+    "artifactPrivacy": {
+      "checked": 55,
+      "blocked": 0
+    },
+    "repositoryPrivacy": {
+      "checked": 385,
+      "blocked": 0
+    },
+    "diffWhitespace": "passed"
+  },
+  "cases": [
+    {
+      "project": "chromium-desktop",
+      "scenario": "public and owner routes pass automated WCAG checks and keyboard navigation",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5894
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "public and owner routes pass automated WCAG checks and keyboard navigation",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5710
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "public and owner routes pass automated WCAG checks and keyboard navigation",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 12693
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "public and owner routes pass automated WCAG checks and keyboard navigation",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 9690
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "public and owner routes pass automated WCAG checks and keyboard navigation",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 9528
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "pending questionnaire and client detail pass automated accessibility with retained data",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1006
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "pending questionnaire and client detail pass automated accessibility with retained data",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1004
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "pending questionnaire and client detail pass automated accessibility with retained data",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1880
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "pending questionnaire and client detail pass automated accessibility with retained data",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1599
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "pending questionnaire and client detail pass automated accessibility with retained data",
+      "file": "accessibility.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1684
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke scheduled banners appear, expire, overlap and update on resume without an inactive gap",
+      "file": "banners.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1783
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke scheduled banners appear, expire, overlap and update on resume without an inactive gap",
+      "file": "banners.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1600
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke scheduled banners appear, expire, overlap and update on resume without an inactive gap",
+      "file": "banners.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3670
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke scheduled banners appear, expire, overlap and update on resume without an inactive gap",
+      "file": "banners.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 30511
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke scheduled banners appear, expire, overlap and update on resume without an inactive gap",
+      "file": "banners.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 30211
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1497
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1377
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3103
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3902
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3829
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1538
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1455
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3030
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4130
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4175
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5166
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4671
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 8463
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 12144
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 11969
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "client lost delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 625
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "client lost delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 526
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "client lost delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1010
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "client lost delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1379
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "client lost delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1378
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "client history delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 628
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "client history delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 535
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "client history delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1065
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "client history delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1354
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "client history delivery failure preserves drafts and prevents blind resend",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1403
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "a lost questionnaire response keeps answers and checks recorded status before any second submission",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 462
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "a lost questionnaire response keeps answers and checks recorded status before any second submission",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 460
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "a lost questionnaire response keeps answers and checks recorded status before any second submission",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 854
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "a lost questionnaire response keeps answers and checks recorded status before any second submission",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1564
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "a lost questionnaire response keeps answers and checks recorded status before any second submission",
+      "file": "clients.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 996
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "private deep links serve the generated SPA fallback with noindex and no-referrer",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1008
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "private deep links serve the generated SPA fallback with noindex and no-referrer",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 844
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "private deep links serve the generated SPA fallback with noindex and no-referrer",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1129
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "private deep links serve the generated SPA fallback with noindex and no-referrer",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 2231
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "private deep links serve the generated SPA fallback with noindex and no-referrer",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 2173
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "missing assets are real 404s and public documents contain prerendered headings",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 104
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "missing assets are real 404s and public documents contain prerendered headings",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 122
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "missing assets are real 404s and public documents contain prerendered headings",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 254
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "missing assets are real 404s and public documents contain prerendered headings",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 576
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "missing assets are real 404s and public documents contain prerendered headings",
+      "file": "deployment.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 257
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke owner uploads oriented images, edits descriptions, reorders and removes public photos",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 50452
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke owner uploads oriented images, edits descriptions, reorders and removes public photos",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 50386
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke owner uploads oriented images, edits descriptions, reorders and removes public photos",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 51009
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke owner uploads oriented images, edits descriptions, reorders and removes public photos",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 51047
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke owner uploads oriented images, edits descriptions, reorders and removes public photos",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 51030
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "sixty images keep ordering, tag filtering and 320/768/1280 layouts usable",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3760
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "sixty images keep ordering, tag filtering and 320/768/1280 layouts usable",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4116
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "sixty images keep ordering, tag filtering and 320/768/1280 layouts usable",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 4568
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "sixty images keep ordering, tag filtering and 320/768/1280 layouts usable",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5435
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "sixty images keep ordering, tag filtering and 320/768/1280 layouts usable",
+      "file": "gallery.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 5898
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke local built HTML is served and the API does not fall back to HTML",
+      "file": "harness.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 211
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke local built HTML is served and the API does not fall back to HTML",
+      "file": "harness.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 241
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke local built HTML is served and the API does not fall back to HTML",
+      "file": "harness.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 388
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke local built HTML is served and the API does not fall back to HTML",
+      "file": "harness.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 384
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke local built HTML is served and the API does not fall back to HTML",
+      "file": "harness.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 344
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke public navigation and service discovery",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 375
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke public navigation and service discovery",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 482
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke public navigation and service discovery",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 830
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke public navigation and service discovery",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 822
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke public navigation and service discovery",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 921
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke contact keeps its public recovery address available",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 224
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke contact keeps its public recovery address available",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 274
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke contact keeps its public recovery address available",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 398
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke contact keeps its public recovery address available",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 582
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke contact keeps its public recovery address available",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 525
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke inquiry reaches the real Worker once and reports provider acceptance",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 337
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke inquiry reaches the real Worker once and reports provider acceptance",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 391
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke inquiry reaches the real Worker once and reports provider acceptance",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 764
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke inquiry reaches the real Worker once and reports provider acceptance",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 824
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke inquiry reaches the real Worker once and reports provider acceptance",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 746
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "provider response loss preserves the draft, never unlocks on a timer and requires fresh manual submission after owner verification",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 544
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "provider response loss preserves the draft, never unlocks on a timer and requires fresh manual submission after owner verification",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 609
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "provider response loss preserves the draft, never unlocks on a timer and requires fresh manual submission after owner verification",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 2003
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "provider response loss preserves the draft, never unlocks on a timer and requires fresh manual submission after owner verification",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1272
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "provider response loss preserves the draft, never unlocks on a timer and requires fresh manual submission after owner verification",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1255
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "browser response loss stays uncertain and receipt confirmation sends nothing else",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 379
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "browser response loss stays uncertain and receipt confirmation sends nothing else",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 411
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "browser response loss stays uncertain and receipt confirmation sends nothing else",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 835
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "browser response loss stays uncertain and receipt confirmation sends nothing else",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 840
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "browser response loss stays uncertain and receipt confirmation sends nothing else",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 749
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "definite rejection permits an explicit retry and required phone errors focus the summary",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 471
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "definite rejection permits an explicit retry and required phone errors focus the summary",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 528
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "definite rejection permits an explicit retry and required phone errors focus the summary",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1027
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "definite rejection permits an explicit retry and required phone errors focus the summary",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1208
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "definite rejection permits an explicit retry and required phone errors focus the summary",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1112
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "all contact fields survive an in-flight send and unavailable API keeps the recovery email selectable",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1243
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "all contact fields survive an in-flight send and unavailable API keeps the recovery email selectable",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1257
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "all contact fields survive an in-flight send and unavailable API keeps the recovery email selectable",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1675
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "all contact fields survive an in-flight send and unavailable API keeps the recovery email selectable",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1875
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "all contact fields survive an in-flight send and unavailable API keeps the recovery email selectable",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1917
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "public routes have no horizontal overflow at 320px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 736
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "public routes have no horizontal overflow at 320px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 747
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "public routes have no horizontal overflow at 320px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1230
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "public routes have no horizontal overflow at 320px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1172
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "public routes have no horizontal overflow at 320px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1185
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "public routes have no horizontal overflow at 768px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 779
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "public routes have no horizontal overflow at 768px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 837
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "public routes have no horizontal overflow at 768px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1323
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "public routes have no horizontal overflow at 768px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1198
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "public routes have no horizontal overflow at 768px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1277
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "public routes have no horizontal overflow at 1280px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 733
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "public routes have no horizontal overflow at 1280px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 871
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "public routes have no horizontal overflow at 1280px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1251
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "public routes have no horizontal overflow at 1280px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1228
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "public routes have no horizontal overflow at 1280px",
+      "file": "inquiry.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1317
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke service, print and PDF use a complete published pricing revision",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 585
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke service, print and PDF use a complete published pricing revision",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 669
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke service, print and PDF use a complete published pricing revision",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 686
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke service, print and PDF use a complete published pricing revision",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 818
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke service, print and PDF use a complete published pricing revision",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 748
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "a PDF module outage leaves complete web pricing and print controls usable",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 309
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "a PDF module outage leaves complete web pricing and print controls usable",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 374
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "a PDF module outage leaves complete web pricing and print controls usable",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 533
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "a PDF module outage leaves complete web pricing and print controls usable",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 666
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "a PDF module outage leaves complete web pricing and print controls usable",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 624
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "owner publication reaches an already-open service page within the freshness budget",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 25494
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "owner publication reaches an already-open service page within the freshness budget",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 25571
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "owner publication reaches an already-open service page within the freshness budget",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 25642
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "owner publication reaches an already-open service page within the freshness budget",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 26128
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "owner publication reaches an already-open service page within the freshness budget",
+      "file": "pricing.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 26045
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke public, private and API responses enforce security headers while the application hydrates",
+      "file": "security.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 408
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke public, private and API responses enforce security headers while the application hydrates",
+      "file": "security.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 461
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke public, private and API responses enforce security headers while the application hydrates",
+      "file": "security.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1431
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke public, private and API responses enforce security headers while the application hydrates",
+      "file": "security.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1227
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke public, private and API responses enforce security headers while the application hydrates",
+      "file": "security.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1199
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "public prerenders expose headings, canonical metadata and sitemap; private routes remain noindex",
+      "file": "seo.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 182
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "public prerenders expose headings, canonical metadata and sitemap; private routes remain noindex",
+      "file": "seo.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 218
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "public prerenders expose headings, canonical metadata and sitemap; private routes remain noindex",
+      "file": "seo.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 385
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "public prerenders expose headings, canonical metadata and sitemap; private routes remain noindex",
+      "file": "seo.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 317
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "public prerenders expose headings, canonical metadata and sitemap; private routes remain noindex",
+      "file": "seo.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 280
+        }
+      ]
+    },
+    {
+      "project": "chromium-desktop",
+      "scenario": "@smoke settings update public recovery details and inquiry delivery independently within 60 seconds",
+      "file": "settings.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 25912
+        }
+      ]
+    },
+    {
+      "project": "chromium-mobile",
+      "scenario": "@smoke settings update public recovery details and inquiry delivery independently within 60 seconds",
+      "file": "settings.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 25942
+        }
+      ]
+    },
+    {
+      "project": "firefox-desktop",
+      "scenario": "@smoke settings update public recovery details and inquiry delivery independently within 60 seconds",
+      "file": "settings.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 26577
+        }
+      ]
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke settings update public recovery details and inquiry delivery independently within 60 seconds",
+      "file": "settings.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 26554
+        }
+      ]
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke settings update public recovery details and inquiry delivery independently within 60 seconds",
+      "file": "settings.spec.ts",
+      "outcome": "expected",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 26453
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Historical WebKit input loss is unresolved; no failing event sequence or product fix is established.",
+    "Passive instrumentation may change timing. Passing this run does not erase previous failures.",
+    "Local synthetic-provider functional evidence only; performance, remote CI, live providers, human/device acceptance and deployment remain separate.",
+    "The task count remains 51/63. Privacy copy remains pending at the owner request."
+  ]
+}
