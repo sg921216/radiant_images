@@ -1,0 +1,52 @@
+{
+  "recordedAt": "2026-11-14T18:34:49.333Z",
+  "window": {
+    "from": "2026-11-14T18:27:00Z",
+    "to": "2026-11-14T18:30:00Z"
+  },
+  "source": "Cloudflare durableObjectsPeriodicGroups",
+  "units": {
+    "memory": "bytes",
+    "cpuTime": "microseconds",
+    "activeTime": "microseconds",
+    "duration": "GB-seconds"
+  },
+  "components": [
+    {
+      "kind": "jpegValidator",
+      "quantiles": {
+        "memoryUsageBytesP99": 29492300,
+        "memoryUsageBytesP999": 29492300
+      },
+      "sum": {
+        "activeTime": 5158417,
+        "cpuTime": 4713125,
+        "duration": 0.660277376,
+        "exceededCpuErrors": 0,
+        "exceededMemoryErrors": 0,
+        "fatalInternalErrors": 0
+      }
+    },
+    {
+      "kind": "galleryMutations",
+      "quantiles": {
+        "memoryUsageBytesP99": 40975644,
+        "memoryUsageBytesP999": 40975644
+      },
+      "sum": {
+        "activeTime": 133928707,
+        "cpuTime": 963624,
+        "duration": 17.142874496,
+        "exceededCpuErrors": 0,
+        "exceededMemoryErrors": 0,
+        "fatalInternalErrors": 0
+      }
+    }
+  ],
+  "earlierWholeRehearsalCoordinatorMemoryP999": 70915496,
+  "limitations": [
+    "Periodic isolate-memory samples are not absolute peak-memory measurements.",
+    "The earlier whole-rehearsal value includes the interrupted pacing diagnostic.",
+    "Gallery GET reached 12 ms CPU once; general Free-tier CPU headroom remains a T001 release concern. Upload/delete front-Worker invocations remained below 7 ms in the retrieved cohort."
+  ]
+}

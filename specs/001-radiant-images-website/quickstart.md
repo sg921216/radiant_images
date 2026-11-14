@@ -66,7 +66,8 @@ missing bindings or provider failures prevent publication.
 Damaged or unsupported JPEGs return HTTP 400 with instructions to re-export as JPEG or PNG.
 No original or derivative is written until validation succeeds. Live binding evidence is
 recorded in research R-19/R-20. The private deployed rehearsal passes functional and sampled
-CPU checks; coordinator memory and account-wide usage controls remain release evidence.
+CPU checks; R-21 adds coordinator memory samples. Account-wide usage controls and general
+API CPU headroom remain release evidence.
 
 ## Separate provider-connected setup
 
@@ -556,5 +557,73 @@ Production requires `IMAGES`, `JPEG_VALIDATOR`/`JpegValidator` and
 is admitted at a time; overlap returns 429 with a two-second retry hint. The UI retains its
 existing error/retry flow. JPEG validation has a 20-second ceiling, Images calls eight
 seconds each, and overall validation thirty seconds; failure prevents publication.
-Account-wide Images/R2/DO budgets and remaining memory proof still gate release. This
+Account-wide Images/R2/DO budgets and general API CPU headroom still gate release. This
 rehearsal does not verify scheduled retention, independent alerts or full client delivery.
+
+### Coordinator memory follow-up
+
+`scripts/cloudflare-gallery-rehearsal/memory.ts` creates a deterministic 40-MP high-detail
+JPEG padded with legal metadata to exactly 10 MiB and verifies four upload/read/delete
+cycles. The ordinary local proxy buffers uploads before forwarding them, so local pacing
+does not establish remote stream duration. For the R-21 follow-up, a separate private
+`streaming-driver.ts` Worker was bound only to the rehearsal API. The loopback proxy's
+TARGET pointed at that driver; `memory.ts --remote-streaming` let the driver pace actual
+Cloudflare-to-Cloudflare traffic at 75 ms per 32 KiB. Keep all routes, workers.dev and preview
+URLs disabled. Delete the driver before the API because it holds a service binding.
+
+The first driver paced each incoming chunk, timed out, and eventually completed remotely.
+The corrected byte-based pacing has a regression test and four passing cycles. Preserve
+both failed receipts and check the gallery before retrying any uncertain result. R-21
+records sampled memory, profiling limitations, CPU observations and complete cleanup.
+
+## Independent recovery monitoring and GitHub alerts
+
+The owner selected GitHub failure notifications on 2026-11-14. The implementation is ready
+in `.github/workflows/operations-monitor.yml`; production activation and notification
+receipt are not yet verified. The workflow runs hourly at minute 17 and can also be run
+manually. Node 24 executes the standalone TypeScript checker without dependency installation.
+It reads Cloudflare's R2 object API independently of the application/cron, never invoking
+application mutations. No public health endpoint or application owner session is added.
+
+`operations/maintenance.json` and `operations/backup.json` contain version, status and times
+only, in the private recovery bucket. Running/error/stale records cannot masquerade as a
+completed job. The monitor separately paginates R2 metadata, checking actual backup
+freshness and delayed removal rather than trusting a successful heartbeat alone. It does
+not download backup, original, derivative or deletion-receipt bodies.
+
+Detection thresholds: maintenance missing/stuck/older than 20 minutes; backup and health
+older than 30 hours; recovery still present 28 days plus 20 minutes after creation; removal
+target misses at day 30; receipts remaining after day 31 plus 20 minutes; recovery bucket
+at or above 6 GiB; Gmail unavailable or nonzero recorded application failure counts.
+Outputs contain fixed issue codes and counts only. Provider/network errors, malformed
+metadata, incomplete pagination and oversized responses fail the check. Delayed receipt
+removal is reported for investigation; the monitor never deletes receipts or bypasses safe
+preservation. The storage threshold is an alert, not a billing cap or account-wide limit.
+
+Activation checklist for the persistent deployment:
+
+1. Deploy the scheduled status-record changes and complete a verified daily backup/health
+   run. Keep R2 private. Configure a dedicated read-only Cloudflare API token accepted by
+   R2 object list/get for the designated account; verify its read scope without copying a
+   deployment token, Wrangler OAuth token or any credential into chat/source control.
+2. Put the workflow on the default branch. At repository scope configure secrets
+   `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_MONITOR_TOKEN`, variable `RECOVERY_BUCKET`, then
+   `OPERATIONS_MONITOR_ENABLED=true`. The existing deployment environment's secrets are
+   not automatically available to this independent job. Missing enablement leaves it
+   inactive and does not satisfy T058.
+3. The intended owner should create/update the schedule or disable/re-enable the workflow,
+   then enable GitHub Actions notifications and “Only notify for failed workflows.” GitHub
+   routes scheduled notifications to the creating/updating/re-enabling user; watching the
+   repository alone does not prove delivery. [Notification routing](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs),
+   [notification preferences](https://docs.github.com/en/subscriptions-and-notifications/how-tos/managing-github-actions-notifications).
+4. Manually dispatch with `notification_test=true` and verify receipt of the explicitly
+   labeled synthetic failure. This test makes no Cloudflare call. Then run the real check
+   and retain the sanitized healthy result; rehearse stale-job/deletion failure and recovery
+   on an isolated deployment before closing T058. Never age/delete real client recovery
+   copies for a test.
+
+GitHub schedules can be delayed/dropped under load and inactive public repositories can
+have schedules disabled. The hourly check is operational monitoring, not a guaranteed
+delivery deadline; review workflow activity and usage allowance separately. No scheduled
+run, notification receipt or repository credential configuration was performed in R-21.
+[Schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).

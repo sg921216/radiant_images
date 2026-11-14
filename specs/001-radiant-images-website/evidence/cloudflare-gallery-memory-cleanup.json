@@ -1,0 +1,40 @@
+{
+  "completedAt": "2026-11-14T18:33:34.908Z",
+  "removals": [
+    {
+      "kind": "worker",
+      "name": "radiant-rehearsal-20261114-c72f19-driver",
+      "success": true
+    },
+    {
+      "kind": "worker",
+      "name": "radiant-rehearsal-20261114-c72f19",
+      "success": true
+    },
+    {
+      "kind": "d1",
+      "name": "radiant-rehearsal-20261114-c72f19",
+      "success": true
+    },
+    {
+      "kind": "r2",
+      "name": "radiant-rehearsal-20261114-c72f19-media",
+      "success": true
+    },
+    {
+      "kind": "r2",
+      "name": "radiant-rehearsal-20261114-c72f19-recovery",
+      "success": true
+    }
+  ],
+  "inventoryCheckedAt": "2026-11-14T18:33:53.094Z",
+  "remaining": {
+    "workers": 0,
+    "durableObjectNamespaces": 0,
+    "d1Databases": 0,
+    "r2Buckets": 0
+  },
+  "storageEmptied": true,
+  "proxyStopped": true,
+  "scope": "Synthetic private rehearsal only; no public routes, client data, Pixieset writes or paid activation."
+}

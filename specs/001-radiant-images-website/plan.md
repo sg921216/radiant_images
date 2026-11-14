@@ -90,6 +90,17 @@ and account-wide usage evidence. All temporary resources and synthetic credentia
 removed; no public release occurred. The current mutation-coordinator design supersedes
 the earlier statement that storage/publication work stays in the front Worker.
 
+**Memory and monitoring follow-up (2026-11-14)**: R-21 adds four passing combined
+40-MP/10-MiB slow-stream uploads with actual coordinator memory samples (p99 ~39 MiB;
+broader diagnostic cohort ~68 MiB), and no reported DO CPU/memory-limit errors. T034 is
+complete. T001 still covers account usage controls, remaining general API CPU headroom
+(one cold gallery-list GET reached 12 ms), and operational recovery proof. The owner chose
+GitHub failure notifications. Scheduled maintenance/backup now publish private status
+records; an independent hourly GitHub workflow reads those records and R2 metadata,
+failing on stale/missing jobs, backups, health, delayed cleanup or recovery storage budget.
+Production activation, cron/restore rehearsal and actual notification receipt remain T058.
+All temporary verification resources were removed; no production release is authorized.
+
 Build a photography business website for Radiant Images with a public marketing site (home gallery, three service pages with "How It Works" + pricing sections, About, FAQ, Contact with CAPTCHA-protected inquiry form) and an owner admin area (gallery, banners, pricing packages, site config, clients, email templates, checklists, questionnaires) protected by Google sign-in with an owner allow-list.
 
 Technical approach: a static React single-page app (Vite + React Router v7) deployed to

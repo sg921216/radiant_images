@@ -66,12 +66,40 @@ export async function healthSignal(env: Env, runtime: Runtime) {
     );
   return value;
 }
-export async function scheduled(event: ScheduledController, env: Env): Promise<void> {
+async function trackOperation(
+  env: Env,
+  runtime: Runtime,
+  name: 'maintenance' | 'backup',
+  action: () => Promise<unknown>,
+) {
+  const startedAt = runtime.now().toISOString();
+  const save = (status: 'running' | 'ok' | 'error') =>
+    env.RECOVERY.put(
+      `operations/${name}.json`,
+      JSON.stringify({
+        version: 1,
+        status,
+        startedAt,
+        ...(status === 'running' ? {} : { finishedAt: runtime.now().toISOString() }),
+      }),
+      { httpMetadata: { contentType: 'application/json', cacheControl: 'no-store' } },
+    );
+  await save('running');
   try {
-    await maintain(env, productionRuntime);
-    if (event.cron === '0 3 * * *') {
-      await createBackup(env, productionRuntime.now());
-      await healthSignal(env, productionRuntime);
+    await action();
+    await save('ok');
+  } catch (error) {
+    // A failed status write leaves a running/stale record, also detected independently.
+    await save('error').catch(() => undefined);
+    throw error;
+  }
+}
+export async function runScheduled(cron: string, env: Env, runtime: Runtime): Promise<void> {
+  try {
+    await trackOperation(env, runtime, 'maintenance', () => maintain(env, runtime));
+    if (cron === '0 3 * * *') {
+      await trackOperation(env, runtime, 'backup', () => createBackup(env, runtime.now()));
+      await healthSignal(env, runtime);
     }
   } catch {
     fallbackAudit(
@@ -80,4 +108,8 @@ export async function scheduled(event: ScheduledController, env: Env): Promise<v
     );
     throw new Error('maintenance_failed');
   }
+}
+
+export async function scheduled(event: ScheduledController, env: Env): Promise<void> {
+  await runScheduled(event.cron, env, productionRuntime);
 }

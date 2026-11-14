@@ -1,0 +1,19 @@
+{
+  "durationMs": 50000,
+  "profileType": "heap",
+  "bytes": 238,
+  "sha256": "0bfeb34d2e352cc0b74cbc2d3bfe359fb41b3c4e5081a2db191be8ea79968a76",
+  "samples": 3,
+  "allocationValues": {
+    "objects": 56956,
+    "bytes": 2097244
+  },
+  "attribution": "Anonymous frames mapped to apps/api/src/index.ts at source line 62, plus generic JavaScript/root frames.",
+  "scope": "Captured during the initial excessively slow streaming diagnostic; useful as evidence of allocation profiling access, not full-pipeline memory sizing.",
+  "limitations": "Allocation samples are not retained or peak memory. The API transport supplied decompressed protobuf bytes.",
+  "earlierAttempt": {
+    "status": 404,
+    "code": 10393,
+    "message": "No recent executions were found for this Worker."
+  }
+}

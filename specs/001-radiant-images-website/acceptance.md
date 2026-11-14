@@ -1242,3 +1242,41 @@ Cleanup verified: no Workers, DO namespaces, D1 databases or R2 buckets remain i
 rehearsal account inventory. The local proxy stopped; generated configs and credentials
 were removed. No real data, email, Pixieset operation, paid subscription, staging or commit
 was performed. Existing unrelated workspace edits were preserved.
+
+## 2026-11-14 — coordinator memory verified; GitHub monitoring implemented
+
+R-21 records the separately authorized private follow-up. Four combined 40-MP/10-MiB
+uploads pass through the unchanged production image path. Four further cycles pass with
+Cloudflare-side byte-based pacing, verifying the real coordinator under slow input. Strict
+Sharp decode, stripped metadata, derivative dimensions/bytes, private originals and
+deletion all pass. Final-window coordinator memory p99/p999 is 40,975,644 bytes (~39.1 MiB),
+validator memory 29,492,300 bytes (~28.1 MiB), with no reported DO limit errors. The broader
+diagnostic coordinator p999 is ~67.6 MiB. Samples are not absolute peaks.
+
+Retained failures: the initial driver delayed per input chunk and timed out locally, then
+completed remotely; the next upload received 429. Its eventual synthetic image was found
+and deleted. A regression test failed on provider chunk fragmentation, then passed after
+byte-based pacing. No production image behavior was changed by this diagnostic correction.
+The successful allocation profile covers early streaming only, not retained/peak memory.
+One cold gallery-list GET reached 12 ms CPU; general Free-tier headroom remains T001 work.
+
+T034 is complete from the accumulated API/storage/browser/real-provider evidence in
+R-19/R-20/R-21. **52/63 tasks are complete**. This does not waive T001 or authorize release.
+
+The owner selected GitHub failure notifications. Implemented private scheduled-job records
+and an independent hourly GitHub R2 metadata monitor with a labeled notification-test mode.
+TDD evidence: the initial scheduled wrapper failed both missing-status/error-transition
+tests; implementation passes both. The monitor stub failed all three stale/overdue/budget
+behavior cases; the completed monitor passes those plus pagination and bounded/read-only
+transport tests. Existing backup/restore/deletion-retry tests also pass. A direct standalone
+Node invocation without credentials exits 1 with a sanitized message, as required.
+
+`pnpm check` passes formatting, lint, workspace/tool types, **58 files / 262 tests**, and both
+builds. No browser flow changed; the earlier 4/4 gallery browser evidence remains applicable.
+Source/artifact privacy and final diff checks pass. Production cron, independent monitoring
+activation, actual owner notification receipt and remote restore/deletion rehearsal remain
+unverified T058 gates. No GitHub notification was sent during this work.
+
+Cleanup inventories confirm zero Workers, DO namespaces, D1 databases and R2 buckets.
+Generated configs and synthetic credentials were removed, with only ignored build/profile
+artifacts retained. No real data, Pixieset operation, paid plan, staging or commit occurred.

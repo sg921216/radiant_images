@@ -30,10 +30,12 @@ dependency-resolution candidate, and the two remaining feasibility issues.
    temporary private deployed rehearsal on 2026-11-14. R-20 records 11/11 passing checks,
    private originals, metadata-free derivatives and successful concurrency admission.
    Upload/delete now run in a per-portfolio Durable Object; observed front-Worker CPU
-   fell from 109 ms to 7 ms. JPEG-validator sampled memory is about 30 MiB, but coordinator
-   memory analytics remain unavailable and percentiles do not establish peak allocation.
-   Complete that resource evidence and account-wide usage/overage controls before release.
-   All temporary resources were removed. See [research R-20](./research.md#r-20-private-deployed-gallery-rehearsal--2026-11-14).
+   fell from 109 ms to 7 ms in that cohort. R-21 adds coordinator memory p99 of ~39 MiB
+   in four successful slow-stream uploads (~68 MiB in the broader diagnostic cohort).
+   This closes missing sampled-memory evidence; percentiles are not absolute peaks.
+   A separate cold gallery-list GET reached 12 ms, so general API CPU headroom and
+   account-wide usage/overage controls still need resolution. T034 is complete; T001
+   remains open. All temporary resources were removed. See [research R-21](./research.md#r-21-gallery-memory-and-independent-recovery-monitoring--2026-11-14).
 
 Sources: [R2 lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/),
 [Workers limits](https://developers.cloudflare.com/workers/platform/limits/),

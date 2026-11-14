@@ -1,0 +1,100 @@
+{
+  "recordedAt": "2026-11-14T18:30:33.806Z",
+  "unit": "milliseconds from Workers invocation logs",
+  "rawEventsReturned": 750,
+  "invocations": 93,
+  "stages": [
+    {
+      "version": "ef840ed6-5379-4506-9ab2-a4ddac585201",
+      "groups": [
+        {
+          "kind": "frontWorker",
+          "invocations": 34,
+          "maxCpuMs": 12,
+          "maxWallMs": 212172,
+          "outcomes": {
+            "ok": 34
+          },
+          "statuses": {
+            "200": 20,
+            "201": 5,
+            "204": 4,
+            "400": 4,
+            "429": 1
+          }
+        },
+        {
+          "kind": "jpegValidator",
+          "invocations": 5,
+          "maxCpuMs": 1246,
+          "maxWallMs": 1290,
+          "outcomes": {
+            "ok": 5
+          },
+          "statuses": {
+            "rpc": 5
+          }
+        },
+        {
+          "kind": "galleryMutations",
+          "invocations": 10,
+          "maxCpuMs": 326,
+          "maxWallMs": 212087,
+          "outcomes": {
+            "ok": 10
+          },
+          "statuses": {
+            "201": 5,
+            "204": 4,
+            "429": 1
+          }
+        }
+      ]
+    },
+    {
+      "version": "cfcf9c3d-b655-42dc-ba01-d8e39e74120f",
+      "groups": [
+        {
+          "kind": "frontWorker",
+          "invocations": 31,
+          "maxCpuMs": 10,
+          "maxWallMs": 31080,
+          "outcomes": {
+            "ok": 31
+          },
+          "statuses": {
+            "200": 18,
+            "201": 4,
+            "204": 5,
+            "400": 4
+          }
+        },
+        {
+          "kind": "jpegValidator",
+          "invocations": 4,
+          "maxCpuMs": 1255,
+          "maxWallMs": 1385,
+          "outcomes": {
+            "ok": 4
+          },
+          "statuses": {
+            "rpc": 4
+          }
+        },
+        {
+          "kind": "galleryMutations",
+          "invocations": 9,
+          "maxCpuMs": 241,
+          "maxWallMs": 31002,
+          "outcomes": {
+            "ok": 9
+          },
+          "statuses": {
+            "201": 4,
+            "204": 5
+          }
+        }
+      ]
+    }
+  ]
+}

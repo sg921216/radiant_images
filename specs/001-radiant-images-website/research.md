@@ -788,3 +788,92 @@ Worker, both DO namespaces, D1 and both emptied R2 buckets; final inventories ar
 The proxy stopped and local generated configs/synthetic credentials were removed. No paid
 plan or public launch occurred. T001/T034 remain open for coordinator memory/resource and
 usage-control evidence; retention/independent monitoring and other acceptance gates remain.
+
+## R-21 Gallery memory and independent recovery monitoring — 2026-11-14
+
+The owner requested the next item and selected **GitHub failure notifications for this
+repository** as the operational alert channel. Continued the scoped private synthetic
+rehearsal; no public release, paid subscription, real client data or Pixieset write occurred.
+
+### Deployed memory evidence
+
+Delayed R-20 analytics still lacked coordinator samples. A new disposable API/D1/R2/DO
+deployment exercised a deterministic high-detail 8000 x 5000 JPEG, legally padded to
+10,485,760 bytes, with an 11,324,096-byte multipart request. The first four cycles passed
+([workload receipt](./evidence/cloudflare-gallery-memory-workload.json)), but the local
+Wrangler service-binding proxy buffered the slow incoming stream. That pacing could not
+establish coordinator activity throughout the client's upload duration.
+
+A separate private driver Worker then paced the actual service-binding body on Cloudflare.
+Its first version delayed every upstream chunk; small provider chunks made the request
+exceed the client's 120-second timeout. The remote operation still completed after about
+212 seconds and a competing attempt received 429. Both the [timeout receipt](./evidence/cloudflare-gallery-memory-streaming-initial.json)
+and [busy receipt](./evidence/cloudflare-gallery-memory-streaming-busy.json) are retained.
+The pending synthetic image was detected and deleted before the final run. No uncertain
+upload was treated as rolled back solely because its client stopped waiting.
+
+After a failing pacing regression test, the driver was corrected to delay per 32 KiB of
+bytes, independent of upstream chunk boundaries. The API entry and image-processing code
+were unchanged. An immediate private API redeployment refreshed the rehearsal version;
+cleanup removed the completed earlier upload. The [final stream run](./evidence/cloudflare-gallery-memory-streaming.json)
+passes **4/4** complete upload/strict derivative decode/private-original/delete cycles,
+with approximately 31 seconds inside the coordinator for each slow upload.
+
+Cloudflare analytics for 18:27–18:30 UTC now provide the missing memory evidence:
+
+| Component | Memory p99/p999 | Reported CPU/memory-limit errors |
+| --- | --- | --- |
+| GalleryMutations isolate | 40,975,644 bytes (~39.1 MiB) | 0 / 0 |
+| JpegValidator isolate | 29,492,300 bytes (~28.1 MiB) | 0 / 0 |
+
+The broader diagnostic cohort, including the interrupted request, recorded coordinator
+p999 of 70,915,496 bytes (~67.6 MiB). These samples are below the 128-MB isolate limit;
+they are not absolute peak measurements or proof for every possible upload. The code's
+input/variant/work bounds and one-mutation admission complement the deployed boundary
+fixtures. [Metrics receipt](./evidence/cloudflare-gallery-memory-metrics.json),
+[Cloudflare memory semantics](https://developers.cloudflare.com/durable-objects/observability/metrics-and-analytics/).
+
+A 50-second heap profile succeeded during the initial slow request, following one 404
+“no recent executions” response. Three allocation samples sum to 2,097,244 bytes, attributed
+to anonymous `apps/api/src/index.ts` frames and generic JavaScript/root frames. This early
+body-stream sample is not a full-pipeline sizing result. Allocation profiles do not show
+retained or peak memory; the [profile receipt](./evidence/cloudflare-gallery-memory-profile.json)
+records its hash and limits. [Profiling semantics](https://developers.cloudflare.com/workers/observability/profiling-in-production/).
+
+The [CPU receipt](./evidence/cloudflare-gallery-memory-cpu.json) retains both deployment
+versions. Final coordinator maximum CPU is 241 ms, JPEG CPU 1,255 ms; upload/delete front
+invocations remain below 7 ms. A separate cold `GET /admin/gallery` reached 12 ms in the
+earlier cohort and 10 ms in the final cohort. This is a remaining general Free-Worker CPU
+headroom concern for T001; do not extrapolate the earlier 7-ms maximum to all requests.
+All invocation outcomes in the receipt are `ok`, including expected 400 and 429 refusals.
+
+T034's portfolio implementation and provider/memory evidence are now complete; T001 still
+gates release for general resource/usage controls and operational recovery. Task count is
+**52/63**. The [cleanup receipt](./evidence/cloudflare-gallery-memory-cleanup.json) confirms
+both private Workers, both DO namespaces, D1 and both emptied R2 buckets are absent. The
+proxy stopped and local generated configs/synthetic credentials were removed.
+
+### Independent monitoring implementation
+
+Scheduled maintenance and backup now write separate private running/ok/error records.
+Failures replace an earlier healthy status; inability to update the record leaves a stale
+or running value, which also fails monitoring. A successful backup signal is written only
+after the existing read-back verification. The monitor independently enumerates R2 object
+metadata, so an apparently healthy heartbeat cannot conceal a missing/stale backup or
+overdue recovery copy. It never downloads client backup or receipt bodies.
+
+The hourly GitHub workflow uses a dedicated read-only token and the standalone
+`scripts/operations-monitor.ts` checker. It detects missed/stuck cleanup, stale backups and
+health, day-28 cleanup delay, day-30 removal misses, day-31 receipt delay, nonzero recorded
+application failures and a 6-GiB recovery-storage warning. Missing credentials, read errors,
+invalid metadata and incomplete pagination fail closed. Output contains only fixed issue
+codes and aggregate counts. The warning does not enforce a billing cap or cover other
+account resources. Existing safe retention/retry rules are unchanged.
+
+The owner must receive notifications as the scheduled-workflow actor; GitHub notification
+preferences and a labeled synthetic failure receipt must be verified. The default-branch
+workflow and repository-scoped secrets/variables are not activated in this rehearsal.
+Quickstart documents setup, hourly detection limits, schedule delays and a notification
+test that performs no Cloudflare operation. T058 remains open for actual production cron,
+restore/deletion failure rehearsal and notification delivery; no live monitoring pass is
+inferred from local tests. [GitHub notification routing](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).

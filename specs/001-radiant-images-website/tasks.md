@@ -1,6 +1,14 @@
 # Tasks: Radiant Images Photography Website
 
-**2026-11-14 deployed gallery follow-up:** R-20 and acceptance.md record 11/11 passing
+**2026-11-14 memory/monitoring follow-up:** R-21 closes the missing coordinator-memory
+sample with four passing deployed 40-MP/10-MiB slow-stream uploads. T034 implementation
+and portfolio-provider evidence are complete: **52/63 tasks complete, 11 open**. T001
+still gates release for account-wide usage controls, general API CPU headroom and recovery
+operations. T058 now includes tested private job signals and an independent hourly GitHub
+monitor; production cron/restore proof and actual owner notification receipt remain open.
+The owner selected GitHub failure notifications. All temporary resources were removed.
+
+**Earlier 2026-11-14 deployed gallery follow-up:** R-20 and acceptance.md record 11/11 passing
 private deployed checks and concurrent-upload admission. A per-portfolio mutation Durable
 Object reduced observed front-Worker maximum CPU from 109 ms to 7 ms. Strict damaged-JPEG
 rejection, private originals and metadata-free derivatives passed. JPEG-validator memory
@@ -145,7 +153,7 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 
 - [x] T032 [P] [US3] Write gallery contract/integration and browser cases in `apps/api/tests/gallery.test.ts` and `e2e/gallery.spec.ts` for tag filtering, order, metadata validation, forged uploads, concurrent 60-image cap, R2 failure compensation, deletion failure, and authorization. Assert missing alt is rejected on upload; empty, whitespace-only or over-200-character alt is rejected on upload or when supplied on edit; omitted alt in a tag-only edit preserves existing text. Verify published data is unchanged on failure and descriptive alt renders on Home/service pages (FR-027/030/033, SC-003/005).
 - [x] T033 [US3] After T032's relevant red cases, write/run failing conversion and metadata tests in `apps/web/tests/images.test.ts`; implement JPEG/PNG/WebP size/pixel checks and full/card/thumb generation at 2000/800/320px maximum long edge in `apps/web/app/lib/images.ts`. Verify GPS/unnecessary EXIF removal from public derivatives, preserve visual orientation, and retain source data privately according to T001's upload contract (QR-001).
-- [ ] T034 [US3] Implement gallery schema, protected list/upload/patch/reorder/delete, actual binary/pixel/metadata validation, generated storage keys, capacity enforcement, staged R2 writes/cleanup, atomic publication and auditing in `packages/shared/src/schemas/gallery.ts`, `apps/api/src/services/images.ts`, and `apps/api/src/routes/admin/gallery.ts`; trim and require descriptive alt text of 1–200 characters on upload and when supplied on edit (omitted edit fields preserve existing text). First test forged client derivatives, EXIF/GPS exposure, private originals/unpublished objects, and cross-storage failures in `apps/api/tests/gallery.test.ts` (FR-027/033, QR-001).
+- [x] T034 [US3] Implement gallery schema, protected list/upload/patch/reorder/delete, actual binary/pixel/metadata validation, generated storage keys, capacity enforcement, staged R2 writes/cleanup, atomic publication and auditing in `packages/shared/src/schemas/gallery.ts`, `apps/api/src/routes/admin/gallery.ts`, and `apps/api/src/services/images.ts`; trim and require descriptive alt text of 1–200 characters on upload and when supplied on edit (omitted edit fields preserve existing text). First test forged client derivatives, EXIF/GPS exposure, private originals/unpublished objects, and cross-storage failures in `apps/api/tests/gallery.test.ts` (FR-027/033, QR-001). R-19/R-20/R-21 record strict-decoder, deployed upload and sampled resource evidence; release still requires T001.
 - [x] T035 [US3] Build upload progress/errors, tag and required descriptive-alt editing with 1–200 trimmed-character validation/help text, accessible reorder controls, and delete confirmation in `apps/web/app/routes/admin/gallery.tsx`; do not offer a decorative-image bypass for portfolio photographs. Refresh public data within 60 seconds after successful saves (FR-027/033, SC-005).
 - [x] T036 [US3] Run gallery suites and quickstart steps 14–16; verify fresh and already-open public pages at 320/768/1280px and record publication latency in `specs/001-radiant-images-website/acceptance.md` (SC-004/005).
 

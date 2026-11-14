@@ -1,0 +1,36 @@
+name: Recovery monitoring
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+    inputs:
+      notification_test:
+        description: Produce a labeled synthetic failure to verify your GitHub notifications
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: radiant-recovery-monitor
+  cancel-in-progress: false
+jobs:
+  monitor:
+    if: vars.OPERATIONS_MONITOR_ENABLED == 'true' || inputs.notification_test == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Synthetic notification test
+        if: inputs.notification_test == true
+        run: |
+          echo '::error::Synthetic notification test only. No application failure or Cloudflare operation occurred.'
+          exit 1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+      - name: Independently inspect private recovery metadata
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_MONITOR_TOKEN: ${{ secrets.CLOUDFLARE_MONITOR_TOKEN }}
+          RECOVERY_BUCKET: ${{ vars.RECOVERY_BUCKET }}
+        run: node scripts/operations-monitor.ts
