@@ -20,7 +20,7 @@ const client = {
   questionnaires: [],
 };
 afterEach(() => vi.unstubAllGlobals());
-test('consecutive client field edits cannot overwrite another field before a render', async () => {
+test('consecutive client input events preserve every entered field', async () => {
   vi.stubGlobal(
     'fetch',
     vi.fn(async () => Response.json([])),
@@ -32,9 +32,9 @@ test('consecutive client field edits cannot overwrite another field before a ren
   );
   await screen.findByText('No clients found.');
   act(() => {
-    fireEvent.change(screen.getByLabelText('Client first name'), { target: { value: 'Avery' } });
-    fireEvent.change(screen.getByLabelText('Client last name'), { target: { value: 'Example' } });
-    fireEvent.change(screen.getByLabelText('Client email'), {
+    fireEvent.input(screen.getByLabelText('Client first name'), { target: { value: 'Avery' } });
+    fireEvent.input(screen.getByLabelText('Client last name'), { target: { value: 'Example' } });
+    fireEvent.input(screen.getByLabelText('Client email'), {
       target: { value: 'avery@example.invalid' },
     });
   });
@@ -42,6 +42,64 @@ test('consecutive client field edits cannot overwrite another field before a ren
   expect(screen.getByLabelText('Client last name')).toHaveValue('Example');
   expect(screen.getByLabelText('Client email')).toHaveValue('avery@example.invalid');
 });
+test.each(['before email', 'after email'] as const)(
+  'a client list arriving %s preserves the draft through blur and submission',
+  async (arrival) => {
+    let finishList!: (response: Response) => void;
+    const listResponse = new Promise<Response>((resolve) => {
+      finishList = resolve;
+    });
+    const fetcher = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) =>
+      init?.method === 'POST'
+        ? Response.json(
+            { error: { code: 'internal_error', message: 'Save failed.' } },
+            { status: 500 },
+          )
+        : listResponse,
+    );
+    vi.stubGlobal('fetch', fetcher);
+    render(
+      <MemoryRouter>
+        <ClientsEditor />
+      </MemoryRouter>,
+    );
+    const firstName = screen.getByLabelText('Client first name'),
+      lastName = screen.getByLabelText('Client last name'),
+      email = screen.getByLabelText('Client email'),
+      user = userEvent.setup();
+    // Keep the real list-loading render pending while the owner starts a new draft.
+    await user.click(firstName);
+    fireEvent.input(firstName, { target: { value: 'Avery' } });
+    await user.click(lastName);
+    fireEvent.input(lastName, { target: { value: 'Example' } });
+    if (arrival === 'before email') {
+      finishList(Response.json([]));
+      await screen.findByText('No clients found.');
+    }
+    await user.click(email);
+    fireEvent.input(email, { target: { value: 'avery@example.invalid' } });
+    if (arrival === 'after email') {
+      finishList(Response.json([]));
+      await screen.findByText('No clients found.');
+    }
+    await user.tab();
+    expect(firstName).toHaveValue('Avery');
+    expect(lastName).toHaveValue('Example');
+    expect(email).toHaveValue('avery@example.invalid');
+    await user.click(screen.getByRole('button', { name: 'Create client' }));
+    await screen.findByText('Save failed.');
+    const submissions = fetcher.mock.calls.filter((call) => call[1]?.method === 'POST');
+    expect(submissions).toHaveLength(1);
+    expect(JSON.parse(String(submissions[0]![1]!.body))).toMatchObject({
+      firstName: 'Avery',
+      lastName: 'Example',
+      email: 'avery@example.invalid',
+    });
+    expect(firstName).toHaveValue('Avery');
+    expect(lastName).toHaveValue('Example');
+    expect(email).toHaveValue('avery@example.invalid');
+  },
+);
 test('checklist responds immediately and rolls back a failed update without losing client edits', async () => {
   let finish: (response: Response) => void = () => {};
   vi.stubGlobal(

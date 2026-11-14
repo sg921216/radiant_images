@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-14",
+  "status": "blocked_before_browser_execution",
+  "task": "T059",
+  "runtime": { "node": "24.14.0", "playwright": "1.65.1" },
+  "requestedWebKit": { "version": "27.2", "build": "2388", "launched": false },
+  "componentResults": {
+    "baseline": { "files": 1, "passed": 6, "failed": 0, "durationSeconds": 3.53 },
+    "focused": { "files": 1, "passed": 8, "failed": 0, "durationSeconds": 4.02 },
+    "webRegression": { "files": 15, "passed": 44, "failed": 0, "durationSeconds": 4.86 }
+  },
+  "browserInvestigation": {
+    "projects": ["webkit-desktop", "webkit-mobile"],
+    "scenarios": ["client entry using fill", "client entry using pressSequentially", "complete owner workflow"],
+    "repetitions": 10,
+    "retries": 0,
+    "listed": 60,
+    "executed": 0,
+    "command": "node node_modules/@playwright/test/cli.js test e2e/clients.spec.ts --project=webkit-desktop --project=webkit-mobile --grep '@client-entry|complete owner workflow' --repeat-each=10 --retries=0"
+  },
+  "blockers": [
+    "The local API bundler cannot read an ancestor directory under this session's filesystem restrictions.",
+    "The installed WebKit cache cannot be inspected or launched due to access denial; absence is not established.",
+    "A workspace-local pinned WebKit installation was blocked by network EACCES."
+  ],
+  "checks": { "formatting": "passed", "scopedLint": "passed", "toolsTypes": "passed", "webTypes": "passed", "artifactPrivacy": "passed", "repositoryPrivacy": "passed", "diffWhitespace": "passed" },
+  "limitations": "Component probes did not reproduce the browser defect. No product code changed. Browser discovery is not execution; no browser pass, behavioral red/green fix, clean matrix, remote CI or release approval is claimed."
+}

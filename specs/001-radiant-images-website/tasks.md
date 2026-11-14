@@ -36,6 +36,17 @@ synthetic photographs keep performance acceptance provisional. `acceptance.md` r
 full evidence and remaining gates. Real-provider/human, production-decoder/retention,
 owner content/privacy and remote release tasks remain open under the approved exception.
 
+**WebKit investigation follow-up (2026-11-14)**: Consecutive `input` events and deferred
+client-list responses before/after email entry preserve the draft through blur and submission
+in all 8 client component tests; the web component suite passes 15 files / 44 tests.
+Two focused browser probes now compare `fill` and `pressSequentially`, create three clients,
+and verify persisted values after reload. The 60-case WebKit investigation selection is
+validated with `--list` only. Execution is **BLOCKED** in the current restricted session:
+the bundler cannot read an ancestor directory, the browser cache is inaccessible, and a
+workspace-local browser download is denied by network policy. No browser case executed,
+no product defect was reproduced or fixed, and T059 remains open. See acceptance.md and
+`evidence/local-webkit-investigation-summary.json`; the count remains 51/63.
+
 ## Phase 1: Setup
 
 **Goal**: Establish a runnable monorepo and resolve feasibility issues before dependent implementation.

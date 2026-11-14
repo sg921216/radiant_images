@@ -90,10 +90,34 @@ pnpm exec playwright test --config=.wrangler/firefox-local.config.ts
 ```
 
 Run that command from the repository root after building. It starts the same local stack
-and runs all 28 Firefox functional cases; the separate Chromium-only performance profile
+and runs all Firefox functional cases; the separate Chromium-only performance profile
 is excluded. This local config is not committed and is not required by CI's normal pinned
 browser installation. Mozilla's standard Firefox installation is separate from this patched
 Playwright browser. Results and the preserved initial failure are recorded in acceptance.md.
+
+For the unresolved WebKit client-email input loss, the focused probes compare consecutive
+`fill` calls with character-by-character `pressSequentially` entry. Each creates three
+synthetic clients and checks all entered values after save/reload. Run these alongside the
+original complete owner workflow with a predeclared ten repetitions and no retries:
+
+```powershell
+node node_modules/@playwright/test/cli.js test e2e/clients.spec.ts --project=webkit-desktop --project=webkit-mobile --grep '@client-entry|complete owner workflow' --repeat-each=10 --retries=0
+```
+
+This selects 60 cases (three scenarios × two projects × ten repetitions). Keep every outcome;
+do not repeat until green or treat a typing-only pass as fixing `fill` input loss. The default
+helper still uses consecutive `fill` calls without inter-field waits. Existing synthetic
+provider isolation, one-worker execution, fail-on-flaky policy, sanitized reporting, and
+disabled screenshots/traces for tokenized workflows remain in force. Run the artifact privacy
+gate afterward. These tests make no live email sends.
+
+The 2026-11-14 restricted session could list the selection and run component probes, but
+could not start the local bundler or access the existing browser cache. A workspace-local
+WebKit download was also blocked by network policy. These are setup blockers, not failed
+browser assertions or evidence that the cached browser is missing. Resume the command in a
+session with authorized access to the project/toolchain and pinned browser cache. Installing
+WebKit alone does not address the separate ancestor-directory bundling failure. Reproduce
+the defect before changing product code, then run the full functional engine matrix.
 
 T063 additionally executes every browser/OS N/N-1 cell in plan.md's release matrix. Freeze
 exact stable versions at release, use actual desktop browsers and physical mobile devices

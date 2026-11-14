@@ -3,13 +3,17 @@ import type { Page, APIRequestContext } from '@playwright/test';
 import { signInOwner, control, sentCount } from './providers';
 // Tokenized journeys disable binary artifacts. The first reporter redacts URL-bearing diagnostics.
 test.use({ screenshot: 'off', trace: 'off' });
-async function createClient(page: Page, firstName: string) {
+async function createClient(
+  page: Page,
+  firstName: string,
+  entry: 'fill' | 'pressSequentially' = 'fill',
+) {
   await page.goto('/admin/clients');
-  await page.getByLabel('Client first name').fill(firstName);
-  await page.getByLabel('Client last name').fill('Example');
-  await page
-    .getByLabel('Client email', { exact: true })
-    .fill(`${firstName.toLowerCase()}@example.invalid`);
+  // Keep these consecutive: waiting between fields could hide the intermittent input loss.
+  await page.getByLabel('Client first name')[entry](firstName);
+  await page.getByLabel('Client last name')[entry]('Example');
+  const email = page.getByLabel('Client email', { exact: true });
+  await email[entry](`${firstName.toLowerCase()}@example.invalid`);
   await expect(page.getByLabel('Client first name')).toHaveValue(firstName);
   await expect(page.getByLabel('Client last name')).toHaveValue('Example');
   await expect(page.getByLabel('Client email', { exact: true })).toHaveValue(
@@ -21,6 +25,27 @@ async function createClient(page: Page, firstName: string) {
   ).toBeVisible();
   return new URL(page.url()).pathname;
 }
+for (const entry of ['fill', 'pressSequentially'] as const)
+  test(`@client-entry consecutive ${entry} values survive creation, blur and reload`, async ({
+    page,
+    request,
+  }) => {
+    await signInOwner(page, request);
+    for (const firstName of ['Avery', 'Blake', 'Casey']) {
+      await test.step(`Create and reload ${firstName}`, async () => {
+        await createClient(page, firstName, entry);
+        await expect(page.getByLabel('Client email', { exact: true })).toHaveValue(
+          `${firstName.toLowerCase()}@example.invalid`,
+        );
+        await page.reload();
+        await expect(page.getByLabel('Client first name')).toHaveValue(firstName);
+        await expect(page.getByLabel('Client last name')).toHaveValue('Example');
+        await expect(page.getByLabel('Client email', { exact: true })).toHaveValue(
+          `${firstName.toLowerCase()}@example.invalid`,
+        );
+      });
+    }
+  });
 async function deliveredPath(request: APIRequestContext) {
   const response = await request.get('http://127.0.0.1:8787/__test/messages', {
     headers: { 'X-Synthetic-Test': 'local-only' },

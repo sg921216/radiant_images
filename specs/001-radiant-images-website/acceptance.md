@@ -751,3 +751,75 @@ browser and the explicit local launch configuration. The historical installer fa
 first test failure remain evidence. T059 is still open for a clean combined engine matrix,
 the recorded WebKit input issue and remote CI execution; T063's actual-device/previous-version
 matrix and other live/human acceptance gates remain open. The task count stays 51/63.
+
+### WebKit client-entry investigation (2026-11-14)
+
+The immediate scope is the recorded WebKit mobile empty-email failure in the complete owner
+workflow. Production image validation/recovery expiry, owner content/privacy/contact approval,
+real-mail/human/device acceptance and deployment remain separate open gates.
+
+**Code inspection and component evidence:** `ClientsEditor` stores the list and new-client
+draft separately; the list-fetch completion updates only the list/loading state. The client
+form is mounted after `AdminLayout` completes its React-driven session check. Generic
+[pre-hydration input loss](https://playwright.dev/docs/navigations#hydration) is therefore
+not established as this failure's cause. This inspection does not rule out a browser-specific
+event or rendering race.
+
+- Baseline: `node node_modules/vitest/vitest.mjs run apps/web/tests/clients.test.tsx`
+  passed 6/6 before edits (3.53 seconds).
+- The consecutive-field probe now dispatches native-style `input` events rather than
+  `change`. Its title no longer claims that React renders were deferred; the event helpers
+  can flush updates between events.
+- Two new component cases hold the initial client-list response until immediately before
+  or after email entry. Both verify all three fields after focus leaves email, the submitted
+  POST payload, exactly one submission, and retained fields after a rejected save.
+- The focused suite passed 8/8 (4.02 seconds); the web component regression suite
+  `node node_modules/vitest/vitest.mjs run --project=web` passed 15 files / 44 tests
+  (4.86 seconds). These probes pass with unchanged product code. **No behavioral red was
+  observed and no product fix or red/green defect-resolution claim is made.**
+
+**Browser probes prepared, execution blocked:** `e2e/clients.spec.ts` adds two `@client-entry`
+cases comparing `fill` and `pressSequentially`. Both create Avery, Blake and Casey through
+the real UI/API and assert persisted first name, last name and email after each reload.
+The original owner workflow keeps its default consecutive `fill` calls and existing
+pre-submit value assertions. No inter-field assertion/wait, retry, timeout increase, API
+substitute, quarantine or skipped critical journey was introduced. Existing token-artifact
+restrictions remain active.
+
+The initial focused command was:
+
+```powershell
+node node_modules/@playwright/test/cli.js test e2e/clients.spec.ts --project=webkit-mobile --grep 'complete owner workflow' --repeat-each=10 --retries=0
+```
+
+With metrics disabled and Wrangler logs directed into `.wrangler/logs`, local D1 migrations
+reported no pending changes. The API web server then exited 1 before any browser test:
+esbuild reported `Cannot read directory "../../..": Access is denied` and could not resolve
+the Worker entry point. A read-only probe confirmed the ancestor profile-directory listing
+is denied in this session. A separate WebKit launch reported an unavailable executable at
+the expected `webkit-2388/Playwright.exe` cache path; PowerShell inspection of that path
+returned **Access denied**, so absence/corruption is not established. A normal installation
+attempt targeting `.wrangler/browsers` failed with network `EACCES` at the official download
+endpoints. The requested pinned engine is WebKit 27.2/build 2388, not a verified running
+browser version. No access controls or security settings were changed.
+
+`pnpm --version` also failed because Corepack could not create its cache directory. The
+checks above use the installed local Node entry points, with Node 24.14.0 / Playwright
+1.65.1. Existing application/toolchain configuration and user edits were preserved.
+
+The command in quickstart.md selects three scenarios × two WebKit projects × ten repetitions,
+with zero retries. Adding `--list` successfully discovers **60 cases**; this is test discovery,
+not execution or a pass. Formatting, scoped ESLint, tools TypeScript and web TypeScript checks
+pass after correcting a computed-method formatting/lint issue. That lint failure is not a
+behavioral red. Machine-readable status is retained in
+[local-webkit-investigation-summary.json](./evidence/local-webkit-investigation-summary.json).
+Artifact privacy scanning checked two generated files and repository scanning checked 380
+files, both with zero blocked findings. `git diff --check` passed. The optional Git
+after-implementation commit hook was reviewed and left unexecuted; no commit was made.
+
+**Disposition:** WebKit investigation and T059 remain **OPEN/BLOCKED on execution**. Resume
+the predeclared browser run in a session with authorized toolchain/browser-cache access,
+retain all failures, reproduce the behavioral cause before a product change, and then verify
+the complete functional engine matrix and remote CI. Reinstalling WebKit alone cannot solve
+the independent bundler access error or establish a fix for input loss. No launch gate closes;
+51/63 tasks remain complete.
