@@ -2,6 +2,7 @@ import { env } from 'cloudflare:workers';
 import { beforeEach, expect, test } from 'vitest';
 import { seedLocalDatabase } from '../src/db/seedData';
 import { runScheduled } from '../src/scheduled';
+import type { Env } from '../src/env';
 
 const now = new Date('2026-11-14T12:00:00Z');
 const runtime = { now: () => now, fetch: async () => new Response('', { status: 503 }) };
@@ -34,4 +35,35 @@ test('failed cleanup replaces a previously healthy status and the next scheduled
   expect(await (await env.RECOVERY.get('operations/maintenance.json'))!.json()).toMatchObject({
     status: 'ok',
   });
+});
+
+test('a new run retains the previous successful completion while work is in progress', async () => {
+  await runScheduled('0 3 * * *', env, runtime);
+  const running: unknown[] = [];
+  const recovery = new Proxy(env.RECOVERY, {
+    get(target, key) {
+      if (key === 'put')
+        return async (...args: Parameters<R2Bucket['put']>) => {
+          if (args[0].startsWith('operations/') && typeof args[1] === 'string') {
+            const value = JSON.parse(args[1]);
+            if (value.status === 'running') running.push(value);
+          }
+          return target.put(...args);
+        };
+      const value = Reflect.get(target, key);
+      return typeof value === 'function' ? value.bind(target) : value;
+    },
+  });
+  const next = new Date(now.getTime() + 300_000);
+  await runScheduled('0 3 * * *', { ...env, RECOVERY: recovery } as Env, {
+    ...runtime,
+    now: () => next,
+  });
+  expect(running).toHaveLength(2);
+  for (const record of running)
+    expect(record).toMatchObject({
+      status: 'running',
+      startedAt: next.toISOString(),
+      lastSucceededAt: now.toISOString(),
+    });
 });

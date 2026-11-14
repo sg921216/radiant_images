@@ -462,3 +462,12 @@ can be sent. Short-text answers allow up to 300 trimmed characters; long-text an
 up to 4000. Optional unanswered fields may be omitted. Choice answers must match a captured
 option. The global 64 KiB JSON request limit still applies. These bounded validation details
 are local implementation constraints, not changes to the question types or data lifecycle.
+
+### Private operation-status metadata (2026-11-14, R-22)
+
+R2 `operations/maintenance.json` and `operations/backup.json` store `version: 1`,
+`status: running | ok | error`, and `startedAt`. Finished states add `finishedAt`.
+Running states retain `lastSucceededAt` from the preceding successful completion or
+in-progress record; an error record does not qualify as a success. The independent
+monitor requires a recent successful completion as well as a fresh start. These files
+contain no client identifiers, contact details, credentials or recovery payloads.

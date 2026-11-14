@@ -1,5 +1,12 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-14 monitoring credential/freshness correction:** R-22 replaces the monitor's
+account-wide REST authentication with bucket-scoped S3 Object Read Only credentials.
+The checker reads only job/health bodies, inventory and backup HEAD metadata. Running jobs
+must retain a recent successful completion; repeated starts no longer hide missed work.
+T058 remains open for deployed recovery/cron proof, monitoring activation and owner receipt.
+**52/63 tasks remain complete, 11 open**; no release or provider acceptance is inferred.
+
 **2026-11-14 memory/monitoring follow-up:** R-21 closes the missing coordinator-memory
 sample with four passing deployed 40-MP/10-MiB slow-stream uploads. T034 implementation
 and portfolio-provider evidence are complete: **52/63 tasks complete, 11 open**. T001

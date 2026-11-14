@@ -877,3 +877,40 @@ Quickstart documents setup, hourly detection limits, schedule delays and a notif
 test that performs no Cloudflare operation. T058 remains open for actual production cron,
 restore/deletion failure rehearsal and notification delivery; no live monitoring pass is
 inferred from local tests. [GitHub notification routing](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).
+
+## R-22 Monitoring credential scope and successful-job freshness — 2026-11-14
+
+Cloudflare explicitly documents that R2 Object Read Only credentials work through the
+S3-compatible API, not the Cloudflare REST object API. REST requires Admin Read Only or
+Admin Read & Write credentials, both account-wide. The R-21 activation instructions could
+therefore not provide bucket-scoped monitoring with their selected transport.
+[Authentication restriction](https://developers.cloudflare.com/r2/platform/troubleshooting/#object-level-api-tokens-fail-against-the-rest-api),
+[Cloudflare aws4fetch example](https://developers.cloudflare.com/r2/examples/aws/aws4fetch/).
+
+Corrected `scripts/operations-monitor.ts` to use S3 SigV4 via pinned `aws4fetch@1.0.20`
+and `fast-xml-parser@5.12.1`. Package versions were checked against the registry and the
+updated lockfile passes the dependency audit. The hourly workflow installs only the root
+production dependencies from the frozen lockfile, with package lifecycle scripts disabled.
+An isolated install required nine packages and the standalone Node entrypoint runs.
+
+The transport is fixed to the selected account's default-jurisdiction S3 endpoint and
+recovery bucket. It reads the three fixed operational JSON bodies, lists object metadata,
+and performs conditional HEAD requests for backup creation/expiry metadata omitted from
+S3 listings. It does not read backup, receipt, original or derivative bodies. GET/HEAD only,
+no redirects/retries, 15-second request timeouts, a three-minute collection budget, 2-MiB
+body bounds and 100 inventory pages bound the inspection. Reject malformed/DTD XML,
+missing or repeating pagination, provider failures and missing/changed backup metadata.
+Quickstart now names the two S3 credential secrets and the required bucket-only read scope.
+
+Also reproduced a false-health case in R-21: repeatedly replacing the status with a fresh
+`running` record could conceal an indefinitely old successful completion. Running records
+now retain `lastSucceededAt`; the monitor requires that completion to remain within the
+maintenance/backup freshness window. First starts, retries after errors and stale successes
+cannot count as healthy merely because their start time is recent.
+
+Local red/green evidence and final verification are in acceptance.md. The shell has no
+configured S3 monitor credentials or recovery-bucket target, and GitHub CLI is unavailable;
+remote workflow state was not inspected. No credentials were created, remote resources
+changed, notifications sent, or release gates closed. T001/T058 remain open; the feature
+still has **52/63 tasks complete**. Account usage controls, general API CPU headroom,
+deployed recovery/cron proof and actual notification receipt remain separate requirements.

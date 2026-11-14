@@ -113,6 +113,13 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**Monitoring correction (2026-11-14, R-22)**: The independent GitHub monitor uses
+bucket-scoped R2 Object Read Only credentials through S3 SigV4, with pinned signing/XML
+dependencies. The former REST-token setup would require account-wide access. Enumerate
+objects and HEAD backup metadata; download only the three fixed operational signal files.
+Retain the last successful completion during a running job so repeated starts cannot mask
+stale work. No application API, retention deadline, or release-gate change is introduced.
+
 **Language/Version**: Strict TypeScript; Cloudflare Workers runtime (workerd) for the API.
 T001/T002 MUST verify support and pin one compatible Node/package-manager/toolchain set
 for local use and CI. The dependency majors below are prior design candidates, not claims

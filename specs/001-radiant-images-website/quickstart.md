@@ -581,15 +581,24 @@ records sampled memory, profiling limitations, CPU observations and complete cle
 The owner selected GitHub failure notifications on 2026-11-14. The implementation is ready
 in `.github/workflows/operations-monitor.yml`; production activation and notification
 receipt are not yet verified. The workflow runs hourly at minute 17 and can also be run
-manually. Node 24 executes the standalone TypeScript checker without dependency installation.
-It reads Cloudflare's R2 object API independently of the application/cron, never invoking
+manually. Node 24 executes the TypeScript checker after a frozen, production-only install
+of its pinned signing/XML dependencies (nine packages including transitive dependencies,
+with install scripts disabled).
+It reads R2's S3-compatible API independently of the application/cron, never invoking
 application mutations. No public health endpoint or application owner session is added.
 
 `operations/maintenance.json` and `operations/backup.json` contain version, status and times
-only, in the private recovery bucket. Running/error/stale records cannot masquerade as a
+only, in the private recovery bucket. Running records also carry `lastSucceededAt` when
+a preceding successful completion exists; restarting work cannot reset its freshness.
+Running/error/stale records cannot masquerade as a
 completed job. The monitor separately paginates R2 metadata, checking actual backup
 freshness and delayed removal rather than trusting a successful heartbeat alone. It does
-not download backup, original, derivative or deletion-receipt bodies.
+not download backup, original, derivative or deletion-receipt bodies. S3 listings omit
+custom metadata, so the checker retrieves backup creation/expiry metadata using conditional
+HEAD requests against the listed ETag. Missing or changed objects fail the run. Requests
+use SigV4, fixed bucket/origin and GET/HEAD only, with no redirects or automatic retries.
+Each request has a 15-second timeout; the collection budget is three minutes, each body
+is bounded to 2 MiB, and inventory is capped at 100 pages of 1,000 objects.
 
 Detection thresholds: maintenance missing/stuck/older than 20 minutes; backup and health
 older than 30 hours; recovery still present 28 days plus 20 minutes after creation; removal
@@ -603,11 +612,14 @@ preservation. The storage threshold is an alert, not a billing cap or account-wi
 Activation checklist for the persistent deployment:
 
 1. Deploy the scheduled status-record changes and complete a verified daily backup/health
-   run. Keep R2 private. Configure a dedicated read-only Cloudflare API token accepted by
-   R2 object list/get for the designated account; verify its read scope without copying a
-   deployment token, Wrangler OAuth token or any credential into chat/source control.
+   run. Keep R2 private. Create R2 **Object Read Only** credentials limited to the recovery
+   bucket and retain their S3 access key ID and secret access key in the secret store.
+   Verify the bucket scope without copying credentials into chat/source control. The REST
+   API does not accept these credentials; its Admin Read Only alternative grants account-wide
+   access and is not used here. [Cloudflare authentication restriction](https://developers.cloudflare.com/r2/platform/troubleshooting/#object-level-api-tokens-fail-against-the-rest-api).
 2. Put the workflow on the default branch. At repository scope configure secrets
-   `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_MONITOR_TOKEN`, variable `RECOVERY_BUCKET`, then
+   `CLOUDFLARE_ACCOUNT_ID`, `R2_MONITOR_ACCESS_KEY_ID`, `R2_MONITOR_SECRET_ACCESS_KEY`,
+   variable `RECOVERY_BUCKET`, then
    `OPERATIONS_MONITOR_ENABLED=true`. The existing deployment environment's secrets are
    not automatically available to this independent job. Missing enablement leaves it
    inactive and does not satisfy T058.
@@ -627,3 +639,9 @@ have schedules disabled. The hourly check is operational monitoring, not a guara
 delivery deadline; review workflow activity and usage allowance separately. No scheduled
 run, notification receipt or repository credential configuration was performed in R-21.
 [Schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+R-22 validates the corrected transport locally and verifies the workflow's minimal frozen
+dependency installation. No S3 monitor credentials or recovery-bucket target are configured
+in the current shell. GitHub CLI is unavailable in this environment; repository settings
+and remote workflow outcomes were not inspected. Do not infer notification activation or
+receipt from local test results. The existing scoped provider/release gates still apply.

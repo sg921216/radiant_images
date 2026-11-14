@@ -100,12 +100,18 @@ test('monitor transport uses read-only fixed-origin calls and rejects provider e
   const config = {
     accountId: 'a'.repeat(32),
     bucket: 'synthetic-recovery',
-    token: 'synthetic-token',
+    accessKeyId: 'synthetic-access-key',
+    secretAccessKey: 'synthetic-secret-key',
   };
   const read = cloudflareReader(config, async (input, init) => {
-    expect(String(input)).toMatch(/^https:\/\/api\.cloudflare\.com\/client\/v4\/accounts\//);
-    expect(init?.method).toBeUndefined();
-    expect(init?.redirect).toBe('error');
+    const request = new Request(input, init);
+    expect(new URL(request.url).origin).toBe(
+      `https://${config.accountId}.r2.cloudflarestorage.com`,
+    );
+    expect(request.method).toBe('GET');
+    expect(request.redirect).toBe('error');
+    expect(request.headers.get('Authorization')).toMatch(/^AWS4-HMAC-SHA256 /);
+    expect(request.headers.get('Authorization')).toContain('/auto/s3/aws4_request');
     return Response.json({ version: 1 });
   });
   expect(await read('/objects/operations/maintenance.json')).toEqual({ version: 1 });
@@ -113,12 +119,111 @@ test('monitor transport uses read-only fixed-origin calls and rejects provider e
     cloudflareReader(
       config,
       async () => new Response('private provider detail', { status: 403 }),
-    )('/objects'),
+    )('/objects/operations/maintenance.json'),
   ).rejects.toThrow('monitor_read_failed');
   await expect(
     cloudflareReader(
       config,
       async () => new Response(new Uint8Array(2 * 1024 * 1024 + 1)),
-    )('/objects'),
+    )('/objects/operations/maintenance.json'),
   ).rejects.toThrow('monitor_response_limit');
+});
+
+const storageConfig = {
+  accountId: 'a'.repeat(32),
+  bucket: 'synthetic-recovery',
+  accessKeyId: 'synthetic-access-key',
+  secretAccessKey: 'synthetic-secret-key',
+};
+function listing(contents: string, truncated = false, cursor = '') {
+  return `<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>synthetic-recovery</Name><IsTruncated>${truncated}</IsTruncated>${cursor ? `<NextContinuationToken>${cursor}</NextContinuationToken>` : ''}${contents}</ListBucketResult>`;
+}
+const backupItem = `<Contents><Key>backups/synthetic.json</Key><LastModified>${ago(0)}</LastModified><ETag>"synthetic-etag"</ETag><Size>300</Size></Contents>`;
+
+test('bucket-scoped S3 collection paginates and reads backup metadata without downloading private bodies', async () => {
+  const requests: string[] = [];
+  const read = cloudflareReader(storageConfig, async (input, init) => {
+    const request = new Request(input, init),
+      url = new URL(request.url);
+    requests.push(`${request.method} ${url.pathname}`);
+    expect(url.origin).toBe(`https://${storageConfig.accountId}.r2.cloudflarestorage.com`);
+    expect(request.headers.get('Authorization')).toMatch(/^AWS4-HMAC-SHA256 /);
+    expect(['GET', 'HEAD']).toContain(request.method);
+    expect(request.redirect).toBe('error');
+    if (url.pathname.endsWith('/operations/maintenance.json'))
+      return Response.json(healthy().maintenance);
+    if (url.pathname.endsWith('/operations/backup.json')) return Response.json(healthy().backup);
+    if (url.pathname.endsWith('/health/latest.json')) return Response.json(healthy().health);
+    if (url.pathname.endsWith('/backups/synthetic.json')) {
+      expect(request.method).toBe('HEAD');
+      expect(request.headers.get('If-Match')).toBe('"synthetic-etag"');
+      return new Response(null, {
+        headers: {
+          'x-amz-meta-createdat': ago(0),
+          'x-amz-meta-expiresat': ago(-28),
+        },
+      });
+    }
+    expect(url.pathname).toBe('/synthetic-recovery');
+    expect(url.searchParams.get('list-type')).toBe('2');
+    expect(url.searchParams.get('max-keys')).toBe('1000');
+    const cursor = url.searchParams.get('continuation-token');
+    if (!cursor) return new Response(listing('', true, 'next/+&amp;='));
+    expect(cursor).toBe('next/+&=');
+    return new Response(listing(backupItem));
+  });
+  expect(inspectOperations(await collectOperations(read), now).ok).toBe(true);
+  expect(requests).toHaveLength(6);
+  expect(requests.filter((value) => value.includes('/backups/'))).toEqual([
+    'HEAD /synthetic-recovery/backups/synthetic.json',
+  ]);
+});
+
+test('S3 inventory rejects malformed XML, entities, invalid metadata and missing pagination', async () => {
+  for (const body of [
+    '<ListBucketResult>',
+    '<!DOCTYPE x [<!ENTITY private "secret">]><ListBucketResult>&private;</ListBucketResult>',
+    '<ListBucketResult><Name>synthetic-recovery</Name></ListBucketResult>',
+    listing('<Contents><Key>private</Key><Size>-1</Size></Contents>'),
+    listing('', true),
+    '<Error><Code>AccessDenied</Code></Error>',
+  ]) {
+    const read = cloudflareReader(storageConfig, async () => new Response(body));
+    await expect(
+      collectOperations(async (suffix) => (suffix.includes('?') ? read(suffix) : null)),
+    ).rejects.toThrow();
+  }
+});
+
+test('monitor cannot request private bodies, arbitrary query parameters or another bucket', async () => {
+  let requests = 0;
+  const read = cloudflareReader(storageConfig, async () => {
+    requests++;
+    return Response.json({});
+  });
+  for (const suffix of [
+    '/objects/backups/private.json',
+    '/objects/client-deletions/private.json',
+    '/objects/../other-bucket',
+    '/objects?prefix=private',
+    '/objects?per_page=1000&cursor=x&delimiter=/',
+  ])
+    await expect(read(suffix)).rejects.toThrow('monitor_path_invalid');
+  expect(requests).toBe(0);
+});
+
+test('repeated job starts cannot hide a missing or stale successful completion', () => {
+  for (const lastSucceededAt of [undefined, ago(1)]) {
+    const maintenance = { version: 1, status: 'running', startedAt: ago(0), lastSucceededAt };
+    expect(inspectOperations({ ...healthy(), maintenance }, now).issues).toContain(
+      'maintenance_job_unhealthy',
+    );
+  }
+  const maintenance = {
+    version: 1,
+    status: 'running',
+    startedAt: ago(0),
+    lastSucceededAt: ago(0.005),
+  };
+  expect(inspectOperations({ ...healthy(), maintenance }, now).ok).toBe(true);
 });

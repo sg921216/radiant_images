@@ -73,6 +73,20 @@ async function trackOperation(
   action: () => Promise<unknown>,
 ) {
   const startedAt = runtime.now().toISOString();
+  const previousObject = await env.RECOVERY.get(`operations/${name}.json`);
+  if (previousObject && previousObject.size > 4096) throw new Error('operation_status_invalid');
+  const previous: unknown = previousObject ? await previousObject.json().catch(() => null) : null;
+  let lastSucceededAt: string | undefined;
+  if (typeof previous === 'object' && previous !== null && 'status' in previous) {
+    const completed =
+      previous.status === 'ok' && 'finishedAt' in previous
+        ? previous.finishedAt
+        : previous.status === 'running' && 'lastSucceededAt' in previous
+          ? previous.lastSucceededAt
+          : undefined;
+    if (typeof completed === 'string' && Number.isFinite(Date.parse(completed)))
+      lastSucceededAt = completed;
+  }
   const save = (status: 'running' | 'ok' | 'error') =>
     env.RECOVERY.put(
       `operations/${name}.json`,
@@ -80,7 +94,9 @@ async function trackOperation(
         version: 1,
         status,
         startedAt,
-        ...(status === 'running' ? {} : { finishedAt: runtime.now().toISOString() }),
+        ...(status === 'running'
+          ? { ...(lastSucceededAt ? { lastSucceededAt } : {}) }
+          : { finishedAt: runtime.now().toISOString() }),
       }),
       { httpMetadata: { contentType: 'application/json', cacheControl: 'no-store' } },
     );

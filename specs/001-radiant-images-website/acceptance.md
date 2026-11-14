@@ -1280,3 +1280,56 @@ unverified T058 gates. No GitHub notification was sent during this work.
 Cleanup inventories confirm zero Workers, DO namespaces, D1 databases and R2 buckets.
 Generated configs and synthetic credentials were removed, with only ignored build/profile
 artifacts retained. No real data, Pixieset operation, paid plan, staging or commit occurred.
+
+## 2026-11-14 — bucket-scoped monitoring and last-success correction
+
+Resumed `$speckit-implement`; prerequisites identify this feature, requirements checklist
+passes 16/16, and Git/ESLint/Prettier ignore patterns cover the current private monorepo.
+Preserved the existing `.specify/`, `.node-version` and `.npmrc` workspace changes.
+R-22 records the provider credential mismatch: Object Read Only credentials cannot use
+the REST object API. Replaced the transport with S3 SigV4 and bucket-scoped credentials,
+conditional backup HEAD metadata reads and fixed operational-body reads. Updated workflow,
+lockfile, plan/data-model and activation instructions. No public API contract changed.
+
+Red/green evidence:
+
+- `pnpm exec vitest run scripts/tests/operations-monitor.test.ts`: initial credentials-only
+  failures were not counted as the behavioral red step. With a synthetic legacy credential
+  supplied to reach the old transport, three behavioral cases failed: wrong REST origin,
+  inability to collect using S3, and permitting private-body paths. The S3 implementation
+  passes all eight transport/inspection cases without the legacy credential. Tests cover
+  signed fixed-origin GET/HEAD, two-page cursor encoding, conditional metadata reads,
+  malformed XML/entities, denied paths, provider failures and oversized responses.
+- Added a repeated-start regression and a local D1/R2 scheduled-job case. Before the fix,
+  the monitor returned healthy without a recent completed job, and the stored running
+  records lacked the previous success time: **2 failed / 10 passed**. Retaining and checking
+  `lastSucceededAt` makes these cases pass.
+- `pnpm exec vitest run scripts/tests/operations-monitor.test.ts
+  apps/api/tests/operations-monitor.test.ts apps/api/tests/operations.test.ts` passes
+  **3 files / 21 tests**, including existing deletion retry, receipt preservation,
+  unsafe/expired restore refusal and private media recovery.
+
+The monitor workflow's exact install command was executed in the isolated ignored
+`.wrangler/monitor-install-check` directory:
+`pnpm install --filter radiant-images --prod --frozen-lockfile --ignore-scripts`.
+It installed nine packages. Direct Node execution without credentials exits 1 with the
+sanitized configuration/connectivity message, establishing that the entrypoint loads and
+fails closed rather than silently reporting success. This is not a live-provider check.
+
+Final validation: `pnpm check` passes formatting, lint, workspace/tool types,
+**58 files / 267 tests**, frontend production build and API dry-run build.
+`pnpm audit --audit-level=moderate` reports no known vulnerabilities; source/artifact
+privacy scans report zero blocked findings. `git diff --check` passes. Existing optional
+PDF-chunk-size and framework deprecation warnings remain; no browser UI changed, so the
+previous browser matrix evidence was not rerun or represented as new evidence.
+
+Current environment checks confirm no configured `CLOUDFLARE_ACCOUNT_ID`,
+`R2_MONITOR_ACCESS_KEY_ID`, `R2_MONITOR_SECRET_ACCESS_KEY` or `RECOVERY_BUCKET` variables.
+GitHub CLI is unavailable, so repository secrets/variables and remote runs were not read.
+Production activation, actual owner notification receipt and deployed restore/cron evidence
+remain unverified; T058 is unchecked. T001's usage/CPU/recovery gates and the other live,
+human, content/privacy and release tasks remain open. **52/63 tasks remain complete**.
+No remote resources, messages, credentials, commits or deployments were created.
+
+Post-hook check: parsed `.specify/extensions.yml`; only the optional Git commit hook applies.
+It is offered and left unexecuted. No mandatory after-implementation hook is registered.
