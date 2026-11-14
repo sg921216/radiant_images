@@ -1,0 +1,349 @@
+{
+  "recordedAt": "2026-11-14T17:34:04.466Z",
+  "scope": "Local workerd Worker and SQLite Durable Object RPC; live Cloudflare Images binding. Synthetic data only. No application deployment, storage, or paid activation. Does not measure deployed CPU/memory.",
+  "command": "pnpm exec wrangler dev --config scripts/image-binding-probe/validation.wrangler.toml --ip 127.0.0.1 --port 8795 --inspector-port 9245 --show-interactive-dev-session=false",
+  "runner": "pnpm exec tsx scripts/image-binding-probe/validate.ts",
+  "node": "v24.14.0",
+  "sharp": "0.35.5",
+  "results": [
+    {
+      "name": "png",
+      "inputBytes": 176,
+      "inputSha256": "9eceb7bdf1a2700f5f74593869cce1391feee53876bc73bac2214cc2d1e2b79c",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/png",
+        "width": 60,
+        "height": 40
+      },
+      "variants": {
+        "full": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 367
+    },
+    {
+      "name": "webp",
+      "inputBytes": 76,
+      "inputSha256": "e3b4b2f17219a6895e73106637839f1378660671cbcb2bbc6fd56524f7f36e4d",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/webp",
+        "width": 60,
+        "height": 40
+      },
+      "variants": {
+        "full": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "61e61a89c706a44cc9b7388264bc1073d4ab1cf98b67b7d0ecec7991d8034e14",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "61e61a89c706a44cc9b7388264bc1073d4ab1cf98b67b7d0ecec7991d8034e14",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "61e61a89c706a44cc9b7388264bc1073d4ab1cf98b67b7d0ecec7991d8034e14",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 236
+    },
+    {
+      "name": "jpeg-re-export",
+      "inputBytes": 287,
+      "inputSha256": "d4f5d47a2cc68706f35c95e43dd692122556f4ca7a1c3962487b1be43390fc4c",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/jpeg",
+        "width": 60,
+        "height": 40
+      },
+      "variants": {
+        "full": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 245
+    },
+    {
+      "name": "jpeg-exif-orientation",
+      "inputBytes": 1015,
+      "inputSha256": "0fe59bd6e1a98b2c7262cfc67f4e8fff4eed64097246ecf88ddb7f85e342ad55",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/jpeg",
+        "width": 60,
+        "height": 40
+      },
+      "variants": {
+        "full": {
+          "width": 40,
+          "height": 60,
+          "bytes": 76,
+          "sha256": "9e5aec3e5b20a2000c472394dc9830732c4720363122b7938c308adc0bd004a8",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 40,
+          "height": 60,
+          "bytes": 76,
+          "sha256": "9e5aec3e5b20a2000c472394dc9830732c4720363122b7938c308adc0bd004a8",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 40,
+          "height": 60,
+          "bytes": 76,
+          "sha256": "9e5aec3e5b20a2000c472394dc9830732c4720363122b7938c308adc0bd004a8",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 243
+    },
+    {
+      "name": "jpeg-truncated-scan",
+      "inputBytes": 267,
+      "inputSha256": "24babef6cc0edfc4ecb46a5a8a44b82e482b8781e8e130c1662dad93775bb28b",
+      "expectedStatus": 400,
+      "status": 400,
+      "passed": true,
+      "elapsedMs": 9
+    },
+    {
+      "name": "jpeg-truncated-scan-with-end-marker",
+      "inputBytes": 269,
+      "inputSha256": "f852e8512dd033d89e2c883317377d1f806289dccfe42022c5f212047eedc900",
+      "expectedStatus": 400,
+      "status": 400,
+      "passed": true,
+      "elapsedMs": 7
+    },
+    {
+      "name": "jpeg-40mp-baseline",
+      "inputBytes": 235018,
+      "inputSha256": "76f0e7fc9f50aabd41f586bc0f18a54cfdb8df15bd6739e4d23f4ded6b340d34",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/jpeg",
+        "width": 8000,
+        "height": 5000
+      },
+      "variants": {
+        "full": {
+          "width": 2000,
+          "height": 1250,
+          "bytes": 4570,
+          "sha256": "3da59f556714e3019ca2ea4e6afdf9a99178b5941b241e5d04952e78e4145b85",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 800,
+          "height": 500,
+          "bytes": 806,
+          "sha256": "5a9754826a8639750dc784efc980ac75de6ec99cbb25f9918a95db6c0d41962e",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 320,
+          "height": 200,
+          "bytes": 196,
+          "sha256": "eb878df222619bac39d3a25533d1f7bb235e50bc0d866c6bdfe44e44be8e0f6d",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 1848
+    },
+    {
+      "name": "jpeg-40mp-progressive-444",
+      "inputBytes": 469691,
+      "inputSha256": "eaf7da8e9b41a4347ba3a78711038bc9375b2c79ce994000fb13018ece1120a8",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/jpeg",
+        "width": 8000,
+        "height": 5000
+      },
+      "variants": {
+        "full": {
+          "width": 2000,
+          "height": 1250,
+          "bytes": 4570,
+          "sha256": "3da59f556714e3019ca2ea4e6afdf9a99178b5941b241e5d04952e78e4145b85",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 800,
+          "height": 500,
+          "bytes": 806,
+          "sha256": "5a9754826a8639750dc784efc980ac75de6ec99cbb25f9918a95db6c0d41962e",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 320,
+          "height": 200,
+          "bytes": 196,
+          "sha256": "eb878df222619bac39d3a25533d1f7bb235e50bc0d866c6bdfe44e44be8e0f6d",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 9324
+    },
+    {
+      "name": "jpeg-16384-axis",
+      "inputBytes": 192268,
+      "inputSha256": "05e1eaf6091e3d204613682ec9a407ace33479c24fa263b84f1a8d53be00aac5",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/jpeg",
+        "width": 16384,
+        "height": 2000
+      },
+      "variants": {
+        "full": {
+          "width": 2000,
+          "height": 244,
+          "bytes": 986,
+          "sha256": "574de2ea0e36a0de24215d4c35599039e4e713c5a33c37eec4122f2bf34f3e4f",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 800,
+          "height": 97,
+          "bytes": 236,
+          "sha256": "d71ff4ce20da6682c540e360a7ea1ebf628f30fd298e6ca0be86f59acb9f8cc2",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 320,
+          "height": 39,
+          "bytes": 102,
+          "sha256": "6e7ec423f5e13b30d3677d56cbe622977a323f15a5cf51abf6fb8895695cafba",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 1389
+    },
+    {
+      "name": "jpeg-10mib-metadata",
+      "inputBytes": 10485760,
+      "inputSha256": "890a028856e3add4501f7d3c92dac5381a4905bd67c7f7dea8bc43058f17450e",
+      "expectedStatus": 200,
+      "status": 200,
+      "original": {
+        "mime": "image/jpeg",
+        "width": 60,
+        "height": 40
+      },
+      "variants": {
+        "full": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "card": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        },
+        "thumb": {
+          "width": 60,
+          "height": 40,
+          "bytes": 76,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+          "strictDecodePassed": true,
+          "metadataFree": true
+        }
+      },
+      "passed": true,
+      "elapsedMs": 9589
+    }
+  ],
+  "failures": 0
+}

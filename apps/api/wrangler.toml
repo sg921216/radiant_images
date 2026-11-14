@@ -3,6 +3,14 @@ main = "src/index.ts"
 compatibility_date = "2026-11-13"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = true
+[images]
+binding = "IMAGES"
+[[durable_objects.bindings]]
+name = "JPEG_VALIDATOR"
+class_name = "JpegValidator"
+[[migrations]]
+tag = "jpeg-validator-v1"
+new_sqlite_classes = ["JpegValidator"]
 [vars]
 WEB_ORIGIN = "http://127.0.0.1:5173"
 API_ORIGIN = "http://127.0.0.1:8787"

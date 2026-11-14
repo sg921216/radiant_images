@@ -25,6 +25,7 @@ import { productionRuntime, type Runtime } from './services/runtime';
 import { fallbackAudit } from './services/audit';
 import { restoreStatus } from './services/backup';
 import { scheduled } from './scheduled';
+export { JpegValidator } from './services/jpegValidator';
 export function createApp(runtime: Runtime = productionRuntime) {
   const app = new Hono<AppEnv>();
   app.use('*', async (c, next) => {

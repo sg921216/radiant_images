@@ -1137,3 +1137,61 @@ Local regression verification: **15/15 tests passed** across the image-provider 
 suites, including both malformed JPEG fixtures and the unconfigured-production-validator
 refusal. Full workspace typechecking, scoped ESLint, formatting and diff checks passed.
 These passing local checks do not supersede the recorded provider failures.
+
+## 2026-11-14 — damaged-JPEG blocker resolved in the upload adapter
+
+The owner requested strict rejection and re-export guidance, with Pixieset continuing to
+handle delivered client collections. Implemented `packages/shared/src/jpeg.ts`, the internal
+per-portfolio `JpegValidator` Durable Object, and `validateCloudflareImages`; wired the adapter
+into `productionRuntime` and protected uploads. API and generated release configurations
+include Images, the validator namespace and its SQLite migration. Generated binding types
+replace duplicated handwritten binding declarations.
+
+The strict check validates sequential/progressive Huffman JPEG entropy before transformation.
+Images fully decodes inputs and regenerates each public derivative from the original. A
+damaged/unsupported JPEG returns HTTP 400 with “Re-export it as JPEG or PNG and try again.”
+Tests verify no transformation or R2/database publication on this rejection; missing bindings
+and provider outages also prevent storage. Pixieset delivery has no new integration or writes.
+See R-19 for bounded work/memory, supported encodings, timeouts and residual proof limits.
+
+Red/green evidence:
+
+- `scripts/tests/jpeg-validation.test.ts`: the initial no-op validator failed three behavioral
+  cases; the completed validator passes seven, including a strict-Sharp differential sweep
+  across more than 100 damaged scans, valid baseline/progressive/grayscale/CMYK/EXIF,
+  restart/padding/table checks and a 40-MP progressive source.
+- `scripts/tests/cloudflare-images.test.ts`: the stub failed five adapter cases. Seven passed
+  after implementation. A subsequent stalled-output/cancellation test failed (still pending
+  after 30 seconds); bounding cancellation fixed it, and all eight adapter tests now pass.
+- `apps/api/tests/jpeg-validator.test.ts`: the initial RPC stub returned false for an intact
+  JPEG and failed; the real local workerd/SQLite DO now accepts intact data, rejects both
+  truncated forms and accepts a later intact request.
+- `apps/api/tests/gallery.test.ts`: before wiring, valid and damaged production uploads both
+  returned 500; the new behavioral tests expected 201/400 and failed. All twelve now pass,
+  including correct guidance, zero writes on failure, unavailable binding refusal and success.
+
+Live-provider evidence: `scripts/image-binding-probe/validate.ts` passes **10/10 cases**, stored
+in [images-validation-probe.json](./evidence/images-validation-probe.json). It exercises the
+production adapter in local workerd/DO RPC with the live Images binding, not offline Images
+emulation. Both R-18 damaged JPEG fixtures return 400. Valid PNG/WebP/JPEG, EXIF orientation,
+40-MP baseline and progressive 4:4:4, 16,384-pixel width, and a 10-MiB metadata-padded JPEG
+pass. Each output passes independent strict Sharp decoding and dimensions/metadata checks.
+The diagnostic process was stopped; authenticated Workers inventory afterward remains zero.
+The old raw-provider failure evidence is retained unchanged.
+
+Repository verification: `pnpm check` passes formatting, lint, types, **53 files / 248 tests**,
+and both production builds (API dry run only). After the additional cancellation fix, the
+eight-test adapter suite, scoped lint, full workspace typecheck and API dry-run build pass.
+Privacy scans found no blocked source or diagnostic artifacts. No files were staged or
+committed by this work; pre-existing `.specify/`, `.node-version` and `.npmrc` edits were left alone.
+
+`pnpm exec playwright test e2e/gallery.spec.ts --project=chromium-desktop
+--project=chromium-mobile` passes **4/4**, zero retries: oriented upload, edit/reorder/delete,
+public refresh, sixty-image capacity, filtering and 320/768/1280 layouts. This browser run
+uses the isolated local Sharp provider; the production adapter and live Images are tested
+separately above. Final source/artifact privacy and diff checks pass.
+
+The reproduced silent-recovery bug is resolved. This is not deployed CPU/memory/usage-budget
+proof, a production application deployment, paid activation, or permission to release.
+T001/T034 remain open for those remaining integration/resource checks; operational retention,
+monitoring and other acceptance gates remain separate. Task count stays **51/63**.

@@ -125,9 +125,20 @@ export async function uploadImage(
     );
   let verified: VerifiedImages;
   try {
-    verified = await runtime.validateImages(input);
+    verified = await runtime.validateImages(
+      input,
+      env.IMAGES && env.JPEG_VALIDATOR
+        ? {
+            images: env.IMAGES,
+            validateJpeg: (bytes) => env.JPEG_VALIDATOR.getByName('portfolio').validate(bytes),
+          }
+        : undefined,
+    );
   } catch (error) {
-    if (error instanceof InvalidImage) invalid('The image could not be fully decoded.');
+    if (error instanceof InvalidImage)
+      invalid(
+        'This photo is damaged or uses an unsupported format. Re-export it as JPEG or PNG and try again.',
+      );
     throw new ApiFault(
       500,
       'image_validation_unavailable',

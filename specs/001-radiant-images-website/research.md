@@ -649,11 +649,54 @@ instead of replacing them with a clean run:
 
 The [binding documentation](https://developers.cloudflare.com/images/optimization/binding/)
 describes transformation decoding; the observed implementation tolerates damaged JPEGs.
-No documented strict-decoding option was established. Keep the production validator
-unconfigured and the gallery fail-closed boundary intact. Next work is a bounded strict
-validator compatible with Workers, followed by adapter integration and provider/resource
-tests; a change to corruption acceptance would instead require an explicit requirements
-decision. Do not infer that a paid Images subscription changes decoding behavior.
+No documented strict-decoding option was established. At this checkpoint the production
+validator remained unconfigured. R-19 below supersedes that implementation gap with a strict
+validator and adapter; the gallery still fails closed when validation is unavailable.
+Do not infer that a paid Images subscription changes decoding behavior.
 
 The diagnostic is intentionally outside routine CI and exits nonzero for unmet expectations.
 It is test code and does not add or change production behavior. T001/T034/T058 remain open.
+
+## R-19 Strict JPEG rejection and production adapter — 2026-11-14
+
+The owner explicitly accepted rejecting damaged JPEGs and re-exporting them, and reaffirmed
+Pixieset for client delivery. Website portfolio uploads remain independently validated.
+
+`assertJpegComplete` implements bounded 8-bit Huffman sequential/progressive scan validation
+against [ITU T.81](https://www.w3.org/Graphics/JPEG/itu-t81.pdf), including complete MCU counts,
+Huffman/quantization tables, restart order, padding, progression and exact end markers.
+It retains only progressive coefficient significance, capped at 24 MiB, rather than decoded
+pixels. Input, scan-count and coefficient-work bounds prevent unbounded parsing. Unsupported
+encodings (including arithmetic/lossless JPEG) fail closed; owners can re-export standard
+JPEG/PNG. A syntactically valid change to compressed content cannot be identified as an
+unintended visual alteration without a trusted source; this is structural/entropy validation,
+not a guarantee that arbitrary byte changes preserve photographic intent.
+
+An internal `JpegValidator` SQLite Durable Object serializes checks per portfolio through
+RPC and retains no image data or storage. This isolates scan CPU from the ordinary Free
+Worker's 10-ms allowance. Durable Objects are available on Free with a default 30-second
+CPU limit; [limits](https://developers.cloudflare.com/durable-objects/platform/limits/)
+and [pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/) do not
+replace a deployed measurement. The adapter bounds individual operations to eight seconds
+and processing to thirty seconds. Exhausted budgets or unavailable services block publication.
+
+`productionRuntime` now invokes the Images adapter. It checks source/variant bounds, sends
+JPEGs through the strict check before transformation, fully decodes supplied variants and
+regenerates all public WebP derivatives from the original. It verifies output dimensions,
+bytes, animation and metadata, preserving EXIF orientation. Private originals and public
+variants are written only after every check passes. Rejected photos get actionable HTTP 400
+re-export guidance. Provider errors such as 9516 remain server failures rather than being
+misreported as proof of damaged input; see [error reference](https://developers.cloudflare.com/images/reference/troubleshooting/).
+API and generated release configuration include both bindings and the SQLite migration.
+
+[Adapter evidence](./evidence/images-validation-probe.json) records **10/10 passing cases**
+using local workerd/DO RPC and the live Images binding: PNG/WebP, intact re-exported JPEG,
+EXIF orientation, both damaged JPEGs, 40-MP baseline/progressive 4:4:4, 16,384-pixel width,
+and a JPEG padded with legal metadata to exactly 10 MiB. Successful derivatives also passed
+independent strict Sharp decoding and metadata/dimension checks. Both damaged fixtures
+return 400 before transformation. The synthetic diagnostic was stopped; no application
+deployment, application storage, real photo, paid activation or Pixieset write occurred.
+
+This resolves the reproduced silent-JPEG-recovery blocker. T001/T034 remain open for deployed
+resource/usage-budget evidence and final release integration; T058 retention/monitoring is
+separate. No task is marked complete solely from local execution or these live transformations.

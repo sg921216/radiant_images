@@ -1,9 +1,10 @@
 import { env } from 'cloudflare:workers';
-import { beforeEach, expect, test } from 'vitest';
+import { beforeEach, expect, test, vi } from 'vitest';
 import { createApp } from './helpers/app';
 import { ownerHeaders } from './helpers/owner';
 import type { Env } from '../src/env';
 import type { Runtime } from '../src/services/runtime';
+import { productionRuntime } from '../src/services/runtime';
 import type { GalleryImage } from '@radiant/shared';
 import fixtures from '../../../e2e/fixtures/images/fixtures.json';
 const decode = (text: string) => Uint8Array.from(atob(text), (c) => c.charCodeAt(0));
@@ -81,6 +82,74 @@ test('missing/blank/long alt, mismatched MIME/size/dimensions, forged and metada
 });
 test('production without authoritative image validation fails closed', async () => {
   expect((await upload(form(), env, { now, fetch: runtime().fetch })).status).toBe(500);
+  expect((await env.MEDIA.list()).objects).toHaveLength(0);
+});
+
+test('production upload rejects damaged JPEGs with re-export guidance before storage or transformation', async () => {
+  const input = vi.fn();
+  const images = new Proxy(env.IMAGES, {
+    get(target, key) {
+      return key === 'input' ? input : Reflect.get(target, key);
+    },
+  });
+  const truncated = decode(fixtures.oriented).slice(0, -20);
+  for (const bytes of [truncated, Uint8Array.from([...truncated, 255, 217])]) {
+    const response = await upload(
+      form('Synthetic damaged photo', {
+        original: new Blob([bytes], { type: 'image/jpeg' }),
+        originalMime: 'image/jpeg',
+        originalBytes: String(bytes.length),
+      }),
+      { ...env, IMAGES: images },
+      { ...productionRuntime, now },
+    );
+    expect(response.status).toBe(400);
+    expect(await response.text()).toContain('Re-export');
+  }
+  expect(input).not.toHaveBeenCalled();
+  expect((await env.DB.prepare('SELECT id FROM gallery_images').all()).results).toHaveLength(0);
+  expect((await env.MEDIA.list()).objects).toHaveLength(0);
+});
+
+test('production upload publishes regenerated variants after authoritative validation', async () => {
+  const encoded = decode(fixtures.webp);
+  const input = vi.fn(() => {
+    const chain: ImageTransformer = {
+      transform: () => chain,
+      draw: () => {
+        throw new Error('Not used');
+      },
+      output: async () => ({
+        contentType: () => 'image/webp',
+        image: () => new Response(encoded).body!,
+        response: () => new Response(encoded),
+      }),
+    };
+    return chain;
+  });
+  const images = new Proxy(env.IMAGES, {
+    get(target, key) {
+      if (key === 'input') return input;
+      if (key === 'info')
+        return async () => ({
+          format: 'image/png',
+          width: 60,
+          height: 40,
+          fileSize: decode(fixtures.original).length,
+        });
+      return Reflect.get(target, key);
+    },
+  });
+  const response = await upload(form(), { ...env, IMAGES: images }, { ...productionRuntime, now });
+  expect(response.status).toBe(201);
+  expect(input).toHaveBeenCalledTimes(6);
+  expect((await env.MEDIA.list()).objects).toHaveLength(4);
+});
+
+test('production upload with missing bindings fails closed without storing the image', async () => {
+  const missing = { ...env };
+  Reflect.deleteProperty(missing, 'IMAGES');
+  expect((await upload(form(), missing, { ...productionRuntime, now })).status).toBe(500);
   expect((await env.MEDIA.list()).objects).toHaveLength(0);
 });
 

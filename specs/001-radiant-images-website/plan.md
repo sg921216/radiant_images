@@ -39,6 +39,26 @@ JPEG scans that strict local decoding rejects. R-18 records the evidence; preser
 validation and the production upload gate until a compatible validator is proven. No paid
 plan, application deployment, or image-validation requirement change is selected.
 
+**Strict JPEG validation design (2026-11-14)**: The owner requested resolving the decoder
+gap by rejecting damaged uploads and letting the owner re-export them. Pixieset continues
+to deliver client collections; the website still validates its public portfolio uploads.
+Validate Huffman JPEG scan completeness before Images transformation, tracking progressive
+coefficient significance rather than allocating full decoded pixels. Use one internal
+SQLite-backed `JpegValidator` Durable Object per portfolio to serialize this bounded CPU
+work and avoid concurrent decoder allocations. It writes no storage and retains no bytes
+between calls. Durable Objects' documented 30-second CPU allowance and Free availability
+fit this check better than the ordinary Free Worker's 10-ms CPU allowance. The main Worker
+keeps authorization, the Images binding, private R2 storage and publication. No external
+service, paid subscription, Pixieset sync, or acceptance of damaged JPEGs is introduced.
+Source: [Durable Object limits](https://developers.cloudflare.com/durable-objects/platform/limits/)
+and [Free allowances](https://developers.cloudflare.com/durable-objects/platform/pricing/).
+
+**Validation result (2026-11-14)**: The strict check and production Images adapter are now
+wired in, with protected-upload tests and ten passing synthetic cases through live Images
+(local workerd/DO). R-19 resolves the reproduced JPEG recovery gap. Resource/usage-budget
+measurement in the deployed environment and other release gates remain open; no application
+deployment or paid activation was performed.
+
 ## Summary
 
 Build a photography business website for Radiant Images with a public marketing site (home gallery, three service pages with "How It Works" + pricing sections, About, FAQ, Contact with CAPTCHA-protected inquiry form) and an owner admin area (gallery, banners, pricing packages, site config, clients, email templates, checklists, questionnaires) protected by Google sign-in with an owner allow-list.

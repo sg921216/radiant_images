@@ -15,5 +15,12 @@ export interface VerifiedImages {
   card: DecodedImage;
   thumb: DecodedImage;
 }
-export type ImageValidator = (input: ImageInputs) => Promise<VerifiedImages>;
+export interface ImageValidationContext {
+  images: Pick<ImagesBinding, 'info' | 'input'>;
+  validateJpeg: (bytes: Uint8Array) => Promise<boolean>;
+}
+export type ImageValidator = (
+  input: ImageInputs,
+  context?: ImageValidationContext,
+) => Promise<VerifiedImages>;
 export class InvalidImage extends Error {}

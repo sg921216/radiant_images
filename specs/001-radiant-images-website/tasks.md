@@ -1,5 +1,11 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-14 JPEG follow-up:** Strict JPEG scan rejection and the production Images adapter
+are implemented; R-19 and acceptance.md record API/storage tests and 10/10 live-binding
+diagnostics. The reproduced damaged-JPEG acceptance issue is resolved. T001/T034 remain
+unchecked pending deployed resource/usage-budget and final integration evidence; other
+release gates and the 51/63 task count are unchanged. Pixieset remains client delivery only.
+
 **Input**: `specs/001-radiant-images-website/` — spec.md, plan.md, research.md, data-model.md, contracts/README.md, contracts/openapi.yaml, quickstart.md.
 **Organization**: Setup, shared foundation, six independently verifiable story increments in priority order, then release validation.
 **Tests**: Mandatory red-green-refactor for every executable behavior, including foundation,
@@ -25,7 +31,7 @@ on this website. T001/T034 production portfolio decoding therefore remains requi
 Studio Manager migration or automatic gallery sync is selected. **51/63 tasks remain complete**;
 policy/scope decisions alone do not close implementation or acceptance tasks.
 
-**Latest local verification (2026-11-14)**: `pnpm check` passes **50 files / 229 tests**,
+**Earlier local verification (2026-11-14)**: `pnpm check` passes **50 files / 229 tests**,
 formatting/lint/types and production builds. A single combined functional matrix passes
 **150/150** (30 cases in each of Chromium desktop/mobile, Firefox desktop and WebKit
 desktop/mobile), with zero retries, failures, skips or flaky classifications. The separate

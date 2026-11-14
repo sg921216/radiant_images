@@ -113,8 +113,12 @@ pnpm --filter @radiant/web dev
 The public site and seeded content can be viewed locally. Placeholder credentials do not enable
 Google owner sign-in or inquiry/email delivery. The public contact address is also a placeholder.
 Ordinary development uses the application's provider integrations; it does not expose the
-synthetic sign-in or email endpoints used by browser tests. Gallery publication requires an
-approved image-validation provider; the local decoder is available only in the isolated E2E setup.
+synthetic sign-in or email endpoints used by browser tests. Portfolio publication uses the
+Cloudflare Images binding and a strict JPEG validator, configured in the API Worker. Damaged
+or unsupported JPEGs are rejected with re-export guidance before anything is stored. The
+Sharp decoder is available only in the isolated E2E setup. Ordinary offline Images emulation
+does not establish provider behavior; the feature quickstart includes the live binding probe.
+Client photo collections and delivery stay in Pixieset Client Gallery.
 
 Use the automated browser workflow below to exercise sign-in, inquiries, gallery, and owner
 workflows with synthetic data and controlled providers. For provider-connected setup, see the

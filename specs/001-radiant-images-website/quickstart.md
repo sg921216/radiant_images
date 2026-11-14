@@ -4,7 +4,7 @@ This guide proves the feature works against the [spec](./spec.md) acceptance sce
 
 **Status (2026-11-14)**: Local application, migration, synthetic provider adapters and automated
 suites are implemented under the approved T001 exception. See acceptance.md for actual
-commands/results and remaining gates. Production decoder/operational-retention proof, owner content,
+commands/results and remaining gates. Deployed image-resource/operational-retention proof, owner content,
 real email, human/device acceptance and deployment remain open. Gmail consent needs both
 `gmail.send` and `gmail.settings.basic` for sending and verified sender lookup.
 
@@ -60,8 +60,11 @@ pnpm dev
 
 The frontend uses 127.0.0.1:5173 and the API 127.0.0.1:8787. Ordinary development does not
 install the E2E provider endpoints; placeholder credentials cannot sign in or send mail.
-The local-only decoder belongs to the isolated E2E server. Production gallery publication
-fails closed until an approved authoritative provider is configured.
+The local-only Sharp decoder belongs to the isolated E2E server. The production adapter uses
+`IMAGES` and `JPEG_VALIDATOR`; missing bindings or provider failures prevent publication.
+Damaged or unsupported JPEGs return HTTP 400 with instructions to re-export as JPEG or PNG.
+No original or derivative is written until validation succeeds. Live binding evidence is
+recorded in research R-19; deployed CPU/memory/budget verification remains a release gate.
 
 ## Separate provider-connected setup
 
@@ -486,6 +489,20 @@ The runner writes sanitized evidence under `specs/001-radiant-images-website/evi
 targeted runs use the `-followup` filename. Preserve previous evidence before a new run.
 Stop the development session afterward. Never deploy this diagnostic as the application.
 
-The recorded run intentionally fails: the provider accepts damaged JPEG scans that the
-strict local decoder rejects. See research R-18. A successful transformation or local
-simulation alone must not close T001/T034 or enable production gallery publication.
+The original raw-provider run intentionally fails: the provider accepts damaged JPEG scans
+that strict decoding rejects (R-18). Preserve this evidence. The production adapter adds
+strict scan validation before transformation (R-19). Its separate diagnostic uses local
+workerd and Durable Object RPC with the **live** Images binding:
+
+```sh
+pnpm exec wrangler dev --config scripts/image-binding-probe/validation.wrangler.toml --ip 127.0.0.1 --port 8795 --inspector-port 9245 --show-interactive-dev-session=false
+# In another terminal:
+pnpm exec tsx scripts/image-binding-probe/validate.ts
+```
+
+Stop the diagnostic process afterward. It uses only synthetic files and no D1/R2 bindings;
+never deploy either diagnostic Worker. The sanitized report is
+`evidence/images-validation-probe.json`. All ten recorded cases pass, including both
+previously accepted damaged JPEGs (400), re-exported JPEGs, EXIF orientation, 40 MP,
+16,384-pixel width and a 10 MiB input. This checks adapter/provider behavior, not deployed
+CPU/memory or remaining T001/T034 release evidence. Full client collections stay in Pixieset.
