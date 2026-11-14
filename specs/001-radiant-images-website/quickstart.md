@@ -134,6 +134,16 @@ the form remounts, or state overwrites a received value before selecting a produ
 verify the complete functional engine matrix. Do not substitute typing, sleeps or retries to
 turn the failing `fill` scenario into a claimed pass.
 
+Client browser cases now install `e2e/client-input-diagnostics.ts` before navigation.
+On failure they attach a bounded `client-input-events` JSON record with native event types,
+focus state, field lengths and DOM node identities. It records no entered values, URLs,
+tokens or message content. Input/blur events and post-input microtasks can distinguish a
+missing event from a received value being cleared or a control being replaced. There are
+no additional waits between field fills. A closed page produces an empty attachment, so
+an empty log alone cannot establish that no events occurred. The listener is test-only;
+it is not application telemetry or a product fix, and its timing overhead can affect an
+intermittent reproduction. Keep the earlier failures when interpreting later passes.
+
 T063 additionally executes every browser/OS N/N-1 cell in plan.md's release matrix. Freeze
 exact stable versions at release, use actual desktop browsers and physical mobile devices
 or a real-device service, and record versions/date plus each required journey's result.

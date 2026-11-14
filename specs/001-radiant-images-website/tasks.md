@@ -16,7 +16,18 @@ React + Cloudflare Workers is the confirmed stack. Generic optional-test instruc
 not override the mandatory TDD and E2E requirements.
 **Paths**: Repository-relative. `[P]` means tasks can run concurrently only within the dependency waves stated below. All other tasks run in listed order. Story labels map directly to spec.md.
 
-**Implementation checkpoint (2026-11-14)**: Prerequisites passed; requirements checklist
+**Latest local verification (2026-11-14)**: `pnpm check` passes **50 files / 229 tests**,
+formatting/lint/types and production builds. A single combined functional matrix passes
+**150/150** (30 cases in each of Chromium desktop/mobile, Firefox desktop and WebKit
+desktop/mobile), with zero retries, failures, skips or flaky classifications. The separate
+30-case WebKit event diagnostic also passes, without reproducing the historical input loss.
+Client browser cases now attach bounded, contact-value-free native-event diagnostics on
+failure. Product code and input sequences are unchanged; no input-loss cause or fix is
+claimed. Remote CI has no recorded runs and T059 stays open. The owner requested privacy
+copy remain pending, so T023 stays open. **51/63 tasks remain complete**; see acceptance.md
+and `evidence/local-functional-matrix-summary.json` for results and outstanding gates.
+
+**Earlier implementation checkpoint (2026-11-14)**: Prerequisites passed; requirements checklist
 16/16 complete. The owner has selected Cloudflare Workers Static Assets and completed R2
 account enrollment; the hosting-choice blocker is resolved. T001 remains **OPEN**, not
 completed: strict recovery expiry and production image-validation feasibility remain

@@ -652,7 +652,7 @@ checked; 12 remain open** because their full acceptance requirements are not met
 | T046 | Settings, stale-form and controlled propagation checks                                              | Changed-recipient real-mailbox acceptance                                                                                          |
 | T057 | Integrated owner workflow, isolation and immutable history                                          | Actual mailbox receipt and unassisted three-minute owner timing                                                                    |
 | T058 | Private backup, restore/deletion reconciliation, media recovery, cleanup and health tests/rehearsal | Physical expiry guarantees and production monitoring/alerting proof                                                                |
-| T059 | CI definition, strict contracts, privacy gates and local browser evidence                           | Clean combined engine matrix and remote CI execution; Firefox now passes locally, earlier failures and WebKit input issue retained |
+| T059 | CI definition, strict contracts, privacy gates and a later 150/150 combined functional matrix       | Remote CI execution and unresolved historical WebKit input loss; passing local runs do not establish its cause or a fix           |
 | T060 | Separate guarded workflows and built local fallback/security checks                                 | Real HTTPS deployment and remote rollback rehearsal                                                                                |
 | T061 | Automated axe/keyboard, SEO, responsive layouts and provisional lab performance                     | Screen-reader/photo-alt review, approved photo fixture and deployed/field evidence                                                 |
 | T063 | Local quickstart coverage and release acceptance register                                           | Actual browser/device matrix, live/human acceptance and owner content/privacy approvals                                            |
@@ -871,3 +871,76 @@ or an application state overwrite. The next useful evidence is a failing event s
 a deterministic component reproduction, followed by a targeted correction and full engine
 verification. **Browser execution is unblocked; input-loss diagnosis, the clean combined
 matrix, remote CI and T059 remain open. The task count stays 51/63.**
+
+### Implementation continuation and bounded diagnostics (2026-11-14)
+
+The requested implementation continuation passed prerequisites and the requirements
+checklist (16/16). Existing Git/Spec Kit configuration changes, runtime files and prior
+untracked evidence were preserved. The existing Git, ESLint and Prettier ignore rules
+cover dependencies, builds, local state and secrets; no additional ignore file was needed.
+The owner explicitly requested that the missing Contact privacy text **remain pending**;
+T023 stays open. The approved local-development exception remains the scope boundary.
+
+One predeclared diagnostic run used the ignored
+`.wrangler/client-input-diagnostic.config.ts`, WebKit mobile, 30 repetitions and zero
+retries. All **30/30 passed**, zero skipped/flaky classifications, in **137.99 seconds**.
+The recorder also captured event trust/input type and document focus without adding
+inter-field waits. No failing sequence was captured, and no product fix is claimed.
+The earlier 59/60 result and historical email loss remain unresolved evidence.
+
+`e2e/client-input-diagnostics.ts` now supplies passive failure diagnostics for the checked-in
+client browser cases. Records contain event types, field lengths, focus state and stable
+DOM identities; they exclude entered values, URLs and tokens and retain at most 200 events
+per document. Only a failed client case attaches the record. Input operations, assertions,
+timeouts, retry policy and product code are unchanged. This is test instrumentation, not a
+behavioral red/green defect fix. Instrumentation can change timing and cannot establish that
+an intermittent defect disappeared.
+
+A standalone check initially failed under `tsx` because its serialized callback referenced
+the transpiler's unavailable `__name` helper; the log was empty. The same check under the
+actual Playwright test loader passed **1/1**, verifying native input/field lengths, DOM
+replacement, the 200-event bound, exclusion of all entered contact values and the closed-page
+empty-record fallback. Command: `pnpm exec playwright test
+--config=.wrangler/verify-client-diagnostics.config.ts`. This ignored, synthetic-only probe
+requires no application servers and does not replace the full application journeys.
+
+`pnpm check` passed: formatting, ESLint, TypeScript, **50 files / 229 tests** (86.22 seconds),
+the seven public prerenders plus SPA fallback, frontend security/sitemap generation and API
+dry-run build. Scoped formatting, lint and tools TypeScript also passed for the added
+diagnostics. Dependency audit reported no known vulnerabilities. Repository privacy checked
+383 files with zero blocked findings. Existing build warnings remain: a large lazy PDF
+chunk, a mixed static/dynamic API import and framework deprecation/future flags.
+
+The GitHub Actions read-only API reported **zero workflow runs** for this repository.
+No remote CI success, live-provider result or deployment is claimed.
+
+**Combined functional result:** one run of
+`pnpm exec playwright test --config=.wrangler/implementation-matrix.config.ts` passed
+**150/150** in **821.73 seconds**, with zero failed, skipped or flaky classifications and
+zero retries. Each of Chromium desktop/mobile, Firefox desktop and WebKit desktop/mobile
+passed all 30 functional cases. The ignored machine-local configuration preserves the
+base test configuration, one worker, focus/flake rejection, real built web/Worker/D1/R2
+stack and privacy reporter. It only supplies the previously verified owner-extracted
+Firefox executable, separate output/report paths and excludes `performance.spec.ts`.
+Runtime versions: Node 24.14.0, Playwright 1.65.1, Chromium 159.0.8154.6, Firefox 159.0,
+WebKit 27.2. Mobile projects are emulated on Windows, not actual-device evidence.
+
+Every functional case/outcome and duration is retained in
+[local-functional-matrix-summary.json](./evidence/local-functional-matrix-summary.json).
+The separate diagnostic result is retained in
+[local-webkit-event-followup-summary.json](./evidence/local-webkit-event-followup-summary.json).
+Performance was not rerun after test-only changes; its existing provisional/photo/field
+limitations remain. All earlier failing runs remain recorded. A successful combined local
+run is now available, but the intermittent WebKit input-loss cause is still unproven.
+
+No task acquired all its outstanding evidence in this continuation: **51/63 remain complete**.
+T001/T034/T058 need production decoding/retention evidence; T023 awaits owner privacy copy;
+T025/T031/T046/T057/T061/T063 retain their live, human, content, physical-device or manual
+acceptance obligations; T059 needs remote CI and resolution of the intermittent issue;
+T060 needs authorized HTTPS deployment/rollback evidence. No product fix, live send,
+paid service, deployment or commit was performed.
+
+Final artifact privacy scanned **55 files** and repository privacy scanned **385 files**,
+both with zero blocked findings; `git diff --check` passed. The after-implementation
+extension configuration was parsed again: its only applicable hook is the optional Git
+commit hook, which was displayed and left unexecuted. No mandatory hooks were registered.

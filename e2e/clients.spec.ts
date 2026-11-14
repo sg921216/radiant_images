@@ -1,8 +1,13 @@
 import { test, expect } from './fixtures';
 import type { Page, APIRequestContext } from '@playwright/test';
 import { signInOwner, control, sentCount } from './providers';
+import { recordClientInput, attachClientInput } from './client-input-diagnostics';
 // Tokenized journeys disable binary artifacts. The first reporter redacts URL-bearing diagnostics.
 test.use({ screenshot: 'off', trace: 'off' });
+test.beforeEach(async ({ page }) => recordClientInput(page));
+test.afterEach(async ({ page }, testInfo) => {
+  if (testInfo.status !== testInfo.expectedStatus) await attachClientInput(page, testInfo);
+});
 async function createClient(
   page: Page,
   firstName: string,
