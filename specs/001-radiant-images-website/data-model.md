@@ -16,7 +16,7 @@ Enum `shoot_type`: `maternity | newborn | family`. Enum `gallery_tag`: `shoot_ty
 |-------|------|-------|
 | id | TEXT PK | ULID; also the R2 key prefix `images/{id}/{variant}.webp` |
 | tag | TEXT | `gallery_tag`; required |
-| alt_text | TEXT | ≤ 200 chars; may be empty string (decorative) |
+| alt_text | TEXT | required descriptive text, 1–200 chars after trimming; reject empty/whitespace-only values; all portfolio photographs are informative |
 | sort_order | INTEGER | unique among images; renumbered on reorder |
 | width / height | INTEGER | of `full` variant |
 | original_mime | TEXT | `image/jpeg \| image/png \| image/webp` |
@@ -40,14 +40,14 @@ Queries: home gallery = all ordered by `sort_order`; service page = `WHERE tag =
 
 Eligibility (evaluated at request time): `starts_at ≤ now < ends_at`. If several eligible, pick `MAX(starts_at)`, tie-break newest `created_at`. Zero eligible → API returns `null` and SPA renders nothing (FR-013).
 
-### `pricing_revisions` + `pricing_packages` (FR-008–011)
+### `pricing_revisions` + `pricing_packages` + `pricing_publication` (FR-008–011)
 
 `pricing_revisions`
 
 | Field | Type | Rules |
 |-------|------|-------|
 | id | TEXT PK | the `revisionId` printed in PDF footer |
-| published_at | TEXT | set when owner publishes; exactly one row is "current" (`MAX(published_at)`) |
+| published_at | TEXT | publication timestamp for display/audit only; timestamps may tie and never select the current revision |
 | created_by | TEXT | owner email |
 
 `pricing_packages`
@@ -63,7 +63,20 @@ Eligibility (evaluated at request time): `starts_at ≤ now < ends_at`. If sever
 | description | TEXT | ≤ 500 chars |
 | inclusions | TEXT | JSON array of strings, 1–15 items, each ≤ 120 chars |
 
-Invariants: a revision must contain ≥ 1 package for **each** of the three shoot types before it can be published. Publishing writes a new revision + packages in one `batch()`; earlier revisions are retained (history) but never served. Web sections, print view, and PDF all read `GET /pricing` which returns the current revision only (SC-006, SC-011).
+`pricing_publication`: exactly one seeded row, `id INTEGER PRIMARY KEY CHECK(id = 1)`,
+`current_revision_id TEXT NOT NULL REFERENCES pricing_revisions(id)`. This pointer is the
+sole authority for the current revision; timestamps are not a selection mechanism.
+
+Invariants: a revision must contain ≥ 1 package for **each** shoot type. Publication writes
+a new immutable revision and its packages and replaces the singleton pointer in one atomic
+`batch()`. Generate new package-row IDs for each revision. A failed write leaves the prior
+pointer and published schedule intact. Concurrent publications serialize at the database;
+the last committed pointer update wins, including when publication timestamps are equal.
+Read the pointer, revision and packages in one consistent query/snapshot for both bootstrap
+and `GET /pricing`. Each web/print/PDF render retains that complete revision. Earlier
+revisions remain history and are not selected by public readers. Test simultaneous saves
+with a frozen identical timestamp, complete package sets, rollback and eventual reader
+agreement within the publication budget (SC-006/011).
 
 ### `faq_entries` (FR-004)
 
@@ -91,12 +104,16 @@ Seeded with the four mandatory topics (what to expect, what to wear, payment tim
 |-------|------|-------|
 | inquiry_recipient | TEXT | valid email; initial `tbd@gmail.com` |
 | sender_address | TEXT | valid email; must equal the Gmail account or one of its verified send-as aliases (validated against Gmail `sendAs` list on save) |
+| public_contact_email | TEXT | required valid email, ≤ 254 chars; explicitly owner-approved for public display/recovery; independent of recipient/sender; local fixture `hello@example.invalid` is forbidden at launch |
 | shoot_locations | TEXT | JSON array of 1–20 strings, each 1–80 chars, unique |
 | referral_sources | TEXT | JSON array of 1–20 strings; seeded `["Business Card","Word of Mouth","Social Media"]` |
 | timezone | TEXT | IANA tz; default `America/New_York` |
 | updated_at | TEXT | |
 
 Saves are all-or-nothing; validation failure leaves the row untouched (FR-029).
+Only `public_contact_email` is exposed as `publicContactEmail`; never derive or expose the
+private recipient/sender through public bootstrap. Changes use the 60-second publication
+budget. The active contact form retains the loaded public address during an API outage.
 
 ---
 
@@ -123,12 +140,22 @@ Saves are all-or-nothing; validation failure leaves the row untouched (FR-029).
 
 Processing order in Worker: rate-limit → Turnstile verify → schema validate → duplicate guard → Gmail send → audit → respond. Nothing is persisted except `inquiry_dedupe` and `audit_events`.
 
+Definite non-delivery releases the duplicate claim; accepted or uncertain dispatch keeps
+it until its original expiry. Uncertainty is not proof of failure and must not trigger
+resend. Provider-accepted inquiries still return 202 if the primary audit write fails;
+write a sanitized fallback operational event and raise the audit failure signal. Do not
+persist inquiry payloads to repair audit failures. Error/UI semantics follow plan.md.
+
 ### `inquiry_dedupe` (FR-022)
 
 | Field | Type |
 |-------|------|
 | hash | TEXT PK — SHA-256 of `lower(email) + "\n" + trim(message)` |
 | expires_at | TEXT — now + 2 min; pruned by cron |
+
+The hash is a short-lived operational guard, not an inquiry record. Exclude these rows
+from backups and remove expired rows. Expiry does not authorize the UI to resend an
+uncertain submission; manual verification remains necessary under FR-020.
 
 ---
 
@@ -145,7 +172,26 @@ Processing order in Worker: rate-limit → Turnstile verify → schema validate 
 | absolute_expires_at | TEXT | created + 7 days |
 | created_at | TEXT | |
 
-### `oauth_states` — transient PKCE state, `expires_at` = +10 min. `exchange_codes` — one-time code → session id, `expires_at` = +60 s, deleted on use.
+### `oauth_states` — transient browser-bound PKCE state, `expires_at` = +10 min
+
+### `exchange_codes` — verified identity grant, not a session reference
+
+| Field | Type | Rules |
+|-------|------|-------|
+| code_hash | TEXT PK | SHA-256 of random 256-bit exchange code; raw code appears only transiently in the callback fragment/exchange request |
+| owner_email | TEXT | verified Google identity; allow-listed at callback and rechecked at redemption |
+| created_at | TEXT | callback time |
+| expires_at | TEXT | created + 60 seconds; valid only while now < expires_at |
+
+The callback consumes valid OAuth state and stores this grant; no session/bearer token
+exists yet. Redemption conditionally consumes exactly one unexpired grant and inserts a
+new session with a freshly generated bearer-token hash in one transaction. No grant match
+means no session insert; concurrent redemption has one winner. Return the raw bearer once,
+only after commit, with `Cache-Control: no-store`. Session inactivity/absolute clocks start
+at redemption. Rollback leaves both grant and session state unchanged. Invalid, expired or
+used codes return 400; allow-list removal returns 403 and invalidates the grant. Never store
+raw codes/bearers or put them in logs/backups. Lost post-commit responses require a new
+Google sign-in; no token-recovery endpoint exists and unreachable sessions expire normally.
 
 ### `audit_events` (FR-032)
 
@@ -179,6 +225,29 @@ Processing order in Worker: rate-limit → Turnstile verify → schema validate 
 
 Deleting a client cascades to `client_checklist_state`, `client_emails`, `questionnaire_invites`, `questionnaire_responses`.
 
+### Client deletion and recovery lifecycle (QR-002)
+
+- The live cascade is transactional. Confirm deletion only after both the cascade and a
+  durable private deletion receipt exist. Retry/reconcile interrupted operations idempotently;
+  never report successful deletion while either obligation is incomplete.
+- Keep the deletion ledger outside the database restore set, as private R2 objects under
+  `client-deletions/{clientId}.json`. Each receipt contains only `clientId` and `deletedAt`,
+  with 31-day retention from deletion; do not copy names, addresses, answers, or email bodies.
+  Storage keys are never reused for new clients. This ledger is recovery metadata, not a
+  soft-deleted client profile, and is never exposed by public image/API routes.
+- Private daily backups expire within 30 days of creation. Provider-managed recovery
+  windows must also be at most 30 days and verified by T001. Thus a deleted client's data
+  may remain in an older recovery copy for at most 30 days after deletion. New backups
+  exclude already-deleted live data; retention cleanup also removes expired receipts.
+- Restore into an isolated environment. Before enabling any reads or sending email, load
+  the independently retained deletion ledger and reapply each cascade to the restored data.
+  Abort reopening if the ledger is unavailable/incomplete or any deletion cannot be applied.
+  Do not overwrite this ledger with the older backup. Subsequent backups use the reconciled
+  live database so restoration cannot reset the retention clock for deleted client data.
+- Operations tests cover deletion followed by restoration of a pre-deletion backup, expired
+  recovery-copy cleanup, receipt retention, interrupted deletion/retry, and refusal to reopen
+  without the ledger. Delivered messages in external mailboxes are outside this cascade.
+
 ### `email_templates`
 
 | Field | Type | Rules |
@@ -189,6 +258,11 @@ Deleting a client cascades to `client_checklist_state`, `client_emails`, `questi
 | body | TEXT | 1–10000 plain text/limited Markdown; placeholders `{{firstName}}`, `{{lastName}}`, `{{sessionDate}}`, `{{shootType}}`, `{{questionnaireLink}}` |
 | sort_order | INTEGER | |
 
+Reject literal application questionnaire URLs in template subject/body and composed-message
+input before persistence or dispatch; direct the owner to `{{questionnaireLink}}`. Preview
+keeps a descriptive placeholder. A send containing that placeholder creates one new
+same-client invitation and expands every occurrence server-side in transient dispatch data.
+
 ### `client_emails` (history)
 
 | Field | Type |
@@ -196,15 +270,39 @@ Deleting a client cascades to `client_checklist_state`, `client_emails`, `questi
 | id | TEXT PK |
 | client_id | TEXT FK |
 | template_id | TEXT NULL FK (null if template later deleted) |
-| subject | TEXT — as sent |
-| body | TEXT — as sent (owner-authored content, not visitor PII) |
+| questionnaire_invite_id | TEXT NULL FK to `questionnaire_invites.id`; same client required; null for ordinary email |
+| subject | TEXT — rendered subject with questionnaire links replaced by `[questionnaire link omitted]` |
+| body | TEXT — rendered body with questionnaire links replaced by `[questionnaire link omitted]`; private client correspondence, never operational logs |
 | gmail_message_id | TEXT |
 | sent_at | TEXT |
+
+Build the stored subject/body from pre-link-expansion content, separately from the transient
+MIME sent to Gmail. All occurrences are redacted. The associated invitation ID is safe for
+owner-authorized history navigation; do not reconstruct a usable link from it. Serialize
+the field as required nullable `questionnaireInviteId` in `ClientEmail`. D1, API history,
+admin views and backups contain no raw questionnaire tokens. Raw tokens are handled only
+transiently for dispatch/link verification and appear in delivered email; redact them from
+logs and test artifacts. The email row and its invitation association are written together
+after known acceptance; history failures follow the existing reconciliation rules below.
+
+If Gmail acceptance is known but this history write fails, return `email_history_failed`
+with `retryable: false`, emit a sanitized failure signal, and require manual mailbox/history
+reconciliation; never resend merely to obtain a history row. If acceptance is unknown,
+do not fabricate a successful `client_emails` row. Preserve any invitation that may have
+been delivered; only definite non-delivery permits invalidating that send's invitation.
 
 ### `checklist_items` (master) and `client_checklist_state`
 
 `checklist_items`: `id`, `label` (1–120), `sort_order`.
-`client_checklist_state`: `client_id` FK, `item_id` FK, `completed_at` TEXT NULL; PK (`client_id`,`item_id`). Removing a master item deletes its state rows; renaming preserves state (FR-031b).
+`client_checklist_state`: `client_id` FK, `item_id` FK, `completed_at` TEXT NULL; PK (`client_id`,`item_id`).
+
+Master changes apply to all retained clients in one transaction. Adding a master item inserts
+one state row with `completed_at = NULL` for every existing client in the same transaction.
+Retained item IDs preserve each client's completion state through renaming, reordering, and
+repeated saves; repeated saves never duplicate rows or reset progress. Removing a master item
+deletes its per-client state rows. Any failure rolls back both master and state changes.
+Creating a client initializes all current master items with `completed_at = NULL` in the
+client-creation transaction (FR-031b).
 
 ### `questionnaire_questions`
 
@@ -223,13 +321,20 @@ Deleting a client cascades to `client_checklist_state`, `client_emails`, `questi
 |-------|------|-------|
 | id | TEXT PK | |
 | client_id | TEXT FK | |
-| token_hash | TEXT UNIQUE | SHA-256 of 256-bit URL token; raw token appears only in the emailed link `/q/{token}` |
+| token_hash | TEXT UNIQUE | SHA-256 of 256-bit URL token; never persist the raw token, including in email history; raw link is delivered by email and handled transiently for dispatch/verification |
 | questions_snapshot | TEXT | JSON copy of questions at send time (so later edits don't orphan answers) |
 | sent_at | TEXT | |
 | expires_at | TEXT | sent + 30 days |
 | submitted_at | TEXT NULL | set once; further submissions rejected |
 
 State machine: `pending` (now < expires, no submission) → `submitted` | `expired`. Only `pending` accepts `POST`.
+
+Owner-authorized `QuestionnaireInvite` responses MUST include `questionsSnapshot`, mapped
+from `questions_snapshot`, and `answers` (null until submission). Each snapshot preserves
+the original question ID, prompt, kind, options, required flag, and sort order. The client
+detail/history UI pairs answers with this snapshot rather than joining the current question
+master. Editing/deleting/reordering master questions cannot mutate sent snapshots. Public
+link responses continue to use `QuestionnairePublic`; they do not expose owner history.
 
 ### `questionnaire_responses`
 

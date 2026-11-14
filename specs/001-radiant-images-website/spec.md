@@ -6,6 +6,9 @@
 
 **Status**: Draft
 
+**Quality baseline**: Constitution v1.0.0, adopted 2026-11-13; mandatory test-first
+development and end-to-end verification apply to all executable behavior.
+
 **Input**: User description: "Radiant Images MVP Technical Feature Specification — a photography business website for Rebekah (owner) offering maternity, newborn, and family photo shoots, with public information pages, a responsive portfolio gallery, pricing (printable + PDF), FAQs, a CAPTCHA-protected inquiry form that emails a configurable recipient, and an authenticated owner administration area for gallery, banner scheduling, and contact-form configuration."
 
 ## Clarifications
@@ -38,8 +41,9 @@ A prospective client (typically an expecting mother or a parent) lands on the Ra
 6. **Given** a visitor completes the form with valid values and passes CAPTCHA, **When** they submit and email dispatch is accepted, **Then** the submitted information is emailed to the configured recipient and the visitor sees a confirmation that their inquiry was sent (not that a booking is confirmed).
 7. **Given** a visitor has not passed CAPTCHA or has invalid/missing required fields, **When** they attempt to submit, **Then** no email is dispatched, field-level errors are shown, and valid entered values are preserved.
 8. **Given** a visitor selects "Call" or "Text" as preferred contact method, **When** they submit without a phone number, **Then** the form rejects the submission and indicates phone is required for that method.
-9. **Given** the email service is unavailable, **When** a visitor submits a valid inquiry, **Then** the visitor is shown a clear "we couldn't send your inquiry, please try again" message rather than a success confirmation, and their entered values are preserved.
+9. **Given** email dispatch is definitely rejected before provider acceptance, **When** a visitor submits a valid inquiry, **Then** the visitor is shown a clear "we couldn't send your inquiry, please try again" message rather than a success confirmation, and their entered values are preserved.
 10. **Given** a visitor is on a narrow (mobile) viewport, **When** they load any public page, **Then** the gallery reflows to fit the screen and navigation remains usable via a collapsed menu.
+11. **Given** a send may have reached the provider but its result is lost or times out, **When** the visitor receives feedback, **Then** the form preserves their values, states that delivery cannot be confirmed, and displays the owner's approved public contact email as selectable text and an email link without inquiry content. Submit stays disabled while receipt is unknown. After Rebekah checks, the visitor can finish if it arrived, or acknowledge that she asked them to send again and select **Start a new submission**; this retains the draft, requires a fresh CAPTCHA and manual Submit, and preserves server validation/duplicate/rate-limit checks. Opening the email link or waiting alone never enables resend.
 
 ---
 
@@ -58,6 +62,7 @@ A visitor who is comparing photographers wants to see what Radiant Images charge
 3. **Given** a visitor is on any service page, **When** they invoke Download PDF, **Then** a PDF containing the full pricing schedule for all three shoot types, matching the published web pricing, is downloaded.
 4. **Given** PDF generation fails, **When** the visitor invokes Download PDF, **Then** a clear error is shown and the on-page Pricing section and Print action remain available.
 5. **Given** a visitor is in a Pricing section, **When** they select **Book Now**, **Then** the Contact page opens.
+6. **Given** two owner pricing publications have the same timestamp, **When** both saves commit, **Then** exactly one complete revision is current, determined by the last committed publication, and each web/print/PDF rendering uses one complete revision without mixing packages.
 
 ---
 
@@ -73,7 +78,7 @@ Rebekah signs in through the OAuth login at the private admin route, opens the g
 
 1. **Given** Rebekah is authenticated and authorized, **When** she adds a valid image with a shoot-type tag, **Then** the image appears in the public home gallery and in the tagged service page's gallery within the publishing window (see SC-005).
 2. **Given** Rebekah is authenticated and authorized, **When** she removes an image or changes its tag, **Then** the home gallery and the affected service page galleries reflect the change.
-3. **Given** an image upload fails (file too large, unsupported type, or save error), **When** the failure occurs, **Then** the previously published gallery is unchanged and Rebekah sees an actionable error.
+3. **Given** an image upload fails (file too large, unsupported type, missing/blank/overlong alt text, or save error), or an alt-text edit is invalid, **When** the failure occurs, **Then** the previously published gallery is unchanged and Rebekah sees an actionable error.
 4. **Given** the gallery has zero images, **When** a visitor opens Home, **Then** the page renders cleanly with a friendly placeholder instead of a broken or empty area.
 5. **Given** a service page has no images tagged for it, **When** a visitor opens that page, **Then** the page's gallery area is omitted or shows a friendly placeholder, and the rest of the page is unaffected.
 6. **Given** the gallery has one image or many (up to the configured maximum), **When** a visitor opens Home or a service page, **Then** the gallery renders responsively.
@@ -111,6 +116,7 @@ Rebekah changes the email address that receives inquiries, edits the list of sho
 2. **Given** Rebekah saves updated location or referral-source options, **When** a visitor loads a new contact form, **Then** the dropdown shows the updated options.
 3. **Given** Rebekah removes a dropdown option while a visitor has a form open with that option selected, **When** the visitor submits, **Then** the submission is rejected with a message asking them to reselect from the current options.
 4. **Given** Rebekah enters an invalid recipient address, **When** she tries to save, **Then** the save is rejected and the prior recipient remains in effect.
+5. **Given** Rebekah saves an approved public contact email, **When** a visitor loads Contact or encounters uncertain delivery, **Then** that address is shown within the publication budget. The settings editor clearly labels it public; changing the private recipient or sender does not change or expose them through this field. An invalid or empty public address rejects the entire save.
 
 ---
 
@@ -128,10 +134,12 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 2. **Given** Rebekah is in Admin, **When** she creates a client record (name, email, optional phone, shoot type, optional session date), **Then** the client appears in her client list and can be opened.
 3. **Given** Rebekah has at least one saved email template, **When** she selects a client, chooses a template, optionally edits the message, and sends, **Then** the email is delivered to the client's address from the configured sender address and the send is recorded on the client's history.
 4. **Given** Rebekah opens a client's checklist, **When** she marks items complete or incomplete, **Then** the state is saved for that client only and shown on return.
-5. **Given** Rebekah edits the master checklist (add, remove, rename, reorder items), **When** she saves, **Then** new clients receive the updated list; existing clients keep their recorded progress for items that still exist.
+5. **Given** existing clients have different completion states, **When** Rebekah adds, renames, reorders, or removes master checklist items, **Then** every client's checklist reflects the updated master: added items are incomplete, retained items preserve their per-client completion state, and removed items disappear. A client created afterward receives the current checklist with every item incomplete.
 6. **Given** Rebekah sends the questionnaire to a client, **When** the client opens the unique link and submits answers, **Then** the responses are stored against that client and visible to Rebekah; the link cannot be used to view another client's data.
-7. **Given** Rebekah edits the questionnaire questions, **When** she saves, **Then** future questionnaire sends use the new questions and previously collected responses remain readable.
+7. **Given** Rebekah edits, deletes, or reorders questionnaire questions or answer choices, **When** she saves and reopens an existing client's responses, **Then** future sends use the updated master while previous responses remain labeled with the original question wording, types, choices, and order from that invitation's immutable snapshot.
 8. **Given** a questionnaire link has already been submitted or is older than 30 days, **When** a client opens it, **Then** they see a message that the questionnaire is closed, and no further submissions are accepted.
+9. **Given** a client email or invitation send has an uncertain provider outcome, or provider acceptance is known but history recording fails, **When** Rebekah sees the result, **Then** the UI distinguishes those outcomes from definite rejection, preserves the draft, and requires manual mailbox/history verification before any explicit resend. It must not invalidate a possibly delivered invitation or silently resend to repair history.
+10. **Given** an email contains a questionnaire link, **When** Rebekah reviews its history, **Then** the sent-message record shows a non-clickable omitted-link marker and links to the authenticated invitation detail by ID. The actual client email contains the usable link, but application history, owner API responses, backups, logs, and test artifacts contain no raw access token. Pasting an application questionnaire URL into a template or composed message is rejected with guidance to use the questionnaire-link placeholder.
 
 ---
 
@@ -147,6 +155,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **Login expiry**: an expired owner session redirects to login; any unsaved admin changes are not applied.
 - **Image load failure**: a broken image shows an unobtrusive placeholder without breaking the gallery layout.
 - **External service outage** (identity provider, CAPTCHA, email): the site never bypasses verification or authorization and never reports false success.
+- **Uncertain email delivery**: a response lost after dispatch, including a browser-to-API timeout, is not proof of non-delivery. Suppress immediate resends, preserve entered values in the active form, and require manual verification before a new submission. The two-minute duplicate guard is not an exactly-once delivery guarantee.
 - **Unauthorized admin access**: knowing the private admin URL grants nothing; unauthenticated users are sent to login, authenticated non-owners are denied, and the underlying owner operations are equally protected.
 
 ## Requirements *(mandatory)*
@@ -183,32 +192,68 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **FR-017**: System MUST validate every submission on the server regardless of browser-side validation, enforcing field formats, lengths (max 2,000 characters for free-text fields), the date window, and numeric ranges defined in Edge Cases.
 - **FR-018**: System MUST verify the CAPTCHA response before any email dispatch and MUST NOT provide a path to submit that bypasses CAPTCHA.
 - **FR-019**: System MUST email the submitted inquiry to the single owner-configured recipient address (initially `tbd@gmail.com`, to be confirmed before launch), sent from the owner-configured sender address with Reply-To set to the visitor's email. Visitors MUST NOT be able to influence the destination or sender address.
-- **FR-020**: System MUST show the visitor feedback that reflects the actual outcome: success only when the email provider has accepted the message; a retryable error otherwise. Feedback MUST NOT describe the inquiry as a confirmed booking.
+- **FR-020**: System MUST show success only when email-provider acceptance is confirmed; feedback MUST NOT describe the inquiry as a confirmed booking. A definite rejection or failure before dispatch permits an explicit user retry. A timeout, lost response, or other uncertain outcome after dispatch MUST instead report that delivery cannot be confirmed, preserve entered values, and suppress immediate resend until the visitor has checked with the owner and explicitly starts a new submission. Neither the system nor the UI may automatically retry email dispatch.
+  Contact MUST show the owner-approved public contact email before submission and retain it in the active form for outage recovery. After uncertainty, display that selectable address and an email link containing no inquiry data. A visitor may finish after confirmed receipt, or acknowledge that Rebekah checked and requested another send before selecting **Start a new submission**. Restart preserves the draft, resets CAPTCHA, and requires a new manual Submit subject to all existing server checks. Opening the email link, expiry of the duplicate window, or an unresolved receipt check MUST NOT authorize resend.
 - **FR-021**: System MUST preserve valid entered values when a submission fails validation, CAPTCHA, or dispatch.
 - **FR-022**: System MUST prevent duplicate dispatch from repeated clicks or rapid resubmission (see Edge Cases).
-- **FR-023**: System MUST NOT persist inquiry content after processing; the email to the configured recipient is the system of record. Only an operational audit entry (timestamp, outcome, no personal details or message body) is retained. If dispatch fails, the visitor is told to retry — the system does not queue or retry on their behalf.
+- **FR-023**: System MUST NOT persist inquiry content after processing; the email to the configured recipient is the system of record. Retained operational audit entries contain timestamp/outcome and no personal details or message body. The two-minute content-hash duplicate guard contains no raw inquiry fields and is excluded from backups. Release its claim on definite non-delivery; retain it until expiry on accepted or uncertain dispatch. Recovery follows FR-020; no inquiry queue, automatic resend, or persisted inquiry payload is introduced.
 
 **Owner administration**
 
 - **FR-024**: System MUST expose owner administration at a private route and MUST require "Sign in with Google" (OAuth-based) so that the owner's identity is a verified Google account email address.
 - **FR-025**: System MUST authorize only Google account email addresses present on a configured owner allow-list (initially Rebekah's address only); authenticated identities not on the allow-list MUST be denied both the admin pages and all underlying owner operations. The allow-list is maintained by the deployer, not through the admin UI, for MVP.
 - **FR-026**: System MUST expire owner sessions after 24 hours of inactivity and provide an explicit sign-out.
-- **FR-027**: Owner MUST be able to add images to and remove images from the gallery, assign each image exactly one shoot-type tag (Maternity, Newborn, Family, or General), set alternative text, and reorder images; uploads are limited to JPEG/PNG/WebP up to 10 MB each, and the gallery is capped at 60 images in total.
-- **FR-028**: Owner MUST be able to configure the inquiry recipient address, the outgoing sender address (used for inquiry notifications, client template emails, and questionnaire links), the shoot-location options, and the referral-source options; referral-source options MUST initially include Business Card, Word of Mouth, and Social Media.
+- **FR-027**: Owner MUST be able to add images to and remove images from the gallery, assign each image exactly one shoot-type tag (Maternity, Newborn, Family, or General), supply descriptive alternative text (1–200 characters after trimming), and reorder images; uploads are limited to JPEG/PNG/WebP up to 10 MB each, and the gallery is capped at 60 images in total. Portfolio photographs are informative; blank or whitespace-only alternative text MUST be rejected on upload or edit without changing the published gallery.
+- **FR-028**: Owner MUST be able to configure the inquiry recipient address, the outgoing sender address (used for inquiry notifications, client template emails, and questionnaire links), an explicitly public contact email for visitor recovery, the shoot-location options, and the referral-source options; referral-source options MUST initially include Business Card, Word of Mouth, and Social Media. The public contact email is required, labeled public in Admin, and approved by the owner for publication. It is configured independently: private recipient/sender settings MUST NOT be exposed or copied into it automatically.
 - **FR-029**: System MUST reject invalid configuration (e.g., malformed email, empty option list) and retain the previously saved configuration.
 - **FR-030**: System MUST apply owner changes atomically — a failed save MUST NOT partially publish.
 - **FR-031**: Owner MUST be able to create, edit, and delete client records (name, email, optional phone, shoot type, optional session date, notes) and view each client's activity history (emails sent, checklist state, questionnaire status).
 - **FR-031a**: Owner MUST be able to maintain a library of email templates (name, subject, body with simple placeholders such as client first name and session date) and send a template-based email to a selected client, editing the message before sending; emails are sent from the configured sender address with Reply-To set to the same address, and each send MUST be recorded on the client's history.
-- **FR-031b**: Owner MUST be able to maintain a master session checklist (ordered items) and mark items complete/incomplete per client; per-client progress MUST persist independently.
-- **FR-031c**: Owner MUST be able to maintain the client questionnaire (ordered questions with short-text, long-text, or single-choice answers), send a unique questionnaire link to a client, and review that client's responses. Links MUST be single-use, expire after 30 days, and MUST NOT expose any other client's data.
+  Definite non-delivery, uncertain delivery, and confirmed provider acceptance with a failed history write MUST have distinct feedback. The last two outcomes require manual verification/reconciliation and MUST NOT cause a blind resend; a possibly delivered questionnaire invitation remains valid until its normal expiry or client deletion.
+  History MUST retain a token-redacted subject/body and an optional same-client invitation ID instead of a usable questionnaire link. Raw tokens may be handled transiently for dispatch and link verification and appear in delivered email, but MUST NOT be retained in application history, owner responses, logs, backups, or test artifacts. Template/message inputs MUST reject pasted application questionnaire URLs and direct the owner to the questionnaire-link placeholder; previews MUST NOT expose a live token.
+- **FR-031b**: Owner MUST be able to maintain an ordered master session checklist and mark items complete/incomplete independently per client. Adding a master item MUST add it as incomplete to every existing client's checklist. New clients MUST receive all current master items as incomplete. Renaming or reordering an item MUST preserve each client's completion state. Removing an item MUST remove it and its associated per-client state. Master changes MUST apply atomically without resetting progress for retained items. These rules apply to all retained client records.
+- **FR-031c**: Owner MUST be able to maintain the client questionnaire (ordered questions with short-text, long-text, or single-choice answers), send a unique questionnaire link to a client, and review that client's responses. Links MUST be single-use, expire after 30 days, and MUST NOT expose any other client's data. Owner review MUST pair answers with the immutable question snapshot from that invitation, preserving question IDs, wording, types, choices, required flags, and order even after master questions are edited or deleted.
 - **FR-031d**: Owner MUST be able to create a client record pre-filled from an inquiry email's details by manual entry; automatic import from inquiries is not required (inquiries are not stored — see FR-023).
 - **FR-032**: System MUST record an audit entry (who, what, when) for each owner configuration change and each inquiry-processing outcome, without storing the visitor's message body or personal details in logs.
 
 **Accessibility, security, and quality**
 
-- **FR-033**: Public pages and forms MUST be keyboard-operable, with labeled inputs, meaningful image alternative text, visible focus indicators, accessible error messaging, and text/background pairings that meet WCAG 2.1 AA contrast (palette colors may be adjusted in pairing to achieve this).
+- **FR-033**: Public, owner-admin, and questionnaire pages/forms MUST meet WCAG 2.2 AA,
+  including keyboard operation, labeled inputs, meaningful image alternatives, visible
+  and unobscured focus, accessible error messaging, contrast, and text resizing. Palette
+  pairings MUST be adjusted where necessary; reduced-motion preferences MUST be respected.
+  Portfolio photographs MUST have descriptive alternatives under FR-027. Empty `alt=""`
+  is permitted only for non-gallery interface images that are purely ornamental or repeat
+  adjacent equivalent text, convey no unique information, and do not name a control/link.
 - **FR-034**: All traffic MUST be served over HTTPS; user-supplied text MUST be safely handled to prevent injection; credentials and provider secrets MUST never be exposed to the browser.
 - **FR-035**: System MUST apply rate limiting to contact submissions and login attempts to deter abuse.
+
+### Quality Requirements
+
+- **QR-001**: Public photographs MUST have owner-confirmed usage permission, including
+  guardian permission for identifiable children. Public copies MUST omit location and
+  unnecessary embedded metadata; originals, unpublished photographs, and backups remain private.
+- **QR-002**: Live client records, checklist progress, email history, questionnaire invitations,
+  and responses MUST be removed together when the owner deletes a client. Private recovery
+  copies may retain deleted data for at most 30 days after deletion; they MUST NOT be served
+  by application routes. Restores MUST reapply subsequent client deletions before any access
+  resumes, using a durable private deletion ledger outside the database restore set; if the
+  ledger cannot be reconciled, reopening the restored service MUST be blocked. Ledger records
+  contain only client ID and deletion time, expire after 31 days, and are not client profiles.
+  Inquiry content remains transient under FR-023; neither logs nor test artifacts may disclose
+  client details or access tokens. Provider retention capability MUST be verified by T001.
+- **QR-003**: Public pages MUST expose discoverable content, descriptive page metadata,
+  canonical addresses, and a sitemap. Admin and questionnaire pages MUST be excluded from
+  indexing without relying on that exclusion to protect access.
+- **QR-004**: Public pages MUST target LCP <= 2.5 seconds, INP <= 200 milliseconds, and
+  CLS <= 0.1 at the 75th percentile separately for mobile/desktop where sufficient field
+  data exists. Prelaunch checks MUST use documented mobile conditions and identify their
+  limits; image/script budgets and the existing three-second/60-second outcomes apply.
+- **QR-005**: Acceptance evidence MUST cover success, relevant invalid/unauthorized input,
+  provider failures, duplicate actions, and recovery for affected journeys. Automated
+  checks MUST be supplemented by keyboard/screen-reader and print/PDF layout review where
+  relevant. Delivery, publication, and authentication failures MUST be observable without
+  leaking client data; stored data MUST have a rehearsed recovery procedure before release.
 
 ### Key Entities
 
@@ -217,7 +262,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **Banner**: An owner-authored promotion or alert with message text, start date/time, end date/time, and optional link; displayed beneath the header when active.
 - **Pricing Schedule / Package**: The published pricing content for all three shoot types. Each shoot type has an ordered list of one or more Packages (name, price, short description, list of inclusions). The same published revision drives each service page's Pricing section, the print view, and the PDF.
 - **Inquiry**: A visitor's submitted contact form — contact details, preferred contact method, postal code, shoot type, preferred day, special requests, session length, number of people, shoot location, referral source, and message. Transient: delivered by email and not stored.
-- **Site Configuration**: Owner-editable settings — inquiry recipient address, outgoing sender address, shoot-location options, referral-source options, timezone.
+- **Site Configuration**: Owner-editable settings — inquiry recipient address, outgoing sender address, explicitly public contact email, shoot-location options, referral-source options, timezone.
 - **Owner Account**: A verified Google account email address on the owner allow-list, authorized to administer the site.
 - **FAQ Entry**: A question and answer shown on the FAQ page.
 - **Client**: A person Rebekah is actively working with — name, email, optional phone, shoot type, optional session date, notes — with an activity history of emails sent, checklist progress, and questionnaire status.
@@ -230,14 +275,17 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 ### Measurable Outcomes
 
 - **SC-001**: A first-time visitor can navigate from the home page to a service page, pricing, and the Contact page in under 3 clicks each, and can complete and submit an inquiry in under 4 minutes.
-- **SC-002**: 100% of valid, CAPTCHA-verified inquiries submitted during acceptance testing are received at the configured recipient address within 5 minutes.
+- **SC-002**: In a predeclared healthy-provider acceptance run of at least 10 valid, CAPTCHA-verified, nonduplicate inquiries, 100% MUST receive provider acceptance and arrive at the configured recipient within 5 minutes of Submit. Record submitted, accepted, and received counts and individual timings; an unexpected failure remains in the denominator. Predeclared invalid-input, duplicate, injected-outage, and uncertain-delivery cases are assessed separately against their required outcomes and never counted as expected deliveries. Provider mocks cannot satisfy this live-mailbox criterion.
 - **SC-003**: 0 inquiries are dispatched without a passing CAPTCHA, and 0 admin pages or owner operations are reachable by unauthenticated or non-owner users during security testing.
-- **SC-004**: Public pages become visually usable within 3 seconds on a typical mobile connection, and the gallery renders without horizontal scrolling at 320px, 768px, and 1280px widths.
+- **SC-004**: Each public route, including a valid client questionnaire, MUST reach `public-usable` within 3 seconds, measured from navigation start as the median of five independent cold-cache runs using the Mobile Acceptance Profile in plan.md (375 × 812 CSS pixels, DPR 1, 4× CPU slowdown, 1.6 Mbps download, 750 Kbps upload, 150 ms RTT). `public-usable` means the header/navigation, route heading and primary content are visible, route controls are hydrated and operable, and any initial-viewport portfolio image is decoded and painted. Contact additionally requires the complete labeled form and ready CAPTCHA control; a questionnaire requires its full labeled question form; service routes include current pricing once US2 is delivered. Use the fixed 60-image fixture and per-route checks defined in the profile; errors/placeholders cannot stand in for required content. Separately, galleries MUST render without horizontal scrolling at 320px, 768px, and 1280px widths. This lab criterion does not claim field performance.
 - **SC-005**: Owner gallery and configuration changes are visible to the public within 60 seconds of a successful save.
 - **SC-006**: Printed pricing and downloaded PDF pricing match the published web pricing exactly in 100% of spot checks.
 - **SC-007**: Scheduled banners appear and disappear within 60 seconds of their configured start/end times.
-- **SC-008**: At least 90% of acceptance-test participants complete an inquiry on the first attempt without assistance.
-- **SC-009**: All public pages pass automated WCAG 2.1 AA checks with zero critical violations and are fully operable by keyboard.
+- **SC-008**: At least 90% of a predeclared cohort of at least 10 first-time participants (at least five mobile and five desktop) MUST complete an inquiry on their first Submit activation without assistance. Native form hints and corrections before Submit are allowed; any validation/CAPTCHA/dispatch rejection on that first activation, abandonment, or facilitator/navigation/field-entry help counts as failure. Use synthetic details and healthy controlled providers; include every participant who starts, record results by device group, and do not replace unsuccessful participants. The required successes are `ceil(0.9 × participants_started)`; this usability check does not substitute for SC-002 mailbox testing.
+- **SC-009**: All public, owner-admin, and questionnaire routes have no unresolved automated
+  WCAG 2.2 A/AA violations and pass keyboard operation checks; representative screen-reader
+  walkthroughs cover inquiry, owner editing, and questionnaires. Automated scans alone do
+  not establish conformance.
 - **SC-010**: Rebekah can add an image, remove an image, and schedule a banner without documentation or developer assistance in under 5 minutes total.
 - **SC-011**: Rebekah can update a price in Admin and see the change reflected identically in the service-page Pricing sections, print view, and PDF within 60 seconds.
 - **SC-012**: Rebekah can create a client, send a template email, and send a questionnaire in under 3 minutes; 100% of questionnaire links used in testing resolve only to the intended client's record.
@@ -248,19 +296,20 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **Book Now** starts an inquiry; there is no appointment confirmation, availability calendar, online payment, client account, proofing/delivery gallery, or automated marketing in scope.
 - No existing live site, URLs, content, or customer records need to be migrated or preserved.
 - `tbd@gmail.com` is a placeholder recipient; the production address will be confirmed and set by Rebekah before launch.
+- Rebekah must approve and monitor a public business contact email before launch. It can be her business Gmail address, independently configured for public display; `hello@example.invalid` is used only in local/test fixtures and cannot satisfy launch acceptance.
 - Final copy, photographs, logo, pricing, deposit terms, and session policies will be supplied or approved by Rebekah; reference sites inform tone and structure only, and no reference wording or assets will be reproduced.
 - Rebekah holds the rights and client consent for every image she publishes; the system does not verify this.
 - Each shoot type has its own public page containing its description, "How It Works", and a Pricing section; there is no standalone pricing page. Print and PDF always output the complete three-type schedule regardless of which service page they are invoked from.
 - Pricing is owner-edited in Admin; web, print, and PDF are all rendered from the same published revision (no separately uploaded PDF).
 - Inquiries are not stored; the inquiry email is the system of record. Client records in Admin are created manually by Rebekah (typically by copying details from an inquiry email).
 - Radiant Images does not yet own a custom domain. All outgoing email (inquiry notifications, client template emails, questionnaire links) is sent from a single owner-configurable sender address, to be set to Rebekah's business Gmail address once created; the email delivery service must be able to send on behalf of that address. Client email addresses are entered by Rebekah and not independently verified.
-- Client, checklist, and questionnaire data are retained until Rebekah deletes the client record; no automatic purge for MVP.
+- Live client, checklist, email-history, and questionnaire data are retained until Rebekah deletes the client record; no automatic purge of active clients for MVP. Deletion cascades through live records; private recovery copies expire within 30 days and restore-time deletion reconciliation prevents their republication (QR-002). Delivered email in external mailboxes is outside this application deletion scope.
 - Banner schedules use the owner's configured timezone (default America/New_York), inclusive start / exclusive end, and overlapping banners resolve to the most recently started.
 - Contact-form defaults: phone required only for Call/Text; postal code free-text (US format expected but not enforced for MVP); preferred day limited to today through 18 months ahead; session length 1–4 hours in 1-hour steps; party size 1–12; free-text fields limited to 2,000 characters.
 - Visitors do not receive an automatic acknowledgment email for MVP; on-screen confirmation is sufficient.
 - Email delivery is considered successful when the email provider accepts the message; end-to-end delivery tracking is not required.
-- Gallery limits: JPEG/PNG/WebP, 10 MB per image, 60 images maximum in total; images are displayed in owner-defined order with a required shoot-type tag and optional alternative text; no cropping or captions for MVP.
+- Gallery limits: JPEG/PNG/WebP, 10 MB per image, 60 images maximum in total; images are displayed in owner-defined order with a required shoot-type tag and descriptive alternative text of 1–200 trimmed characters (FR-027); no cropping or captions for MVP.
 - Owner sessions expire after 24 hours of inactivity.
-- Browser support targets the current and previous major versions of mainstream desktop and mobile browsers.
+- Browser support covers the current and previous stable major versions, frozen at each release: Chrome, Edge, and Firefox on Windows 11; Safari on macOS; Chrome and Firefox on Android; and Safari on iOS. The release matrix in plan.md assigns actual browser/OS verification to T063; engine emulation cannot establish previous-version or physical-device support. Exact versions and any blocked combinations must be recorded before release.
 - Standard web-hosting availability is acceptable; no formal uptime guarantee is required for MVP, but daily backups of owner-managed content and configuration are expected.
 - Privacy notice text will be supplied by Rebekah; because inquiries are not stored (FR-023), visitor data retention is limited to the email inbox Rebekah controls.

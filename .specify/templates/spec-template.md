@@ -10,6 +10,10 @@
 
 ## User Scenarios & Testing *(mandatory)*
 
+Each story MUST define observable success, relevant invalid/unauthorized input, dependency
+failure, and recovery behavior. Tests are mandatory under the project constitution; capture
+the intended outcomes here and the TDD/test-tool implementation in plan.md and tasks.md.
+
 <!--
   IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
   Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
@@ -102,6 +106,22 @@
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
+
+### Quality Requirements *(mandatory)*
+
+- **QR-001**: Define WCAG 2.2 AA acceptance for affected public, admin, and questionnaire
+  journeys, including keyboard and screen-reader review beyond automated scans.
+- **QR-002**: Define measurable mobile usability, image/layout stability, and publication
+  latency outcomes; preserve the constitution's three-second and 60-second budgets.
+- **QR-003**: Define owner permissions, private/public data and image boundaries, usage
+  permission, metadata removal, retention/deletion, and behavior on denied access.
+- **QR-004**: Define honest inquiry/email status, duplicate prevention, failure recovery,
+  and web/print/PDF consistency where the feature touches these behaviors.
+- **QR-005**: Define crawlable public content and non-indexable private/tokenized routes,
+  plus operational failure signals and recoverability for affected stored data.
+
+Replace these prompts with feature-specific, testable requirements or a justified N/A.
+Do not invent unrelated business features or equate an automated scan with conformance.
 
 ## Success Criteria *(mandatory)*
 

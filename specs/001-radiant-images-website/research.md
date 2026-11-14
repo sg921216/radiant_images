@@ -2,7 +2,17 @@
 
 **Feature**: [spec.md](./spec.md) | **Plan**: [plan.md](./plan.md) | **Date**: 2026-10-17
 
-All "NEEDS CLARIFICATION" / "TBD" items from the plan's Technical Context and the brief's known-unknowns (item 9 — technology & operations; item 10 — quality/privacy targets; item 7 — admin identity) are resolved below. User-confirmed constraints: public site on **GitHub Pages**, **Cloudflare Workers** backend (option C), email via **Rebekah's Gmail**, $0 infrastructure.
+**Constitution reconciliation (2026-11-13)**: React + Cloudflare Workers is confirmed.
+Constitution v1.0.0 adds mandatory TDD, deterministic E2E, WCAG 2.2 AA, media/data privacy,
+SEO/performance budgets, and release evidence. Historical provider/version/quota claims
+below require T001 verification; they are not revalidated by this governance update.
+T001 also resolves image pixel bounds and verifies provider support for the client deletion
+and recovery policy in spec.md QR-002/data-model.md before dependent work. Current test and
+quality rules are specified in plan.md and quickstart.md.
+
+The original design decisions are recorded below. Existing constraints: public site on
+**GitHub Pages**, **Cloudflare Workers** backend, email via **Rebekah's Gmail**, and $0
+infrastructure. Open feasibility and governance obligations are tracked in T001 and plan.md.
 
 ---
 
@@ -57,9 +67,16 @@ All "NEEDS CLARIFICATION" / "TBD" items from the plan's Technical Context and th
 
 1. SPA → `GET /auth/google/start` → Worker stores `state`+`code_verifier` in a short-lived D1 row, redirects to Google.
 2. Google → `GET /auth/google/callback` → Worker exchanges code, validates ID token (`email_verified` must be true), checks `email` against `OWNER_ALLOWLIST` secret (comma-separated).
-3. If allowed, Worker creates a `sessions` row (random 256-bit opaque token, hashed at rest, 24 h sliding inactivity expiry, 7-day absolute cap) and redirects to `https://<pages-origin>/admin/callback#token=<one-time-exchange-code>`.
-4. SPA exchanges the one-time code for the session token via `POST /auth/exchange`, stores it in `sessionStorage`, and sends `Authorization: Bearer <token>` on admin calls.
+3. If allowed, Worker stores only a 60-second identity grant in `exchange_codes` (SHA-256 hash of a random 256-bit one-time code, verified owner email, creation/expiry times), consumes the browser-bound OAuth state, and redirects to `https://<pages-origin>/admin/callback#code=<one-time-exchange-code>`. No session/bearer exists at callback time.
+4. SPA immediately removes the fragment and submits the code once to `POST /auth/exchange`. Worker rechecks the allow-list and atomically consumes the unexpired grant and creates one session storing only the hash of a newly generated 256-bit bearer. Return the raw bearer after commit with `Cache-Control: no-store`; the SPA stores it in `sessionStorage` and sends `Authorization: Bearer <token>` on admin calls. Session clocks start at redemption (24 h sliding inactivity, seven-day absolute cap).
 5. `POST /auth/logout` deletes the session. Non-allow-listed emails get a 403 page and no session.
+
+Concurrent exchanges have one winner; invalid/expired/replayed codes return 400 and an
+owner removed between callback and exchange gets 403 with grant invalidation. Failed
+transactions leave no session and preserve the grant. A lost post-commit response requires
+a fresh Google sign-in, not code replay or raw-token recovery; the unreachable session
+expires normally. Raw codes and bearer tokens never enter server persistence, logs or
+backups. These are explicit T010/T011/T012 acceptance cases.
 
 **Rationale**: Frontend (`*.github.io`) and API (`*.workers.dev`) are different sites; Safari/iOS and increasingly Chrome block third-party cookies, so a cookie session would break the admin on Rebekah's iPhone. A bearer token in `sessionStorage` avoids that, is cleared when the tab closes, and the one-time exchange keeps the long-lived token out of browser history/referrers. Owner authorization is enforced by `requireOwner` middleware on every admin route and on the underlying operations, satisfying the "knowing the URL grants nothing" invariant.
 
@@ -79,13 +96,46 @@ All "NEEDS CLARIFICATION" / "TBD" items from the plan's Technical Context and th
 
 **Quota**: consumer Gmail sends ≤ 500 messages/day via API — far above the ≤ 20 inquiries/day scale.
 
-**Delivery semantics (FR-020)**: success is reported to the visitor only when the Gmail API returns 200 with a message id; any error → visitor sees the retryable error, values preserved, audit event recorded, no retry queue (FR-023).
+**Delivery semantics (FR-020, reconciled 2026-11-13)**: report acceptance only after the
+Gmail API confirms it. A definite rejection/pre-dispatch failure returns `502 email_not_sent`
+with `retryable: true`; a possibly dispatched send whose result is lost or times out returns
+`504 email_outcome_unknown` with `retryable: false`. Preserve values and require manual
+owner/mailbox verification before a new send after uncertainty, including browser/API
+response loss. No automatic resend or inquiry queue is permitted. A known accepted inquiry
+remains 202 if primary audit persistence fails; use sanitized fallback audit and failure
+signals. An accepted owner email whose history write fails returns `500 email_history_failed`
+with `retryable: false` and requires manual reconciliation, not another send. Retain possibly
+delivered invitations; invalidate only on definite non-delivery. Plan.md defines two-second
+provider-call and four-second overall email deadlines. Duplicate claims expire after two
+minutes but expiry is not evidence that resending is safe.
+
+Visitor recovery uses a required, owner-approved `publicContactEmail` exposed on Contact
+and retained in the active form, independent of private sender/recipient settings. A
+selectable address and mailto link without inquiry data let the visitor check receipt with
+Rebekah outside the Worker send path. Receipt confirmed means finish without sending;
+otherwise acknowledge that Rebekah checked and requested another send, then explicitly
+restart with the retained draft, fresh CAPTCHA and manual Submit. Existing duplicate and
+rate limits still apply. Unknown receipt, opening the link or waiting never enables resend.
+
+For template and dedicated questionnaire sends, expand `{{questionnaireLink}}` only in
+transient server dispatch content, creating one same-client invitation per explicit send.
+Retain `[questionnaire link omitted]` in history subject/body plus nullable invitation ID;
+never retain the rendered token-bearing MIME. Reject literal application questionnaire URLs
+in stored templates/composed input. Admin previews/history expose placeholders and an
+authenticated invitation-detail link, not raw tokens. See plan.md and data-model.md for
+the T048/T053 redaction, association and failure cases.
 
 **Alternatives considered**: Resend/Postmark free tiers (cannot legitimately send *from* a gmail.com address — DMARC fails; would require a custom domain the business does not have), SMTP via Workers TCP sockets (no mature library, Gmail requires app passwords), MailChannels (Workers integration discontinued).
 
 ## R-08 Pricing PDF & print (FR-009–011)
 
 **Decision**: The **browser generates the PDF** using `@react-pdf/renderer` from the exact `GET /pricing` JSON (which includes `revisionId`); the print view is a CSS `@media print` stylesheet over the same data. The PDF footer embeds the revision id and publish date so spot checks (SC-006) are trivially verifiable.
+
+The current revision is selected only through `pricing_publication.current_revision_id`.
+Publish revision/packages and change that singleton pointer in one transaction; concurrent
+publications resolve by commit order even with identical timestamps. Bootstrap and pricing
+read pointer/revision/packages consistently; each web/print/PDF render retains one revision.
+T026 tests equal-time publication and rollback; timestamps remain display/audit metadata.
 
 **Rationale**: Workers free tier has no reliable headless Chromium; pure-JS layout (pdf-lib) is laborious; `@react-pdf/renderer` gives declarative layout with the same React components mindset and runs fully client-side at zero cost. Single-revision consistency is guaranteed by rendering from one payload.
 
@@ -115,28 +165,76 @@ Plus the duplicate-inquiry guard (same normalised email + message hash within 2 
 ## R-11 Testing strategy
 
 **Decision**:
+- **Process**: Mandatory red-green-refactor for all executable behavior, including shared
+  foundation, migrations, UI interactions, validation, and defect fixes. Record meaningful
+  failing and passing runs; do not defer tests to the final phase.
 - **Unit**: Vitest for `packages/shared` schemas and web utilities (pricing → PDF model, banner eligibility, date window).
 - **Component**: React Testing Library for forms (required-field logic FR-016, conditional phone), gallery responsiveness via viewport mocks.
 - **API integration**: `@cloudflare/vitest-pool-workers` runs the Worker against local D1/R2 (Miniflare); Gmail/Turnstile/Google calls mocked via `fetchMock`.
 - **Contract**: generated tests assert each endpoint's response matches `contracts/openapi.yaml` schemas.
-- **E2E**: Playwright against `pnpm dev` (web + `wrangler dev`) covering the quickstart scenarios; Turnstile uses the official *always-pass* test site key in non-prod.
-- **Accessibility**: `@axe-core/playwright` on every public route (SC-009).
+- **E2E**: Playwright against the real local React/Worker/D1/R2 stack, with controlled
+  external Google/Gmail/Turnstile adapters including rejection/outage scenarios. Fresh
+  contexts, unique/resettable data, deterministic seeds/cleanup, and controlled time;
+  semantic locators and retrying assertions replace fixed sleeps. Test-only modes must
+  be unreachable in production. Separate live-provider acceptance proves mailbox receipt.
+- **Matrix/CI**: PR Chromium desktop/mobile smoke; complete Chromium/Firefox/WebKit nightly
+  and before release, including 320/768/1280 px checks. Reject focused/flaky tests; at most
+  one diagnostic retry, sanitized traces/screenshots retained seven days, and documented
+  owner/issue/expiry/alternative evidence for any quarantine. Critical checks cannot vanish.
+- **Accessibility**: `@axe-core/playwright` on public/admin/questionnaire routes plus
+  keyboard and representative screen-reader review against WCAG 2.2 AA (SC-009).
 
 ## R-12 CI/CD & environments
 
 **Decision**: GitHub Actions.
-- `ci.yml` on PR: lint (ESLint + Prettier), typecheck, unit/component/integration/contract tests, Playwright e2e.
+- `ci.yml` on PR: formatting/lint, typecheck, production build, unit/component/integration/
+  contract tests, Chromium E2E smoke, dependency/secret checks; full browser matrix nightly
+  and before release. Establish these gates in T006 and complete them in T059.
 - `deploy-api.yml` on push to `main`: `wrangler d1 migrations apply --remote` then `wrangler deploy` (secret `CLOUDFLARE_API_TOKEN`).
 - `deploy-web.yml` on push to `main`: build with `VITE_API_ORIGIN` → `actions/deploy-pages`.
+- Both deployment workflows MUST depend on applicable passing checks and release evidence;
+  pushing to main alone does not satisfy release gates. Document migration/rollback/restore.
 - Environments: `local` (wrangler dev + Vite), `production`. A `preview` Worker environment is optional and free; GitHub Pages has no preview — PR previews rely on local runs.
 
 ## R-13 Data backup (assumption: daily backups)
 
-**Decision**: Daily Cron Trigger in the Worker exports all D1 tables as JSON to a private `backups/` prefix in R2 (30-day retention); D1 Time Travel (30-day point-in-time restore, free) is the primary restore mechanism. R2 image originals are the backup of derived variants.
+**Decision**: Daily Cron Trigger exports durable owner-managed D1 data as JSON to a private
+`backups/` prefix in R2, expiring each copy within 30 days of creation. Exclude transient
+OAuth state, exchange codes, sessions, and inquiry dedupe entries; never introduce inquiry
+payload storage. Provider-managed recovery is supplementary: T001 must verify availability,
+cost and an actual recovery window no longer than 30 days, rather than assume a free 30-day
+Time Travel entitlement. R2 private originals support derived-image recovery under T001's
+verified upload design.
+
+Client deletion removes live records and dependent checklist/email/questionnaire data.
+Older private recovery copies can still contain that data for at most 30 days after deletion;
+they are unavailable to application routes. Maintain client-ID/deletion-time receipts for
+31 days in a separate private `client-deletions/` R2 ledger, outside the database restore set.
+Confirm deletion only when the live cascade and durable receipt are complete; handle partial
+failures idempotently as specified in data-model.md. Restore offline, reapply the independent
+ledger, and verify cascades before allowing reads or email sends. Missing/unreconciled ledger
+evidence blocks reopening. Do not overwrite the ledger with an older backup or create new
+backups from unreconciled data. T050/T058 tests and T063 rehearsal verify this policy (QR-002).
 
 ## R-14 Accessibility & browser targets
 
-**Decision**: WCAG 2.1 AA. Palette pairings verified: Charcoal `#2F3431` on Warm Cream `#F9F6F0` = 12.6:1 ✓; Charcoal on Soft Sage `#9CAF88` = 6.4:1 ✓ (use charcoal text on sage buttons, **not white** — white on sage is 2.4:1 ✗); white on Muted Olive `#6E7A5F` = 4.9:1 ✓; Soft Linen Rose only decorative. Browserslist: `defaults and fully supports es6-module`, i.e., current + previous major evergreen browsers.
+**Decision**: WCAG 2.2 AA for public, admin, and questionnaire routes, with automated and
+manual review. Validate actual rendered palette pairings, focus, labels/errors, resizing,
+and reduced motion; prior palette calculations are not proof of conformance. Browserslist
+controls build targeting, not test coverage. Record the actual Playwright browser versions
+separately from T063's required actual-browser N/N-1 release matrix in plan.md. That matrix
+names browser/OS combinations and requires physical mobile devices or a real-device service.
+Freeze exact versions at release and record per-journey results; unavailable or failed
+combinations remain blocked. Do not infer physical-device or previous-version support
+from emulation. T061 separately enforces plan.md's API/inquiry latency profile; T025/T063
+apply the predeclared SC-002 delivery run and SC-008 cohort/scoring protocol.
+
+Public content must be crawlable with titles/descriptions/canonical URLs and a sitemap;
+private/tokenized routes must be noindex. Responsive derivatives reserve dimensions and
+lazy-load below-fold media, while the primary visible image loads promptly. Use plan.md's
+JS/image budgets and mobile profile for prelaunch evidence, and report field-data gaps.
+Uploads require permission, private originals, safe content/pixel validation, generated
+keys, and EXIF/GPS-free public derivatives under constitution Principles V–VI.
 
 ## R-15 Launch-time configuration (not design decisions)
 
@@ -144,6 +242,7 @@ Plus the duplicate-inquiry guard (same normalised email + message hash within 2 
 |------|-----------|---------------|
 | Inquiry recipient | Admin → Settings (D1 `site_config`) | `tbd@gmail.com` (placeholder; confirm) |
 | Sender address | Admin → Settings; must match Gmail account/alias | Rebekah's business Gmail once created |
+| Public contact email | Admin → Settings; explicitly labeled public, independent of private addresses | Owner-approved monitored business address before launch; local fixtures use `hello@example.invalid` |
 | Owner allow-list | `wrangler secret OWNER_ALLOWLIST` | Rebekah's Google account email |
 | Admin route | SPA `/admin` (unguessable path adds nothing — auth is the control) | `/admin` |
 | Timezone | Admin → Settings | `America/New_York` |
@@ -158,8 +257,9 @@ Plus the duplicate-inquiry guard (same normalised email + message hash within 2 
 | Storage | D1 + R2 (R-03, R-04) |
 | Testing | R-11 |
 | Target platform | GitHub Pages + Cloudflare Workers (R-01, R-02) |
-| Performance / constraints | plan.md Technical Context; verified against free-tier budgets (R-04, R-07, R-09) |
+| Performance / constraints | plan.md Technical Context; provider budgets/entitlements require T001 verification |
 | Email, CAPTCHA, identity provider | R-07, R-05, R-06 |
 | Rate limits, audit, backups, a11y | R-09, R-10, R-13, R-14 |
 
-No NEEDS CLARIFICATION items remain.
+Design choices remain documented; T001 feasibility/data-lifecycle decisions and all
+implementation/release evidence remain open. These are tracked obligations, not passes.
