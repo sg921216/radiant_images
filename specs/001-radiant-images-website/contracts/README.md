@@ -2,6 +2,13 @@
 
 Two external interfaces exist:
 
+**T001 checkpoint (2026-11-13)**: API contract 0.2.0 adds required original image bytes,
+explicit upload/pixel bounds, a 413 upload response, and a required numeric Retry-After
+header. Research R-16 records the remaining decoder/retention feasibility work.
+The frontend host is now owner-approved Cloudflare Workers Static Assets; decoder/retention
+verification remains open. These are design corrections; there is no implemented API or
+passing runtime suite yet.
+
 1. **Worker HTTP API** — [openapi.yaml](./openapi.yaml). Consumed by the SPA; also the surface for contract tests (`apps/api/tests/contract/`).
 2. **SPA route contract** — the public URLs the site must expose (below). These are prerendered by React Router v7 and are the stable links used in navigation, emails, and the questionnaire.
 
@@ -25,13 +32,18 @@ Two external interfaces exist:
 | `/admin/clients`, `/admin/clients/:id` | no | Client list / detail (emails, checklist, questionnaires) | FR-031, 031a–d |
 | `/admin/templates`, `/admin/checklist`, `/admin/questionnaire` | no | Master data editors | FR-031a–c |
 
-GitHub Pages serves `404.html` (a copy of `index.html`) so non-prerendered routes resolve client-side.
+Cloudflare Workers Static Assets serves prerendered public HTML at the frontend origin's
+root basename `/`. The frontend Worker routes valid non-prerendered HTML navigations to
+React Router's generated `__spa-fallback.html` when Home is prerendered. Direct loads and
+refreshes of admin/callback and questionnaire URLs must hydrate the intended route; missing
+asset requests remain 404. The separate API origin always returns its API responses and
+must never fall back to frontend HTML.
 
 ## Cross-cutting API behaviours
 
 | Concern | Contract |
 |---------|----------|
-| CORS | `Access-Control-Allow-Origin` = configured Pages origin only; `Authorization` header allowed; no credentials/cookies |
+| CORS | `Access-Control-Allow-Origin` = exact configured frontend origin (`WEB_ORIGIN`); `Authorization` header allowed; no credentials/cookies |
 | Auth | `Authorization: Bearer <token>`; 401 when missing/expired, 403 when email not allow-listed (re-checked per request). Every protected operation declares both responses in OpenAPI. |
 | Session handoff | Callback stores a hashed 60-second identity grant, with no session yet. Exchange atomically consumes it and stores a fresh bearer hash; return the raw bearer once after commit with `Cache-Control: no-store`. Invalid/expired/used codes: 400; owner removed before redemption: 403 and grant invalidation. Lost response: restart Google sign-in, never recover/replay the token. |
 | Public recovery contact | Required `PublicConfig.publicContactEmail` is explicitly approved for publication, independent of private recipient/sender. Display it before submission and retain it in the active form through failures; never derive it from private fields. |
@@ -114,8 +126,8 @@ invitation and require the existing manual reconciliation without blind resend.
 | FR-031d | `POST /admin/clients` (manual entry) |
 | FR-032 | `audit_events` writes |
 | FR-033 | SPA a11y practices + axe e2e |
-| FR-034 | HTTPS (Pages + Workers), CSP, secrets via `wrangler secret` |
-| FR-035 | Rate Limiting binding |
+| FR-034 | HTTPS (Workers Static Assets + API Worker), CSP/security headers on both static and fallback responses, secrets via `wrangler secret` |
+| FR-035 | Atomic D1 application-window counters; optional short-window Rate Limiting binding (research R-09/R-16) |
 
 ## Gallery and questionnaire response invariants
 

@@ -6,6 +6,12 @@ This guide proves the feature works against the [spec](./spec.md) acceptance sce
 have not been implemented. Constitution v1.0.0 requires red-green-refactor for executable
 behavior and the E2E policy below. T002/T006 implement these scripts and browser projects.
 
+The owner has selected Cloudflare Workers Static Assets for the frontend and completed R2
+enrollment. T001's remaining work is technical feasibility verification in research R-16;
+no additional frontend-host confirmation is needed. The commands below remain planned,
+not successful execution evidence. Gmail consent requires both `gmail.send` and
+`gmail.settings.basic`; sending permission alone cannot perform the required sender lookup.
+
 ## Prerequisites
 
 - Use the supported Node and pnpm versions pinned by T002; install from the committed
@@ -277,13 +283,27 @@ release before the US5 editor exists, the deployer sets the approved value in si
 
 ## Deploy
 
+The frontend and API are separate Workers deployments. Configure `WEB_ORIGIN` on the API
+to the exact frontend HTTPS origin; set the browser's public API origin to the API Worker.
+Use the frontend origin for canonical URLs, sitemap entries, sign-in return links and
+questionnaire emails, with basename `/`. Register the API `/auth/google/callback` URI with
+Google and the frontend hostname with Turnstile. Cloudflare account/deployment access is
+configured locally or through environment-scoped CI secrets; R2 keys do not go in the web
+build. GitHub Actions remains CI; both deployment workflows use pinned Wrangler.
+
+Before deployment, T060 serves the production web build through local Wrangler to verify
+prerendered public routes and the generated SPA fallback for admin/callback/questionnaire
+direct loads and refreshes. Check missing assets return 404 and both static/fallback
+responses carry the intended security headers. A Vite dev-server pass alone is insufficient.
+
 ```bash
 # Secrets (once per environment)
 cd apps/api && for s in GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GMAIL_REFRESH_TOKEN TURNSTILE_SECRET OWNER_ALLOWLIST WEB_ORIGIN; do pnpm dlx wrangler secret put $s; done
 
 # CI does this on push to main; manual equivalent:
 pnpm --filter api run db:migrate:remote && pnpm --filter api run deploy
-pnpm --filter web run build   # VITE_API_ORIGIN, VITE_TURNSTILE_SITE_KEY from GitHub Actions vars → actions/deploy-pages
+pnpm --filter web run build   # public frontend/API origins and Turnstile site key from CI variables
+pnpm --filter web run deploy  # pinned Wrangler + apps/web/wrangler.toml → Workers Static Assets
 ```
 
 Post-deploy smoke: check public navigation and approved test-account sign-in. Any email

@@ -8,11 +8,23 @@
 confirmed by the user; Hono, D1, R2, and the existing hosting design remain selected.
 No application code exists yet; all implementation/CI evidence remains pending.
 
+**Hosting clarification (2026-11-13)**: The owner selected Cloudflare Workers Static Assets
+for the frontend and reports the R2 account is set up. The hosting-choice/account-enrollment
+blocker is resolved. T001 remains open for technical feasibility verification (decoder,
+retention, toolchain and usage budgets); no further hosting confirmation is required.
+See spec.md Clarifications, research R-16 and acceptance.md.
+
 ## Summary
 
 Build a photography business website for Radiant Images with a public marketing site (home gallery, three service pages with "How It Works" + pricing sections, About, FAQ, Contact with CAPTCHA-protected inquiry form) and an owner admin area (gallery, banners, pricing packages, site config, clients, email templates, checklists, questionnaires) protected by Google sign-in with an owner allow-list.
 
-Technical approach: a static React single-page app (Vite + React Router v7) deployed to **GitHub Pages**, backed by a **Cloudflare Worker** API (Hono) using **D1** (SQLite) for data and **R2** for images. Outgoing email is sent through the **Gmail API** as the owner's Gmail account; CAPTCHA is **Cloudflare Turnstile**; owner authentication is Google OpenID Connect with an opaque bearer-token session. The pricing PDF is rendered in the browser from the same published pricing revision that drives the on-page sections and print stylesheet. The $0/no-card hosting target requires T001 verification before dependent work. Full reasoning in [research.md](./research.md).
+Technical approach: a static React single-page app (Vite + React Router v7) deployed to
+**Cloudflare Workers Static Assets**, backed by a separate **Cloudflare Worker** API (Hono)
+using **D1** (SQLite) for data and **R2** for images. Outgoing email uses the **Gmail API**;
+CAPTCHA is **Cloudflare Turnstile**; owner authentication is Google OpenID Connect with an
+opaque bearer-token session. Pricing PDF, page and print use the same published revision.
+Target $0 usage within included allowances; R2 enrollment is owner-completed and no paid-tier
+upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in [research.md](./research.md).
 
 ## Technical Context
 
@@ -26,7 +38,10 @@ that their support status has been revalidated on 2026-11-13.
 - API: Hono 4, Drizzle ORM (D1 driver) + drizzle-kit migrations, Zod (shared validation), `arctic` (Google OAuth 2.0/OIDC client), `@oslojs/crypto` (tokens)
 - Shared: `packages/shared` — Zod schemas and TypeScript types used by both web and API
 
-**Storage**: Cloudflare D1 (SQLite) for all relational data; Cloudflare R2 for image originals and derived sizes; Cloudflare Workers Rate Limiting binding for abuse controls; no inquiry persistence (FR-023)
+**Storage**: Cloudflare D1 (SQLite) for relational data and atomic application rate-window
+counters; Cloudflare R2 for private image originals and validated derived sizes; optional
+Workers Rate Limiting binding for additional 10/60-second filtering. R-16 corrects the
+unsupported ten-minute binding assumption. No inquiry-content persistence (FR-023).
 
 **Testing**: Vitest (unit, web + shared); `@cloudflare/vitest-pool-workers` (API integration against local D1/R2 via Miniflare); React Testing Library (components); Playwright (end-to-end against local stack); contract tests validate API responses against `contracts/openapi.yaml`
 
@@ -39,7 +54,10 @@ smoke on mobile/desktop; nightly and release runs cover Chromium/Firefox/WebKit,
 diagnostic retry with sanitized traces/screenshots retained for seven days. Production
 must reject test adapters/seeding. Live Google, CAPTCHA, and mailbox checks are separate.
 
-**Target Platform**: Public web — evergreen desktop & mobile browsers (current + previous major); static assets on GitHub Pages; API on Cloudflare's edge (`*.workers.dev`, custom domain later)
+**Target Platform**: Public web — evergreen desktop & mobile browsers (current + previous
+major); frontend on Cloudflare Workers Static Assets and API on a separate Cloudflare Worker.
+Use separate configured HTTPS `*.workers.dev` origins initially, with frontend basename `/`;
+custom domain later. Retain exact-origin CORS and the existing bearer-session contract.
 
 **Project Type**: Web application — static SPA frontend + serverless API backend, pnpm monorepo
 
@@ -237,9 +255,10 @@ latency with scripted interactions and disclose that this is not field INP. Afte
 assess LCP <= 2.5 s, INP <= 200 ms, CLS <= 0.1 at p75 by mobile/desktop when field data is
 sufficient. T061 records lab/field limitations rather than inventing a field-data pass.
 
-**Constraints**: Existing $0/month/no-card hosting requirement remains subject to T001
-provider feasibility verification; previous free-tier numbers are not a verified current
-entitlement. Frontend and API have different origins; images <= 10 MB upload, 60 max;
+**Constraints**: Target $0/month usage within included allowances on the selected Cloudflare
+services. The owner has completed R2 enrollment, resolving the earlier no-card enrollment
+blocker; no paid-tier upgrade or new spending budget is selected. T001 must still verify
+usage budgets and overage controls. Frontend and API have different origins; images <= 10 MB upload, 60 max;
 WCAG 2.2 AA for public/admin/questionnaire routes; HTTPS only. Private originals/backups,
 EXIF/GPS-free public derivatives, documented usage permission and client-data lifecycle
 are required. QR-002 and data-model.md define live deletion, a maximum 30-day recovery-copy
@@ -289,7 +308,7 @@ specs/001-radiant-images-website/
 
 ```text
 apps/
-├── web/                          # Vite + React Router v7 SPA → GitHub Pages
+├── web/                          # Vite + React Router v7 SPA → Workers Static Assets
 │   ├── app/
 │   │   ├── routes/
 │   │   │   ├── public/           # home, maternity, newborn, family, about, faq, contact, q.$token
@@ -299,7 +318,9 @@ apps/
 │   │   ├── lib/                  # api client, auth session store, pdf renderer, print styles
 │   │   ├── styles/               # tailwind theme (palette tokens), print.css
 │   │   └── root.tsx
-│   ├── public/                   # logo, favicon, 404.html (SPA fallback)
+│   ├── public/                   # logo, favicon, _headers
+│   ├── worker.ts                 # HTML fallback routing/security headers only; no domain API
+│   ├── wrangler.toml             # build/client assets binding; separate frontend Worker
 │   ├── react-router.config.ts    # ssr:false, prerender list, basename
 │   ├── vite.config.ts
 │   └── tests/                    # vitest + RTL component tests
@@ -318,12 +339,18 @@ packages/
 e2e/                              # Playwright scenarios (quickstart.md maps to these)
 .github/workflows/
 ├── ci.yml                        # lint, typecheck, unit + integration tests, e2e
-├── deploy-web.yml                # build web → GitHub Pages
+├── deploy-web.yml                # build web → wrangler deploy (Workers Static Assets)
 └── deploy-api.yml                # d1 migrations apply → wrangler deploy
 pnpm-workspace.yaml
 ```
 
-**Structure Decision**: Web application layout with two deployables (`apps/web` → GitHub Pages, `apps/api` → Cloudflare Workers) plus one shared validation package so the contact-form and admin validation rules (FR-016/017) are defined once and enforced identically in the browser and on the server. Admin lives inside the same SPA (route-level code splitting) rather than a separate app, per the "one codebase" decision.
+**Structure Decision**: Keep two deployables (`apps/web` → Cloudflare Workers Static Assets,
+`apps/api` → the Hono Worker) plus shared validation. Admin remains in the same React app.
+The frontend Worker serves built assets and routes valid client-only HTML navigations to
+React Router's generated `__spa-fallback.html` when Home is prerendered; it contains no
+business API or server-rendered React. Prerendered public pages keep their own HTML; missing
+asset requests must remain 404. Test root, service, admin/callback and questionnaire direct
+loads/refreshes against the built Worker. T060 replaces the former copied-404 fallback.
 
 ## Complexity Tracking
 
@@ -332,12 +359,14 @@ complexity choices are recorded below; rationale does not waive security or test
 
 | Choice | Why Needed | Simpler Alternative Rejected Because |
 |--------|------------|-------------------------------------|
-| Separate API origin (Workers) instead of all-static | GitHub Pages cannot run server logic required by FR-017/018/019/025 | Static-only cannot verify CAPTCHA, send email, or protect owner operations |
-| Bearer-token session instead of cookies | Frontend (`github.io`) and API (`workers.dev`) are cross-site; Safari blocks third-party cookies | Cookie sessions would silently fail on Safari/iOS until a shared custom domain exists |
+| Separate frontend and API deployments | Preserve independent static-content/API rollout and existing service boundaries | Combining deployments is unnecessary for the requested frontend-host change |
+| Bearer-token session instead of cookies | Preserve verified identity-grant/session behavior across configured frontend/API origins | A cookie migration changes authentication and browser tests beyond this hosting clarification |
 
 ## Post-Design Constitution Re-check
 
-Re-evaluated on 2026-11-13 against constitution v1.0.0: the design retains two deployables
+Re-evaluated after the hosting clarification on 2026-11-13 against constitution v1.0.0:
+Workers Static Assets is compatible with the existing React/Workers/D1/R2 principles;
+no constitution amendment is required. The design retains two deployables
 and shared validation. Spec, plan, tasks, and quickstart now require TDD and the E2E policy.
 The OPEN gates above remain open; T001 must resolve feasibility/data decisions before
 dependent work, and implementation/release gates require actual results. No automatic

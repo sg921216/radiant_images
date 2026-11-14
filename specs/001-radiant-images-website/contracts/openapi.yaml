@@ -1,12 +1,13 @@
 openapi: 3.1.0
 info:
   title: Radiant Images API
-  version: 0.1.0
+  version: 0.2.0
   description: |
-    Cloudflare Worker API consumed by the Radiant Images SPA (GitHub Pages).
+    Cloudflare Worker API consumed by the Radiant Images SPA (Cloudflare Workers Static Assets, separate frontend origin).
     Public endpoints are anonymous. Admin endpoints require `Authorization: Bearer <session token>`
     issued to an allow-listed Google account. All request/response bodies are JSON unless noted.
     Error shape everywhere: `{ "error": { "code": string, "message": string, "fields"?: { [name]: string } } }`.
+    Frontend hosting is owner-approved; T001 technical feasibility remains open (research R-16). This contract is not implementation evidence.
 servers:
   - url: https://radiant-images-api.<account>.workers.dev
     description: production
@@ -50,7 +51,14 @@ components:
       description: Requested resource was not found.
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     TooManyRequests:
-      description: Rate limit exceeded (see research R-09). `Retry-After` header set.
+      description: Application fixed-window rate limit exceeded (see research R-09/R-16). Seconds until the active window resets; does not authorize retrying an uncertain email send.
+      headers:
+        Retry-After:
+          required: true
+          schema: { type: integer, minimum: 1 }
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    PayloadTooLarge:
+      description: Upload body or binary part exceeds its byte ceiling; published gallery remains unchanged.
       content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
     Conflict:
       description: Invariant violated (e.g. gallery cap, duplicate inquiry, questionnaire already submitted).
@@ -130,8 +138,8 @@ components:
         tag: { $ref: '#/components/schemas/GalleryTag' }
         altText: { type: string, minLength: 1, maxLength: 200, pattern: '\S', description: 'Required descriptive alternative for an informative portfolio photograph; trim before validation/storage.' }
         sortOrder: { type: integer }
-        width: { type: integer }
-        height: { type: integer }
+        width: { type: integer, minimum: 1, maximum: 2000 }
+        height: { type: integer, minimum: 1, maximum: 2000 }
         urls:
           type: object
           required: [full, card, thumb]
@@ -227,7 +235,7 @@ components:
           required: [inquiryRecipient, senderAddress]
           properties:
             inquiryRecipient: { type: string, format: email }
-            senderAddress: { type: string, format: email }
+            senderAddress: { type: string, format: email, description: 'Must match the Gmail primary identity or an accepted verified send-as alias. Server lookup requires gmail.settings.basic in addition to gmail.send; failed verification leaves the entire configuration unchanged.' }
 
     InquirySubmission:
       type: object
@@ -508,27 +516,49 @@ paths:
     post:
       tags: [admin-gallery]
       security: [{ ownerSession: [] }]
-      summary: Upload image (browser-resized variants) — multipart
+      summary: Upload private original and browser-prepared variants for server validation — multipart
+      description: |
+        Original bytes are required for authoritative validation and private recovery.
+        MIME, byte counts, dimensions, full decoding and safe derivative metadata are verified
+        server-side; client assertions are not trusted. Reject mismatched claims, malformed or
+        animated input. Preserve visual orientation and strip GPS/unnecessary public metadata.
+        Original dimensions must be 1–16384 per axis and at most 40000000 total pixels.
+        Variant long edges must be at most 2000/800/320 pixels, each axis at least 1.
+        No original or staged object is public. Commit publication only after all validated
+        objects exist; failed writes require cleanup/reconciliation with no partial publication.
+        Byte ceilings are enforced while reading, regardless of Content-Length. Oversized
+        requests return 413; invalid content/dimensions/claims return 400 with field errors.
+        T001's bounded decoder feasibility proof is still required before implementation.
+      x-upload-limits:
+        requestBytes: 16777216
+        originalBytes: 10485760
+        originalMaxAxis: 16384
+        originalMaxPixels: 40000000
+        fullBytes: 2097152
+        cardBytes: 1048576
+        thumbBytes: 262144
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
               type: object
-              required: [tag, altText, full, card, thumb, width, height, originalMime, originalBytes]
+              required: [tag, altText, original, full, card, thumb, width, height, originalMime, originalBytes]
               properties:
                 tag: { $ref: '#/components/schemas/GalleryTag' }
                 altText: { type: string, minLength: 1, maxLength: 200, pattern: '\S', description: 'Required descriptive alternative; trim before validation/storage.' }
-                full: { type: string, format: binary, description: 'image/webp ≤ 2000px' }
-                card: { type: string, format: binary }
-                thumb: { type: string, format: binary }
-                width: { type: integer }
-                height: { type: integer }
+                original: { type: string, format: binary, description: 'Actual JPEG/PNG/WebP source, 1–10485760 bytes; private storage only. Dimensions and full content are independently checked.' }
+                full: { type: string, format: binary, description: 'Static metadata-clean WebP, long edge ≤ 2000px, 1–2097152 bytes.' }
+                card: { type: string, format: binary, description: 'Static metadata-clean WebP, long edge ≤ 800px, 1–1048576 bytes.' }
+                thumb: { type: string, format: binary, description: 'Static metadata-clean WebP, long edge ≤ 320px, 1–262144 bytes.' }
+                width: { type: integer, minimum: 1, maximum: 2000, description: 'Claimed full-variant width; must match decoded content.' }
+                height: { type: integer, minimum: 1, maximum: 2000, description: 'Claimed full-variant height; must match decoded content.' }
                 originalMime: { type: string, enum: [image/jpeg, image/png, image/webp] }
-                originalBytes: { type: integer, maximum: 10485760 }
+                originalBytes: { type: integer, minimum: 1, maximum: 10485760, description: 'Claim must equal actual original byte length.' }
       responses:
         '201': {"description": "Created", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/GalleryImage"}}}}
         '400': {"$ref": "#/components/responses/BadRequest"}
+        '413': {"$ref": "#/components/responses/PayloadTooLarge"}
         '401': {"$ref": "#/components/responses/Unauthorized"}
         '403': {"$ref": "#/components/responses/Forbidden"}
         '409': {"$ref": "#/components/responses/Conflict"}

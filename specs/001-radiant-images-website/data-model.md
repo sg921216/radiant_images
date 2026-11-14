@@ -6,6 +6,11 @@ Conventions: all ids are ULIDs (`TEXT`, 26 chars, sortable); timestamps are ISO-
 
 Enum `shoot_type`: `maternity | newborn | family`. Enum `gallery_tag`: `shoot_type ∪ general`.
 
+**T001 checkpoint (2026-11-13)**: The corrections below are design requirements, not
+implemented/verified behavior. Frontend hosting is resolved to Cloudflare Workers Static
+Assets and the owner reports R2 enrollment complete. Strict recovery expiry and bounded
+server image decoding remain open in research R-16. No retention exception is approved.
+
 ---
 
 ## Public-content entities
@@ -21,9 +26,23 @@ Enum `shoot_type`: `maternity | newborn | family`. Enum `gallery_tag`: `shoot_ty
 | width / height | INTEGER | of `full` variant |
 | original_mime | TEXT | `image/jpeg \| image/png \| image/webp` |
 | original_bytes | INTEGER | ≤ 10 485 760 |
+| original_width / original_height | INTEGER | derived from validated original bytes; each 1–16 384; product ≤ 40 000 000 |
 | created_at / updated_at | TEXT | |
 
-Invariants: `COUNT(*) ≤ 60` enforced in the insert transaction (FR-027). Variants `full`, `card`, `thumb` must all exist in R2 before the row is committed; on any R2 failure the row is not written and uploaded objects are deleted (FR-030).
+Invariants: `COUNT(*) ≤ 60` enforced in the insert transaction (FR-027). The private original
+and variants `full`, `card`, `thumb` must all exist in R2 before the row is committed;
+on any R2 failure the row is not written and staged objects are removed, with failed cleanup
+recorded for idempotent reconciliation (FR-030). Originals use generated keys under
+`originals/{id}/source`; only the three variants of a published row are publicly readable.
+
+T001 upload correction: send the original binary, not just claimed original metadata.
+Server validation derives MIME, byte length and dimensions from actual content and rejects
+claims that disagree. Full/card/thumb WebP long edges are ≤ 2000/800/320 pixels, with byte
+ceilings 2 MiB/1 MiB/256 KiB and at least one pixel per axis. Total multipart input is
+bounded to 16 MiB. Original limits above are application design bounds, not evidence of
+Worker decoding capacity. Reject malformed/animated input and verify orientation and
+EXIF/GPS-free derivatives. Browser validation is early feedback only; the bounded server
+decoder/transform path still needs the feasibility proof in research R-16 before implementation.
 
 Queries: home gallery = all ordered by `sort_order`; service page = `WHERE tag = :shootType` ordered.
 
@@ -157,6 +176,31 @@ The hash is a short-lived operational guard, not an inquiry record. Exclude thes
 from backups and remove expired rows. Expiry does not authorize the UI to resend an
 uncertain submission; manual verification remains necessary under FR-020.
 
+### `rate_limit_windows` (FR-035; T001 correction)
+
+| Field | Type / rules |
+|-------|--------------|
+| group_name | TEXT; inquiry, auth, questionnaire, or admin mutation policy |
+| subject_hash | TEXT; HMAC of trusted client IP, or owner session identity; never raw IP/bearer/token |
+| window_start | INTEGER; UTC epoch seconds, aligned to policy period |
+| request_count | INTEGER; positive and at most the configured limit |
+| expires_at | INTEGER; window start + policy period |
+
+Composite primary key: `(group_name, subject_hash, window_start)`. Use an atomic conditional
+insert/increment to admit requests; denial cannot dispatch email or create auth state.
+R-09 defines 600-second windows for inquiry/auth/questionnaire and 60 seconds for admin
+mutations. These are fixed windows; test the boundary burst explicitly. Return 429 with
+`Retry-After = max(1, ceil(expires_at - now))` on denial. Separate endpoint-group keys;
+do not include questionnaire tokens or inquiry fields in keys. A trusted IP comes from
+Cloudflare's request header in production; test fixtures provide explicit synthetic identities.
+Use a server-secret HMAC key and keep rotation from resetting active windows.
+
+Exclude counters from application backups and logs. Expired rows do not affect admission;
+periodic cleanup must remove them promptly. Provider-managed D1 Time Travel can retain
+historical operational hashes for its documented seven-day free-plan recovery window;
+application-level backup exclusion cannot remove them from provider-managed history.
+No raw inquiry payload, IP, bearer, or questionnaire token is introduced by these counters.
+
 ---
 
 ## Owner & security entities
@@ -226,6 +270,20 @@ Google sign-in; no token-recovery endpoint exists and unreachable sessions expir
 Deleting a client cascades to `client_checklist_state`, `client_emails`, `questionnaire_invites`, `questionnaire_responses`.
 
 ### Client deletion and recovery lifecycle (QR-002)
+
+T001 provider correction: D1 Free Time Travel retains seven days (Paid: 30 days).
+R2 lifecycle expiration is asynchronous and cannot prove an exact 30-day deletion maximum
+or exact 31-day receipt removal by itself. Keep the existing deadlines below. T058 must
+use explicit early deletion, verify removal, signal failures and block restore access to
+overdue backups. An unresolved provider-outage guarantee is still an OPEN feasibility gate;
+neither a lifecycle rule nor a nominal cron schedule counts as proof. Sources and remaining
+decisions are in research R-16.
+
+Live client records and their questionnaire/email/checklist data remain until owner deletion;
+30-day invitation expiry closes access but does not itself delete retained owner responses.
+The owner deletion cascade removes both submitted and expired invitation data. External
+mailbox retention remains outside application deletion. Recovery-copy expiry never extends
+live retention or permits deleted data to reappear after a restore.
 
 - The live cascade is transactional. Confirm deletion only after both the cascade and a
   durable private deletion receipt exist. Retry/reconcile interrupted operations idempotently;

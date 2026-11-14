@@ -21,6 +21,10 @@ development and end-to-end verification apply to all executable behavior.
 - Q: Which account does Rebekah use to sign in to Admin? → A: Sign in with Google; authorization is granted only to allow-listed Google account email address(es), initially Rebekah's.
 - Q: What address are client emails and inquiry notifications sent from? → A: An owner-configurable sender address (no custom domain exists yet); it will be set to Rebekah's business Gmail address once created.
 
+### Session 2026-11-13
+
+- Q: Which service should host the frontend? → A: Switch from GitHub Pages to Cloudflare Workers Static Assets.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Discover Services and Submit an Inquiry (Priority: P1)
@@ -292,6 +296,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 
 ## Assumptions
 
+- The owner-selected frontend host is Cloudflare Workers Static Assets. Public pages, owner sign-in return links, and questionnaire links must work when opened directly or refreshed. The owner has already set up the R2 account; deployment access will be configured during implementation.
 - Rebekah is the sole administrator at launch; additional owners can be added by extending the allow-list, but no admin UI for managing owners is required for MVP.
 - **Book Now** starts an inquiry; there is no appointment confirmation, availability calendar, online payment, client account, proofing/delivery gallery, or automated marketing in scope.
 - No existing live site, URLs, content, or customer records need to be migrated or preserved.

@@ -10,22 +10,45 @@ T001 also resolves image pixel bounds and verifies provider support for the clie
 and recovery policy in spec.md QR-002/data-model.md before dependent work. Current test and
 quality rules are specified in plan.md and quickstart.md.
 
-The original design decisions are recorded below. Existing constraints: public site on
-**GitHub Pages**, **Cloudflare Workers** backend, email via **Rebekah's Gmail**, and $0
-infrastructure. Open feasibility and governance obligations are tracked in T001 and plan.md.
+Current design decisions are recorded below. The owner selected **Cloudflare Workers
+Static Assets** for the frontend and has set up R2. The **Cloudflare Workers** backend and
+email via **Rebekah's Gmail** remain selected, targeting $0 usage within included allowances.
+Open technical feasibility and governance obligations are tracked in T001 and plan.md.
+
+**T001 checkpoint (2026-11-13): PARTIAL.** Hosting selection and R2 enrollment are resolved;
+decoder, retention, toolchain and usage-budget verification remain open. R-16 supersedes
+historical feasibility claims where noted. No additional hosting confirmation is required.
 
 ---
 
 ## R-01 Frontend framework & hosting
 
-**Decision**: React 19 + TypeScript on Vite 6 using **React Router v7 in framework mode** with `ssr: false`. Public routes are prerendered to static HTML at build time; admin and questionnaire routes are client-rendered. Deployed to GitHub Pages via GitHub Actions. A `404.html` copy of `index.html` provides SPA fallback for non-prerendered routes.
+**Decision (owner clarification, 2026-11-13)**: React 19 + TypeScript on a supported Vite
+version pinned by T002, using **React Router v7 framework mode** with `ssr: false`. Public
+routes remain prerendered; admin/questionnaire routes remain client-rendered. Deploy the
+frontend to **Cloudflare Workers Static Assets** using GitHub Actions and pinned Wrangler.
+Keep a separate API Worker and existing bearer-session/CORS behavior. Frontend basename is `/`.
 
-**Rationale**: Matches the user's "Vite" preference; prerendering gives crawlable, fast first paint for the marketing pages (SC-004) while keeping the admin in the same codebase. GitHub Pages is free, HTTPS by default, and the user's stated host.
+**Rationale**: Implements the owner's explicit host selection while preserving crawlable
+marketing pages and the existing app boundaries. Asset routing must serve React Router's
+generated SPA fallback for client routes. Because Home is prerendered, that file is
+`__spa-fallback.html`; blindly enabling an `index.html` fallback would use Home's document.
+T060 verifies public HTML, direct admin/callback/questionnaire navigation, refreshes and
+real 404s for missing assets. The frontend Worker only handles asset/fallback responses.
+Sources: [React Router prerendering](https://reactrouter.com/how-to/pre-rendering),
+[Workers routing](https://developers.cloudflare.com/workers/static-assets/routing/worker-script/),
+[SPA mode](https://developers.cloudflare.com/workers/static-assets/routing/single-page-application/).
+
+Use `public/_headers` for static security headers and attach equivalent headers to Worker
+fallback responses, including private-route noindex and no-referrer protection for tokenized
+links. `_headers` does not apply to Worker-generated responses. Source:
+[Workers asset headers](https://developers.cloudflare.com/workers/static-assets/headers/).
 
 **Alternatives considered**:
 - *Next.js App Router* — needs a Node/edge server or `output: 'export'`, which disables most of what makes Next attractive; not Vite.
 - *Astro + React islands* — excellent for static content, but the admin SPA would be a second mental model; build-time image optimization doesn't help owner-uploaded runtime images.
-- *Cloudflare Workers Static Assets* for the SPA — would eliminate the cross-origin auth problem (R-06); rejected only because the user explicitly chose GitHub Pages. **Documented as the recommended future migration** if cross-origin friction arises.
+- *GitHub Pages* — previous host selection, superseded by the owner's explicit Workers
+  Static Assets instruction. GitHub remains the repository/CI service.
 
 ## R-02 Backend runtime & framework
 
@@ -45,9 +68,20 @@ infrastructure. Open feasibility and governance obligations are tracked in T001 
 
 ## R-04 Image storage & delivery
 
-**Decision**: Images stored in **Cloudflare R2**. The admin SPA **resizes and re-encodes in the browser** (Canvas → WebP) before upload, producing three variants: `full` (max 2000 px long edge), `card` (max 800 px), `thumb` (max 320 px). The Worker validates type/size (≤ 10 MB original, JPEG/PNG/WebP), writes the three objects, and serves them at `GET /images/{id}/{variant}` with `Cache-Control: public, max-age=31536000, immutable`.
+**Decision, corrected by T001**: Images stored in the owner's configured **Cloudflare R2**
+account, subject to R-16's usage-budget verification. The admin SPA prepares WebP
+`full`/`card`/`thumb` variants at 2000/800/320px maximum
+long edges and uploads them together with the private original. The Worker independently
+validates actual binary content, dimensions and metadata under contract 0.2.0, then stages
+all four objects before publishing. Only published variants are served at
+`GET /images/{id}/{variant}` with `Cache-Control: public, max-age=31536000, immutable`.
+The bounded server decoding/transform implementation is still an OPEN R-16 proof; browser
+conversion alone cannot establish safety or recovery.
 
-**Rationale**: Workers cannot run `sharp`/libvips on the free tier, so client-side resizing is the zero-cost way to get responsive images. Serving through the Worker (rather than the `r2.dev` public URL, which Cloudflare labels rate-limited/not-for-production) keeps URLs stable and lets us switch to a custom domain later without changing references. Immutable caching means repeat views cost no Worker requests.
+**Rationale**: Browser preparation reduces upload work, but the historical claim that it
+alone makes secure zero-cost processing feasible is withdrawn pending R-16. Serving
+published variants through the Worker keeps originals/private prefixes inaccessible and
+URLs stable. Client caching reduces repeat requests; it does not remove cold-load quotas.
 
 **Budget check**: 60 images × 3 variants; a home-page view requests ~60 `card` images on first visit → ~1.7k uncached page views/day before hitting the 100k/day cap. Acceptable for MVP; migrate to R2 custom domain if traffic grows.
 
@@ -67,7 +101,7 @@ infrastructure. Open feasibility and governance obligations are tracked in T001 
 
 1. SPA → `GET /auth/google/start` → Worker stores `state`+`code_verifier` in a short-lived D1 row, redirects to Google.
 2. Google → `GET /auth/google/callback` → Worker exchanges code, validates ID token (`email_verified` must be true), checks `email` against `OWNER_ALLOWLIST` secret (comma-separated).
-3. If allowed, Worker stores only a 60-second identity grant in `exchange_codes` (SHA-256 hash of a random 256-bit one-time code, verified owner email, creation/expiry times), consumes the browser-bound OAuth state, and redirects to `https://<pages-origin>/admin/callback#code=<one-time-exchange-code>`. No session/bearer exists at callback time.
+3. If allowed, Worker stores only a 60-second identity grant in `exchange_codes` (SHA-256 hash of a random 256-bit one-time code, verified owner email, creation/expiry times), consumes the browser-bound OAuth state, and redirects to `<WEB_ORIGIN>/admin/callback#code=<one-time-exchange-code>`, where WEB_ORIGIN is the configured HTTPS frontend origin on Workers Static Assets. No session/bearer exists at callback time.
 4. SPA immediately removes the fragment and submits the code once to `POST /auth/exchange`. Worker rechecks the allow-list and atomically consumes the unexpired grant and creates one session storing only the hash of a newly generated 256-bit bearer. Return the raw bearer after commit with `Cache-Control: no-store`; the SPA stores it in `sessionStorage` and sends `Authorization: Bearer <token>` on admin calls. Session clocks start at redemption (24 h sliding inactivity, seven-day absolute cap).
 5. `POST /auth/logout` deletes the session. Non-allow-listed emails get a 403 page and no session.
 
@@ -78,17 +112,21 @@ a fresh Google sign-in, not code replay or raw-token recovery; the unreachable s
 expires normally. Raw codes and bearer tokens never enter server persistence, logs or
 backups. These are explicit T010/T011/T012 acceptance cases.
 
-**Rationale**: Frontend (`*.github.io`) and API (`*.workers.dev`) are different sites; Safari/iOS and increasingly Chrome block third-party cookies, so a cookie session would break the admin on Rebekah's iPhone. A bearer token in `sessionStorage` avoids that, is cleared when the tab closes, and the one-time exchange keeps the long-lived token out of browser history/referrers. Owner authorization is enforced by `requireOwner` middleware on every admin route and on the underlying operations, satisfying the "knowing the URL grants nothing" invariant.
+**Rationale**: Retain the existing token handoff when moving the frontend host. Frontend and
+API still have separate configured origins; bearer authentication avoids a new dependency
+on cross-origin cookie behavior. The one-time exchange and sessionStorage token rules remain
+unchanged. Owner authorization is enforced by `requireOwner` on every admin operation.
 
 **Hardening**: strict CSP on the SPA (only self + Turnstile + API origin), no third-party scripts in admin, token hashed in D1, rate-limited auth endpoints.
 
 **Alternatives considered**: Auth.js (designed around cookies/Next; heavy on Workers), Cloudflare Access (free for ≤ 50 users but gates the whole origin and requires a custom domain), HttpOnly `SameSite=None` cookie (Safari ITP failure mode), Firebase Auth (extra vendor).
 
-**Future**: once a custom domain exists and both SPA and API share it, switch to HttpOnly cookies — only `apps/web/app/lib/auth.ts` and the `auth.ts` route file change.
+**Future**: A same-origin or HttpOnly-cookie migration requires a separate authentication
+design and test review; it is not part of this frontend hosting change.
 
 ## R-07 Outgoing email (FR-019, FR-028, FR-031a/c)
 
-**Decision**: **Gmail API** (`users.messages.send`) called from the Worker using a stored OAuth 2.0 **refresh token** for Rebekah's Google account (scope `https://www.googleapis.com/auth/gmail.send`). The `From` header is the owner-configured sender address (must be the authenticated Gmail account or one of its verified "Send mail as" aliases — the Worker validates this on save). Inquiry notifications set `Reply-To` to the visitor's email; client emails set `Reply-To` to the sender address.
+**Decision (scope correction, T001)**: **Gmail API** (`users.messages.send`) called from the Worker using a stored OAuth 2.0 **refresh token** for Rebekah's Google account with both `https://www.googleapis.com/auth/gmail.send` and `https://www.googleapis.com/auth/gmail.settings.basic`. Sending permission alone cannot list send-as identities. The `From` header is the owner-configured sender address (must be the authenticated Gmail account or one of its verified "Send mail as" aliases — the Worker validates this on save). Inquiry notifications set `Reply-To` to the visitor's email; client emails set `Reply-To` to the sender address. See R-16 for consent and verification limits.
 
 **Setup (one-time, documented in quickstart)**: create a Google Cloud project; configure the OAuth consent screen as *External* and **publish it to Production** (unverified-app warning is shown only to Rebekah during the single consent); run `scripts/gmail-consent.ts` locally to obtain the refresh token; store as `GMAIL_REFRESH_TOKEN` secret. The same OAuth client is reused for owner sign-in (R-06).
 
@@ -143,7 +181,12 @@ T026 tests equal-time publication and rollback; timestamps remain display/audit 
 
 ## R-09 Rate limiting & abuse controls (FR-035)
 
-**Decision**: Cloudflare **Workers Rate Limiting binding** (available on free tier), keyed by client IP (`CF-Connecting-IP`):
+**Required policy; implementation correction (T001)**: Preserve the following limits.
+The Workers Rate Limiting binding alone cannot implement the ten-minute windows below:
+its supported periods are only 10 or 60 seconds, with approximate per-location counts.
+Use atomic D1 counters for the application policy; an optional binding may provide an
+additional short-window abuse filter. Never configure a binding with `period = 600` or
+silently replace ten-minute limits with one-minute limits. See R-16 and data-model.md.
 
 | Endpoint group | Limit |
 |----------------|-------|
@@ -154,7 +197,8 @@ T026 tests equal-time publication and rollback; timestamps remain display/audit 
 
 Plus the duplicate-inquiry guard (same normalised email + message hash within 2 min) stored in D1 with a 2-minute TTL cleanup.
 
-**Alternatives considered**: KV counters (eventually consistent), D1 counters (write amplification), Cloudflare WAF rate rules (require custom domain / paid).
+**Alternatives considered**: KV counters (eventually consistent); D1 counters now required
+for the stated application windows despite write cost; provider binding alone is insufficient.
 
 ## R-10 Audit log & observability (FR-032)
 
@@ -191,16 +235,20 @@ Plus the duplicate-inquiry guard (same normalised email + message hash within 2 
   contract tests, Chromium E2E smoke, dependency/secret checks; full browser matrix nightly
   and before release. Establish these gates in T006 and complete them in T059.
 - `deploy-api.yml` on push to `main`: `wrangler d1 migrations apply --remote` then `wrangler deploy` (secret `CLOUDFLARE_API_TOKEN`).
-- `deploy-web.yml` on push to `main`: build with `VITE_API_ORIGIN` → `actions/deploy-pages`.
+- `deploy-web.yml` on push to `main`: build with public frontend/API origins and Turnstile
+  site key, then use pinned `wrangler deploy` with `apps/web/wrangler.toml` to publish Workers
+  Static Assets and its fallback router. Use environment-scoped Cloudflare CI credentials.
 - Both deployment workflows MUST depend on applicable passing checks and release evidence;
   pushing to main alone does not satisfy release gates. Document migration/rollback/restore.
-- Environments: `local` (wrangler dev + Vite), `production`. A `preview` Worker environment is optional and free; GitHub Pages has no preview — PR previews rely on local runs.
+- Environments: `local` (API wrangler dev + Vite; built web Worker for deployment/E2E checks),
+  `production`. Optional isolated preview Workers require explicit origin/provider configuration;
+  they must not inherit production data or credentials. CI uses the isolated local stack.
 
 ## R-13 Data backup (assumption: daily backups)
 
 **Decision**: Daily Cron Trigger exports durable owner-managed D1 data as JSON to a private
 `backups/` prefix in R2, expiring each copy within 30 days of creation. Exclude transient
-OAuth state, exchange codes, sessions, and inquiry dedupe entries; never introduce inquiry
+OAuth state, exchange codes, sessions, rate-limit counters, and inquiry dedupe entries; never introduce inquiry
 payload storage. Provider-managed recovery is supplementary: T001 must verify availability,
 cost and an actual recovery window no longer than 30 days, rather than assume a free 30-day
 Time Travel entitlement. R2 private originals support derived-image recovery under T001's
@@ -256,10 +304,126 @@ keys, and EXIF/GPS-free public derivatives under constitution Principles V–VI.
 | Primary dependencies | R-01, R-02, R-03, R-05, R-06, R-08 |
 | Storage | D1 + R2 (R-03, R-04) |
 | Testing | R-11 |
-| Target platform | GitHub Pages + Cloudflare Workers (R-01, R-02) |
+| Target platform | Cloudflare Workers Static Assets frontend + separate API Worker (R-01, R-02) |
 | Performance / constraints | plan.md Technical Context; provider budgets/entitlements require T001 verification |
 | Email, CAPTCHA, identity provider | R-07, R-05, R-06 |
 | Rate limits, audit, backups, a11y | R-09, R-10, R-13, R-14 |
 
 Design choices remain documented; T001 feasibility/data-lifecycle decisions and all
 implementation/release evidence remain open. These are tracked obligations, not passes.
+
+## R-16 T001 feasibility checkpoint — 2026-11-13
+
+Status: **PARTIAL — hosting decision resolved; technical verification pending**. This is
+documentation/source verification, not a deployed-account, image-decoder, installation,
+or production-performance test. The agent has not enabled subscriptions, accessed payment
+details/credentials, or deployed infrastructure.
+
+**Owner follow-up**: The owner reports that their R2 account is now set up. Account
+enrollment is no longer an owner action blocking progress; this is user-reported readiness,
+not an authenticated deployment check. The owner subsequently selected Cloudflare Workers
+Static Assets for the frontend. Both owner decisions are resolved. No R2 access keys are
+needed for local implementation; deployment access can be configured later. Decoder,
+retention, toolchain and usage-budget verification remain technical work for the agent.
+
+### Hosting decision resolved
+
+- **R2**: Cloudflare requires an R2 subscription through checkout. Standard storage includes
+  10 GB-month, one million Class A and ten million Class B operations monthly; additional
+  usage is billed. The general billing setup requires a primary payment method to purchase
+  services and permits alternatives to cards. Taken together, these do **not** establish a
+  no-billing/no-card deployment or a guaranteed $0 ceiling for this project. The owner has
+  now completed enrollment, so that earlier prerequisite is resolved. Continue using the
+  existing R2 account and target included allowances; verify usage controls without selecting
+  a paid-tier upgrade or assuming a new spending budget. Sources: [R2 setup](https://developers.cloudflare.com/r2/get-started/),
+  [pricing](https://developers.cloudflare.com/r2/pricing/),
+  [billing setup](https://developers.cloudflare.com/billing/get-started/create-billing-profile/).
+- **Superseded GitHub Pages choice**: GitHub restricts using Pages to run an online business or a site primarily
+  facilitating commercial transactions. Applying that restriction to this photography
+  pricing/inquiry site is an inference, not a GitHub ruling on this account. Its suitability
+  was not treated as verified; the owner has now selected a different host. Source: [Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+- **Owner-approved selection**: Keep React, Hono, D1 and R2; serve the prerendered
+  frontend through Workers Static Assets, with the modular API and existing bearer-session
+  design retained. Static asset requests/storage have no additional charge; requests that
+  execute Worker code follow Workers quotas. The frontend and API remain separate deployables;
+  R2 enrollment has separately been completed by the owner. Source:
+  [Static Assets billing](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/).
+
+The owner instruction is explicit: switch the frontend to Cloudflare Workers Static Assets.
+Record it in spec.md and use it for implementation without asking again. The backend/storage
+principles remain compatible with constitution v1.0.0, so no constitution amendment is needed.
+
+### Verified technical corrections
+
+- **Rate limits**: binding periods are 10 or 60 seconds, Wrangler must be at least 4.36.0,
+  and counters are approximate per Cloudflare location. Preserve R-09's policy using atomic
+  D1 fixed-window counters, keyed by endpoint group and HMAC of trusted IP (owner session ID
+  for admin mutations), with a required numeric `Retry-After`. This is an application design
+  choice; concurrency/boundary tests and D1 write-budget checks remain T007/T009 work.
+  Source: [binding documentation](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/).
+- **Gmail sender validation**: `sendAs.list` requires a scope other than `gmail.send`;
+  select `gmail.settings.basic` alongside sending permission. The settings scope is
+  restricted, so the earlier claim that production consent alone resolves setup is not a
+  verification result. Check the applicable owner-only/personal-use verification exception
+  before live use; do not request broader mailbox-read scopes as a workaround. Login OIDC
+  consent remains separate from the local Gmail consent operation. Sources:
+  [sendAs.list](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs/list),
+  [scope classifications](https://developers.google.com/workspace/gmail/api/auth/scopes).
+- **D1 recovery**: Free-plan Time Travel is seven days; paid-plan recovery is 30 days.
+  Free recovery fits QR-002's maximum, but it does not replace the independent deletion
+  ledger or private application backups. Source:
+  [D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/).
+- **R2 expiry**: lifecycle deletion is normally within 24 hours after expiration, and
+  migration of existing objects can take longer. A 30-day lifecycle rule therefore cannot
+  prove deletion within a strict 30-day maximum. Keep the existing maximum; require explicit
+  early deletion, verification, failure alerts and restore refusal for overdue copies.
+  Provider outages still leave a guarantee gap that must be resolved before this gate passes;
+  merely choosing 29 days is not a proof. Source:
+  [object lifecycles](https://developers.cloudflare.com/r2/buckets/object-lifecycles/).
+
+### Media contract correction and remaining proof
+
+The old multipart request contained client-asserted `originalMime`/`originalBytes` but no
+original bytes, despite requiring private original recovery. Add the original binary part;
+derive MIME/size/dimensions from bytes on the server and reject mismatching claims. Never
+trust browser conversion or file extensions as security validation. The revised contract
+sets application bounds: original 10,485,760 bytes, each axis 1–16,384 pixels, total at most
+40,000,000 pixels; WebP full/card/thumb long edges at most 2000/800/320 pixels, respectively.
+Variant byte ceilings are 2 MiB/1 MiB/256 KiB; total multipart request ceiling is 16 MiB.
+These are explicit design limits, **not measured runtime capacity**. Reject malformed and
+animated input, preserve orientation, and verify stripped public metadata before publication.
+
+Server decoder feasibility remains OPEN: binary headers alone cannot establish that an image
+fully decodes or that derivatives are safe. Current Cloudflare Images documentation exposes
+a Worker binding for byte-based transforms and inspection, with free-plan transformations;
+evaluate it or a bounded decoder before T004/T033/T034. No paid Images storage is selected.
+Sources: [Images binding](https://developers.cloudflare.com/images/optimization/binding/),
+[Images pricing](https://developers.cloudflare.com/images/pricing/).
+
+### Toolchain evidence and remaining proof
+
+Local commands report Node **24.14.0**, npm **11.12.0**, pnpm **9.15.0**. Node's current
+release table lists Node 24 as LTS; pnpm's compatibility table lists Node 24 with supported
+pnpm 10/11/12 lines. Vite currently lists 8.3 for regular fixes, 7.3/8.2 for important fixes,
+and 6.4/8.1 for security fixes. Thus the old unspecified Vite 6 / Node 22 candidate is not a
+verified, pinned dependency set. T002 must pin compatible patches and prove install/build;
+T006 must match the Workers test pool's actual Vitest peer dependencies. No install or build
+has passed. Sources: [Node releases](https://nodejs.org/en/about/previous-releases),
+[pnpm installation](https://pnpm.io/installation), [Vite support](https://vite.dev/releases).
+
+Registry follow-up (`npm view … version engines peerDependencies --json`, with Node's
+`--use-system-ca`): `@react-router/dev@7.15.1` accepts Vite 5/6/7/8 and Node ≥20;
+`@cloudflare/vitest-pool-workers@0.23.0` requires Vitest/runner/snapshot `^4.1.0`;
+Wrangler 4.162.0 requires Node ≥22.12; pnpm's current registry tag returned 12.18.0.
+The first query attempt hit `UNABLE_TO_VERIFY_LEAF_SIGNATURE`; retry using the OS trust
+store succeeded without disabling certificate verification. These are retrieved package
+metadata, not chosen lockfile pins or a tested installation. Use explicit versions when
+resuming, because the React Router `latest` tag is already 8.x while this plan selects 7.x.
+
+### Resume conditions
+
+The owner's host choice and R2 readiness are recorded; plan/tasks/contracts/deployment
+instructions now reflect Workers Static Assets. Continue T001's retention/decoder feasibility,
+compatible-toolchain and usage-budget checks, then mark it complete. T002–T063 remain unchecked until
+their work and required evidence exist. The approved 30-day recovery/31-day receipt policy
+and no-persisted-inquiry rule have not been relaxed.
