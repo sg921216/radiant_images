@@ -25,14 +25,15 @@ dependency-resolution candidate, and the two remaining feasibility issues.
    physical-deletion deadlines. Production must still prove verified deletion, retry after
    failure, independent monitoring of missed/stale jobs, owner alerting, safe receipt
    retention and refusal of expired/unsafe restores. Provider delays must be disclosed.
-2. **Server image validation:** the 40-megapixel limit rules out a naive full-frame RGBA
-   decoder within Workers' memory budget. After the owner activated Images Free on
-   2026-11-14, a temporary remote-development probe successfully transformed private bytes,
-   preserved orientation, removed metadata, and processed 40-megapixel fixtures. However,
-   it also accepted truncated JPEG scans, including one with an end marker, without a
-   warning. The binding alone does not meet the current strict corruption-rejection
-   requirement. Production integration and resource-budget evidence remain open. See
-   [research R-18](./research.md#r-18-images-free-activation-and-remote-binding-probe--2026-11-14).
+2. **Image resource and usage budgets:** R-19 resolves the reproduced damaged-JPEG gap
+   with strict scan validation before Images transformation. The owner authorized a
+   temporary private deployed rehearsal on 2026-11-14. R-20 records 11/11 passing checks,
+   private originals, metadata-free derivatives and successful concurrency admission.
+   Upload/delete now run in a per-portfolio Durable Object; observed front-Worker CPU
+   fell from 109 ms to 7 ms. JPEG-validator sampled memory is about 30 MiB, but coordinator
+   memory analytics remain unavailable and percentiles do not establish peak allocation.
+   Complete that resource evidence and account-wide usage/overage controls before release.
+   All temporary resources were removed. See [research R-20](./research.md#r-20-private-deployed-gallery-rehearsal--2026-11-14).
 
 Sources: [R2 lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/),
 [Workers limits](https://developers.cloudflare.com/workers/platform/limits/),

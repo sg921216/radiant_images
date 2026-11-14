@@ -1,0 +1,13 @@
+{
+  "startedAt": "2026-11-14T18:03:20.086Z",
+  "completedAt": "2026-11-14T18:03:23.341Z",
+  "statuses": [
+    429,
+    201
+  ],
+  "retryAfterSeconds": 2,
+  "publishedImages": 1,
+  "mediaObjects": 4,
+  "cleanupPassed": true,
+  "passed": true
+}

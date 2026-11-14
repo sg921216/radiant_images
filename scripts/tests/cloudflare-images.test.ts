@@ -73,6 +73,21 @@ function context(): ImageValidationContext {
 }
 afterEach(() => vi.useRealTimers());
 
+test('a large JPEG scan gets a bounded 20-second budget while provider calls retain their shorter timeout', async () => {
+  vi.useFakeTimers();
+  const ctx = context();
+  ctx.validateJpeg = () => new Promise((resolve) => setTimeout(() => resolve(false), 9_000));
+  const pending = expect(
+    validateCloudflareImages({ ...input(), original: bytes(fixtures.oriented) }, ctx),
+  ).rejects.toBeInstanceOf(InvalidImage);
+  await Promise.all([pending, vi.advanceTimersByTimeAsync(9_000)]);
+  ctx.validateJpeg = () => new Promise(() => {});
+  const timedOut = expect(
+    validateCloudflareImages({ ...input(), original: bytes(fixtures.oriented) }, ctx),
+  ).rejects.toThrow(/timeout/);
+  await Promise.all([timedOut, vi.advanceTimersByTimeAsync(20_000)]);
+});
+
 test('production adapter regenerates derivatives from the original, not substituted client photos', async () => {
   const forged = new Uint8Array(
     await sharp({ create: { width: 60, height: 40, channels: 3, background: 'blue' } })

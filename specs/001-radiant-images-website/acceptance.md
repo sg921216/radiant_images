@@ -1195,3 +1195,50 @@ The reproduced silent-recovery bug is resolved. This is not deployed CPU/memory/
 proof, a production application deployment, paid activation, or permission to release.
 T001/T034 remain open for those remaining integration/resource checks; operational retention,
 monitoring and other acceptance gates remain separate. Task count stays **51/63**.
+
+## 2026-11-14 — private deployed gallery and CPU verification
+
+Under the owner's scoped continuation, deployed the actual API to a disposable private
+Worker with synthetic D1/R2 data, Images and SQLite Durable Objects. R-20 records the
+configuration, retained initial harness interruption, clean rerun, metrics and cleanup.
+The original pipeline exceeded the Free front-Worker CPU target; moving upload/delete
+execution into `GalleryMutations` reduced observed maximum front CPU from 109 ms to 7 ms.
+Concurrent writes receive retryable 429 admission; strict JPEG rejection stays unchanged.
+JPEG RPC has 20 seconds within the existing 30-second deadline; Images calls retain 8 seconds.
+
+Red/green evidence:
+
+- `scripts/tests/gallery-rehearsal.test.ts`: the initial stub failed both private-resource
+  configuration cases; the real-entry/private-config implementation passes both.
+- `apps/api/tests/gallery-mutations.test.ts`: front forwarding initially returned 400 instead
+  of 204 and the coordinator stub returned 501 instead of 401. Implementation then exposed
+  a missing security header in the forwarded response; preserving response headers fixed
+  it. Both tests pass, including unconsumed-body forwarding, auth and concurrency release.
+- `scripts/tests/cloudflare-images.test.ts`: a nine-second validator response failed at the
+  old eight-second timeout. The revised budget passes that case and still refuses a stalled
+  validator at twenty seconds. All nine adapter tests pass.
+
+Remote verification: **11/11** coordinated upload/storage/publication checks pass, plus
+the separate concurrent upload test (one 201, one 429, exactly one image/four objects).
+All successful variants pass independent strict Sharp decode and metadata/dimension checks.
+Damaged JPEGs return 400 without R2/D1 publication. Originals remain private, and deleting
+an image removes its public route while creating private recovery copies. Sanitized JSON
+evidence is linked from R-20; initial failed assertions are retained, not overwritten.
+
+Invocation CPU and partial memory analytics are recorded, not inferred from local tests.
+The JPEG validator reports ~30.2 MiB p99 memory and zero reported CPU/memory-limit errors;
+the front Worker reports ~10.7 MiB p99. Coordinator memory metrics are missing, and no peak
+heap profile was obtained. T001/T034 therefore remain open, alongside account-wide usage
+controls. Task count remains **51/63**.
+
+Repository validation: `pnpm check` passes formatting, lint, workspace/tool types,
+**55 files / 254 tests**, and both production builds. The subsequent concurrency diagnostic
+also passes scoped lint and tool typechecking. `pnpm exec playwright test e2e/gallery.spec.ts
+--project=chromium-desktop --project=chromium-mobile` passes **4/4**, zero retries. Browser
+checks use the isolated local Sharp provider; remote checks above use the actual Images
+adapter. Source/artifact privacy and final diff checks pass.
+
+Cleanup verified: no Workers, DO namespaces, D1 databases or R2 buckets remain in the
+rehearsal account inventory. The local proxy stopped; generated configs and credentials
+were removed. No real data, email, Pixieset operation, paid subscription, staging or commit
+was performed. Existing unrelated workspace edits were preserved.

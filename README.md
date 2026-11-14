@@ -22,6 +22,11 @@ pnpm --version
 Wrangler is a workspace dependency. Local development uses emulated D1 and R2 resources; no
 Cloudflare login or live resources are needed for the setup below.
 
+Production portfolio uploads use the Images binding plus SQLite Durable Objects for strict
+JPEG validation and upload/delete coordination. Pixieset handles delivered client collections.
+The [private Cloudflare rehearsal](specs/001-radiant-images-website/research.md#r-20-private-deployed-gallery-rehearsal--2026-11-14)
+records deployed checks and remaining resource-budget evidence; it does not authorize release.
+
 ## Local setup
 
 ### 1. Install dependencies

@@ -23,8 +23,16 @@ const config =
         main: resolve('apps/api/src/index.ts'),
         compatibility_flags: ['nodejs_compat'],
         images: { binding: 'IMAGES' },
-        durable_objects: { bindings: [{ name: 'JPEG_VALIDATOR', class_name: 'JpegValidator' }] },
-        migrations: [{ tag: 'jpeg-validator-v1', new_sqlite_classes: ['JpegValidator'] }],
+        durable_objects: {
+          bindings: [
+            { name: 'JPEG_VALIDATOR', class_name: 'JpegValidator' },
+            { name: 'GALLERY_MUTATIONS', class_name: 'GalleryMutations' },
+          ],
+        },
+        migrations: [
+          { tag: 'jpeg-validator-v1', new_sqlite_classes: ['JpegValidator'] },
+          { tag: 'gallery-mutations-v1', new_sqlite_classes: ['GalleryMutations'] },
+        ],
         vars: {
           WEB_ORIGIN: required('WEB_ORIGIN'),
           API_ORIGIN: required('API_ORIGIN'),

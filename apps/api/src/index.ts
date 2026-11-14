@@ -25,8 +25,11 @@ import { productionRuntime, type Runtime } from './services/runtime';
 import { fallbackAudit } from './services/audit';
 import { restoreStatus } from './services/backup';
 import { scheduled } from './scheduled';
+import { authenticate } from './services/session';
+import { isGalleryMutation } from './services/galleryMutations';
 export { JpegValidator } from './services/jpegValidator';
-export function createApp(runtime: Runtime = productionRuntime) {
+export { GalleryMutations } from './services/galleryMutations';
+export function createApp(runtime: Runtime = productionRuntime, coordinateGallery = false) {
   const app = new Hono<AppEnv>();
   app.use('*', async (c, next) => {
     c.set('requestId', crypto.randomUUID());
@@ -57,6 +60,17 @@ export function createApp(runtime: Runtime = productionRuntime) {
     }),
   );
   app.use('*', async (c, next) => {
+    if (coordinateGallery && isGalleryMutation(c.req.method, c.req.path)) {
+      await authenticate(c.env, c.req.header('Authorization'), runtime.now());
+      if (!c.env.GALLERY_MUTATIONS)
+        throw new ApiFault(
+          500,
+          'image_validation_unavailable',
+          'Image processing is unavailable. No change was made.',
+        );
+      const response = await c.env.GALLERY_MUTATIONS.getByName('portfolio').fetch(c.req.raw);
+      return c.newResponse(response.body, response);
+    }
     if (c.req.raw.body && !['GET', 'HEAD'].includes(c.req.method)) {
       const limit =
         c.req.path === '/admin/gallery' && c.req.method === 'POST'
@@ -146,5 +160,5 @@ export function createApp(runtime: Runtime = productionRuntime) {
   });
   return app;
 }
-const app = createApp();
+const app = createApp(productionRuntime, true);
 export default { fetch: app.fetch, scheduled };

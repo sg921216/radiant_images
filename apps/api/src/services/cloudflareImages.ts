@@ -5,8 +5,8 @@ export const validateCloudflareImages: ImageValidator = async (input, context) =
   if (!context) throw new Error('Image validation is not configured.');
   const { images, validateJpeg } = context;
   const deadline = Date.now() + 30_000;
-  async function bounded<T>(operation: () => Promise<T>): Promise<T> {
-    const remaining = Math.min(8_000, deadline - Date.now());
+  async function bounded<T>(operation: () => Promise<T>, budget = 8_000): Promise<T> {
+    const remaining = Math.min(budget, deadline - Date.now());
     if (remaining <= 0) throw new Error('Image validation timeout.');
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
@@ -47,7 +47,7 @@ export const validateCloudflareImages: ImageValidator = async (input, context) =
     )
       throw new InvalidImage();
   }
-  if (source.mime === 'image/jpeg' && !(await bounded(() => validateJpeg(input.original))))
+  if (source.mime === 'image/jpeg' && !(await bounded(() => validateJpeg(input.original), 20_000)))
     throw new InvalidImage();
 
   try {

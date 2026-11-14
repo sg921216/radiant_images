@@ -61,6 +61,35 @@ deployment or paid activation was performed.
 
 ## Summary
 
+**Controlled provider rehearsal (2026-11-14)**: The owner asked to continue with the next
+step after the scoped proposal to verify the deployed upload pipeline. Use a temporary
+private Worker (workers.dev, preview URLs and routes disabled), disposable D1/R2 and the
+real API entry point, Images and SQLite JPEG validator. Invoke through a local service-binding
+proxy; seed only a synthetic short-lived owner session directly into the isolated D1.
+Measure Cloudflare CPU/memory, validate storage/publication/refusal, then remove all rehearsal
+resources. This is scoped provider verification, not a public launch, paid upgrade, live email
+send or approval to close unrelated release gates. No real client data or Pixieset writes.
+
+The first deployed sample measured 92–109 ms of regular-Worker CPU for large multipart
+uploads, and 11 ms for a large deletion. Although the sampled requests completed, these
+exceed the 10-ms Free target. Coordinate upload/delete in one `GalleryMutations` Durable
+Object per portfolio, with one in-flight mutation and a retryable 429 for competing calls.
+The front Worker authenticates before forwarding the body stream; the DO runs the same
+application authorization, bounded-body, validation, R2/D1 and audit code. No test provider
+is deployed. The separate JPEG validator remains bounded and stores no data. This also
+bounds concurrent multipart/recovery allocations per portfolio. Measure again before
+claiming the resource gate passes.
+
+**Rehearsal result (2026-11-14)**: R-20 records 11/11 passing deployed checks plus concurrent
+upload admission. Maximum observed front-Worker CPU is now 7 ms; coordinator CPU is 159 ms
+and strict JPEG CPU is 7,366 ms. Sampled front/validator memory is below the runtime limit,
+but coordinator memory remains unavailable and absolute peak memory is not established.
+JPEG RPC gets 20 seconds inside the existing 30-second validation deadline; individual
+Images calls remain bounded to eight seconds. T001/T034 stay open for remaining resource
+and account-wide usage evidence. All temporary resources and synthetic credentials were
+removed; no public release occurred. The current mutation-coordinator design supersedes
+the earlier statement that storage/publication work stays in the front Worker.
+
 Build a photography business website for Radiant Images with a public marketing site (home gallery, three service pages with "How It Works" + pricing sections, About, FAQ, Contact with CAPTCHA-protected inquiry form) and an owner admin area (gallery, banners, pricing packages, site config, clients, email templates, checklists, questionnaires) protected by Google sign-in with an owner allow-list.
 
 Technical approach: a static React single-page app (Vite + React Router v7) deployed to

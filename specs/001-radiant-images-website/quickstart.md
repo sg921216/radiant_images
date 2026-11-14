@@ -61,10 +61,12 @@ pnpm dev
 The frontend uses 127.0.0.1:5173 and the API 127.0.0.1:8787. Ordinary development does not
 install the E2E provider endpoints; placeholder credentials cannot sign in or send mail.
 The local-only Sharp decoder belongs to the isolated E2E server. The production adapter uses
-`IMAGES` and `JPEG_VALIDATOR`; missing bindings or provider failures prevent publication.
+`IMAGES` and `JPEG_VALIDATOR`, plus `GALLERY_MUTATIONS` for upload/delete coordination;
+missing bindings or provider failures prevent publication.
 Damaged or unsupported JPEGs return HTTP 400 with instructions to re-export as JPEG or PNG.
 No original or derivative is written until validation succeeds. Live binding evidence is
-recorded in research R-19; deployed CPU/memory/budget verification remains a release gate.
+recorded in research R-19/R-20. The private deployed rehearsal passes functional and sampled
+CPU checks; coordinator memory and account-wide usage controls remain release evidence.
 
 ## Separate provider-connected setup
 
@@ -506,3 +508,53 @@ never deploy either diagnostic Worker. The sanitized report is
 previously accepted damaged JPEGs (400), re-exported JPEGs, EXIF orientation, 40 MP,
 16,384-pixel width and a 10 MiB input. This checks adapter/provider behavior, not deployed
 CPU/memory or remaining T001/T034 release evidence. Full client collections stay in Pixieset.
+
+## Private deployed gallery rehearsal
+
+R-20 records the separately authorized 2026-11-14 rehearsal. It passes 11/11 checks plus
+concurrent upload admission. This workflow creates temporary remote resources; it is not
+part of ordinary local setup or CI. Use the owner's scoped authorization and designated
+account. Never reuse a live database/bucket or copy application credentials into the probe.
+
+1. Choose a fresh suffix shaped `YYYYMMDD-abcdef`. Confirm the corresponding
+   `radiant-rehearsal-<suffix>` Worker/D1 and `-media`/`-recovery` buckets do not exist.
+   Create that disposable D1 and two Standard R2 buckets, with public access disabled.
+2. Run `pnpm exec tsx scripts/cloudflare-gallery-rehearsal/prepare.ts <suffix> <d1-id>
+   <account-id>`. It writes ignored configs and synthetic credentials under
+   `.wrangler/gallery-rehearsal/`. Inspect the generated configuration: actual API entry,
+   isolated D1/R2, Images, both SQLite DO bindings/migrations, no routes/cron/workers.dev/
+   preview URLs, full diagnostic telemetry. No Google or Gmail integration is enabled.
+3. Using `.wrangler/gallery-rehearsal/wrangler.jsonc`, apply remote D1 migrations, deploy
+   the private Worker, load the generated `secrets.json` with Wrangler's bulk-secret
+   command, and execute `session.sql` only against that disposable D1. Verify Worker and
+   bucket public access remains disabled before invoking it. `refresh.ts` updates the
+   generated bindings when rehearsal code changes; it does not deploy or change identities.
+4. Start the loopback proxy (never deploy this entry point):
+
+   ```sh
+   pnpm exec wrangler dev --config .wrangler/gallery-rehearsal/proxy.jsonc --ip 127.0.0.1 --port 8796 --inspector-port 9246 --show-interactive-dev-session=false
+   ```
+
+5. In another terminal run `pnpm exec tsx scripts/cloudflare-gallery-rehearsal/run.ts
+   --report=coordinated`, then `pnpm exec tsx scripts/cloudflare-gallery-rehearsal/concurrency.ts`.
+   Optional case-name arguments select a subset. Preserve failed evidence; choose a new
+   report suffix for a repeat. Keep the proxy/config unchanged during execution: a reload
+   can interrupt the response while a dispatched upload still completes. Check inventory
+   before any retry; `tidy.ts` removes only gallery entries with the synthetic rehearsal alt
+   prefix. Never run these scripts against a real gallery.
+6. Collect invocation CPU and GraphQL Worker/DO memory metrics by version/namespace and
+   time window. Analytics can lag; empty rows are missing evidence. Export only sanitized
+   aggregates, never headers, tokens, client IPs or raw invocation payloads. Record sampled
+   percentiles separately from peak-memory profiling and report failed profiling attempts.
+7. Call local `POST /__empty-storage`, verify `GET /__storage` is empty, stop the proxy,
+   then delete only the verified rehearsal Worker, D1 and two empty buckets. Confirm both
+   DO namespaces and all named resources are absent. Remove generated local configs and
+   synthetic credentials; retain sanitized evidence and a cleanup receipt.
+
+Production requires `IMAGES`, `JPEG_VALIDATOR`/`JpegValidator` and
+`GALLERY_MUTATIONS`/`GalleryMutations`, with both SQLite migrations. One portfolio mutation
+is admitted at a time; overlap returns 429 with a two-second retry hint. The UI retains its
+existing error/retry flow. JPEG validation has a 20-second ceiling, Images calls eight
+seconds each, and overall validation thirty seconds; failure prevents publication.
+Account-wide Images/R2/DO budgets and remaining memory proof still gate release. This
+rehearsal does not verify scheduled retention, independent alerts or full client delivery.

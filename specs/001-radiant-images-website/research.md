@@ -700,3 +700,91 @@ deployment, application storage, real photo, paid activation or Pixieset write o
 This resolves the reproduced silent-JPEG-recovery blocker. T001/T034 remain open for deployed
 resource/usage-budget evidence and final release integration; T058 retention/monitoring is
 separate. No task is marked complete solely from local execution or these live transformations.
+
+## R-20 Private deployed gallery rehearsal — 2026-11-14
+
+The owner authorized the proposed next step: verify the deployed upload pipeline using
+temporary private Cloudflare resources and synthetic data. The real API entry point used
+Images, two SQLite Durable Object classes, D1, and separate media/recovery R2 buckets.
+Workers.dev, preview URLs, routes and bucket public access were disabled. A loopback-only
+service-binding proxy supplied access; a short-lived synthetic session was seeded directly
+in disposable D1. No Google/Gmail/Turnstile credentials, client images or Pixieset writes
+were used. Wrangler 4.162.0, Node 24.14.0 and compatibility date 2026-11-14 identify this
+rehearsal; the checked-in API target remains 2026-11-13 and needs its final release checks.
+
+The first deployment exposed a resource issue: large multipart uploads consumed 92–109 ms
+of front-Worker CPU and a large deletion consumed 11 ms. Requests completed, but exceeded
+the 10-ms Free target. `GalleryMutations` now admits one upload/delete at a time per
+portfolio, returning 429 plus `Retry-After: 2` for overlap. The front Worker authenticates
+and forwards the unconsumed body; the coordinator runs the same authorization, bounded
+body, validation, R2/D1, recovery and auditing code. The separate `JpegValidator` retains
+strict scan validation. Neither Durable Object stores image bytes between operations.
+
+The cold 40-MP progressive JPEG check approached the old eight-second timeout (7,935 ms
+wall time). JPEG RPC now has a 20-second ceiling within the unchanged 30-second processing
+deadline; Images operations retain eight-second ceilings. Timeout or provider failure
+still prevents publication. This gives observed valid inputs headroom without accepting
+damaged JPEGs or removing work bounds.
+
+The [coordinated run](./evidence/cloudflare-gallery-rehearsal-coordinated.json) passes
+**11/11** checks: unauthorized access, PNG/WebP/JPEG, EXIF orientation, two damaged JPEGs,
+40-MP progressive 4:4:4 and high-detail baseline JPEGs, 16,384-pixel width and exactly
+10 MiB of legal JPEG input. Successful uploads create one private original and three
+public derivatives, independently decoded with strict Sharp and checked for static content,
+dimensions and stripped metadata. Damaged JPEGs return 400 with no storage/publication.
+Original routes stay inaccessible; deletion removes public access and writes private
+recovery copies. A [concurrent-upload run](./evidence/cloudflare-gallery-concurrency.json)
+returns one 201 and one 429, publishes exactly one image/four objects and cleans up.
+
+| Deployed component | Maximum observed CPU | Maximum observed wall time | Evidence scope |
+| --- | --- | --- | --- |
+| Original front Worker | 109 ms | 11,212 ms | 74 invocations before coordination |
+| Coordinated front Worker | 7 ms | 10,832 ms | 91 invocations |
+| Gallery mutation coordinator | 159 ms | 10,748 ms | 21 invocations |
+| Strict JPEG validator, coordinated version | 7,366 ms | 7,841 ms | 8 RPC invocations |
+
+All retained invocation outcomes are `ok`; HTTP 400/401/404/429 are expected refusal paths.
+The [CPU receipt](./evidence/cloudflare-gallery-cpu.json) is reduced from invocation logs,
+without request headers, IPs or tokens. The [analytics receipt](./evidence/cloudflare-gallery-metrics.json)
+records front-Worker memory p99 of 11,184,267 bytes (~10.7 MiB) and JPEG-validator memory
+p99 of 31,707,058 bytes (~30.2 MiB), with zero reported validator CPU/memory-limit errors.
+These are sampled percentiles, not absolute peaks. Coordinator memory rows and DO invocation
+aggregates remained unavailable. An idle-object profiler request returned HTTP 503/10397;
+no CPU/heap profile was captured. Do not interpret missing analytics as zero usage or close
+the remaining memory gate from the absence of request failures.
+
+The [initial run](./evidence/cloudflare-gallery-rehearsal.json) is retained with two failed
+assertions. Editing the local proxy during execution caused a reload and 503 for the wide
+JPEG while its remote upload still completed (201 in invocation logs). Its four objects
+then caused the next inventory assertion to see eight new objects instead of four.
+Both entries were removed through the API before the clean rerun. This records a harness
+interruption and an uncertain upload response, not evidence that a failed response cancels
+an already-dispatched write. Do not edit proxy source/config during a run or blindly retry
+an uncertain upload without checking the gallery.
+
+Usage planning, verified against current provider documentation:
+
+- Images Free permits 5,000 unique transformations per month and refuses new ones at the
+  limit without overage charges. The adapter makes six transformations per successful
+  upload (three supplied-variant decodes, three regenerated outputs); `.info()` is unbilled.
+  Budgeting every call separately gives at most 833 uploads/month before other account
+  activity, failed attempts and diagnostic usage. This is a planning ceiling, not an
+  installed quota guard. Public reads use stored R2 derivatives, not new transformations.
+  [Images pricing](https://developers.cloudflare.com/images/pricing/)
+- Free SQLite Durable Objects include 100,000 requests and 13,000 GB-s/day, with operations
+  refused at limits. A JPEG upload uses one coordinator request and one validator RPC;
+  deletion uses one coordinator request. Duration is billed using allocated 128 MB while
+  active, including I/O waits; sampled CPU alone is not a usage-cost estimate.
+  [Durable Objects pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/)
+- R2 Standard includes 10 GB-month, one million Class A and ten million Class B operations
+  monthly, then bills usage. The 60-image cap and existing per-file bounds cap live portfolio
+  data at 795 MiB, excluding recovery, database backups and other account use. The coordinated
+  run ended with zero live media and 38,041,744 bytes of recovery data, subsequently removed.
+  Recovery churn and reads still need account-wide controls; no hard $0 guarantee follows
+  from a small rehearsal. [R2 pricing](https://developers.cloudflare.com/r2/pricing/)
+
+The [cleanup receipt](./evidence/cloudflare-gallery-cleanup.json) confirms deletion of the
+Worker, both DO namespaces, D1 and both emptied R2 buckets; final inventories are empty.
+The proxy stopped and local generated configs/synthetic credentials were removed. No paid
+plan or public launch occurred. T001/T034 remain open for coordinator memory/resource and
+usage-control evidence; retention/independent monitoring and other acceptance gates remain.

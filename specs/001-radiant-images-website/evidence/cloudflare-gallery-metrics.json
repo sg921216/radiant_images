@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-11-14T18:10:36.586Z",
+  "source": "Cloudflare GraphQL analytics",
+  "windowStart": "2026-11-14T18:00:20Z",
+  "windowEnd": "2026-11-14T18:09:00Z",
+  "units": {
+    "memory": "bytes",
+    "cpuTime": "microseconds",
+    "activeTime": "microseconds",
+    "duration": "GB-seconds"
+  },
+  "frontWorker": {
+    "note": "Earlier successful query collected before deletion; a later query returned no rows.",
+    "dimensions": {
+      "status": "success"
+    },
+    "quantiles": {
+      "cpuTimeP50": 1642,
+      "cpuTimeP99": 7580,
+      "memoryUsageBytesP99": 11184267,
+      "memoryUsageBytesP999": 11184267
+    },
+    "sum": {
+      "errors": 0,
+      "requests": 87,
+      "subrequests": 18
+    }
+  },
+  "jpegValidator": {
+    "quantiles": {
+      "memoryUsageBytesP99": 31707058,
+      "memoryUsageBytesP999": 31707058
+    },
+    "sum": {
+      "activeTime": 9836656,
+      "cpuTime": 9024081,
+      "duration": 1.259091968,
+      "exceededCpuErrors": 0,
+      "exceededMemoryErrors": 0,
+      "fatalInternalErrors": 0
+    }
+  },
+  "galleryMutations": {
+    "memoryMetricsAvailable": false
+  },
+  "limitations": [
+    "Percentiles are sampled analytics, not measured absolute peak memory.",
+    "GalleryMutations memory rows and Durable Object invocation aggregates were unavailable; empty results are not zero usage.",
+    "An idle-object profiler request returned HTTP 503 / 10397 (runtime could not start); no CPU/heap profile was captured."
+  ]
+}
