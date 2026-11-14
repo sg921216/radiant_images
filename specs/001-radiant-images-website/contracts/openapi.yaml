@@ -8,6 +8,10 @@ info:
     issued to an allow-listed Google account. All request/response bodies are JSON unless noted.
     Error shape everywhere: `{ "error": { "code": string, "message": string, "fields"?: { [name]: string } } }`.
     Frontend hosting is owner-approved; T001 technical feasibility remains open (research R-16). This contract is not implementation evidence.
+    Client deletion confirms the live cascade and durable private deletion receipt, not physical removal of all recovery copies.
+    QR-002 uses operational retention: application recovery copies become unrestorable and enter verified deletion at day 28,
+    targeting removal by day 30; receipt cleanup targets day 31 subject to safe reconciliation.
+    Provider delays require retry, independent alerts and disclosure; expired or unsafe restores remain forbidden.
 servers:
   - url: https://radiant-images-api.<account>.workers.dev
     description: production

@@ -1,0 +1,127 @@
+{
+  "observedAt": "2026-11-14T16:59:52.593Z",
+  "scope": "Synthetic fixtures through wrangler dev --remote; no D1/R2 bindings or application deployment",
+  "wranglerVersion": "4.162.0",
+  "results": [
+    {
+      "name": "jpeg-truncated-scan",
+      "input": {
+        "bytes": 267,
+        "sha256": "24babef6cc0edfc4ecb46a5a8a44b82e482b8781e8e130c1662dad93775bb28b",
+        "header": {
+          "mime": "image/jpeg",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "strictLocalDecode": false
+      },
+      "expected": "reject",
+      "status": 200,
+      "passed": false,
+      "info": {
+        "fileSize": 267,
+        "width": 60,
+        "height": 40,
+        "format": "image/jpeg"
+      },
+      "output": {
+        "bytes": 80,
+        "sha256": "8af2740b269591dbfc6c1b5ec6058805a24c13d082ec5b038f1c816056c6c03e",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 142
+    },
+    {
+      "name": "jpeg-truncated-scan-with-end-marker",
+      "input": {
+        "bytes": 269,
+        "sha256": "f852e8512dd033d89e2c883317377d1f806289dccfe42022c5f212047eedc900",
+        "header": {
+          "mime": "image/jpeg",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "strictLocalDecode": false
+      },
+      "expected": "reject",
+      "status": 200,
+      "passed": false,
+      "info": {
+        "fileSize": 269,
+        "width": 60,
+        "height": 40,
+        "format": "image/jpeg"
+      },
+      "output": {
+        "bytes": 80,
+        "sha256": "8af2740b269591dbfc6c1b5ec6058805a24c13d082ec5b038f1c816056c6c03e",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 52
+    },
+    {
+      "name": "png-16384-axis",
+      "input": {
+        "bytes": 433633,
+        "sha256": "2d29923a61dd619a648e4c4d0420984dffc9081f504a613e0684bbf14e6e89e1",
+        "header": {
+          "mime": "image/png",
+          "width": 16384,
+          "height": 2000,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "strictLocalDecode": true
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 433633,
+        "width": 16384,
+        "height": 2000,
+        "format": "image/png"
+      },
+      "output": {
+        "bytes": 988,
+        "sha256": "9f9feec41c7b84101f847649f9d3718140d0d0bdf95221bdbc77d89f63ea04b7",
+        "header": {
+          "mime": "image/webp",
+          "width": 2000,
+          "height": 244,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 645
+    }
+  ]
+}

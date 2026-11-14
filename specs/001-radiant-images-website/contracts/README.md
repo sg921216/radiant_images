@@ -145,5 +145,9 @@ invitation and require the existing manual reconciliation without blind resend.
   including after master questions are edited or deleted. Public link responses remain
   `QuestionnairePublic` and never expose owner history or another client's data.
 - Client DELETE confirmation requires the live cascade and durable private deletion receipt
-  described in data-model.md. Recovery copies expire within 30 days; restore-time receipt
-  reconciliation must finish before any application access resumes (QR-002).
+  described in data-model.md; it does not confirm removal of every private recovery copy.
+  Under the owner-approved QR-002 policy, application recovery copies become unrestorable
+  and enter verified deletion at day 28, targeting removal by day 30. Receipt cleanup targets
+  day 31, preserving required receipts if overdue recovery removal cannot be verified.
+  Provider delays require retry, independent alerts and disclosure. Restore-time receipt
+  reconciliation must finish before access resumes; expired or unsafe restores are forbidden.

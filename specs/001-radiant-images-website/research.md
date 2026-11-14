@@ -22,6 +22,12 @@ unresolved. See [the approved local-development exception](./feasibility-decisio
 R-16 supersedes
 historical feasibility claims where noted. No additional hosting confirmation is required.
 
+**Current owner decisions (2026-11-14)**: R-17 records approval of operational retention
+and the existing paid Pixieset Client Gallery account for client delivery only. Website
+portfolio processing remains on the selected Cloudflare stack. The unconditional retention
+guarantee is superseded; production image validation and operational monitoring/alert
+evidence remain open. Earlier checkpoints describe their date's requirements and evidence.
+
 ---
 
 ## R-01 Frontend framework & hosting
@@ -253,17 +259,22 @@ for the stated application windows despite write cost; provider binding alone is
 ## R-13 Data backup (assumption: daily backups)
 
 **Decision**: Daily Cron Trigger exports durable owner-managed D1 data as JSON to a private
-`backups/` prefix in R2, expiring each copy within 30 days of creation. Exclude transient
+`backups/` prefix in R2. Under the owner-approved operational policy, copies become
+unrestorable and enter verified deletion at day 28, with removal targeted by day 30.
+Retry and independently alert on failures/missed runs; disclose delayed physical removal
+during outages. Exclude transient
 OAuth state, exchange codes, sessions, rate-limit counters, and inquiry dedupe entries; never introduce inquiry
 payload storage. Provider-managed recovery is supplementary: T001 must verify availability,
-cost and an actual recovery window no longer than 30 days, rather than assume a free 30-day
-Time Travel entitlement. R2 private originals support derived-image recovery under T001's
+cost and restore eligibility consistent with QR-002, rather than assume a free 30-day
+Time Travel entitlement. R2 private portfolio originals support derived-image recovery under T001's
 verified upload design.
 
 Client deletion removes live records and dependent checklist/email/questionnaire data.
-Older private recovery copies can still contain that data for at most 30 days after deletion;
-they are unavailable to application routes. Maintain client-ID/deletion-time receipts for
-31 days in a separate private `client-deletions/` R2 ledger, outside the database restore set.
+Older private recovery copies are unavailable to application routes and subject to the
+day-28 expiry/day-30 removal target; outages can delay physical removal beyond that target.
+Keep client-ID/deletion-time receipts in a separate private `client-deletions/` R2 ledger,
+outside the database restore set. Target receipt removal at day 31 after client deletion,
+but preserve required receipts and alert if overdue recovery removal cannot be verified.
 Confirm deletion only when the live cascade and durable receipt are complete; handle partial
 failures idempotently as specified in data-model.md. Restore offline, reapply the independent
 ledger, and verify cascades before allowing reads or email sends. Missing/unreconciled ledger
@@ -381,10 +392,10 @@ principles remain compatible with constitution v1.0.0, so no constitution amendm
   [D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/).
 - **R2 expiry**: lifecycle deletion is normally within 24 hours after expiration, and
   migration of existing objects can take longer. A 30-day lifecycle rule therefore cannot
-  prove deletion within a strict 30-day maximum. Keep the existing maximum; require explicit
-  early deletion, verification, failure alerts and restore refusal for overdue copies.
-  Provider outages still leave a guarantee gap that must be resolved before this gate passes;
-  merely choosing 29 days is not a proof. Source:
+  prove deletion within a strict 30-day maximum. The owner subsequently adopted operational
+  targets (R-17): day-28 expiry/deletion attempts, day-30 removal target, day-31 receipt
+  target, retries, independent alerts and unsafe-restore refusal. Provider delays must be
+  disclosed; actual control verification remains open. Source:
   [object lifecycles](https://developers.cloudflare.com/r2/buckets/object-lifecycles/).
 
 ### Media contract correction and remaining proof
@@ -429,10 +440,10 @@ resuming, because the React Router `latest` tag is already 8.x while this plan s
 ### Resume conditions
 
 The owner's host choice and R2 readiness are recorded; plan/tasks/contracts/deployment
-instructions now reflect Workers Static Assets. Continue T001's retention/decoder feasibility,
-compatible-toolchain and usage-budget checks, then mark it complete. T002–T063 remain unchecked until
-their work and required evidence exist. The approved 30-day recovery/31-day receipt policy
-and no-persisted-inquiry rule have not been relaxed.
+instructions reflect Workers Static Assets. Continue T001's operational-retention/decoder
+and usage-budget verification. Mark each task complete only when its required evidence exists;
+current progress is recorded in tasks.md/acceptance.md. The operational policy in R-17
+supersedes the earlier unconditional recovery deadlines. Inquiry content remains transient.
 
 ### Implementation follow-up — verified allowances and controls
 
@@ -508,14 +519,13 @@ This is a proposed proof protocol, **not a completed decoder test**.
 
 ### Implementation follow-up — retention and Gmail
 
-D1 Free's documented seven-day recovery window fits the existing maximum. R2 documents
-typical lifecycle deletion timing, not an unconditional upper bound. Explicit deletion at
-day 28, hourly retries, independent alerts, and refusal to restore expired backups would
-reduce operational risk but still cannot establish physical deletion by day 30 during an
-extended provider outage. Receipt deletion at day 31 has the same limitation. Do not
-discard receipts while overdue recoverable copies remain: that could resurrect deleted
-clients. No automatic extension of either deadline is approved. This is an unresolved
-requirement/provider mismatch, not work that can be closed by adding a cron expression.
+D1 Free's documented seven-day recovery window and R2's asynchronous lifecycle behavior
+require distinct checks. R2 does not establish an unconditional physical-deletion upper bound.
+The owner approved the R-17 operational policy on 2026-11-14: day-28 restore expiry/deletion
+attempts, day-30 removal target, day-31 receipt target, retries and independent alerts with
+explicit disclosure of outage delays. Do not discard required receipts while overdue
+recovery removal is unverified; refuse expired or unsafe restores. The policy mismatch is
+resolved by that amendment, while implementation and deployed control evidence remain open.
 Sources: [D1 recovery](https://developers.cloudflare.com/d1/reference/time-travel/),
 [R2 lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/).
 
@@ -549,3 +559,101 @@ this proves dependency resolution only. pnpm installation, lockfile, runtime imp
 builds, vulnerability scanning and Workers integration tests remain T002/T006/T059 work.
 The pool itself pins a different Wrangler/Miniflare pair; do not override its internal
 versions merely to deduplicate dependencies. Tests must establish compatibility.
+
+## R-17 Owner-approved retention and Pixieset boundary — 2026-11-14
+
+**Retention decision: APPROVED.** The owner replied "Adopt the operation policy" to the
+explicit day-28/day-30/day-31 proposal. QR-002, plan, data-model, contract descriptions,
+T058 and quickstart now distinguish restore eligibility and operational deletion targets
+from actual physical removal. No unconditional provider-outage deadline is claimed.
+
+Application recovery copies become unrestorable and enter verified deletion at day 28
+after creation, targeting removal by day 30. Receipt cleanup targets day 31 after client
+deletion and preserves required receipts when overdue recovery removal is unverified.
+Retry failed deletion, independently monitor missed cleanup/stale backups/target misses,
+alert the owner and disclose delays. Live cascades, private storage, transient inquiries
+and refusal of expired/unsafe restores remain required. This replaces the earlier strict
+retention feasibility mismatch, but T001/T058 require actual operational proof. The owner
+alert destination and independent monitoring configuration are still outstanding.
+
+**Photo delivery decision: APPROVED.** The owner confirmed an existing paid **Client Gallery**
+plan and chose "Client photo delivery; keep portfolio images on our website". The exact
+storage tier/account limits have not been inspected, and no new subscription is selected.
+
+| Responsibility | Selected system | Consequence |
+| --- | --- | --- |
+| Public Home/service portfolio and owner gallery editor | Radiant Images on Cloudflare | Keep R2 portfolio originals/derivatives and T001/T034 server validation, metadata removal, usage permissions, alt text and publication tests. |
+| Full client collections, favorites, downloads and delivery | Existing Pixieset Client Gallery account | Manage collection privacy and sharing in Pixieset; do not build a duplicate delivery system or import full client shoots into the portfolio bucket. |
+| Website client records, questionnaires, inquiry workflow and application recovery | Existing Radiant Images implementation | QR-002 still applies; a website client deletion does not automatically delete Pixieset collections or external mailbox messages. |
+
+The provided link describes **Studio Manager**, a separate product. Pixieset offers
+individual subscriptions and a Suite bundle, so a paid Client Gallery account does not
+establish a paid Studio Manager entitlement. No Studio Manager migration is selected.
+[Subscription documentation](https://website-help.pixieset.com/en/articles/4064291-managing-your-pixieset-subscription)
+
+Client Gallery documents uploads, client favorites/downloads, privacy controls and sharing
+through Pixieset email invitations or copied collection links. These support the selected
+delivery workflow without requiring an API integration into the custom website.
+[Client Gallery guide](https://help.pixieset.com/hc/en-us/articles/360058713951-Getting-started-with-Client-Gallery)
+
+The documented automatically synchronized gallery blocks are a **Pixieset Website** feature;
+the article also allows up to an hour for automatic synchronization. That is not evidence
+of an embeddable/API integration for this React website or its 60-second publication budget.
+No supported custom-site gallery API/embed contract was established in the reviewed sources,
+and no automatic sync, CDN hotlinking or scraping is selected.
+[Gallery-block documentation](https://help.pixieset.com/hc/en-us/articles/360033998392-Sharing-Client-Gallery-collections-on-your-website)
+
+T063 must record the operational boundary: review designated synthetic Pixieset collection
+sharing/privacy separately if testing delivery, and verify website portfolio permission
+and publication independently. Do not treat these documentation findings as an account
+test, photo migration, real-client delivery, production decoder pass or release approval.
+
+## R-18 Images Free activation and remote binding probe — 2026-11-14
+
+The owner reported activating the free Images & Stream plan. The Images statistics API
+then changed from HTTP 403/code 5403 to success, with zero current and zero allowed hosted
+images. This is consistent with using R2 for storage. It is not a paid Images storage plan.
+The [pricing documentation](https://developers.cloudflare.com/images/pricing/) describes
+5,000 unique transformations/month on Free, with new transformations refused at the limit
+and no overage charge. The older upload tutorial still says Paid is required; actual
+remote-development binding calls now establish transformation access for this account.
+
+Used project-local Wrangler 4.162.0 and the standalone diagnostic configuration in
+`scripts/image-binding-probe/`, with only an Images binding. `wrangler dev --remote` ran
+the diagnostic on Cloudflare through a loopback development endpoint. No application,
+D1/R2 binding, client photo, email, subscription change or persistent Worker deployment
+was involved. The temporary process was stopped; the Workers scripts inventory afterward
+remained empty. This is remote provider-development evidence, not a deployed application
+or production CPU/memory/usage-budget pass.
+
+The initial run records 13 cases in [probe evidence](./evidence/images-binding-probe.json).
+A targeted [follow-up](./evidence/images-binding-probe-followup.json) retains the failures
+instead of replacing them with a clean run:
+
+- Valid PNG/WebP/JPEG transformed to decodable, static, metadata-free WebP. EXIF orientation
+  changed 60 x 40 to 40 x 60 as expected. `.info()` reports the oriented dimensions, whereas
+  the application's source header reports the encoded dimensions; an adapter must account
+  for this difference when verifying originals.
+- The 8000 x 5000 (40 MP) PNG produced 2000 x 1250, 800 x 500 and 320 x 200 derivatives.
+  A 10,485,760-byte PNG with synthetic metadata succeeded. A 16,384-pixel-wide JPEG passed;
+  the equivalent PNG hit a development proxy internal error once, then passed the targeted
+  repeat. Preserve that failure; these samples do not establish reliability or worst-case
+  resource budgets for all supported input combinations.
+- PNG and WebP with corrupt pixel payloads were refused with provider code 9516. Cloudflare
+  [documents this as an internal error](https://developers.cloudflare.com/images/reference/troubleshooting/),
+  so the probe deliberately does not claim correct client-input error classification.
+- **Blocking result:** a truncated JPEG scan was accepted and re-encoded without a warning.
+  Adding a valid end-of-image marker did not change this. Both fixtures pass the application
+  header parser but fail local Sharp decoding with `failOn: 'warning'`. A terminal-marker
+  check alone therefore cannot close the validation gap.
+
+The [binding documentation](https://developers.cloudflare.com/images/optimization/binding/)
+describes transformation decoding; the observed implementation tolerates damaged JPEGs.
+No documented strict-decoding option was established. Keep the production validator
+unconfigured and the gallery fail-closed boundary intact. Next work is a bounded strict
+validator compatible with Workers, followed by adapter integration and provider/resource
+tests; a change to corruption acceptance would instead require an explicit requirements
+decision. Do not infer that a paid Images subscription changes decoding behavior.
+
+The diagnostic is intentionally outside routine CI and exits nonzero for unmet expectations.
+It is test code and does not add or change production behavior. T001/T034/T058 remain open.

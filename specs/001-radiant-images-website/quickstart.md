@@ -4,9 +4,16 @@ This guide proves the feature works against the [spec](./spec.md) acceptance sce
 
 **Status (2026-11-14)**: Local application, migration, synthetic provider adapters and automated
 suites are implemented under the approved T001 exception. See acceptance.md for actual
-commands/results and remaining gates. Production decoder/expiry feasibility, owner content,
+commands/results and remaining gates. Production decoder/operational-retention proof, owner content,
 real email, human/device acceptance and deployment remain open. Gmail consent needs both
 `gmail.send` and `gmail.settings.basic` for sending and verified sender lookup.
+
+**Owner decisions (2026-11-14)**: Use the operational retention procedure below; the
+unconditional physical-deletion deadline is superseded. Use the existing paid Pixieset
+Client Gallery account for client photo delivery and keep portfolio images on this website.
+Portfolio uploads still require production image validation. Upload/share delivered client
+collections through Pixieset's own controls; no automatic synchronization or cross-provider
+deletion is implemented. Verify each private collection's intended audience in Pixieset.
 
 ## Prerequisites
 
@@ -184,7 +191,7 @@ do not prove mailbox delivery, human usability, full accessibility, or productio
   result. Record errors/slow samples as failures and deployed live-provider samples separately.
 - Verify public crawlable content/metadata/canonical URLs/sitemap and private-route noindex.
 - Verify owner-confirmed photo usage/guardian permission, EXIF/GPS-free public derivatives,
-  private originals/backups, and QR-002's live deletion/30-day recovery-copy policy with
+  private originals/backups, and QR-002's live deletion/operational recovery policy with
   T001-verified provider support. Portfolio alt text must be descriptive and nonblank;
   inspect meaning manually, since a schema or automated scan cannot establish it.
 - Rehearse restore/rollback using the deletion-reconciliation checks below and confirm
@@ -201,10 +208,18 @@ do not prove mailbox delivery, human usability, full accessibility, or productio
    Reapply deletion receipts and verify the client and every dependent record are absent
    before enabling reads or email sends. Prove missing/incomplete ledger evidence blocks
    reopening. Never overwrite the ledger with the historical backup.
-4. With controlled time, verify recovery copies expire within 30 days of creation and
-   deletion receipts after 31 days. A restored/reconciled database's next backup must not
-   reintroduce deleted client data or restart its retention clock. Record the provider's
-   verified recovery window separately; external mailboxes are outside application deletion.
+4. With controlled time, verify application recovery copies become unrestorable and verified
+   deletion starts at day 28 after creation; normal removal targets day 30. At day 31 after
+   client deletion, remove receipts only after overdue recovery removal is verified. Inject
+   storage failure across both targets: preserve required receipts, reject expired/unsafe
+   restores, retry cleanup after recovery and record the actual verified removal time.
+5. Verify independent monitoring detects missed cleanup, stale backups and delayed deletion,
+   and the configured owner alert channel receives a sanitized alert. Record detection and
+   recovery evidence; a private health file alone does not prove notification. Physical
+   deletion can be delayed during provider outages and that limitation must be disclosed.
+   A reconciled database's next backup must not reintroduce deleted data or restart its clock.
+   Record provider-managed recovery windows separately. External mailboxes and Pixieset
+   collections are separate deletion boundaries; application deletion does not remove them.
 
 ## Separate live-provider acceptance
 
@@ -399,8 +414,11 @@ reopening. Refuse copies at day-28 expiry. Never copy real recovery payloads int
 
 `health/latest.json` is private: Gmail sender status and inquiry/auth/image failure counts,
 without mail content or addresses. Monitor independent provider job failures and backup
-freshness as well: a stale health file does not mean success. External alerting and physical
-expiry during outages remain unverified release gates.
+freshness as well: a stale health file does not mean success. Independent monitoring and
+owner alert delivery remain unverified release gates. The approved operational policy
+allows disclosed provider-outage delays; record target misses and verified cleanup without
+claiming an unconditional physical-expiry guarantee. The alert destination and deployed
+monitoring configuration still need to be established.
 
 ## Deployment and rollback preparation (T060)
 
@@ -451,3 +469,23 @@ For each participant record started/completed/abandoned, device, first Submit re
 assistance and elapsed time. For email record provider health, first Submit, API outcome,
 mailbox receipt and latency; negative/fault runs remain separate. Unknown delivery requires
 the documented manual receipt check and must never be counted as successful receipt.
+
+## Isolated Images provider diagnostic
+
+The synthetic provider probe uses a separate Worker configuration containing only Images;
+it does not use the application or any D1/R2 binding. It contacts Cloudflare and is not part
+of routine CI. Run only in the selected account for a scoped provider investigation:
+
+```powershell
+pnpm exec wrangler dev --config scripts/image-binding-probe/wrangler.toml --remote --ip 127.0.0.1 --port 8795 --inspector-port 9245 --show-interactive-dev-session=false
+```
+
+In another terminal, run `pnpm exec tsx scripts/image-binding-probe/run.ts`. Optional case
+names select targeted follow-ups, for example `jpeg-truncated-scan-with-end-marker`.
+The runner writes sanitized evidence under `specs/001-radiant-images-website/evidence/`;
+targeted runs use the `-followup` filename. Preserve previous evidence before a new run.
+Stop the development session afterward. Never deploy this diagnostic as the application.
+
+The recorded run intentionally fails: the provider accepts damaged JPEG scans that the
+strict local decoder rejects. See research R-18. A successful transformation or local
+simulation alone must not close T001/T034 or enable production gallery publication.

@@ -1,0 +1,457 @@
+{
+  "observedAt": "2026-11-14T16:58:29.111Z",
+  "scope": "Synthetic fixtures through wrangler dev --remote; no D1/R2 bindings or application deployment",
+  "wranglerVersion": "4.162.0",
+  "results": [
+    {
+      "name": "png",
+      "input": {
+        "bytes": 176,
+        "sha256": "9eceb7bdf1a2700f5f74593869cce1391feee53876bc73bac2214cc2d1e2b79c",
+        "header": {
+          "mime": "image/png",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 176,
+        "width": 60,
+        "height": 40,
+        "format": "image/png"
+      },
+      "output": {
+        "bytes": 76,
+        "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 285
+    },
+    {
+      "name": "webp",
+      "input": {
+        "bytes": 76,
+        "sha256": "e3b4b2f17219a6895e73106637839f1378660671cbcb2bbc6fd56524f7f36e4d",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 76,
+        "width": 60,
+        "height": 40,
+        "format": "image/webp"
+      },
+      "output": {
+        "bytes": 76,
+        "sha256": "61e61a89c706a44cc9b7388264bc1073d4ab1cf98b67b7d0ecec7991d8034e14",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 50
+    },
+    {
+      "name": "jpeg-exif-orientation",
+      "input": {
+        "bytes": 1015,
+        "sha256": "0fe59bd6e1a98b2c7262cfc67f4e8fff4eed64097246ecf88ddb7f85e342ad55",
+        "header": {
+          "mime": "image/jpeg",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": true
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 1015,
+        "width": 40,
+        "height": 60,
+        "format": "image/jpeg"
+      },
+      "output": {
+        "bytes": 76,
+        "sha256": "9e5aec3e5b20a2000c472394dc9830732c4720363122b7938c308adc0bd004a8",
+        "header": {
+          "mime": "image/webp",
+          "width": 40,
+          "height": 60,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 54
+    },
+    {
+      "name": "webp-exif-icc-xmp",
+      "input": {
+        "bytes": 816,
+        "sha256": "c29a57dd8f33a5363d72077957d72f9768e5104e7394c6fdedfffd0cfe75efe9",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": true
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 816,
+        "width": 60,
+        "height": 40,
+        "format": "image/webp"
+      },
+      "output": {
+        "bytes": 76,
+        "sha256": "61e61a89c706a44cc9b7388264bc1073d4ab1cf98b67b7d0ecec7991d8034e14",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 51
+    },
+    {
+      "name": "png-corrupt-pixels-valid-crc",
+      "input": {
+        "bytes": 176,
+        "sha256": "afe05b982abebc3627a6de8b4e75b1b1877403e2657f8ace33ba4e73ef014e10",
+        "header": {
+          "mime": "image/png",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "reject",
+      "status": 422,
+      "error": {
+        "error": "images_provider_error",
+        "code": 9516
+      },
+      "passed": false,
+      "elapsedMs": 39
+    },
+    {
+      "name": "jpeg-truncated-scan",
+      "input": {
+        "bytes": 267,
+        "sha256": "24babef6cc0edfc4ecb46a5a8a44b82e482b8781e8e130c1662dad93775bb28b",
+        "header": {
+          "mime": "image/jpeg",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "reject",
+      "status": 200,
+      "passed": false,
+      "info": {
+        "fileSize": 267,
+        "width": 60,
+        "height": 40,
+        "format": "image/jpeg"
+      },
+      "output": {
+        "bytes": 80,
+        "sha256": "8af2740b269591dbfc6c1b5ec6058805a24c13d082ec5b038f1c816056c6c03e",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 50
+    },
+    {
+      "name": "webp-corrupt-pixels",
+      "input": {
+        "bytes": 76,
+        "sha256": "7462cd04214a3b245634a2525072854fa6a5c3383eb925382ba4bb24ccbd0153",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "reject",
+      "status": 422,
+      "error": {
+        "error": "images_provider_error",
+        "code": 9516
+      },
+      "passed": false,
+      "elapsedMs": 34
+    },
+    {
+      "name": "40mp-2000",
+      "input": {
+        "bytes": 547707,
+        "sha256": "ebeaf25563920de9d3008a074e69154d3a1c3501bab01f408e773faa1bf4bcfa",
+        "header": {
+          "mime": "image/png",
+          "width": 8000,
+          "height": 5000,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 547707,
+        "width": 8000,
+        "height": 5000,
+        "format": "image/png"
+      },
+      "output": {
+        "bytes": 4572,
+        "sha256": "f5e607231b9da4d484a6473c081939083de8464da2dde8a96c08683564c07b32",
+        "header": {
+          "mime": "image/webp",
+          "width": 2000,
+          "height": 1250,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 516
+    },
+    {
+      "name": "40mp-800",
+      "input": {
+        "bytes": 547707,
+        "sha256": "ebeaf25563920de9d3008a074e69154d3a1c3501bab01f408e773faa1bf4bcfa",
+        "header": {
+          "mime": "image/png",
+          "width": 8000,
+          "height": 5000,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 547707,
+        "width": 8000,
+        "height": 5000,
+        "format": "image/png"
+      },
+      "output": {
+        "bytes": 806,
+        "sha256": "d2395663ffafd2f15f0e4c32305dcb6d80eabc39c93b6b8e99e3a776ee6381c1",
+        "header": {
+          "mime": "image/webp",
+          "width": 800,
+          "height": 500,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 289
+    },
+    {
+      "name": "40mp-320",
+      "input": {
+        "bytes": 547707,
+        "sha256": "ebeaf25563920de9d3008a074e69154d3a1c3501bab01f408e773faa1bf4bcfa",
+        "header": {
+          "mime": "image/png",
+          "width": 8000,
+          "height": 5000,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 547707,
+        "width": 8000,
+        "height": 5000,
+        "format": "image/png"
+      },
+      "output": {
+        "bytes": 196,
+        "sha256": "cbcacc53563d609f59ab4f576842ef43fdfdd1c52384928c6a569b75a4f21084",
+        "header": {
+          "mime": "image/webp",
+          "width": 320,
+          "height": 200,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 272
+    },
+    {
+      "name": "jpeg-16384-axis",
+      "input": {
+        "bytes": 192269,
+        "sha256": "665bd71a4c4f6575cfb06e1b4ba773b70cde43fa7da8c58694454778ac21c6e1",
+        "header": {
+          "mime": "image/jpeg",
+          "width": 16384,
+          "height": 2000,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 192269,
+        "width": 16384,
+        "height": 2000,
+        "format": "image/jpeg"
+      },
+      "output": {
+        "bytes": 984,
+        "sha256": "9e15e67e2c9ecd71906c8d64956e087ec52bf2303db5d46043be60a946d76b01",
+        "header": {
+          "mime": "image/webp",
+          "width": 2000,
+          "height": 244,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 327
+    },
+    {
+      "name": "png-16384-axis",
+      "input": {
+        "bytes": 433633,
+        "sha256": "2d29923a61dd619a648e4c4d0420984dffc9081f504a613e0684bbf14e6e89e1",
+        "header": {
+          "mime": "image/png",
+          "width": 16384,
+          "height": 2000,
+          "animated": false,
+          "hasMetadata": false
+        }
+      },
+      "passed": false,
+      "transportOrDecodeError": "SyntaxError"
+    },
+    {
+      "name": "png-10mib-metadata",
+      "input": {
+        "bytes": 10485760,
+        "sha256": "5fc24616f506ddd5068831cd8e13df129e9d07e340f80b981f597459b63d1b9e",
+        "header": {
+          "mime": "image/png",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": true
+        }
+      },
+      "expected": "accept",
+      "status": 200,
+      "passed": true,
+      "info": {
+        "fileSize": 10485760,
+        "width": 60,
+        "height": 40,
+        "format": "image/png"
+      },
+      "output": {
+        "bytes": 76,
+        "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb",
+        "header": {
+          "mime": "image/webp",
+          "width": 60,
+          "height": 40,
+          "animated": false,
+          "hasMetadata": false
+        },
+        "exif": false,
+        "icc": false,
+        "xmp": false
+      },
+      "providerWarning": null,
+      "elapsedMs": 2431
+    }
+  ]
+}

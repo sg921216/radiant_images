@@ -11,7 +11,8 @@ implemented/verified behavior. Frontend hosting is resolved to Cloudflare Worker
 Assets and the owner reports R2 enrollment complete. Strict recovery expiry and bounded
 server image decoding remain open in research R-16. Its implementation follow-up records
 verified quotas, the image-provider eligibility conflict and a proposed storage envelope.
-No retention-policy exception is approved. The separate local-development exception in
+That historical retention blocker is superseded by the owner-approved operational policy
+below (2026-11-14). Production verification remains open. The separate local-development exception in
 `feasibility-decision.md` was approved on 2026-11-13; production gates remain open.
 
 ---
@@ -279,13 +280,14 @@ Deleting a client cascades to `client_checklist_state`, `client_emails`, `questi
 
 ### Client deletion and recovery lifecycle (QR-002)
 
-T001 provider correction: D1 Free Time Travel retains seven days (Paid: 30 days).
-R2 lifecycle expiration is asynchronous and cannot prove an exact 30-day deletion maximum
-or exact 31-day receipt removal by itself. Keep the existing deadlines below. T058 must
-use explicit early deletion, verify removal, signal failures and block restore access to
-overdue backups. An unresolved provider-outage guarantee is still an OPEN feasibility gate;
-neither a lifecycle rule nor a nominal cron schedule counts as proof. Sources and remaining
-decisions are in research R-16.
+Owner-approved operational policy (2026-11-14): R2 lifecycle deletion is asynchronous;
+physical removal during outages has no unconditional day-30/day-31 guarantee. Application
+backups/media recovery expire for restore at day 28 after creation and deletion begins then,
+with a day-30 completion target. Retry failed cleanup on subsequent scheduled runs and
+independently detect/alert missed runs, delayed removal and stale backups. The target and
+possible delays must be disclosed. T001/T058 still require deployed evidence of these
+controls; neither policy approval nor a cron expression alone closes the gate. Verify D1
+provider-managed recovery separately and reject unsafe restore points under QR-002.
 
 Live client records and their questionnaire/email/checklist data remain until owner deletion;
 30-day invitation expiry closes access but does not itself delete retained owner responses.
@@ -298,13 +300,17 @@ live retention or permits deleted data to reappear after a restore.
   never report successful deletion while either obligation is incomplete.
 - Keep the deletion ledger outside the database restore set, as private R2 objects under
   `client-deletions/{clientId}.json`. Each receipt contains only `clientId` and `deletedAt`,
-  with 31-day retention from deletion; do not copy names, addresses, answers, or email bodies.
+  with a day-31 removal target from deletion; do not copy names, addresses, answers, or email bodies.
   Storage keys are never reused for new clients. This ledger is recovery metadata, not a
   soft-deleted client profile, and is never exposed by public image/API routes.
-- Private daily backups expire within 30 days of creation. Provider-managed recovery
-  windows must also be at most 30 days and verified by T001. Thus a deleted client's data
-  may remain in an older recovery copy for at most 30 days after deletion. New backups
-  exclude already-deleted live data; retention cleanup also removes expired receipts.
+- Private daily backups become ineligible for restore at day 28 of creation. Verify removal
+  beginning at day 28 and target completion by day 30; delayed physical removal may retain
+  deleted data longer during outages. New backups exclude already-deleted live data.
+  Begin receipt cleanup at day 31 only after overdue recovery copies are verified absent;
+  if that check or removal fails, preserve the required receipts, retry, alert the owner
+  and keep unsafe restores blocked. Do not describe an unsuccessful delete as completed.
+  Provider-managed recovery windows and restore eligibility must also be verified by T001;
+  do not use provider recovery to bypass ledger reconciliation or expiry checks.
 - Restore into an isolated environment. Before enabling any reads or sending email, load
   the independently retained deletion ledger and reapply each cascade to the restored data.
   Abort reopening if the ledger is unavailable/incomplete or any deletion cannot be applied.
@@ -448,7 +454,8 @@ lifecycle state are excluded. Capture/restore reject token-bearing email history
 implementation bounds snapshots at 16 MiB. Restore prunes deleted clients before atomic import,
 reconciles the independent ledger again and remains closed until explicit reopen. Original
 and variant recovery verifies all four media objects before reopening. These locally tested
-controls do not resolve T001's unconditional physical-expiry or production capacity gates.
+controls do not establish T001's deployed operational-retention/alerting or production
+capacity evidence. The owner-approved policy supersedes unconditional physical expiry.
 
 Question master input permits 0–40 questions, with at least one required before an invitation
 can be sent. Short-text answers allow up to 300 trimmed characters; long-text answers allow

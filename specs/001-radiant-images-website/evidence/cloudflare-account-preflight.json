@@ -1,0 +1,61 @@
+{
+  "observedAt": "2026-11-14T16:40:11.419Z",
+  "scope": "Read-only authenticated account inventory; no resources changed",
+  "wranglerVersion": "4.162.0",
+  "authenticatedAccounts": 1,
+  "r2BucketCount": 0,
+  "d1DatabaseCount": 0,
+  "workerScriptCount": 0,
+  "workerDefaultUsageModel": "standard",
+  "subscriptionQuery": {
+    "status": 403,
+    "errorCode": 10000,
+    "conclusion": "Current Wrangler OAuth token cannot establish subscription state"
+  },
+  "imagesStorageStatsQuery": {
+    "status": 403,
+    "errorCode": 10000,
+    "conclusion": "Permission denial does not establish Images plan or binding entitlement"
+  },
+  "connectorVerification": {
+    "observedAt": "2026-11-14T16:51:43Z",
+    "connection": "Cloudflare plugin OAuth",
+    "identityQuery": "Succeeded",
+    "accountListQuery": {
+      "status": 200,
+      "authenticatedAccounts": 1,
+      "paginationComplete": true
+    },
+    "imagesStorageStatsQuery": {
+      "status": 403,
+      "errorCode": 5403,
+      "message": "The given account is not valid or is not authorized to access this service",
+      "conclusion": "Storage service access is denied; transformation binding eligibility remains unverified"
+    },
+    "subscriptionQuery": {
+      "status": 403,
+      "errorCode": 10000,
+      "conclusion": "The connector reports no OAuth scope covers this endpoint; a Billing Read API token or dashboard inspection is needed to establish subscription state"
+    },
+    "dashboardInspection": "Unavailable: no connected browser",
+    "remoteMutations": false
+  },
+  "freeImagesActivation": {
+    "observedAt": "2026-11-14T16:59:52.593Z",
+    "ownerReportedPlan": "Free; Activate Cloudflare Images & Stream",
+    "imagesStorageStatsQuery": {
+      "status": 200,
+      "success": true,
+      "currentHostedImages": 0,
+      "allowedHostedImages": 0
+    },
+    "remoteDevelopmentBinding": "Transformations succeeded using synthetic fixtures; strict JPEG rejection failed",
+    "evidence": ["images-binding-probe.json", "images-binding-probe-followup.json"],
+    "workerScriptCountAfterProbe": 0,
+    "temporaryDevelopmentSession": "Stopped",
+    "paidSubscriptionSelected": false,
+    "applicationDeploymentPerformed": false
+  },
+  "productionImageValidation": "Remote development provider probe executed; strict decoding failed and deployed application validation remains unexecuted",
+  "productionGate": "Open"
+}

@@ -77,3 +77,14 @@ test('decode rejects a header-valid truncated source and metadata-bearing public
     validateLocalImages({ ...input(), full: bytes(fixtures.metadata) }),
   ).rejects.toThrow();
 });
+
+test('strict local validation rejects truncated JPEG scans with or without an end marker', async () => {
+  // The live Images binding accepted both fixtures on 2026-11-14. Keep the
+  // application's stricter requirement explicit while the provider remains gated.
+  const jpeg = await sharp(bytes(fixtures.original)).jpeg().toBuffer();
+  const truncated = jpeg.subarray(0, jpeg.length - 20);
+  for (const original of [truncated, Buffer.concat([truncated, Buffer.from([255, 217])])]) {
+    expect(imageHeader(original)).toMatchObject({ mime: 'image/jpeg', width: 60, height: 40 });
+    await expect(validateLocalImages({ ...input(), original })).rejects.toThrow();
+  }
+});

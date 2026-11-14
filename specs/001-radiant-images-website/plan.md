@@ -21,6 +21,24 @@ expiry and production image-decoder feasibility. `feasibility-decision.md` propo
 bounded exception for local work, explicitly approved by the owner on 2026-11-13.
 T001 remains a deployment gate; local implementation may proceed under that exception.
 
+**Owner decisions (2026-11-14)**: QR-002 now uses the approved operational retention policy:
+restore eligibility ends and verified deletion starts at day 28, removal targets day 30,
+and receipts target day 31 with safe preservation during unresolved cleanup. Retries,
+independent monitoring/owner alerts and disclosure of physical-deletion delays are required.
+The unconditional provider-deletion guarantee is superseded; operational proof remains open.
+The owner has a paid Pixieset **Client Gallery** plan and selected it for client photo
+delivery while keeping portfolio images on this website. R-17 records the integration
+findings. The existing R2 portfolio originals/derivatives, gallery editor, metadata/privacy
+and authoritative production image-validation requirements remain in scope. Full delivered
+client collections stay in Pixieset; no gallery API sync or Studio Manager migration is selected.
+
+**Images feasibility follow-up (2026-11-14)**: The owner activated Images Free. A synthetic
+remote-development binding probe confirms transformation access, orientation and metadata
+handling, including 40-megapixel inputs. It also demonstrates silent acceptance of damaged
+JPEG scans that strict local decoding rejects. R-18 records the evidence; preserve strict
+validation and the production upload gate until a compatible validator is proven. No paid
+plan, application deployment, or image-validation requirement change is selected.
+
 ## Summary
 
 Build a photography business website for Radiant Images with a public marketing site (home gallery, three service pages with "How It Works" + pricing sections, About, FAQ, Contact with CAPTCHA-protected inquiry form) and an owner admin area (gallery, banners, pricing packages, site config, clients, email templates, checklists, questionnaires) protected by Google sign-in with an owner allow-list.
@@ -268,10 +286,12 @@ blocker; no paid-tier upgrade or new spending budget is selected. T001 must stil
 usage budgets and overage controls. Frontend and API have different origins; images <= 10 MB upload, 60 max;
 WCAG 2.2 AA for public/admin/questionnaire routes; HTTPS only. Private originals/backups,
 EXIF/GPS-free public derivatives, documented usage permission and client-data lifecycle
-are required. QR-002 and data-model.md define live deletion, a maximum 30-day recovery-copy
-window, and independent 31-day deletion receipts reapplied before restores reopen. T001
-verifies provider support for that policy and records upload pixel bounds before dependent
-data/media implementation; it does not silently extend retention.
+are required. QR-002 and data-model.md define live deletion, day-28 application recovery
+expiry/deletion attempts, a day-30 removal target, and day-31 receipt cleanup subject to safe
+reconciliation. Provider-outage delays require retry, independent alerts and disclosure;
+expired or unsafe restores remain forbidden. T001 verifies these controls and provider
+recovery windows. Pixieset client delivery does not retire the existing production decoder
+requirement for the site's separately managed portfolio images.
 
 **Scale/Scope**: 1 owner; ~1–5k visitors/month; ≤ 60 gallery images; ≤ 200 client records; ≤ 20 inquiries/day; ~12 public routes + ~10 admin routes; ~35 API endpoints
 

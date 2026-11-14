@@ -944,3 +944,196 @@ Final artifact privacy scanned **55 files** and repository privacy scanned **385
 both with zero blocked findings; `git diff --check` passed. The after-implementation
 extension configuration was parsed again: its only applicable hook is the optional Git
 commit hook, which was displayed and left unexecuted. No mandatory hooks were registered.
+
+## 2026-11-14 — owner-guided release gate review
+
+The owner requested resolving Production, live/human acceptance, remote CI and deployment
+one at a time, with explicit identification of needed owner inputs. This review begins with
+Production. No remaining gate is passed by this review; **51/63 tasks remain complete**.
+Existing hosting selection and R2 enrollment remain accepted. The owner-requested Contact
+privacy-copy deferral remains pending until replacement copy or a new decision is supplied.
+
+### Checks performed in this review
+
+- Spec Kit prerequisites identify this feature; `requirements.md` is complete (16/16).
+- Existing Git, Prettier and ESLint ignore rules cover the detected private Node/TypeScript
+  workspace and Python tooling. No ignore-file change is needed.
+- The current local commit is `7416b3c869493c9af35797ef10d0ec5185806ab8`.
+  Existing unrelated workspace changes were left intact. Application suites were not rerun
+  for this documentation-only review; the previous 229-test and 150-case results above
+  remain historical evidence, not new executions.
+- `node node_modules/wrangler/bin/wrangler.js whoami` reports **not authenticated**.
+  No account entitlement, resource inventory or deployed behavior was verified. No temporary
+  account, resource creation, subscription, live send or deployment was attempted.
+- `productionRuntime` has no `validateImages` implementation. The gallery service rejects
+  publication without it. Closing T001/T034 requires implementation as well as account and
+  deployed evidence; signing in alone does not close the gate.
+- Current provider documentation still describes asynchronous R2 lifecycle deletion and
+  inconsistent Images binding prerequisites: the pricing page includes free transformations,
+  while the upload tutorial requires Images Paid. This does not establish this account's
+  eligibility for private-byte transforms under the existing budget.
+
+Sources rechecked: [R2 lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/),
+[Images pricing](https://developers.cloudflare.com/images/pricing/), and
+[Images upload tutorial](https://developers.cloudflare.com/images/tutorials/optimize-user-uploaded-image/).
+
+### Sequence and owner inputs
+
+| Gate | Work to complete | Owner input needed at that stage |
+| --- | --- | --- |
+| 1. Production — T001/T034/T058 | Resolve retention policy, implement/prove authoritative image validation, verify resource budgets and operational monitoring | Retention decision first; then sign in to the selected Cloudflare account and identify the operational alert recipient/channel. Any paid option requires a separate concrete decision. |
+| 2. Live/human acceptance — T023/T025/T031/T046/T057/T061/T063 | Record actual mailbox delivery, usability/owner timings, accessibility, physical print, approved-photo performance and actual-browser/device evidence | Designated test mailboxes and Google/Turnstile setup; final content/privacy/contact/photo approvals; 10 first-time participants (at least five mobile/five desktop), owner participation and required browser/device access. |
+| 3. Remote CI — T059 | Run the configured full remote matrix for the reviewed commit, resolve failures and address the historical intermittent WebKit input loss | GitHub access if unavailable; identify any account-side Actions restrictions. The recorded zero-run result above was not refreshed in this review. |
+| 4. Deployment — T060/T063 | Rehearse HTTPS configuration, migration/restore/rollback and smoke checks, then release the accepted artifact | Confirm the prepared deployment inventory and release when it is concrete and reviewable; provision credentials through local/provider secret mechanisms. |
+
+Remote CI needs no live-provider secrets and may be prepared independently. Live-provider
+acceptance requires a deployed environment, so the four gates are not four completely
+independent deploy phases. The present `releaseGate()` rejects **every** unchecked task,
+including T060/T063 tasks requiring deployed evidence. A separate isolated acceptance/probe
+path must be designed and reviewed before provider-connected execution, with synthetic
+data, designated accounts, bounded usage, access controls and cleanup. Keep the final
+production gate strict; do not check incomplete tasks merely to enable an acceptance run.
+
+### First owner proposal — subsequently approved below
+
+QR-002 currently imposes an unconditional maximum retention period for deleted client data
+in recovery copies and 31-day deletion receipts. R2 lifecycle documentation does not prove
+those deadlines during provider outages. The proposed alternative is an operational policy:
+
+- Keep live deletion and private recovery storage; refuse expired or unsafe restores.
+- Start verified backup/media recovery deletion at day 28 and target completion by day 30.
+- Target deletion-receipt expiry at day 31; reconcile the ledger before any restore reopens.
+- Retry delayed deletion, monitor missed cleanup/freshness independently, notify the owner,
+  and explicitly disclose that provider outages can delay physical removal.
+
+The owner may instead retain the strict deadlines and require another demonstrably feasible
+retention design. No policy amendment, new exception or production approval is inferred from
+the request to walk through gates. If the operational policy is selected, synchronize the
+specification, plan, data lifecycle, contracts, tasks and runbook, then implement and verify
+missing controls before considering T001/T058 complete.
+
+## 2026-11-14 — operational retention approved; Pixieset delivery scope selected
+
+The owner explicitly approved the proposed retention amendment: **"Adopt the operation
+policy."** This is authorization to synchronize QR-002 and its dependent design/runbook
+artifacts; it is not a claim of production control verification. The former pending proposal
+above is superseded by this approval.
+
+Updated spec, plan, data-model, research, feasibility decision, tasks, quickstart and contract
+descriptions to require day-28 application restore expiry/verified deletion attempts, a
+day-30 removal target, and a day-31 receipt-cleanup target. Failed cleanup must retry and
+alert through independent monitoring, including missed jobs and stale backups. Disclose
+physical-removal delays during outages. Preserve required receipts if overdue recovery
+removal cannot be verified; expired/unsafe restores remain forbidden. No HTTP schema,
+endpoint, executable code, retention constant or task-completion flag changed.
+
+The owner also confirmed the existing paid plan is **Pixieset Client Gallery**, then selected
+**"Client photo delivery; keep portfolio images on our website"**. R-17 records official
+product/integration findings and the selected boundary. Full client collections and sharing
+belong in Pixieset; portfolio processing remains on Cloudflare, so T001/T034's production
+decoder still needs implementation and proof. No Studio Manager migration, automatic gallery
+sync, new subscription or real-client data operation is selected/performed. Application
+client deletion does not imply deletion of Pixieset collections.
+
+**Resolved decisions:** retention-policy amendment and Pixieset product/scope.
+**Remaining Production evidence:** portfolio decoder entitlement/implementation/proof,
+usage controls, deployed cleanup/retry, independent monitoring/owner notification and safe
+restore rehearsal. Alert destination/configuration remain outstanding. Cloudflare sign-in
+was requested as the next owner action so account capabilities can be inspected.
+**Task status remains 51/63 complete**; T001/T034/T058 are still open.
+
+Validation for this amendment: `git diff --check` passes. OpenAPI parses as YAML and a
+structural comparison with HEAD confirms only the general description changed; HTTP
+operations and schemas are identical. Task counts remain 63 total / 51 checked.
+`node node_modules/vitest/vitest.mjs run apps/api/tests/operations.test.ts` passes **1 file /
+9 tests** in **7.61 seconds**, covering existing local expiry, deletion-ledger preservation
+during failed cleanup, safe retry, restore refusal and private media recovery. No test or
+runtime implementation was changed. These are local checks, not production alert evidence.
+The after-implementation hook was parsed: only the optional Git commit hook applies, and
+it remains unexecuted. No mandatory hooks are registered.
+
+## 2026-11-14 — authenticated Cloudflare inventory and agent setup
+
+The owner completed Wrangler login. `wrangler whoami` confirms one accessible account.
+Read-only `r2 bucket list`, `d1 list --json`, and the Workers scripts API report zero
+buckets, databases and Workers respectively. R2 enrollment remains accepted; application
+resource provisioning is still future work. The Workers account-settings response reports
+`standard`, which is not treated as proof of a billing plan or an Images entitlement.
+
+The account-subscriptions and Images storage-statistics endpoints return HTTP 403/code
+10000 with the Wrangler OAuth credential. This is insufficient API permission, not evidence
+that Images is unavailable or that an upgrade is needed. Credential values and account
+identifiers were excluded from the tracked
+[preflight evidence](./evidence/cloudflare-account-preflight.json). No photo-processing,
+resource creation, subscription change, message or deployment was performed.
+
+The owner then explicitly requested executing the applicable instructions at
+[Cloudflare's agent setup](https://developers.cloudflare.com/agent-setup/prompt.md).
+Installed all 22 published `cloudflare/skills` skill directories into the global Codex
+skills folder using Codex's skill-installer helper; each `SKILL.md` was verified. Registered
+the official `https://mcp.cloudflare.com/mcp` server with `codex mcp add cloudflare --url ...`
+after backing up the user configuration. Registration automatically started OAuth; completion
+is recorded below once observed. The optional beta `cf` CLI choice was presented separately.
+This environment setup does not close T001/T034/T058 or any release task.
+
+**Setup result:** the registration process exited successfully with `Successfully logged
+in`; `codex mcp list` reports the Cloudflare server enabled with OAuth authentication.
+The user selected **"Skip it; keep Wrangler"** for the optional beta `cf` executable.
+It was not installed. The published `cf-cli` guidance skill is included among the 22
+skills, which does not install that executable. Existing user configuration is semantically
+unchanged apart from the Cloudflare entry (Codex omitted one equivalent empty `args` list).
+The configuration backup remains in the user Codex directory. Skills are available next
+turn; restart Codex to load the newly registered MCP tools, which are not exposed to this
+running session. After activation, resume Images entitlement investigation and the remaining
+Production gate. No task-completion flag changed; the count remains **51/63**.
+
+## 2026-11-14 — resumed Cloudflare connector verification
+
+After the owner updated access and requested another retry, the Cloudflare plugin's
+identity lookup and account list succeeded. The account list contains one account and
+pagination is complete. The earlier local tool-approval rejection no longer blocks this
+connector's account lookup.
+
+Images storage statistics return HTTP 403/code 5403 (account invalid or unauthorized for
+the service). Account subscriptions return HTTP 403/code 10000; the connector explicitly
+reports that no OAuth scope covers that endpoint and that an API token with Billing Read
+or Billing Write is needed. These results do not establish whether private-byte Images
+transformations are available, nor do they justify purchasing a subscription. Dashboard
+inspection could not proceed because no browser is connected. The owner was asked for
+the Images plan/setup status shown in the dashboard.
+
+Sanitized results are recorded in the existing
+[preflight evidence](./evidence/cloudflare-account-preflight.json), preserving the earlier
+Wrangler observations separately. No credentials or account identifiers were added to
+project evidence. No remote resource, subscription or application code was changed.
+Production image validation remains unexecuted; T001/T034/T058 and the **51/63** task count
+remain unchanged.
+
+## 2026-11-14 — Images Free activation and remote provider diagnostics
+
+The owner activated Images & Stream Free. Account statistics now succeed (zero hosted
+images; zero hosted-storage allowance). The temporary Images-only development probe
+successfully transformed synthetic private image bytes on Cloudflare. R-18 records the
+boundary findings and links to both raw, sanitized evidence files.
+
+The first probe has nine successful valid-image cases, two corrupt-input refusals reported
+as provider internal error 9516, one silently accepted truncated JPEG, and one PNG proxy
+failure. A targeted repeat accepted the valid PNG but reproduced JPEG acceptance both with
+and without an end marker. Both malformed JPEGs fail the strict local decoder. These are
+unresolved validation results, not a provider pass. No production validator was wired in.
+
+Commands: `pnpm exec wrangler dev --config scripts/image-binding-probe/wrangler.toml --remote
+--ip 127.0.0.1 --port 8795 --inspector-port 9245 --show-interactive-dev-session=false`, then
+`pnpm exec tsx scripts/image-binding-probe/run.ts`; targeted follow-up selected
+`jpeg-truncated-scan jpeg-truncated-scan-with-end-marker png-16384-axis`. Diagnostic exits
+were nonzero, as required by the unmet expectations. The development process was stopped;
+the authenticated Workers scripts inventory afterward remained at zero.
+
+Production decoder, resource-budget and retention/monitoring evidence remain outstanding.
+No paid plan, real photo, live message, application deployment or task-completion change
+was introduced. The count remains **51/63**.
+
+Local regression verification: **15/15 tests passed** across the image-provider and gallery
+suites, including both malformed JPEG fixtures and the unconfigured-production-validator
+refusal. Full workspace typechecking, scoped ESLint, formatting and diff checks passed.
+These passing local checks do not supersede the recorded provider failures.

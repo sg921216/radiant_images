@@ -25,6 +25,11 @@ development and end-to-end verification apply to all executable behavior.
 
 - Q: Which service should host the frontend? → A: Switch from GitHub Pages to Cloudflare Workers Static Assets.
 
+### Session 2026-11-14
+
+- Q: May recovery retention use an operational policy instead of unconditional physical-deletion deadlines? → A: Adopt the operational policy: start verified recovery-copy deletion at day 28, target completion by day 30, target receipt expiry at day 31, retry and alert on delays, and refuse expired or unsafe restores. Disclose that provider outages can delay physical removal.
+- Owner input: Use the owner's existing paid **Pixieset Client Gallery** account for client photo delivery; keep public portfolio images on the Radiant Images website. Pixieset handles delivered collections and sharing; the website retains its selected portfolio, gallery administration and image-validation requirements. This does not select Studio Manager or replace the site's client-management workflows.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Discover Services and Submit an Inquiry (Priority: P1)
@@ -239,13 +244,21 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
   unnecessary embedded metadata; originals, unpublished photographs, and backups remain private.
 - **QR-002**: Live client records, checklist progress, email history, questionnaire invitations,
   and responses MUST be removed together when the owner deletes a client. Private recovery
-  copies may retain deleted data for at most 30 days after deletion; they MUST NOT be served
-  by application routes. Restores MUST reapply subsequent client deletions before any access
+  copies MUST NOT be served by application routes. Application recovery copies become
+  ineligible for restore at day 28 after creation; verified deletion MUST begin then, with
+  an operational completion target of day 30. Provider outages may delay physical removal
+  beyond this target; this limitation MUST be disclosed. Failed deletion MUST be retried,
+  independently monitored, and alerted to the owner, including missed cleanup runs.
+  Restores MUST reapply subsequent client deletions before any access
   resumes, using a durable private deletion ledger outside the database restore set; if the
   ledger cannot be reconciled, reopening the restored service MUST be blocked. Ledger records
-  contain only client ID and deletion time, expire after 31 days, and are not client profiles.
+  contain only client ID and deletion time, target verified removal at day 31 after deletion,
+  and are not client profiles. If overdue recovery copies cannot be verified removed, retain
+  required receipts, report the delay, and refuse unsafe restores; never discard recovery
+  safeguards solely to meet the receipt target. New backups MUST exclude deleted live data.
   Inquiry content remains transient under FR-023; neither logs nor test artifacts may disclose
-  client details or access tokens. Provider retention capability MUST be verified by T001.
+  client details or access tokens. T001 MUST verify provider recovery windows and the
+  operational controls; policy approval alone is not evidence that those controls work.
 - **QR-003**: Public pages MUST expose discoverable content, descriptive page metadata,
   canonical addresses, and a sitemap. Admin and questionnaire pages MUST be excluded from
   indexing without relying on that exclusion to protect access.
@@ -308,7 +321,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - Pricing is owner-edited in Admin; web, print, and PDF are all rendered from the same published revision (no separately uploaded PDF).
 - Inquiries are not stored; the inquiry email is the system of record. Client records in Admin are created manually by Rebekah (typically by copying details from an inquiry email).
 - Radiant Images does not yet own a custom domain. All outgoing email (inquiry notifications, client template emails, questionnaire links) is sent from a single owner-configurable sender address, to be set to Rebekah's business Gmail address once created; the email delivery service must be able to send on behalf of that address. Client email addresses are entered by Rebekah and not independently verified.
-- Live client, checklist, email-history, and questionnaire data are retained until Rebekah deletes the client record; no automatic purge of active clients for MVP. Deletion cascades through live records; private recovery copies expire within 30 days and restore-time deletion reconciliation prevents their republication (QR-002). Delivered email in external mailboxes is outside this application deletion scope.
+- Live client, checklist, email-history, and questionnaire data are retained until Rebekah deletes the client record; no automatic purge of active clients for MVP. Deletion cascades through live records; application recovery copies become unrestorable at day 28, target verified removal by day 30, and use QR-002's retry/alert policy for provider delays. Restore-time deletion reconciliation prevents republication. Delivered email in external mailboxes is outside this application deletion scope. Pixieset photo lifecycle and deletion remain a separate provider boundary to verify when gallery scope is selected; application deletion does not imply deletion in Pixieset.
 - Banner schedules use the owner's configured timezone (default America/New_York), inclusive start / exclusive end, and overlapping banners resolve to the most recently started.
 - Contact-form defaults: phone required only for Call/Text; postal code free-text (US format expected but not enforced for MVP); preferred day limited to today through 18 months ahead; session length 1–4 hours in 1-hour steps; party size 1–12; free-text fields limited to 2,000 characters.
 - Visitors do not receive an automatic acknowledgment email for MVP; on-screen confirmation is sufficient.
