@@ -455,9 +455,11 @@ then repeat healthy → injected fault → recovered and verify a scheduled reci
 Pull requests now run the complete configured Chromium desktop/mobile, Firefox desktop,
 and WebKit desktop/mobile suite in the Quality workflow. Main-branch pushes run Chromium
 smoke; scheduled, manual and reusable release runs retain the full suite. A successful
-old PR smoke run does not establish a full-suite pass. The latest pushed baseline has a
-new manual Quality run linked in acceptance.md. The local R-24 changes need their own
-remote full-suite result on the exact commit before merge or release.
+old PR smoke run does not establish a full-suite pass. R-24 commit `c00eaab` now passes
+PR Quality run 43675695318 with an identical tested merge tree: 281 unit/integration
+tests and 158 browser passes, plus 12 declared duplicate performance-profile skips.
+T059 is complete; acceptance.md retains the exact commit/tree and gate evidence. Later
+application changes still require a fresh remote result before merge or release.
 
 The API and frontend have separate manually dispatched workflows. Both require the Quality
 workflow on the same commit, an exact acceptance commit input, and the `production` GitHub

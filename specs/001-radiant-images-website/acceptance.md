@@ -1,5 +1,42 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-14 — Committed R-24 remote CI acceptance (T059)
+
+The owner supplied [Quality run 43675695318 / verify job 132695230356](https://github.com/sg921216/radiant_images/actions/runs/43675695318/job/132695230356).
+Verified its run/job APIs and completed job log: **SUCCESS** on feature head
+`c00eaab40235185e7d320176986ccdf3fe4bc334`, which contains all R-24 CPU, usage-control,
+contract and pricing changes. The PR checkout is merge commit
+`ce7ca2c7a7d227cfc618a6645778fa5d739e241e`; GitHub's Git API confirms its tree exactly
+matches the feature head (`e2ef3326e26b3060b790c7edb418488b98580f8c`). This closes the
+previous gap between local changes and the remote-tested source.
+
+| Gate | Verified result |
+| --- | --- |
+| Install and static quality | Frozen lockfile install, formatting, lint and type checks pass. |
+| Unit/component/API/contract/tooling | **63 files / 281 tests pass**, including the new dispatch, upload-budget and contract-harness cases. |
+| Production and browser setup | API/web builds, local database setup and all three browser-engine installations pass. |
+| Full browser matrix | **158 passed / 12 skipped** in 15.7 minutes: 155 functional cases across five projects, plus three once-per-run performance profiles. Only duplicate performance-profile cells are skipped; no functional quarantine. |
+| Security/privacy | Dependency audit, repository secret scan and diagnostic privacy gate pass. Failure-only artifact upload is correctly skipped on success. |
+| CI guard review | PR/nightly/manual/reusable release events select the full matrix; main pushes select smoke. Focused tests are forbidden, CI permits one diagnostic retry, flaky classification fails the run, traces are disabled, and privacy-cleared failure artifacts have seven-day retention. No live-provider secrets are injected into Quality. |
+
+The existing R-24 observation matrix establishes success/error coverage for all 40
+operations and 401/403 for all 31 protected operations; the now-remote-passing security
+suite also checks expired, removed-owner and non-owner sessions. Applicable-error
+declaration checks and actual response validation pass. A supplementary local schema
+probe passes 12 checks across all three email error schemas: valid code/retryable pairs
+are accepted, while wrong codes, inverted retryability and missing retryability reject.
+
+The historical isolated WebKit input-loss observation remains in the earlier evidence;
+it did not recur in this complete matrix. No root-cause fix is claimed and no journey is
+omitted. Passive failure diagnostics and T063's actual-device acceptance remain required.
+
+**T059 is complete: 54/63 tasks complete, 9 open.** This is pinned-engine CI acceptance;
+general HTTP CPU/account usage, persistent recovery monitoring, real-mail/human checks,
+owner content and production release gates remain open. The evidence update itself changes
+only documentation. No application code, deployment, workflow dispatch or merge occurred
+during this verification. The UTC run ended November 15; the New York date is November 14.
+See [sanitized run, commit/tree, step and count evidence](./evidence/github-ci-r24-20261115.json).
+
 ## 2026-11-14 — Scheduled CPU remediation, usage controls and pricing acceptance (R-24)
 
 Base commit: `48d5ee3032ee1ad9587b18bbc2588d6b86d394db`, plus the local changes described
