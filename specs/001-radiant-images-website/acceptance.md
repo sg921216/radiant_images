@@ -1,5 +1,121 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-14 — Scheduled CPU remediation, usage controls and pricing acceptance (R-24)
+
+Base commit: `48d5ee3032ee1ad9587b18bbc2588d6b86d394db`, plus the local changes described
+below. UTC measurements fall on November 15; the workstation date is November 14 (New York).
+Existing Spec Kit/toolchain edits and the unrelated logo asset remain outside this work.
+No public release, paid upgrade, live Gmail send or customer-data operation occurred.
+
+### Scheduled CPU and application usage controls
+
+Both production cron expressions now await one private `ScheduledOperations` Durable
+Object, serializing the single recovery ledger with at most two outstanding jobs.
+Unsupported schedules/excess queueing fail explicitly; operation failures reach the cron
+caller and release the queue. The existing R2 job records remain the persistent completion,
+failure and freshness evidence. Release, local and private rehearsal configurations include
+the new binding and SQLite-class migration; Wrangler regenerated the binding types.
+
+| Check | Observed result |
+| --- | --- |
+| Actual Cloudflare cron | Three successful accelerated invocations on version `57cfe04e-f0c3-401c-aaab-19fac45b88bb`; the daily recovery branch used real D1/R2 with a synthetic no-send Gmail boundary. |
+| Front Worker CPU | **0 / 0 / 0 ms at provider reporting resolution**, compared with R-23's 32 / 34 / 30 / 43 ms. This is not zero computation. |
+| Coordinator CPU | **30 / 28 / 18 ms**; front wall times 14,456 / 13,115 / 13,043 ms. All six invocations returned `ok`, without exceptions. |
+| Independent observation | Separate R2 binding reader reported `ok:true`, no issues and zero overdue recovery/receipt counts after actual cron completion. |
+| Private ingress | Worker public/preview URLs disabled, no routes; both R2 managed domains disabled and no custom domains. |
+| Teardown | Schedule removed, buckets emptied with absence checks, local proxy/tail stopped; Worker/DO namespaces/D1/buckets removed. Final provider listings contain zero matching resources. |
+| Portfolio churn control | Persistent DO allowance of 300 admitted upload attempts per rolling 30 days, before image processing. Failed admitted attempts consume a slot; exhaustion returns 429 with Retry-After. Auth/byte-limit rejection occurs before reservation. Reads and deletion remain available. Local real-DO proof; no new deployed portfolio-quota claim. |
+| Account warning | Added and re-read enabled **$1 account-wide budget warning**, reusing the existing billing recipient. Existing $10 warning preserved. No notification test or paid upgrade. |
+| Billing limitations | Subscription and spend-policy reads return 403 with the current OAuth connection. Budget warnings do not stop usage; no account-wide invoice cap or $0 guarantee is established. |
+
+Evidence: [sanitized CPU/control/cleanup record](./evidence/cloudflare-cpu-remediation.json).
+Research R-24 records source-backed limits and the bounded storage/transformation planning
+envelope. These samples do not establish worst-case backup capacity or general HTTP CPU
+headroom (the earlier cold gallery GET reached 12 ms). **T001 stays open.**
+
+**T058 stays open:** no persistent application deployment exists to monitor. Activate only
+against the real recovery bucket with verified bucket-scoped S3 read credentials, repository
+settings and scheduled recipient routing. R-23's user-confirmed manual notification and
+healthy/fault/recovered rehearsal remain valid but do not prove future scheduled delivery.
+The $1 warning is the only persistent Cloudflare change from this follow-up.
+
+### Red/green and local quality evidence
+
+- `pnpm exec vitest run apps/api/tests/scheduled-dispatch.test.ts`: initial behavioral
+  failures showed no coordinator dispatch and swallowed injected coordinator failure.
+  Overlap/unknown-schedule checks also failed before the coordinator behavior was added.
+  Final five cases pass, including real failed cleanup → successful backup/healthy signals.
+- `pnpm exec vitest run apps/api/tests/gallery-budget.test.ts`: the initial 301st attempt
+  returned 400 instead of 429. Final real-DO test passes for the last admitted invalid
+  upload, persistent count, exhaustion/Retry-After/contract body, unauthorized access and
+  expired-window recovery. No image processing is needed to consume those test attempts.
+- Focused rehearsal/release configuration tests and scheduled/operations tests pass.
+  `pnpm check` passes formatting, lint, types, **62 files / 277 tests** and production builds
+  after the CPU/usage implementation. This run predates the later contract-harness file.
+- After the contract additions, the complete API audit passes **24 files / 158 tests**;
+  the subsequent four-case contract-harness run passes, including three new coverage cases.
+  Final formatting, lint, types, secret/artifact privacy gates and `git diff --check` pass.
+  Final secret scan: 453 files / zero blocked; diagnostic scan: 10 files / zero blocked.
+
+### T059 contract and remote CI verification
+
+An observation hook temporarily recorded only normalized path, method and status **after**
+the normal strict response validator succeeded. The helper was restored byte-for-byte.
+The complete API run exposed three coverage gaps: no error for Google sign-in start, and
+no success for owner banner/questionnaire reads. Added authenticated-read cases and an
+auth rate-limit case; all pass. A separate harness regression rejects an intentionally
+malformed `/pricing` response with the expected schema-mismatch error.
+
+The combined observed response set covers **all 40 operations with success and error**,
+and **all 31 protected operations with 401 and 403**, in addition to the existing expired,
+removed-owner and non-owner authorization tests. The audit does not treat schema
+declarations alone as response evidence. See
+[the complete sanitized status matrix](./evidence/contract-coverage-20261115.json).
+
+The manually dispatched [Quality run 43673720689](https://github.com/sg921216/radiant_images/actions/runs/43673720689)
+**passes** on the latest pushed commit `48d5ee3032ee1ad9587b18bbc2588d6b86d394db`:
+frozen install, formatting/lint/types, dependency and secret checks, **60 files / 271 tests**,
+production builds, setup and the full browser matrix. Browser result: **153 passed / 12
+skipped** in 17.5 minutes. The 150 functional cases cover all five projects; three performance
+profiles run once in Chromium desktop (including the specified CDP mobile conditions),
+and their 12 duplicate non-target project cells are explicitly skipped. These are declared
+profile-selection skips, not quarantined functional journeys. The diagnostic privacy step
+passes; failure-only artifact upload is correctly skipped. Focused/flaky rejection and
+seven-day retention remain configured. This run does not contain the local CPU/usage/test
+diff; remote CI on its eventual commit remains required before closing T059 or releasing.
+See [sanitized run/step/count evidence](./evidence/github-ci-20261115.json).
+
+### T031 pricing, print and PDF acceptance
+
+The expanded local pricing suite passes **20/20 cases** across Chromium desktop/mobile,
+Firefox desktop and WebKit desktop/mobile, with no retries, failures, skips or flaky cases.
+Every service's pricing loads from Home in one navigation-link click (plus opening the
+mobile menu), and each scoped Book Now CTA opens Contact. Publication updates an already
+open service page within 60 seconds; its download filename and all print revision footers
+match `GET /pricing`. The PDF-module outage retains usable pricing/print controls.
+Existing pricing integration tests also pass missing-type/negative-price/duplicate-order
+rejection, simultaneous equal-time publication and rollback after pointer-write failure.
+
+Downloaded PDFs and Chromium browser-print PDFs were captured before and after publication,
+rendered with PyMuPDF, inspected visually, and checked with text/page coordinates. **All
+four documents have three pages (12 inspected pages total):** one each for Maternity,
+Newborn and Family, with readable package text, no clipping, no unexpected blank pages or
+navigation. Initial prices are $250.00; the updated Family price is $350.50 with the other
+two unchanged. Every corresponding footer matches the API revision. The browser-print
+and PDF layouts differ visually but preserve the same complete published data.
+
+The first short run overlapped the production rebuild and returned one transient Family
+404; it is not counted as product acceptance. After the build completed, the sequential
+20-case run above passed. No product fix is attributed to that harness race. Firefox used
+the existing owner-installed executable via the local matrix configuration.
+See [pricing matrix and page inspection evidence](./evidence/pricing-review-20261115.json).
+
+**T031 is complete for its pricing-specific assertions; 53/63 tasks complete, 10 open.**
+This adds the deferred pricing navigation to the existing US1 evidence. Overall SC-001
+participant/inquiry timings still depend on T025/T063, SC-004 full acceptance remains
+T061, and final owner-content/physical-printer/device acceptance remains T063. Synthetic
+pricing fixtures do not constitute owner approval of launch prices or text.
+
 ## 2026-11-14 — Private recovery and monitoring rehearsal (R-23)
 
 Requested after merge; branch `001-radiant-images-website` fast-forwarded to main

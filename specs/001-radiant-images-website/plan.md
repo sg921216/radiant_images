@@ -113,6 +113,19 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**CPU and usage remediation (2026-11-14, R-24):** Both production cron schedules now
+await one `ScheduledOperations` Durable Object for the recovery ledger. It serializes
+maintenance and daily backup/health, permits at most two outstanding jobs, propagates
+failure, and leaves completion evidence in the existing private R2 signals. The front
+Worker only dispatches RPC; it no longer executes the 30–43 ms recovery workload.
+Production, local and private rehearsal configs include a SQLite-class migration.
+The portfolio coordinator also persists a reservation for at most 300 owner-authorized
+upload attempts per rolling 30 days. Failed attempts count; reads/deletion do not consume
+that allowance. This bounds application churn, not total account billing. A verified $1
+account-wide budget warning supplements the existing $10 alert. Billing subscription and
+spend-policy APIs remain inaccessible to this OAuth connection. See acceptance.md for
+the actual deployed measurements and remaining persistent-monitor/general API gates.
+
 **Recovery rehearsal (2026-11-14, R-23)**: The private disposable operator in
 `scripts/cloudflare-recovery-rehearsal/` imports the shipped backup, deletion, media and
 scheduled services without adding application routes. Real D1/R2 checks cover deletion

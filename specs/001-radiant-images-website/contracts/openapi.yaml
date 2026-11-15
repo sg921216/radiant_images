@@ -796,6 +796,11 @@ paths:
         objects exist; failed writes require cleanup/reconciliation with no partial publication.
         Byte ceilings are enforced while reading, regardless of Content-Length. Oversized
         requests return 413; invalid content/dimensions/claims return 400 with field errors.
+        The private portfolio coordinator reserves at most 300 admitted owner-authorized
+        upload attempts per rolling 30 days; failures after reservation consume a slot.
+        Authentication and byte-limit rejections precede reservation. Exhaustion returns
+        429 with Retry-After before image processing. Reads and deletion remain available.
+        This application allowance is not an account-wide billing cap.
         T001's bounded decoder feasibility proof is still required before implementation.
         Header inspection alone does not establish full decoding. Flattening an animation
         is not rejection of animated input. Provider failure must never publish unvalidated

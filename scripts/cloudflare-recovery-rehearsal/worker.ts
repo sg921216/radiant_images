@@ -14,7 +14,8 @@ import {
   reconcileDeletions,
 } from '../../apps/api/src/services/clientDeletion';
 import { deleteImage, imageKeys } from '../../apps/api/src/services/images';
-import { runScheduled } from '../../apps/api/src/scheduled';
+import { runScheduled, scheduled } from '../../apps/api/src/scheduled';
+import { ScheduledOperations } from '../../apps/api/src/services/scheduledOperations';
 import { sha256 } from '../../apps/api/src/services/crypto';
 
 // Disposable, private operator entry only. Never included by the application entry point.
@@ -61,6 +62,23 @@ const fixtureEnv = (env: Env): Env => ({
   GOOGLE_CLIENT_SECRET: 'synthetic',
   GMAIL_REFRESH_TOKEN: 'synthetic',
 });
+// The same production serialization and RPC dispatch, with only the external mail
+// provider and rehearsal control/receipt injected inside the private coordinator.
+export class RehearsalScheduledOperations extends ScheduledOperations {
+  protected override async execute(cron: string): Promise<void> {
+    const state = await control(this.env);
+    if (!state.cron) return;
+    await runScheduled(cron, fixtureEnv(this.env), runtime(new Date()));
+    await this.env.RECOVERY.put(
+      'rehearsal/cron.json',
+      JSON.stringify({
+        delegatedSchedule: cron,
+        completedAt: new Date().toISOString(),
+        provider: 'synthetic-no-send',
+      }),
+    );
+  }
+}
 async function control(env: Env) {
   const value = await env.RECOVERY.get(controlKey);
   check(value && value.size < 2048, 'control_missing');
@@ -471,18 +489,7 @@ export default {
     }
   },
   async scheduled(event: ScheduledController, env: Env): Promise<void> {
-    const state = await control(env);
-    if (!state.cron) return;
-    // Accelerates only the trigger. The shipped maintenance/backup/health logic is unchanged.
-    await runScheduled('0 3 * * *', fixtureEnv(env), runtime(new Date()));
-    await env.RECOVERY.put(
-      'rehearsal/cron.json',
-      JSON.stringify({
-        cron: event.cron,
-        scheduledTime: event.scheduledTime,
-        completedAt: new Date().toISOString(),
-        provider: 'synthetic-no-send',
-      }),
-    );
+    // Accelerate the daily branch, keeping the front Worker on the shipped dispatch path.
+    await scheduled({ ...event, cron: '0 3 * * *' }, env);
   },
 };

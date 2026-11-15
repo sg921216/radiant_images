@@ -15,6 +15,12 @@ export function recoveryConfig(suffix: string, databaseId: string) {
     workers_dev: false,
     preview_urls: false,
     routes: [],
+    durable_objects: {
+      bindings: [{ name: 'SCHEDULED_OPERATIONS', class_name: 'RehearsalScheduledOperations' }],
+    },
+    migrations: [
+      { tag: 'scheduled-operations-v1', new_sqlite_classes: ['RehearsalScheduledOperations'] },
+    ],
     vars: {
       WEB_ORIGIN: 'https://web.rehearsal.invalid',
       API_ORIGIN: 'https://api.rehearsal.invalid',

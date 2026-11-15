@@ -1,5 +1,26 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-14 CPU, usage and pricing checkpoint (R-24):** Scheduled recovery now runs in
+one private Durable Object. Three actual accelerated cron samples report 0/0/0 ms front
+CPU at provider resolution, versus the earlier 30–43 ms; coordinator work completes at
+30/28/18 ms and the independent observer reports healthy. Temporary resources were
+removed and absence verified. Portfolio uploads now have a persistent 300-attempt rolling
+30-day allowance, with local integration proof. An enabled $1 account budget warning
+supplements the existing $10 warning; neither stops billing. T001 remains open for general
+HTTP CPU and account-wide usage/plan evidence; billing reads return 403. T058 still needs
+the persistent deployment and scheduled monitoring/recipient configuration.
+
+T031's pricing checks are complete: 20/20 browser cases across all five configured
+projects, successful publication/rollback integration tests, and visual/text inspection
+of all 12 pages from initial/updated download and browser-print PDFs. Prices and revision
+IDs match. Overall SC-001 human timings remain with T025/T063; final-content/physical-device
+acceptance is not inferred. **53/63 tasks complete, 10 open.** Contract observation now
+covers all 40 operations with success/error and all 31 protected operations with 401/403.
+The latest pushed baseline `48d5ee3` passes remote Quality run 43673720689: 271 tests,
+153 browser passes and 12 declared non-target performance-profile skips. T059 remains
+open for remote CI on the current local changes. See acceptance.md and the sanitized
+evidence records. No public release occurred.
+
 **2026-11-14 recovery rehearsal checkpoint (R-23):** On the feature branch fast-forwarded
 to merged main `d4e8aee`, a private temporary Worker/D1/two-R2-bucket rehearsal now verifies
 application backup/restore, deleted-client cascades, media byte recovery, blocked unsafe/expired
@@ -175,7 +196,7 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 - [x] T028 [P] [US2] Build package add/remove/reorder/edit and publish UI with atomic failure feedback in `apps/web/app/routes/admin/pricing.tsx` (FR-011/030).
 - [x] T029 [P] [US2] Build one-revision pricing state, service-type sections, Book Now, and full-schedule print layout in `apps/web/app/lib/pricing.ts`, `apps/web/app/components/PricingSection.tsx`, and `apps/web/app/styles/print.css`; never mix bootstrap and separately fetched revisions (FR-006/008/009).
 - [x] T030 [US2] Build lazy-loaded full-schedule PDF generation with revision/publish footer, download and retryable error state in `apps/web/app/lib/PricingPdf.tsx`; bind page, print, and PDF to the same revision and integrate pricing into the three service routes in `apps/web/app/routes/public/maternity.tsx`, `apps/web/app/routes/public/newborn.tsx`, and `apps/web/app/routes/public/family.tsx` (FR-010/011).
-- [ ] T031 [US2] Run pricing suites and quickstart steps 3–5 (including their deferred US2 assertions) and 22–23. Verify Home-to-pricing navigation in fewer than three clicks, the Pricing-section Book Now CTA, and service readiness including loaded pricing; combine with T025's evidence to complete SC-001. Visually inspect print/PDF for clipping/pagination and record price/revision parity in `specs/001-radiant-images-website/acceptance.md`; full SC-004 benchmarking remains T061 (SC-001/006/011).
+- [x] T031 [US2] Run pricing suites and quickstart steps 3–5 (including their deferred US2 assertions) and 22–23. Verify Home-to-pricing navigation in fewer than three clicks, the Pricing-section Book Now CTA, and service readiness including loaded pricing; combine with T025's evidence to complete SC-001. Visually inspect print/PDF for clipping/pagination and record price/revision parity in `specs/001-radiant-images-website/acceptance.md`; full SC-004 benchmarking remains T061 (SC-001/006/011).
 
 ## Phase 5: US3 — Owner Manages the Gallery (P3)
 

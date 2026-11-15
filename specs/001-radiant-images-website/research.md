@@ -1,5 +1,56 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-24: Scheduled CPU remediation and upload usage controls — 2026-11-14
+
+The R-23 cron baseline used 32/34/30/43 ms in the ordinary Free Worker. Scheduled
+dispatch now awaits a private SQLite-backed `ScheduledOperations` Durable Object, which
+serializes the two schedules over the single recovery ledger. At most two jobs are
+outstanding; unknown schedules and excess queueing fail explicitly. A failed operation
+does not poison the next invocation. The existing private R2 records preserve last
+completion, failure and stale-work monitoring across restarts.
+
+Three actual accelerated Cloudflare cron invocations on version
+`57cfe04e-f0c3-401c-aaab-19fac45b88bb` completed with **0/0/0 ms** front-Worker CPU at
+provider resolution and **30/28/18 ms** coordinator CPU. Front wall times were
+14,456/13,115/13,043 ms. The independent binding observer reported healthy with no issues.
+This establishes headroom for the sampled synthetic recovery workload, not zero CPU,
+worst-case backup sizing, general HTTP CPU or live Gmail acceptance. The source hashes,
+private-ingress checks and verified teardown are in
+[the sanitized CPU record](./evidence/cloudflare-cpu-remediation.json).
+
+Cloudflare documents [10 ms Free Worker CPU](https://developers.cloudflare.com/workers/platform/limits/#cpu-time)
+and [30 seconds per Durable Object invocation](https://developers.cloudflare.com/durable-objects/platform/limits/).
+DO duration includes waiting for I/O; the sample's ~13–14 seconds is not its CPU cost.
+At 128 MB allocated, 289 invocations/day of the sampled daily workload would use roughly
+520 GB-s/day, before other DO work, versus the documented 13,000 GB-s/day Free allowance.
+This conservative extrapolation is not an account-wide usage measurement.
+[DO pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/)
+
+The portfolio coordinator now persists at most **300 owner-authorized upload attempts
+per rolling 30 days**, charging failures after admission and returning 429 plus
+Retry-After at exhaustion. Authentication/byte-limit rejections precede reservation.
+Reads and deletion are unaffected. Local real-DO tests verify
+the final admitted attempt, refusal, unauthorized access and expiry. This closes the
+unbounded upload/delete churn path left by the 60-current-image cap. At the existing
+13.25-MiB maximum per upload, 300 recovery copies plus 60 live images and 28 maximum
+16-MiB backups total about 5.10 GiB, excluding receipts, overhead, delayed cleanup and
+other account resources. A 31-day calendar month can contain two boundary bursts, up to
+600 admitted uploads / 3,600 transformation calls. Neither calculation guarantees $0.
+
+Account controls inspected: only the existing $10 budget warning was installed. Added
+and re-read an enabled **$1 account-wide budget warning** using its existing recipient;
+the $10 warning remains. No notification test, subscription change or paid upgrade was
+performed. Budget warnings notify without stopping usage. Current spending limits cover
+Workers and Durable Objects, exclude R2, and explicitly do not guarantee the invoice.
+Both subscription and spend-policy reads return 403 for the current OAuth connection.
+[Budget alerts](https://developers.cloudflare.com/billing/manage/budget-alerts/),
+[spending limits](https://developers.cloudflare.com/billing/manage/spend-management/).
+
+T001 remains open for general API CPU headroom and account-wide usage evidence. T058
+remains open for the persistent deployment, bucket-scoped read credentials, schedule and
+recipient routing. All temporary Worker/DO/D1/R2 resources were removed and their absence
+verified; the account budget warning is the only persistent provider change.
+
 **Feature**: [spec.md](./spec.md) | **Plan**: [plan.md](./plan.md) | **Date**: 2026-10-17
 
 **Constitution reconciliation (2026-11-13)**: React + Cloudflare Workers is confirmed.

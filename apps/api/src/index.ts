@@ -29,7 +29,12 @@ import { authenticate } from './services/session';
 import { isGalleryMutation } from './services/galleryMutations';
 export { JpegValidator } from './services/jpegValidator';
 export { GalleryMutations } from './services/galleryMutations';
-export function createApp(runtime: Runtime = productionRuntime, coordinateGallery = false) {
+export { ScheduledOperations } from './services/scheduledOperations';
+export function createApp(
+  runtime: Runtime = productionRuntime,
+  coordinateGallery = false,
+  reserveGalleryUpload?: () => Promise<number>,
+) {
   const app = new Hono<AppEnv>();
   app.use('*', async (c, next) => {
     c.set('requestId', crypto.randomUUID());
@@ -138,6 +143,20 @@ export function createApp(runtime: Runtime = productionRuntime, coordinateGaller
     );
   });
   app.use('/admin/*', requireOwner(runtime, true));
+  app.use('/admin/gallery', async (c, next) => {
+    if (c.req.method === 'POST' && reserveGalleryUpload) {
+      const retryAfter = await reserveGalleryUpload();
+      if (retryAfter > 0) {
+        c.header('Retry-After', String(retryAfter));
+        throw new ApiFault(
+          429,
+          'rate_limited',
+          'The 30-day photo upload allowance is used up. Try again later.',
+        );
+      }
+    }
+    await next();
+  });
   app.route('/auth', authRoutes(runtime));
   app.route('/public', publicRoutes(runtime));
   app.route('/images', imageRoutes);

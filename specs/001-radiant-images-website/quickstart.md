@@ -428,11 +428,36 @@ monitoring configuration still need to be established.
 
 ## Deployment and rollback preparation (T060)
 
+**R-24 operational prerequisites:** Include the `SCHEDULED_OPERATIONS` binding and
+`scheduled-operations-v1` SQLite-class migration from the release generator. Both cron
+expressions dispatch to the same `recovery` object and await completion. Inspect the
+maintenance/backup/health objects with the independent monitor; successful RPC dispatch
+alone is not a successful backup. Do not restore service while the deletion ledger or
+recovery cleanup remains unverified.
+
+The portfolio coordinator now admits 300 upload attempts in any rolling 30-day window.
+Admitted validation/provider failures consume a slot; authentication and byte-limit
+rejections occur before reservation. At exhaustion, uploads return 429 and a
+`Retry-After` value; photo deletion and reads remain available. Do not delete the DO
+namespace or clear its storage to bypass the allowance. The existing 60-photo and byte
+bounds still apply. The verified account-wide $1 budget warning uses the existing billing
+recipient and supplements the $10 warning; neither stops billing. R2 has no documented
+account spending limit. Subscription/spend-policy verification needs an authorized
+billing dashboard session or Billing Read credential; the current OAuth connection gets
+403. No paid upgrade is selected.
+
+Persistent recovery monitoring still needs the actual long-lived recovery bucket,
+verified bucket-only S3 read credentials, repository settings and scheduled notification
+routing. The disposable CPU rehearsal is not that target. Keep
+`OPERATIONS_MONITOR_ENABLED` off until those values point to the persistent deployment;
+then repeat healthy → injected fault → recovered and verify a scheduled recipient path.
+
 Pull requests now run the complete configured Chromium desktop/mobile, Firefox desktop,
 and WebKit desktop/mobile suite in the Quality workflow. Main-branch pushes run Chromium
 smoke; scheduled, manual and reusable release runs retain the full suite. A successful
-old PR smoke run does not establish a full-suite pass. Push the CI selection change to
-the existing feature branch and inspect the resulting PR check before merging.
+old PR smoke run does not establish a full-suite pass. The latest pushed baseline has a
+new manual Quality run linked in acceptance.md. The local R-24 changes need their own
+remote full-suite result on the exact commit before merge or release.
 
 The API and frontend have separate manually dispatched workflows. Both require the Quality
 workflow on the same commit, an exact acceptance commit input, and the `production` GitHub

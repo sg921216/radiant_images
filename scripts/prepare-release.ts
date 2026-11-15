@@ -27,11 +27,13 @@ const config =
           bindings: [
             { name: 'JPEG_VALIDATOR', class_name: 'JpegValidator' },
             { name: 'GALLERY_MUTATIONS', class_name: 'GalleryMutations' },
+            { name: 'SCHEDULED_OPERATIONS', class_name: 'ScheduledOperations' },
           ],
         },
         migrations: [
           { tag: 'jpeg-validator-v1', new_sqlite_classes: ['JpegValidator'] },
           { tag: 'gallery-mutations-v1', new_sqlite_classes: ['GalleryMutations'] },
+          { tag: 'scheduled-operations-v1', new_sqlite_classes: ['ScheduledOperations'] },
         ],
         vars: {
           WEB_ORIGIN: required('WEB_ORIGIN'),

@@ -11,12 +11,18 @@ class_name = "JpegValidator"
 [[durable_objects.bindings]]
 name = "GALLERY_MUTATIONS"
 class_name = "GalleryMutations"
+[[durable_objects.bindings]]
+name = "SCHEDULED_OPERATIONS"
+class_name = "ScheduledOperations"
 [[migrations]]
 tag = "jpeg-validator-v1"
 new_sqlite_classes = ["JpegValidator"]
 [[migrations]]
 tag = "gallery-mutations-v1"
 new_sqlite_classes = ["GalleryMutations"]
+[[migrations]]
+tag = "scheduled-operations-v1"
+new_sqlite_classes = ["ScheduledOperations"]
 [vars]
 WEB_ORIGIN = "http://127.0.0.1:5173"
 API_ORIGIN = "http://127.0.0.1:8787"

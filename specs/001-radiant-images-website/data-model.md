@@ -19,6 +19,20 @@ below (2026-11-14). Production verification remains open. The separate local-dev
 
 ## Public-content entities
 
+### Operational coordinator state (2026-11-14, R-24)
+
+`GalleryMutations` stores `upload-attempts` in its SQLite-backed Durable Object storage:
+at most 300 UTC epoch-millisecond timestamps, with no identities, credentials or image
+bytes. Admission drops timestamps older than 30 days and durably reserves one slot before
+image processing; failed validation/provider attempts stay charged. It is independent of
+D1 restore and the gallery's current item count. Missing state starts empty; malformed or
+future state fails closed. This is an application quota, not an account spending cap.
+
+`ScheduledOperations` serializes the site's two cron schedules. Its bounded in-memory
+queue is coordination only; the existing R2 job signals, backup objects and independent
+deletion ledger remain the durable evidence. An interrupted invocation is not treated as
+complete. The next cron can retry and the independent monitor detects stale completion.
+
 ### `gallery_images` (FR-005, FR-027)
 
 | Field                            | Type    | Rules                                                                                                                                 |

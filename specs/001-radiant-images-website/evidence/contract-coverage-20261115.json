@@ -1,0 +1,552 @@
+{
+  "observedAt": "2026-11-15T04:00:45.576Z",
+  "source": "Combined complete API integration audit (24 files / 158 tests) and the four-case contract-harness follow-up. Temporary response observation hook restored byte-for-byte. Only path templates, methods and statuses recorded. Every recorded response passed strict OpenAPI validation.",
+  "sourceCommit": "48d5ee3032ee1ad9587b18bbc2588d6b86d394db plus local R-24 changes",
+  "initialMissing": [
+    {
+      "method": "GET",
+      "path": "/auth/google/start",
+      "protected": false,
+      "statuses": [
+        302
+      ],
+      "success": true,
+      "error": false
+    },
+    {
+      "method": "GET",
+      "path": "/admin/banners",
+      "protected": true,
+      "statuses": [
+        401,
+        403
+      ],
+      "success": false,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/questionnaire",
+      "protected": true,
+      "statuses": [
+        401,
+        403
+      ],
+      "success": false,
+      "error": true
+    }
+  ],
+  "followUpTests": "apps/api/tests/contract-harness.test.ts",
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/public/bootstrap",
+      "protected": false,
+      "statuses": [
+        200,
+        503
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/pricing",
+      "protected": false,
+      "statuses": [
+        200,
+        503
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/images/{id}/{variant}",
+      "protected": false,
+      "statuses": [
+        200,
+        400,
+        404
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/inquiries",
+      "protected": false,
+      "statuses": [
+        202,
+        400,
+        409,
+        429,
+        502,
+        504
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/auth/google/start",
+      "protected": false,
+      "statuses": [
+        302,
+        429
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/auth/google/callback",
+      "protected": false,
+      "statuses": [
+        302,
+        400,
+        502
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/auth/exchange",
+      "protected": false,
+      "statuses": [
+        200,
+        400,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/auth/session",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/auth/logout",
+      "protected": true,
+      "statuses": [
+        204,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/gallery",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/admin/gallery",
+      "protected": true,
+      "statuses": [
+        201,
+        400,
+        401,
+        403,
+        409,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/gallery/order",
+      "protected": true,
+      "statuses": [
+        204,
+        400,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/gallery/{id}",
+      "protected": true,
+      "statuses": [
+        200,
+        400,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/gallery/{id}",
+      "protected": true,
+      "statuses": [
+        204,
+        401,
+        403,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/banners",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/admin/banners",
+      "protected": true,
+      "statuses": [
+        201,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/banners/{id}",
+      "protected": true,
+      "statuses": [
+        200,
+        400,
+        401,
+        403,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/banners/{id}",
+      "protected": true,
+      "statuses": [
+        204,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/pricing",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/pricing",
+      "protected": true,
+      "statuses": [
+        200,
+        400,
+        401,
+        403,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/pages/{page}",
+      "protected": true,
+      "statuses": [
+        200,
+        400,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/faq",
+      "protected": true,
+      "statuses": [
+        200,
+        400,
+        401,
+        403,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/config",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/config",
+      "protected": true,
+      "statuses": [
+        200,
+        400,
+        401,
+        403,
+        500,
+        502
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/clients",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403,
+        503
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/admin/clients",
+      "protected": true,
+      "statuses": [
+        201,
+        400,
+        401,
+        403,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/clients/{id}",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403,
+        404
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/clients/{id}",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/clients/{id}",
+      "protected": true,
+      "statuses": [
+        204,
+        401,
+        403,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/admin/clients/{id}/emails",
+      "protected": true,
+      "statuses": [
+        201,
+        400,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/clients/{id}/checklist/{itemId}",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/admin/clients/{id}/questionnaires",
+      "protected": true,
+      "statuses": [
+        201,
+        401,
+        403,
+        500,
+        502,
+        504
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/templates",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/templates",
+      "protected": true,
+      "statuses": [
+        200,
+        400,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/checklist",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/checklist",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403,
+        500
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/questionnaire",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/questionnaire",
+      "protected": true,
+      "statuses": [
+        200,
+        401,
+        403
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "GET",
+      "path": "/questionnaire/{token}",
+      "protected": false,
+      "statuses": [
+        200,
+        404,
+        503
+      ],
+      "success": true,
+      "error": true
+    },
+    {
+      "method": "POST",
+      "path": "/questionnaire/{token}",
+      "protected": false,
+      "statuses": [
+        201,
+        400,
+        409,
+        500
+      ],
+      "success": true,
+      "error": true
+    }
+  ],
+  "missing": [],
+  "protectedCount": 31
+}

@@ -50,6 +50,14 @@ test('prepared deployment config keeps owner allowlist and Google credentials in
     expect(config.vars).not.toHaveProperty('OWNER_ALLOWLIST');
     expect(config.vars).not.toHaveProperty('GOOGLE_CLIENT_ID');
     expect(config.vars.WEB_ORIGIN).toBe('https://web.release-fixture.dev');
+    expect(config.durable_objects.bindings).toContainEqual({
+      name: 'SCHEDULED_OPERATIONS',
+      class_name: 'ScheduledOperations',
+    });
+    expect(config.migrations).toContainEqual({
+      tag: 'scheduled-operations-v1',
+      new_sqlite_classes: ['ScheduledOperations'],
+    });
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

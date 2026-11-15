@@ -1,0 +1,394 @@
+{
+  "at": "2026-11-15T03:53:20.750Z",
+  "sourceCommit": "48d5ee3032ee1ad9587b18bbc2588d6b86d394db with local R-24 changes",
+  "stats": {
+    "startTime": "2026-11-15T03:47:46.261Z",
+    "duration": 152310.396,
+    "expected": 20,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "each service pricing section is one Home link away and its CTA opens Contact",
+      "project": "chromium-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 943
+        }
+      ]
+    },
+    {
+      "title": "each service pricing section is one Home link away and its CTA opens Contact",
+      "project": "chromium-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1045
+        }
+      ]
+    },
+    {
+      "title": "each service pricing section is one Home link away and its CTA opens Contact",
+      "project": "firefox-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2016
+        }
+      ]
+    },
+    {
+      "title": "each service pricing section is one Home link away and its CTA opens Contact",
+      "project": "webkit-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 1719
+        }
+      ]
+    },
+    {
+      "title": "each service pricing section is one Home link away and its CTA opens Contact",
+      "project": "webkit-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 2002
+        }
+      ]
+    },
+    {
+      "title": "@smoke service, print and PDF use a complete published pricing revision",
+      "project": "chromium-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 578
+        }
+      ]
+    },
+    {
+      "title": "@smoke service, print and PDF use a complete published pricing revision",
+      "project": "chromium-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 559
+        }
+      ]
+    },
+    {
+      "title": "@smoke service, print and PDF use a complete published pricing revision",
+      "project": "firefox-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 624
+        }
+      ]
+    },
+    {
+      "title": "@smoke service, print and PDF use a complete published pricing revision",
+      "project": "webkit-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 818
+        }
+      ]
+    },
+    {
+      "title": "@smoke service, print and PDF use a complete published pricing revision",
+      "project": "webkit-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 770
+        }
+      ]
+    },
+    {
+      "title": "a PDF module outage leaves complete web pricing and print controls usable",
+      "project": "chromium-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 274
+        }
+      ]
+    },
+    {
+      "title": "a PDF module outage leaves complete web pricing and print controls usable",
+      "project": "chromium-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 374
+        }
+      ]
+    },
+    {
+      "title": "a PDF module outage leaves complete web pricing and print controls usable",
+      "project": "firefox-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 531
+        }
+      ]
+    },
+    {
+      "title": "a PDF module outage leaves complete web pricing and print controls usable",
+      "project": "webkit-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 691
+        }
+      ]
+    },
+    {
+      "title": "a PDF module outage leaves complete web pricing and print controls usable",
+      "project": "webkit-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 645
+        }
+      ]
+    },
+    {
+      "title": "owner publication reaches an already-open service page within the freshness budget",
+      "project": "chromium-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 25981
+        }
+      ]
+    },
+    {
+      "title": "owner publication reaches an already-open service page within the freshness budget",
+      "project": "chromium-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 26008
+        }
+      ]
+    },
+    {
+      "title": "owner publication reaches an already-open service page within the freshness budget",
+      "project": "firefox-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 26278
+        }
+      ]
+    },
+    {
+      "title": "owner publication reaches an already-open service page within the freshness budget",
+      "project": "webkit-desktop",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 26499
+        }
+      ]
+    },
+    {
+      "title": "owner publication reaches an already-open service page within the freshness budget",
+      "project": "webkit-mobile",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "retry": 0,
+          "durationMs": 26330
+        }
+      ]
+    }
+  ],
+  "visualInspection": [
+    {
+      "pdf": "test-results\\pricing-review\\pricing--smoke-service-pri-2e6ca--published-pricing-revision-chromium-desktop\\pricing-print.pdf",
+      "pageCount": 3,
+      "revision": "01K00000000000000000000001",
+      "checks": [
+        {
+          "page": 1,
+          "section": "Maternity",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 2,
+          "section": "Newborn",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 3,
+          "section": "Family",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        }
+      ]
+    },
+    {
+      "pdf": "test-results\\pricing-review\\pricing--smoke-service-pri-2e6ca--published-pricing-revision-chromium-desktop\\pricing.pdf",
+      "pageCount": 3,
+      "revision": "01K00000000000000000000001",
+      "checks": [
+        {
+          "page": 1,
+          "section": "Maternity",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 2,
+          "section": "Newborn",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 3,
+          "section": "Family",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        }
+      ]
+    },
+    {
+      "pdf": "test-results\\pricing-review\\pricing-owner-publication--e122f-within-the-freshness-budget-chromium-desktop\\pricing-updated-print.pdf",
+      "pageCount": 3,
+      "revision": "01M7EN34R68RAV533716APG77G",
+      "checks": [
+        {
+          "page": 1,
+          "section": "Maternity",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 2,
+          "section": "Newborn",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 3,
+          "section": "Family",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        }
+      ]
+    },
+    {
+      "pdf": "test-results\\pricing-review\\pricing-owner-publication--e122f-within-the-freshness-budget-chromium-desktop\\pricing-updated.pdf",
+      "pageCount": 3,
+      "revision": "01M7EN34R68RAV533716APG77G",
+      "checks": [
+        {
+          "page": 1,
+          "section": "Maternity",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 2,
+          "section": "Newborn",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        },
+        {
+          "page": 3,
+          "section": "Family",
+          "hasSection": true,
+          "hasPrice": true,
+          "hasRevision": true,
+          "withinPage": true,
+          "textMatchesReader": true
+        }
+      ]
+    }
+  ],
+  "visualResult": "All twelve initial/updated print and download pages inspected. No clipping, overlap, unexpected blank pages or navigation. Each three-page schedule has matching revision IDs and prices. Synthetic content only; physical print and owner final-content acceptance remain separate.",
+  "initialAttempt": "One Chromium desktop case received a Not found page while the concurrent pnpm check build was rewriting static assets; eleven other cases passed. Invalid acceptance run. Clean sequential expanded run: 20/20, no retries/skips/flaky classifications."
+}
