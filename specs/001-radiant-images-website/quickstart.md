@@ -428,6 +428,12 @@ monitoring configuration still need to be established.
 
 ## Deployment and rollback preparation (T060)
 
+Pull requests now run the complete configured Chromium desktop/mobile, Firefox desktop,
+and WebKit desktop/mobile suite in the Quality workflow. Main-branch pushes run Chromium
+smoke; scheduled, manual and reusable release runs retain the full suite. A successful
+old PR smoke run does not establish a full-suite pass. Push the CI selection change to
+the existing feature branch and inspect the resulting PR check before merging.
+
 The API and frontend have separate manually dispatched workflows. Both require the Quality
 workflow on the same commit, an exact acceptance commit input, and the `production` GitHub
 environment. Configure that environment with required owner review before enabling releases.

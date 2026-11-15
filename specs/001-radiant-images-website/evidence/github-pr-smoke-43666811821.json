@@ -1,0 +1,132 @@
+{
+  "run": {
+    "id": 43666811821,
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "358277e17d486dec15f2733778792e37f5b95c17",
+    "head_branch": "001-radiant-images-website",
+    "html_url": "https://github.com/sg921216/radiant_images/actions/runs/43666811821"
+  },
+  "job": {
+    "id": 132667903065,
+    "name": "verify",
+    "status": "completed",
+    "conclusion": "success",
+    "started_at": "2026-11-15T02:14:14Z",
+    "completed_at": "2026-11-15T02:19:52Z",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm/action-setup@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm install --frozen-lockfile",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm format:check",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm lint",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm typecheck",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm security:dependencies",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm security:secrets",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm test",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm test:setup",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run pnpm exec playwright install --with-deps chromium firefox webkit",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Pull request Chromium smoke",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Nightly and release browser matrix",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Verify diagnostic privacy",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Run pnpm/action-setup@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-node@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "scope": "Public API metadata only; full browser step skipped; no raw logs or per-test results retrieved"
+}

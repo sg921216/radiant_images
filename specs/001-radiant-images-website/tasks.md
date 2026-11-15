@@ -1,5 +1,13 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-14 remote PR CI checkpoint:** GitHub run 43666811821 passes the Quality job
+on commit `358277e17d486dec15f2733778792e37f5b95c17`, including frozen install,
+quality/security checks, tests/builds and Chromium smoke. Its full browser suite was
+skipped by the previous event condition. CI now selects the complete configured suite
+for pull requests as well as nightly/manual/release runs; main pushes retain smoke checks.
+The changed workflow still needs a remote run before merge. T059 remains open and
+**52/63 tasks remain complete**. See acceptance.md and the linked sanitized run evidence.
+
 **2026-11-14 monitoring credential/freshness correction:** R-22 replaces the monitor's
 account-wide REST authentication with bucket-scoped S3 Object Read Only credentials.
 The checker reads only job/health bodies, inventory and backup HEAD metadata. Running jobs

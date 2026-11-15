@@ -34,11 +34,11 @@ jobs:
       - run: pnpm build
       - run: pnpm test:setup
       - run: pnpm exec playwright install --with-deps chromium firefox webkit
-      - name: Pull request Chromium smoke
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
+      - name: Main branch Chromium smoke
+        if: github.event_name == 'push'
         run: pnpm e2e:smoke
-      - name: Nightly and release browser matrix
-        if: github.event_name != 'pull_request' && github.event_name != 'push'
+      - name: Pull request, nightly and release browser matrix
+        if: github.event_name != 'push'
         run: pnpm e2e
       - name: Verify diagnostic privacy
         id: diagnostic_privacy

@@ -1333,3 +1333,34 @@ No remote resources, messages, credentials, commits or deployments were created.
 
 Post-hook check: parsed `.specify/extensions.yml`; only the optional Git commit hook applies.
 It is offered and left unexecuted. No mandatory after-implementation hook is registered.
+
+## 2026-11-14 — first remote PR CI pass; full browser suite prepared for next push
+
+Read the public GitHub run/job APIs for
+[Quality run 43666811821](https://github.com/sg921216/radiant_images/actions/runs/43666811821/job/132667903065).
+The run is a completed successful `pull_request` event on
+`358277e17d486dec15f2733778792e37f5b95c17`. The verify job ran from
+`2026-11-15T02:14:14Z` to `2026-11-15T02:19:52Z` (November 14 in America/New_York).
+Frozen installation, formatting, lint, types, dependency/source security, tests, builds,
+test setup, browser installation, Chromium smoke and diagnostic privacy steps succeeded.
+The nightly/release browser step was explicitly skipped. No detailed test counts or
+individual browser results are inferred from this job metadata.
+
+Saved only run identity, event, commit, timestamps and step conclusions in
+`evidence/github-pr-smoke-43666811821.json`; no logs, credentials or client data are retained.
+The successful run resolves the earlier absence of any remote CI execution, but it does
+not close T059's complete-browser evidence or the historical intermittent input-loss concern.
+
+Changed the declarative CI selection so pull requests run `pnpm e2e` across the existing
+five Playwright projects. Main pushes retain `pnpm e2e:smoke`; nightly, manual and reusable
+release runs keep full coverage. Exactly one browser-suite step is selected per event,
+with the existing focused/flaky-test rejection, timeout and privacy gates unchanged.
+YAML/format validation and event-selection checks pass for pull_request, push,
+workflow_dispatch, schedule and workflow_call. Playwright lists 165 cases across 12 files
+and the existing five projects; listing is not execution and project-specific performance
+selection remains unchanged. The privacy scan reports 436 files with zero blocked findings,
+and `git diff --check` passes. These checks cover this configuration-only change;
+application code and browser tests are unchanged. The changed workflow has not been pushed
+or run remotely by this session. The user should commit/push it to the existing PR and
+wait for the full-suite result before merging. **52/63 tasks remain complete**; no public
+deployment, notification send, credentials or release-gate bypass occurred.
