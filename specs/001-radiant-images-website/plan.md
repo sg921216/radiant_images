@@ -113,6 +113,18 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**Recovery rehearsal (2026-11-14, R-23)**: The private disposable operator in
+`scripts/cloudflare-recovery-rehearsal/` imports the shipped backup, deletion, media and
+scheduled services without adding application routes. Real D1/R2 checks cover deletion
+reconciliation after both application snapshots and D1 Time Travel. Public ingress stays
+detached during provider restores because Time Travel can reset the D1 maintenance flag.
+An accelerated every-minute cron exercises the daily branch using a clearly labeled synthetic
+Gmail sender adapter; it is not live Gmail acceptance or the production schedule. Independent
+monitor observations, rollback and cleanup receipts are retained in acceptance.md. The first
+observed cron exceeded the Free CPU budget despite completing; production resource headroom,
+persistent monitoring and scheduled-recipient routing remain explicit release gates. The
+user confirmed receipt of the manually triggered GitHub rehearsal notification.
+
 **Monitoring correction (2026-11-14, R-22)**: The independent GitHub monitor uses
 bucket-scoped R2 Object Read Only credentials through S3 SigV4, with pinned signing/XML
 dependencies. The former REST-token setup would require account-wide access. Enumerate

@@ -1,0 +1,817 @@
+{
+  "dateLocal": "2026-11-14",
+  "timezone": "America/New_York",
+  "baseCommit": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+  "scope": "Disposable private Cloudflare recovery rehearsal; synthetic data and no-send Gmail adapter",
+  "resources": {
+    "worker": "radiant-recovery-20261114-3e7013",
+    "databaseId": "773a25c9-61dc-4375-80fa-8cddb646caf5",
+    "region": "ENAM",
+    "workersDev": false,
+    "previewUrls": false,
+    "routes": [],
+    "r2PublicDomainsEnabled": false
+  },
+  "records": [
+    {
+      "at": "2026-11-15T03:02:09.819Z",
+      "action": "seed",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "seed"
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:12.128Z",
+      "action": "backup",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "backup"
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:14.093Z",
+      "action": "delete",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "delete"
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:17.843Z",
+      "action": "restore",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "restore"
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:32.964Z",
+      "action": "unsafe",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "unsafe"
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:36.326Z",
+      "action": "retention",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "retention"
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:38.189Z",
+      "action": "monitor",
+      "clockOffsetDays": 32,
+      "result": {
+        "ok": false,
+        "issues": [
+          "backup_job_unhealthy",
+          "backup_missing_or_stale",
+          "health_missing_or_stale",
+          "maintenance_job_unhealthy",
+          "receipt_cleanup_overdue",
+          "recovery_cleanup_overdue",
+          "recovery_removal_target_missed"
+        ],
+        "counts": {
+          "overdueRecovery": 6,
+          "missedRemovalTarget": 6,
+          "overdueReceipts": 1,
+          "recoveryBytes": 7832
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:54.710Z",
+      "action": "retry",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "retry"
+      }
+    },
+    {
+      "at": "2026-11-15T03:02:59.049Z",
+      "action": "healthy",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "healthy"
+      }
+    },
+    {
+      "at": "2026-11-15T03:03:02.470Z",
+      "action": "monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 6328
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:03:03.006Z",
+      "action": "cron-on",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "cron-on"
+      }
+    },
+    {
+      "at": "2026-11-15T03:03:44.874Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": null
+    },
+    {
+      "at": "2026-11-15T03:04:34.041Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": null
+    },
+    {
+      "at": "2026-11-15T03:05:51.445Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": null
+    },
+    {
+      "at": "2026-11-15T03:06:16.776Z",
+      "action": "cron-off",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "cron-off"
+      }
+    },
+    {
+      "at": "2026-11-15T03:06:31.093Z",
+      "action": "provider-delete",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "provider-delete"
+      }
+    },
+    {
+      "at": "2026-11-15T03:06:35.184Z",
+      "action": "provider-reconcile",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "provider-reconcile"
+      }
+    },
+    {
+      "at": "2026-11-15T03:06:37.603Z",
+      "action": "cron-on",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "cron-on"
+      }
+    },
+    {
+      "at": "2026-11-15T03:07:03.274Z",
+      "action": "recover-monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "recover-monitor"
+      }
+    },
+    {
+      "at": "2026-11-15T03:07:09.047Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": null
+    },
+    {
+      "at": "2026-11-15T03:07:32.302Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": null
+    },
+    {
+      "at": "2026-11-15T03:08:27.564Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": null
+    },
+    {
+      "at": "2026-11-15T03:08:52.508Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": null
+    },
+    {
+      "at": "2026-11-15T03:09:04.514Z",
+      "action": "stale",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "stale"
+      }
+    },
+    {
+      "at": "2026-11-15T03:09:05.762Z",
+      "action": "monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": false,
+        "issues": [
+          "maintenance_job_unhealthy",
+          "recovery_cleanup_overdue",
+          "recovery_removal_target_missed"
+        ],
+        "counts": {
+          "overdueRecovery": 1,
+          "missedRemovalTarget": 1,
+          "overdueReceipts": 0,
+          "recoveryBytes": 11386
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:09:06.331Z",
+      "action": "recover-monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "recover-monitor"
+      }
+    },
+    {
+      "at": "2026-11-15T03:09:10.326Z",
+      "action": "monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 16292
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:09:10.916Z",
+      "action": "cron-on",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "cron-on"
+      }
+    },
+    {
+      "at": "2026-11-15T03:09:43.232Z",
+      "action": "cron-receipt",
+      "clockOffsetDays": 0,
+      "result": {
+        "cron": "* * * * *",
+        "scheduledTime": 1794712153919,
+        "completedAt": "2026-11-15T03:09:23.653Z",
+        "provider": "synthetic-no-send"
+      }
+    },
+    {
+      "at": "2026-11-15T03:09:43.743Z",
+      "action": "monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 21303
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:12:05.756Z",
+      "action": "monitor-s3",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 31099
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:12:57.324Z",
+      "action": "stale",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "stale"
+      }
+    },
+    {
+      "at": "2026-11-15T03:12:58.621Z",
+      "action": "monitor-s3",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": false,
+        "issues": [
+          "maintenance_job_unhealthy",
+          "recovery_cleanup_overdue",
+          "recovery_removal_target_missed"
+        ],
+        "counts": {
+          "overdueRecovery": 1,
+          "missedRemovalTarget": 1,
+          "overdueReceipts": 0,
+          "recoveryBytes": 35998
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:13:00.138Z",
+      "action": "recover-monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "recover-monitor"
+      }
+    },
+    {
+      "at": "2026-11-15T03:13:04.259Z",
+      "action": "monitor-s3",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 40904
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:13:38.743Z",
+      "action": "cron-off",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "cron-off"
+      }
+    },
+    {
+      "at": "2026-11-15T03:18:45.252Z",
+      "action": "checklist-proof",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "checklist-proof"
+      }
+    },
+    {
+      "at": "2026-11-15T03:18:50.557Z",
+      "action": "recover-monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "recover-monitor"
+      }
+    },
+    {
+      "at": "2026-11-15T03:18:54.674Z",
+      "action": "monitor-s3",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 52387
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:21:17.974Z",
+      "action": "monitor-s3",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 52387
+        }
+      }
+    },
+    {
+      "at": "2026-11-15T03:22:27.450Z",
+      "action": "stale",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "stale"
+      }
+    },
+    {
+      "at": "2026-11-15T03:23:33.794Z",
+      "action": "recover-monitor",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "recover-monitor"
+      }
+    },
+    {
+      "at": "2026-11-15T03:24:33.251Z",
+      "action": "cron-off",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "action": "cron-off"
+      }
+    },
+    {
+      "at": "2026-11-15T03:24:33.986Z",
+      "action": "empty",
+      "clockOffsetDays": 0,
+      "result": {
+        "ok": true,
+        "emptied": 2
+      }
+    }
+  ],
+  "cronTelemetry": [
+    {
+      "outcome": "ok",
+      "eventTimestamp": 1794712154379,
+      "cron": "* * * * *",
+      "scheduledTime": 1794712153919,
+      "cpuMs": 32,
+      "wallMs": 9659,
+      "exceptionCount": 0
+    },
+    {
+      "outcome": "ok",
+      "eventTimestamp": 1794712214432,
+      "cron": "* * * * *",
+      "scheduledTime": 1794712213919,
+      "cpuMs": 34,
+      "wallMs": 9264,
+      "exceptionCount": 0
+    },
+    {
+      "outcome": "ok",
+      "eventTimestamp": 1794712274576,
+      "cron": "* * * * *",
+      "scheduledTime": 1794712273919,
+      "cpuMs": 30,
+      "wallMs": 10880,
+      "exceptionCount": 0
+    },
+    {
+      "outcome": "ok",
+      "eventTimestamp": 1794712334734,
+      "cron": "* * * * *",
+      "scheduledTime": 1794712333919,
+      "cpuMs": 43,
+      "wallMs": 7757,
+      "exceptionCount": 0
+    }
+  ],
+  "initialCredentialScope": {
+    "at": "2026-11-15T03:12:07.781Z",
+    "otherBucketListStatus": 200,
+    "recoveryWriteStatus": 200,
+    "bucketScopedReadOnly": false
+  },
+  "providerRestore": {
+    "performed": true,
+    "ingressDetached": true,
+    "cronPaused": true,
+    "independentDeletionReconciliationPassed": true
+  },
+  "rollback": {
+    "from": "6e4e69a5-ae1a-442e-b38b-cbf4ee3559e4",
+    "to": "0dceb9d3-a5d8-4807-8575-f555730f7d94",
+    "percentage": 100,
+    "recoveryAfterRollbackPassed": true
+  },
+  "notificationRuns": [
+    43670559798,
+    43671241481
+  ],
+  "notificationReceipt": {
+    "confirmedByUser": true,
+    "runId": 43671241481,
+    "channel": "GitHub Actions failure notification",
+    "scheduleRoutingNotInferred": true
+  },
+  "validation": {
+    "check": "passed",
+    "testFiles": 60,
+    "tests": 271,
+    "privacy": "passed",
+    "diffCheck": "passed",
+    "finalTestDurationSeconds": 97.13
+  },
+  "limitations": [
+    "Controlled retention clock and injected storage failure, not a month-long observation",
+    "Gmail health adapter synthetic; no live mail sent",
+    "Cron CPU 30-43 ms exceeds documented Free 10-ms budget",
+    "Persistent production monitoring not activated"
+  ],
+  "cleanup": {
+    "scheduleRemoved": true,
+    "scheduleVerifiedEmpty": true,
+    "localProxyAndTailStopped": true,
+    "bucketsVerifiedEmptyBeforeDeletion": true,
+    "cloudflare": {
+      "deleted": [
+        "worker",
+        "database",
+        "media-bucket",
+        "recovery-bucket"
+      ],
+      "remainingRehearsalWorkers": 0,
+      "remainingRehearsalDatabases": 0,
+      "remainingRehearsalBuckets": 0,
+      "verifiedAt": "2026-11-15 03:25:30 UTC"
+    },
+    "github": {
+      "remainingVariableNames": [],
+      "remainingSecretNames": []
+    },
+    "r2TokenRevocation": "Owner action required; connection has no token-management permission",
+    "localCredentials": "Ignored .env.recovery-monitor; values excluded from artifacts"
+  },
+  "checklistFollowup": {
+    "initialSeedMissingStates": true,
+    "redExpected": 2,
+    "redActual": 0,
+    "correctedLocalTestPassed": true,
+    "livePopulatedRestorePassed": true,
+    "version": "6310a82e-cfd0-45e7-b8b3-4aecee2c4ac5"
+  },
+  "finalCredentialScope": {
+    "at": "2026-11-15T03:21:17.637Z",
+    "otherBucketListStatus": 403,
+    "recoveryWriteStatus": 403,
+    "probeRemoved": true,
+    "bucketScopedReadOnly": true
+  },
+  "githubMonitorRuns": [
+    {
+      "id": 43672001075,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/sg921216/radiant_images/actions/runs/43672001075",
+      "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+      "event": "workflow_dispatch",
+      "actor": "sg921216",
+      "jobs": [
+        {
+          "name": "monitor",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Synthetic notification test",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm/action-setup@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install pinned monitor dependencies",
+              "conclusion": "success"
+            },
+            {
+              "name": "Independently inspect private recovery metadata",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run pnpm/action-setup@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "runId": 43672001075,
+      "monitorResults": [
+        {
+          "ok": true,
+          "issues": [],
+          "counts": {
+            "overdueRecovery": 0,
+            "missedRemovalTarget": 0,
+            "overdueReceipts": 0,
+            "recoveryBytes": 52387
+          }
+        }
+      ]
+    },
+    {
+      "id": 43672071929,
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/sg921216/radiant_images/actions/runs/43672071929",
+      "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+      "event": "workflow_dispatch",
+      "actor": "sg921216",
+      "jobs": [
+        {
+          "name": "monitor",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Synthetic notification test",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm/action-setup@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install pinned monitor dependencies",
+              "conclusion": "success"
+            },
+            {
+              "name": "Independently inspect private recovery metadata",
+              "conclusion": "failure"
+            },
+            {
+              "name": "Post Run pnpm/action-setup@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "runId": 43672071929,
+      "monitorResults": [
+        {
+          "ok": false,
+          "issues": [
+            "maintenance_job_unhealthy",
+            "recovery_cleanup_overdue",
+            "recovery_removal_target_missed"
+          ],
+          "counts": {
+            "overdueRecovery": 1,
+            "missedRemovalTarget": 1,
+            "overdueReceipts": 0,
+            "recoveryBytes": 52379
+          }
+        }
+      ]
+    },
+    {
+      "id": 43672158050,
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/sg921216/radiant_images/actions/runs/43672158050",
+      "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+      "event": "workflow_dispatch",
+      "actor": "sg921216",
+      "jobs": [
+        {
+          "name": "monitor",
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Synthetic notification test",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm/action-setup@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install pinned monitor dependencies",
+              "conclusion": "success"
+            },
+            {
+              "name": "Independently inspect private recovery metadata",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run pnpm/action-setup@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "runId": 43672158050,
+      "monitorResults": [
+        {
+          "ok": true,
+          "issues": [],
+          "counts": {
+            "overdueRecovery": 0,
+            "missedRemovalTarget": 0,
+            "overdueReceipts": 0,
+            "recoveryBytes": 57702
+          }
+        }
+      ]
+    }
+  ]
+}

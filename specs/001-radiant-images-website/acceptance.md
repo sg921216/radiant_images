@@ -1,5 +1,74 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-14 — Private recovery and monitoring rehearsal (R-23)
+
+Requested after merge; branch `001-radiant-images-website` fast-forwarded to main
+`d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61`. The requirements checklist passes 16/16.
+Existing local Spec Kit, `.node-version` and `.npmrc` edits remain separate and unchanged.
+No public release, paid upgrade, live-email send or customer-data operation occurred.
+
+Evidence: [sanitized rehearsal record](./evidence/cloudflare-recovery-rehearsal.json).
+The UTC run crosses into November 15; the workstation date is November 14 (New York).
+
+| Check | Observed result |
+| --- | --- |
+| Private infrastructure | One temporary ENAM D1 database, Worker and two R2 buckets. API confirms workers.dev/preview URLs and both r2.dev domains disabled; no routes. |
+| Snapshot and application restore | PASS: transient auth/dedupe/rate/lifecycle state omitted; retained data, omission markers and invitation associations preserved; deleted client and all dependent rows absent after reconciliation; API 503 until explicit reopen. |
+| Populated checklist follow-up | Initial fixture review found zero checklist states; a new assertion failed (0 versus 2). Corrected the seed and added a live targeted proof: two populated checklist states before backup, deleted client's state absent after delete/restore, retained client's exact completion time preserved. Passed on version `6310a82e-cfd0-45e7-b8b3-4aecee2c4ac5`; the earlier empty-table assertion is not counted as checklist evidence. |
+| Portfolio recovery | PASS: original and three variant byte fixtures restored exactly from private recovery. This does not repeat image-decoder acceptance. |
+| Unsafe restore | PASS: missing indexed receipt and day-28-expired snapshot rejected; unsafe reopen refused. |
+| Delayed deletion and retry | PASS with injected R2 delete failure and 32-day clock: old backup and required receipt retained; monitor detects overdue recovery, missed target and overdue receipt. Retry verifies backup/media removal before retiring receipts. |
+| Actual provider restore | PASS: real D1 Time Travel to saved pre-deletion bookmark; deleted client returned only to isolated D1, then independent R2 receipt replay removed client/dependents, cleared transient state and allowed explicit reopen. Ingress detached throughout; cron paused. |
+| Compatible Worker rollback | PASS: `6e4e69a5-ae1a-442e-b38b-cbf4ee3559e4` → `0dceb9d3-a5d8-4807-8575-f555730f7d94` at 100%; recovery/monitor passed afterward. No database rollback implied. |
+| Actual Cloudflare cron | PASS functionally: accelerated every-minute trigger invoked real daily maintenance/backup/health logic; first successful recorded completion `2026-11-15T03:09:23.653Z`. Gmail adapter was synthetic/no-send. |
+| CPU headroom | OPEN: four tailed cron runs returned `ok` with no exceptions but used 32, 34, 30, 43 ms CPU, exceeding the Free 10-ms budget. Wall times 9,659 / 9,264 / 10,880 / 7,757 ms. No production resource-budget pass. |
+| Independent observation | PASS through separate R2 binding and real S3 SigV4 checker: healthy → injected stale maintenance/overdue backup/target miss → healthy. Signals/metadata only. |
+| Initial credential scope | REJECTED for GitHub setup: other fixture bucket list and recovery write both returned 200; empty write probe removed. Owner asked to replace with bucket-only Object Read Only credentials. |
+| Replacement credential scope | PASS at `2026-11-15T03:21:17.637Z`: other fixture bucket listing returned 403, recovery write returned 403, while the real S3 monitor returned healthy. Only this verified replacement was used for temporary GitHub setup. |
+| GitHub notification test | Both requested synthetic runs completed with the intended failure before checkout/provider access: [43670559798](https://github.com/sg921216/radiant_images/actions/runs/43670559798), retry [43671241481](https://github.com/sg921216/radiant_images/actions/runs/43671241481). Receipt is not inferred from a failed run. |
+| Recipient receipt | PASS: user explicitly confirmed receipt of the failure notification for retry run `43671241481`. This proves the manually triggered recipient path; future production schedule ownership/routing must still be configured. |
+| Real GitHub monitor | Verified replacement credentials encrypted into temporary repository secrets; merged-main healthy run [43672001075](https://github.com/sg921216/radiant_images/actions/runs/43672001075) succeeded. Injected-fault run [43672071929](https://github.com/sg921216/radiant_images/actions/runs/43672071929) failed at the real monitoring step after successful install; no application mutation occurred in the monitor. Recovery and teardown results are retained below/in the JSON record. |
+
+The fault run's sanitized output contains exactly `maintenance_job_unhealthy`,
+`recovery_cleanup_overdue`, and `recovery_removal_target_missed`, with one overdue copy.
+After cleanup, [recovery run 43672158050](https://github.com/sg921216/radiant_images/actions/runs/43672158050)
+passed with `ok:true`, no issues and no overdue objects. This completes the real GitHub
+healthy → fault → recovered rehearsal using bucket-only read credentials. Manual dispatch
+is not evidence of scheduled GitHub delivery or future production activation.
+
+**Teardown verified:** the temporary schedule was removed; the local proxy/tail stopped;
+both R2 buckets were emptied with absence checks; the Worker, D1 database and both buckets
+were deleted. Re-listing Cloudflare returned zero matching resources. The three temporary
+repository secrets and two variables were removed; GitHub lists no repository secrets or
+variables afterward (matching the initial state). No paid service or production monitor was
+left running. The user-controlled R2 token still needs revocation in Cloudflare; this
+connection cannot manage API tokens (403). Its local file remains Git-ignored and no secret
+value appears in evidence. Any broad token created solely for this rehearsal should also
+be revoked by its owner.
+
+Local red/green evidence:
+
+- `pnpm exec vitest run scripts/tests/recovery-rehearsal.test.ts apps/api/tests/operations.test.ts scripts/tests/operations-monitor.test.ts` initially gave 1 failed isolation test / 18 passing existing tests. The failure showed the old gallery configuration was not the separate recovery target/entry/trigger.
+- The new API rehearsal initially failed because POST seed returned 404, then passed the
+  whole synthetic recovery sequence. Provider-reconciliation coverage separately failed
+  at the unsupported provider-delete action (404), then passed after implementation.
+- Fixture review added an assertion requiring two populated rows in each client-dependent
+  table; checklist state failed with 0 rather than 2. Seed correction, local checks and the
+  separate deployed `checklist-proof` passed. Its initial empty-table check remains disclosed.
+- `pnpm check` PASS: formatting, lint, types, **60 files / 271 tests**, production API/web builds.
+  The first check failed solely on 269 CRLF checkouts under `core.autocrlf=true`; `.gitattributes`
+  now enforces the existing Prettier LF requirement. Formatting normalization preserved all
+  tracked application-content hashes; no application behavior changed.
+- `pnpm security:secrets` and `pnpm security:artifacts` PASS (0 blocked); `git diff --check` PASS.
+  No browser UI behavior changed; this pass exercises recovery through real workerd/D1/R2
+  locally and the private deployed resources, not a rerun of the human/browser release matrix.
+
+The implementation hooks are optional commit hooks; surfaced without execution. T058 is
+not checked off: persistent production target/monitor activation and CPU headroom remain
+distinct gates. T001/T060/T063 are not closed by these scoped results;
+the task count stays **52/63 complete**. Final credential, GitHub and teardown results
+are retained in the evidence record.
+
 ## 2026-11-13 — T001 feasibility checkpoint
 
 **Initial checkpoint:** T001 was blocked on strict recovery expiry and production image-decoder feasibility; the local-development exception was approved on 2026-11-13. Hosting and R2 enrollment were resolved. At that checkpoint no application code or runtime evidence existed. Current local implementation evidence follows; deployment, real mailbox delivery and human acceptance remain open.

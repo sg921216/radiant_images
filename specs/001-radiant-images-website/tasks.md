@@ -1,5 +1,21 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-14 recovery rehearsal checkpoint (R-23):** On the feature branch fast-forwarded
+to merged main `d4e8aee`, a private temporary Worker/D1/two-R2-bucket rehearsal now verifies
+application backup/restore, deleted-client cascades, media byte recovery, blocked unsafe/expired
+restores, failed cleanup with receipt preservation and successful retry. Actual D1 Time Travel
+and independent-ledger reconciliation, compatible Worker rollback and an actual accelerated
+Cloudflare cron invocation pass. An independent binding reader detects injected stale jobs and
+overdue recovery objects and returns healthy after recovery. The GitHub notification test ran
+and failed at its intended synthetic step; recipient receipt is separate. The first tailed cron
+used 32 ms CPU, above the Workers Free 10-ms limit: T001 CPU headroom remains open.
+Replacement bucket-only read credentials passed live S3 checks, real GitHub healthy/failure
+runs and a recovered healthy run executed, and the user confirmed notification receipt.
+All temporary Cloudflare resources and GitHub monitor settings were removed and verified;
+details and token-revocation follow-up are in acceptance.md.
+T058 remains open for persistent deployment/monitor activation and unresolved operational
+acceptance; **52/63 tasks complete, 11 open**. No public release is authorized by this rehearsal.
+
 **2026-11-14 remote PR CI checkpoint:** GitHub run 43666811821 passes the Quality job
 on commit `358277e17d486dec15f2733778792e37f5b95c17`, including frozen install,
 quality/security checks, tests/builds and Chromium smoke. Its full browser suite was

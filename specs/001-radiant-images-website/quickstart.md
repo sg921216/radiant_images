@@ -651,3 +651,88 @@ dependency installation. No S3 monitor credentials or recovery-bucket target are
 in the current shell. GitHub CLI is unavailable in this environment; repository settings
 and remote workflow outcomes were not inspected. Do not infer notification activation or
 receipt from local test results. The existing scoped provider/release gates still apply.
+
+## Private recovery and monitoring rehearsal (R-23)
+
+This disposable diagnostic has no public routes, workers.dev URL or preview URLs. It imports
+the real recovery services into a separate operator entry point; the application entry does
+not import it. Use only new `radiant-recovery-YYYYMMDD-xxxxxx` resources with synthetic data.
+Gmail is explicitly replaced with a no-send sender-verification adapter. Portfolio recovery
+compares four small byte fixtures; it does not replace the R-20/R-21 image-decoder evidence.
+The day-28/day-31 checks use controlled time and injected deletion failure, not a month-long
+provider-outage observation.
+
+1. Verify the new names are absent, create one D1 database and private `-media`/`-recovery`
+   buckets, then prepare fixed-name configuration:
+
+   ```powershell
+   pnpm exec tsx scripts/cloudflare-recovery-rehearsal/prepare.ts <suffix> <d1-id> <account-id>
+   pnpm exec wrangler deploy --config .wrangler/recovery-rehearsal/wrangler.jsonc --dry-run
+   pnpm exec wrangler d1 migrations apply <rehearsal-name> --remote --config .wrangler/recovery-rehearsal/wrangler.jsonc
+   pnpm exec wrangler deploy --config .wrangler/recovery-rehearsal/wrangler.jsonc
+   pnpm exec wrangler dev --config .wrangler/recovery-rehearsal/proxy.jsonc --ip 127.0.0.1 --port 8797 --inspector-port 9247 --show-interactive-dev-session=false
+   ```
+
+2. In another terminal, run `pnpm exec tsx scripts/cloudflare-recovery-rehearsal/run.ts ACTION`
+   for `seed`, `backup`, `delete`, `restore`, `unsafe`, `retention` in that order. The driver
+   checks the phase and refuses to seed an existing fixture. Inspect each result before
+   continuing; do not retry an uncertain mutation without inspecting its state. `restore`
+   verifies deleted clients/dependents remain absent, retained invitation associations and
+   omission markers survive, all original/variant bytes match, and public reads stay 503
+   until explicit reconciliation/reopen. `unsafe` checks missing receipts and day-28 expiry.
+   The seed asserts two populated rows in every client-dependent fixture table; empty-table
+   absence checks cannot satisfy cascade evidence. `checklist-proof` provides a separate
+   populated checklist snapshot/delete/restore check when cron is off.
+
+3. After `retention`, run `monitor 32`: the independent binding reader should report failed
+   maintenance, overdue copies/receipts and missed removal targets under the 32-day fixture
+   clock. Run `retry`, `healthy`, then `monitor`; the final result must be healthy. A successful
+   retry verifies actual R2 absence before retiring receipts. The monitor command records the
+   result; deliberate negative probes are interpreted by their fixed issue codes, not just
+   by the diagnostic driver's exit code.
+
+4. Run `cron-on` and wait for `cron-receipt` to contain a new Cloudflare-generated scheduled
+   event and successful completion. The temporary every-minute trigger calls the daily
+   maintenance/backup/health branch. It is not the production schedule. Cloudflare documents
+   [up to 15 minutes of trigger propagation](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
+   Record actual tail CPU/wall time and outcome, not just a configured cron expression.
+   Run `cron-off` before fault injection, Time Travel or cleanup.
+
+5. To rehearse provider recovery, keep ingress detached, disable fixture cron, capture a
+   current bookmark using `wrangler d1 time-travel info <name> --json`, run `provider-delete`,
+   then use `wrangler d1 time-travel restore <name> --bookmark <saved-bookmark>` on that
+   isolated D1 only. Run `provider-reconcile`: it verifies the deleted fixture returned to
+   offline D1, reapplies the independent R2 ledger, clears transient credentials and verifies
+   cascades before reopening. Do not import or reset the ledger/lifecycle identity from a
+   backup. A provider restore can reset the maintenance flag, so detached ingress is essential.
+   Never use a fixture bookmark for a production restore.
+
+6. For independent S3 verification, put `R2_MONITOR_ACCESS_KEY_ID` and
+   `R2_MONITOR_SECRET_ACCESS_KEY` in ignored `.env.recovery-monitor`. Use R2 **Object Read Only**
+   credentials restricted to the recovery bucket. Verify the chosen bucket can be read,
+   another disposable bucket cannot be listed, and writes are denied. Never put a broader
+   credential in GitHub as a shortcut. Run `monitor-s3`, then `stale`, `monitor-s3`,
+   `recover-monitor`, `monitor-s3`. Expect healthy → stale maintenance/overdue recovery/target
+   miss → healthy. This uses the shipped SigV4/conditional-HEAD checker against real R2.
+   Only synthetic metadata is aged; real client recovery copies must never be aged for a test.
+
+7. A compatible Worker code rollback uses a saved version ID and `wrangler rollback` with
+   this exact config. Confirm the active version and run `recover-monitor` plus `monitor-s3`
+   afterward. This private operator rollback does not establish the web/API release rollback
+   matrix, schema compatibility for arbitrary versions, or public HTTPS acceptance.
+
+8. The existing workflow's `notification_test=true` intentionally fails before checkout or
+   Cloudflare access; it requires no R2 credentials. Verify receipt with the intended recipient.
+   For a real GitHub check, use only verified bucket-only read credentials, record the run,
+   and remove temporary repository secrets/variables when the rehearsal ends. Persistent
+   monitoring still requires the production target and notification routing described above.
+
+9. Run `cron-off`, remove the temporary schedule, then `empty` to verify both fixture buckets
+   empty. Stop the loopback proxy/tail. Delete only the verified rehearsal Worker, D1 and
+   empty buckets; re-list resources to prove absence. Remove any temporary GitHub credentials
+   and ask the credential owner to revoke the rehearsal R2 token. Retain sanitized JSON
+   results from `.wrangler/recovery-rehearsal/results.jsonl`, never credentials or raw tails.
+
+R-23 records actual outcomes, limitations, credential checks and cleanup. A passing functional
+rehearsal does not close the Free CPU budget: the observed cron samples were 30–43 ms against
+the [documented 10-ms Free limit](https://developers.cloudflare.com/workers/platform/limits/#cpu-time).

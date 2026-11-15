@@ -914,3 +914,81 @@ remote workflow state was not inspected. No credentials were created, remote res
 changed, notifications sent, or release gates closed. T001/T058 remain open; the feature
 still has **52/63 tasks complete**. Account usage controls, general API CPU headroom,
 deployed recovery/cron proof and actual notification receipt remain separate requirements.
+
+## R-23 Private recovery and monitoring rehearsals — 2026-11-14
+
+The owner requested this next implementation step after merging the feature to main. The
+existing feature branch was fast-forwarded to `d4e8aee`; pre-existing local Spec Kit/toolchain
+configuration changes were preserved. New private rehearsal resources used only synthetic
+data. They were provisioned with D1 in ENAM, two private R2 buckets and a Worker with
+workers.dev and preview URLs disabled and no routes. Cloudflare API reads confirmed those
+privacy settings. No production resource or client record was restored or deleted.
+
+`scripts/cloudflare-recovery-rehearsal/` provides the separate operator, fixed resource
+configuration, local service-binding proxy and sanitized result recorder. It imports the
+shipped backup/deletion/media/scheduler services; the production application does not import
+the operator. Local tests first failed for missing isolation/driver behavior, then passed.
+See acceptance.md for the exact commands, final validation and sanitized evidence.
+
+Verified against deployed D1/R2:
+
+- Private snapshots omit transient auth/dedupe/rate/lifecycle state, retain omission markers
+  and same-client invitation associations, and restore retained data.
+- Client deletion cascades remove dependent email/checklist/invite/response data. Restoring
+  a pre-deletion application snapshot replays the independent ledger and does not resurrect
+  deleted data. All four portfolio original/variant byte fixtures recover exactly.
+  Review found the initial seed lacked checklist master rows; a failing 0-versus-2 assertion
+  caught the vacuous checklist test. The corrected seed and a separate deployed populated
+  checklist backup/delete/restore proof passed, preserving the retained completion time.
+- Missing indexed receipts and copies at day-28 expiry refuse restore/reopen and keep API
+  reads at 503. Successful reconciliation precedes explicit reopening.
+- An injected R2 delete failure under a 32-day fixture clock preserves the expired backup
+  and required receipt. Independent monitoring reports the failed job, overdue recovery,
+  missed day-30 target and overdue receipt. A subsequent retry verifies object removal before
+  retiring the receipt. This is fault injection/controlled time, not an observed 32-day outage.
+- Actual D1 Time Travel restored the selected pre-deletion bookmark. With ingress detached
+  and cron paused, the operator verified the deleted synthetic client had returned to offline
+  D1, restored the maintenance gate, replayed the independently retained R2 ledger, cleared
+  transient credentials and verified dependent cascades before reopening. Time Travel can
+  reset the maintenance flag, which is why detached ingress is essential.
+  [D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/).
+- A compatible Worker version rollback returned 100% of traffic to the recorded earlier
+  version, and recovery/monitor checks passed afterward. It did not roll back D1 or R2.
+  This is private operator rollback evidence, not the full application release matrix.
+  [Worker rollback behavior](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/).
+- Cloudflare actually invoked the temporary every-minute cron. The first successful receipt
+  completed at `2026-11-15T03:09:23.653Z`; four captured runs returned `ok`, without exceptions,
+  using 30–43 ms CPU and 7,757–10,880 ms wall time. The daily branch and storage were real;
+  Gmail sender verification used a labeled synthetic no-send adapter. This does not establish
+  actual Gmail health, production cadence or ongoing monitoring.
+
+The independent observer first used a separate remote R2 binding, then the shipped S3 SigV4
+checker against real R2. It downloaded only operational signals and metadata. The S3 sequence
+was healthy → stale maintenance/overdue recovery/missed removal target → healthy after
+cleanup. Initial user-provided credentials also allowed a media-bucket listing and an empty
+write probe, so their scope was rejected for GitHub use; the probe was removed. The owner was
+asked to replace them with recovery-bucket-only Object Read Only credentials. Final scope,
+GitHub execution, owner receipt and cleanup outcomes are recorded in acceptance.md.
+The replacement credentials subsequently denied both unrelated-bucket listing and recovery
+writes (403) while permitting healthy S3 inspection. Only that replacement was copied into
+temporary GitHub secrets. The real monitor passed against R2, then correctly failed on the
+injected stale maintenance/overdue backup/target miss. The user explicitly confirmed receipt
+of the synthetic notification retry; this is actual human receipt evidence for manual runs.
+The recovered GitHub run `43672158050` returned healthy with no issues. Temporary repository
+settings/secrets and all four Cloudflare resources were removed and their absence verified.
+The user retains responsibility for revoking the temporary R2 token because the connection
+has no token-management permission. No persistent monitor or public deployment remains.
+
+GitHub's intended synthetic notification failure ran on merged main as `sg921216` in runs
+[43670559798](https://github.com/sg921216/radiant_images/actions/runs/43670559798) and, at the
+owner's request, [43671241481](https://github.com/sg921216/radiant_images/actions/runs/43671241481).
+Both failed at the labeled first step and skipped checkout/Cloudflare access. They need no
+R2 credentials. Actual owner notification receipt is a separate human observation.
+[GitHub notification routing](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).
+
+**Release boundary:** functional completion is not a Free-plan resource pass. Cloudflare
+documents 10 ms CPU per Free Cron invocation and permits occasional over-limit execution;
+all four captured full-job samples exceeded 10 ms. Production scheduling needs resource
+headroom/remediation evidence before release. The existing T001/T058 gates remain open;
+no paid upgrade, production deployment, or permanent monitoring activation is inferred.
+[Workers CPU limits](https://developers.cloudflare.com/workers/platform/limits/#cpu-time).
