@@ -1,0 +1,41 @@
+{
+  "completedAt": "2026-11-14T18:09:26.614Z",
+  "removals": [
+    {
+      "kind": "r2",
+      "name": "radiant-rehearsal-20261114-b9e6a4-media",
+      "success": true
+    },
+    {
+      "kind": "r2",
+      "name": "radiant-rehearsal-20261114-b9e6a4-recovery",
+      "success": true
+    },
+    {
+      "kind": "d1",
+      "name": "radiant-rehearsal-20261114-b9e6a4",
+      "success": true
+    },
+    {
+      "kind": "worker",
+      "name": "radiant-rehearsal-20261114-b9e6a4",
+      "success": true
+    }
+  ],
+  "publicAccess": {
+    "workersDev": false,
+    "previewUrls": false,
+    "routes": [],
+    "bucketManagedUrls": false,
+    "bucketCustomDomains": []
+  },
+  "inventoryCheckedAt": "2026-11-14T18:10:02.125Z",
+  "remainingAccountInventory": {
+    "workers": 0,
+    "durableObjectNamespaces": 0,
+    "d1Databases": 0,
+    "r2Buckets": 0
+  },
+  "data": "Only synthetic identities and generated images. Both buckets were emptied before successful deletion. No client photos, email sends, Pixieset writes or paid subscription changes.",
+  "localCleanup": "Local proxy stopped; generated configs and synthetic credentials removed from ignored .wrangler/gallery-rehearsal after remote deletion."
+}

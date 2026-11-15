@@ -1,0 +1,129 @@
+[
+  {
+    "sql": "INSERT OR IGNORE INTO site_config (id, inquiry_recipient, sender_address, public_contact_email, shoot_locations, referral_sources, timezone) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "values": [
+      1,
+      "inquiries@example.invalid",
+      "owner@example.invalid",
+      "hello@example.invalid",
+      "[\"Studio\", \"Outdoors\"]",
+      "[\"Business Card\", \"Word of Mouth\", \"Social Media\"]",
+      "America/New_York"
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO pricing_revisions (id, published_at, created_by) VALUES (?, ?, ?)",
+    "values": ["01K00000000000000000000001", "2026-11-13T12:00:00.000Z", "owner@example.invalid"]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO pricing_packages (id, revision_id, shoot_type, sort_order, name, price_cents, description, inclusions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    "values": [
+      "01K00000000000000000000010",
+      "01K00000000000000000000001",
+      "maternity",
+      0,
+      "Studio session",
+      25000,
+      "Synthetic local pricing; owner approval required before launch.",
+      "[\"A relaxed photography session\", \"A curated digital gallery\"]"
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO pricing_packages (id, revision_id, shoot_type, sort_order, name, price_cents, description, inclusions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    "values": [
+      "01K00000000000000000000011",
+      "01K00000000000000000000001",
+      "newborn",
+      0,
+      "Studio session",
+      25000,
+      "Synthetic local pricing; owner approval required before launch.",
+      "[\"A relaxed photography session\", \"A curated digital gallery\"]"
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO pricing_packages (id, revision_id, shoot_type, sort_order, name, price_cents, description, inclusions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    "values": [
+      "01K00000000000000000000012",
+      "01K00000000000000000000001",
+      "family",
+      0,
+      "Studio session",
+      25000,
+      "Synthetic local pricing; owner approval required before launch.",
+      "[\"A relaxed photography session\", \"A curated digital gallery\"]"
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO pricing_publication (id, current_revision_id) VALUES (?, ?)",
+    "values": [1, "01K00000000000000000000001"]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO faq_entries (id, question, answer, sort_order) VALUES (?, ?, ?, ?)",
+    "values": [
+      "01K00000000000000000000020",
+      "What can I expect?",
+      "We will plan the session together and leave time to settle in.",
+      0
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO faq_entries (id, question, answer, sort_order) VALUES (?, ?, ?, ?)",
+    "values": [
+      "01K00000000000000000000021",
+      "What should we wear?",
+      "Simple, comfortable clothing lets your connection take center stage.",
+      1
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO faq_entries (id, question, answer, sort_order) VALUES (?, ?, ?, ?)",
+    "values": [
+      "01K00000000000000000000022",
+      "When is payment due?",
+      "Please ask Rebekah for the current payment schedule before booking.",
+      2
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO faq_entries (id, question, answer, sort_order) VALUES (?, ?, ?, ?)",
+    "values": [
+      "01K00000000000000000000023",
+      "Is a deposit required?",
+      "Please ask Rebekah for the current deposit terms before booking.",
+      3
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO page_content (page, intro_md, how_it_works) VALUES (?, ?, ?)",
+    "values": [
+      "maternity",
+      "Thoughtful photographs of the people and moments you want to remember.",
+      "[{\"title\": \"Say hello\", \"body\": \"Tell Rebekah a little about your family and the session you have in mind.\"}, {\"title\": \"Make a plan\", \"body\": \"Choose a setting and a time together.\"}, {\"title\": \"Be yourselves\", \"body\": \"Take your time, settle in, and enjoy being together.\"}]"
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO page_content (page, intro_md, how_it_works) VALUES (?, ?, ?)",
+    "values": [
+      "newborn",
+      "Thoughtful photographs of the people and moments you want to remember.",
+      "[{\"title\": \"Say hello\", \"body\": \"Tell Rebekah a little about your family and the session you have in mind.\"}, {\"title\": \"Make a plan\", \"body\": \"Choose a setting and a time together.\"}, {\"title\": \"Be yourselves\", \"body\": \"Take your time, settle in, and enjoy being together.\"}]"
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO page_content (page, intro_md, how_it_works) VALUES (?, ?, ?)",
+    "values": [
+      "family",
+      "Thoughtful photographs of the people and moments you want to remember.",
+      "[{\"title\": \"Say hello\", \"body\": \"Tell Rebekah a little about your family and the session you have in mind.\"}, {\"title\": \"Make a plan\", \"body\": \"Choose a setting and a time together.\"}, {\"title\": \"Be yourselves\", \"body\": \"Take your time, settle in, and enjoy being together.\"}]"
+    ]
+  },
+  {
+    "sql": "INSERT OR IGNORE INTO page_content (page, intro_md, how_it_works) VALUES (?, ?, ?)",
+    "values": [
+      "about",
+      "Thoughtful photographs of the people and moments you want to remember.",
+      "[]"
+    ]
+  }
+]

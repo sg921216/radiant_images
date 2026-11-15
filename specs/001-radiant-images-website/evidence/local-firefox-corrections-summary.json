@@ -1,0 +1,17 @@
+{
+  "stats": {
+    "total": 28,
+    "expected": 28,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": true
+  },
+  "projects": ["firefox-desktop"],
+  "browser": "159.0",
+  "playwright": "1.65.1",
+  "executableSha256": "a8fa6c08d8a9e8cb961e74a626dd2f4c5064a853de38bcde3df3cb145ec44530",
+  "started": 1794668712326,
+  "duration": 161676.64800000002,
+  "limitations": "Single complete verification run after adding positive persisted-checklist readiness assertions. The initial 27/28 run is preserved separately. Pinned Firefox was manually extracted by the owner; real-device/previous-version, remote CI and production acceptance remain open."
+}

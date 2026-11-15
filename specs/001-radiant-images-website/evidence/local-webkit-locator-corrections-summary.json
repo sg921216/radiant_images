@@ -1,0 +1,181 @@
+{
+  "date": "2026-11-14",
+  "status": "completed_with_mobile_input_loss",
+  "task": "T059",
+  "runtime": {
+    "node": "24.14.0",
+    "playwright": "1.65.1",
+    "webkit": "27.2",
+    "webkitBuild": "2388"
+  },
+  "selection": {
+    "projects": [
+      "webkit-desktop",
+      "webkit-mobile"
+    ],
+    "scenarios": 3,
+    "repetitions": 10,
+    "retries": 0,
+    "executed": 60
+  },
+  "change": "Only post-save/reload email assertions changed to getByRole(textbox). Creation helper, product code, typing sequence, waits and retries are unchanged.",
+  "stats": {
+    "startTime": "2026-11-14T15:34:06.048Z",
+    "duration": 460372.756,
+    "expected": 59,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "project": "webkit-desktop",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "outcomes": [
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@client-entry consecutive fill values survive creation, blur and reload",
+      "outcomes": [
+        "unexpected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "outcomes": [
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@client-entry consecutive pressSequentially values survive creation, blur and reload",
+      "outcomes": [
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10
+    },
+    {
+      "project": "webkit-desktop",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "outcomes": [
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10
+    },
+    {
+      "project": "webkit-mobile",
+      "scenario": "@smoke complete owner workflow preserves per-client progress and immutable questionnaire history",
+      "outcomes": [
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected",
+        "expected"
+      ],
+      "attempts": 10
+    }
+  ],
+  "failure": {
+    "project": "webkit-mobile",
+    "scenario": "consecutive fill",
+    "client": "Avery (synthetic)",
+    "field": "firstName",
+    "expected": "Avery",
+    "actual": "",
+    "stage": "pre-submit value assertion after three consecutive fills",
+    "cause": "not established"
+  },
+  "checks": {
+    "productionBuild": "passed",
+    "scopedLint": "passed",
+    "toolsTypes": "passed",
+    "formatting": "passed",
+    "artifactPrivacy": {
+      "checked": 51,
+      "blocked": 0
+    },
+    "repositoryPrivacy": {
+      "checked": 382,
+      "blocked": 0
+    }
+  },
+  "limitations": "The ambiguous locator is corrected. One input-loss failure is retained; 59/60 is not a clean pass or a product fix. The symptom affected first name rather than the historically reported email. The complete combined engine matrix, remote CI and release acceptance remain open; task count stays 51/63.",
+  "diagnostics": {
+    "nativeHtml": {
+      "contexts": 50,
+      "failures": 0
+    },
+    "passiveEventRecording": {
+      "projects": [
+        "webkit-mobile"
+      ],
+      "repetitions": 10,
+      "retries": 0,
+      "stats": {
+        "startTime": "2026-11-14T15:42:15.055Z",
+        "duration": 49953.72,
+        "expected": 10,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedEventSequenceCaptured": false
+    }
+  }
+}

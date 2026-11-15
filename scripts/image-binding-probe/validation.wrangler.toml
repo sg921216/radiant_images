@@ -1,0 +1,21 @@
+# Use `wrangler dev` (local code + live Images), never deploy this diagnostic.
+name = "radiant-images-validation-probe"
+main = "validation-worker.ts"
+compatibility_date = "2026-11-14"
+workers_dev = false
+preview_urls = false
+
+[images]
+binding = "IMAGES"
+remote = true
+
+[[durable_objects.bindings]]
+name = "JPEG_VALIDATOR"
+class_name = "JpegValidator"
+
+[[migrations]]
+tag = "jpeg-validator-v1"
+new_sqlite_classes = ["JpegValidator"]
+
+[observability]
+enabled = false

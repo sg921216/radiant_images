@@ -1,0 +1,92 @@
+{
+  "recordedAt": "2026-11-14T18:06:13.866Z",
+  "unit": "milliseconds from Workers invocation logs",
+  "rawEventsReturned": 1494,
+  "invocations": 202,
+  "stages": [
+    {
+      "version": "a4e6aaf2-8211-4bdf-8e38-71adabb19fa4",
+      "groups": [
+        {
+          "kind": "frontWorker",
+          "invocations": 74,
+          "maxCpuMs": 109,
+          "maxWallMs": 11212,
+          "outcomes": {
+            "ok": 74
+          },
+          "statuses": {
+            "200": 37,
+            "201": 8,
+            "204": 8,
+            "400": 8,
+            "401": 1,
+            "404": 12
+          }
+        },
+        {
+          "kind": "jpegValidator",
+          "invocations": 8,
+          "maxCpuMs": 7593,
+          "maxWallMs": 7935,
+          "outcomes": {
+            "ok": 8
+          },
+          "statuses": {
+            "rpc": 8
+          }
+        }
+      ]
+    },
+    {
+      "version": "585b0ba1-4590-4c5f-8acb-68f34bee9b26",
+      "groups": [
+        {
+          "kind": "frontWorker",
+          "invocations": 91,
+          "maxCpuMs": 7,
+          "maxWallMs": 10832,
+          "outcomes": {
+            "ok": 91
+          },
+          "statuses": {
+            "200": 45,
+            "201": 9,
+            "204": 9,
+            "400": 10,
+            "401": 1,
+            "404": 16,
+            "429": 1
+          }
+        },
+        {
+          "kind": "jpegValidator",
+          "invocations": 8,
+          "maxCpuMs": 7366,
+          "maxWallMs": 7841,
+          "outcomes": {
+            "ok": 8
+          },
+          "statuses": {
+            "rpc": 8
+          }
+        },
+        {
+          "kind": "galleryMutations",
+          "invocations": 21,
+          "maxCpuMs": 159,
+          "maxWallMs": 10748,
+          "outcomes": {
+            "ok": 21
+          },
+          "statuses": {
+            "201": 9,
+            "204": 9,
+            "400": 2,
+            "429": 1
+          }
+        }
+      ]
+    }
+  ]
+}

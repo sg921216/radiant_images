@@ -1,0 +1,10 @@
+name = "radiant-images-web"
+main = "worker.ts"
+compatibility_date = "2026-11-13"
+workers_dev = true
+[assets]
+directory = "./build/client"
+binding = "ASSETS"
+run_worker_first = ["/admin", "/admin/*", "/q/*"]
+[observability]
+enabled = false

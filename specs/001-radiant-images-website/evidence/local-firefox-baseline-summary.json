@@ -1,0 +1,17 @@
+{
+  "stats": {
+    "total": 28,
+    "expected": 27,
+    "unexpected": 1,
+    "flaky": 0,
+    "skipped": 0,
+    "ok": false
+  },
+  "projects": ["firefox-desktop"],
+  "browser": "159.0",
+  "playwright": "1.65.1",
+  "executableSha256": "a8fa6c08d8a9e8cb961e74a626dd2f4c5064a853de38bcde3df3cb145ec44530",
+  "started": 1794668514563,
+  "duration": 162542.496,
+  "limitations": "First run: owner workflow failed with NS_BINDING_ABORTED after a checklist reload checked only the absence of a removed item. All 27 other cases passed. Native executable was manually extracted by the owner from the pinned official Playwright archive."
+}

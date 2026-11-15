@@ -1,0 +1,16 @@
+# Build replaces the CSP tokens with the exact API origin and hashes of prerendered scripts.
+/*
+  Content-Security-Policy: __BUILD_CSP__
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000
+
+/admin*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+/q/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

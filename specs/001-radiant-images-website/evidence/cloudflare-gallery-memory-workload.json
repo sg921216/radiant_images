@@ -1,0 +1,38 @@
+{
+  "worker": "radiant-rehearsal-20261114-c72f19",
+  "startedAt": "2026-11-14T18:19:08.445Z",
+  "completedAt": "2026-11-14T18:21:45.382Z",
+  "sourcePixels": 40000000,
+  "sourceBytes": 10485760,
+  "sourceSha256": "57492771fb0c5f0d15c8b139409b429003cb44b7962a5b9a634958ab9f2d8cda",
+  "multipartBytes": 11324096,
+  "chunkBytes": 32768,
+  "chunkDelayMs": 75,
+  "results": [
+    {
+      "iteration": 1,
+      "status": 201,
+      "elapsedMs": 33403,
+      "passed": true
+    },
+    {
+      "iteration": 2,
+      "status": 201,
+      "elapsedMs": 37028,
+      "passed": true
+    },
+    {
+      "iteration": 3,
+      "status": 201,
+      "elapsedMs": 36731,
+      "passed": true
+    },
+    {
+      "iteration": 4,
+      "status": 201,
+      "elapsedMs": 36421,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

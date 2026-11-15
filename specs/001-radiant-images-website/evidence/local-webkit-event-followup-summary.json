@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-14",
+  "task": "T059",
+  "status": "diagnostic_pass_without_failure_reproduction",
+  "runtime": {
+    "node": "24.14.0",
+    "playwright": "1.65.1",
+    "webkit": "27.2",
+    "webkitBuild": "2388"
+  },
+  "selection": {
+    "projects": ["webkit-mobile"],
+    "scenarios": 1,
+    "repetitions": 30,
+    "retries": 0,
+    "clientsPerCase": 3
+  },
+  "command": "pnpm exec playwright test --config=.wrangler/client-input-diagnostic.config.ts --repeat-each=30 --retries=0",
+  "stats": {
+    "startTime": "2026-11-14T15:48:28.816Z",
+    "duration": 137988.456,
+    "expected": 30,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "failedEventSequenceCaptured": false,
+  "productCodeChanged": false,
+  "diagnosticChange": "Passive native events now include trust/input type and document focus, without added inter-field waits.",
+  "limitations": "No input-loss cause or fix is established. The historical email failure and 59/60 probe result remain unresolved. Instrumentation may affect timing. This is local synthetic-provider evidence only; T059 stays open."
+}

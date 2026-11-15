@@ -1,0 +1,570 @@
+{
+  "runner": {
+    "os": "win32 10.0.26200",
+    "cpu": "12th Gen Intel(R) Core(TM) i9-12900K",
+    "logicalCpus": 24,
+    "memoryGiB": 64,
+    "playwright": "1.65.1",
+    "fixture": "synthetic-load-only; approved-photo gate OPEN",
+    "captcha": "deterministic adapter; 200 ms readiness; not live Turnstile"
+  },
+  "browser": "159.0.8154.6",
+  "results": [
+    {
+      "route": "/",
+      "run": 0,
+      "usable": 1791.5733,
+      "interactionMs": 57.37780000000021,
+      "lcp": 792,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146451,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 1,
+      "usable": 21810.5998,
+      "interactionMs": 164.62449999999808,
+      "lcp": 20544,
+      "cls": 0,
+      "lcpElement": "H1.",
+      "shifts": [],
+      "jsBytes": 146451,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "usable": 1814.3424999999988,
+      "interactionMs": 52.34769999999844,
+      "lcp": 800,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146451,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "usable": 1820.6348999999973,
+      "interactionMs": 75.36099999999715,
+      "lcp": 788,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146451,
+      "imageBytes": 0
+    },
+    {
+      "route": "/",
+      "run": 4,
+      "usable": 1791.9645999999993,
+      "interactionMs": 59.37039999999979,
+      "lcp": 776,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 146451,
+      "imageBytes": 0
+    },
+    {
+      "route": "/maternity",
+      "run": 0,
+      "usable": 3304.1082000000024,
+      "interactionMs": 59.988600000004226,
+      "lcp": 956,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183357,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 1,
+      "usable": 3297.9357999999993,
+      "interactionMs": 50.175999999999476,
+      "lcp": 948,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183357,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 2,
+      "usable": 3145.0259000000005,
+      "interactionMs": 77.88650000000052,
+      "lcp": 928,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183357,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 3,
+      "usable": 3140.4634000000005,
+      "interactionMs": 50.61070000000473,
+      "lcp": 992,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183357,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/maternity",
+      "run": 4,
+      "usable": 3346.97619999999,
+      "interactionMs": 54.76390000000538,
+      "lcp": 980,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183357,
+      "imageBytes": 59572
+    },
+    {
+      "route": "/newborn",
+      "run": 0,
+      "usable": 3278.894199999995,
+      "interactionMs": 51.021899999992456,
+      "lcp": 964,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 1,
+      "usable": 3312.6080000000075,
+      "interactionMs": 52.934900000007474,
+      "lcp": 980,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 2,
+      "usable": 3298.430699999997,
+      "interactionMs": 128.4646000000066,
+      "lcp": 1000,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 3,
+      "usable": 3303.5034999999916,
+      "interactionMs": 53.614300000001094,
+      "lcp": 936,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/newborn",
+      "run": 4,
+      "usable": 3304.9217999999964,
+      "interactionMs": 48.54300000000512,
+      "lcp": 924,
+      "cls": 0.05613590932805941,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 57580
+    },
+    {
+      "route": "/family",
+      "run": 0,
+      "usable": 3373.4005999999936,
+      "interactionMs": 52.524600000004284,
+      "lcp": 908,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 1,
+      "usable": 3385.5108000000037,
+      "interactionMs": 52.84219999999914,
+      "lcp": 952,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 2,
+      "usable": 3415.809699999998,
+      "interactionMs": 51.65519999999378,
+      "lcp": 968,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 3,
+      "usable": 3343.1379000000015,
+      "interactionMs": 42.825700000001234,
+      "lcp": 944,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/family",
+      "run": 4,
+      "usable": 3404.053700000004,
+      "interactionMs": 58.443599999998696,
+      "lcp": 936,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 183356,
+      "imageBytes": 59804
+    },
+    {
+      "route": "/about",
+      "run": 0,
+      "usable": 1989.9049999999988,
+      "interactionMs": 77.63340000002063,
+      "lcp": 924,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180727,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 1,
+      "usable": 2430.4227000000246,
+      "interactionMs": 47.20699999999488,
+      "lcp": 932,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180727,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 2,
+      "usable": 1999.1296999999904,
+      "interactionMs": 67.199099999998,
+      "lcp": 952,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180727,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 3,
+      "usable": 2149.513799999986,
+      "interactionMs": 197.09909999999218,
+      "lcp": 948,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180727,
+      "imageBytes": 0
+    },
+    {
+      "route": "/about",
+      "run": 4,
+      "usable": 1989.3136999999988,
+      "interactionMs": 68.5402999999933,
+      "lcp": 940,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180727,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 0,
+      "usable": 2030.909400000004,
+      "interactionMs": 75.9201999999932,
+      "lcp": 980,
+      "cls": 0.2436774278676988,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.2436774278676988,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180629,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 1,
+      "usable": 1988.56210000001,
+      "interactionMs": 66.42029999999795,
+      "lcp": 940,
+      "cls": 0.2436774278676988,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.2436774278676988,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180629,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 2,
+      "usable": 2007.2118000000191,
+      "interactionMs": 98.31010000000242,
+      "lcp": 940,
+      "cls": 0.2436774278676988,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.2436774278676988,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180629,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 3,
+      "usable": 1994.3902999999991,
+      "interactionMs": 99.35680000000866,
+      "lcp": 928,
+      "cls": 0.2436774278676988,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.2436774278676988,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180629,
+      "imageBytes": 0
+    },
+    {
+      "route": "/faq",
+      "run": 4,
+      "usable": 2341.272800000006,
+      "interactionMs": 57.43450000000303,
+      "lcp": 824,
+      "cls": 0.2436774278676988,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.2436774278676988,
+          "nodes": ["MAIN.", "FOOTER.site-footer"]
+        }
+      ],
+      "jsBytes": 180629,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 0,
+      "usable": 2005.0626000000047,
+      "interactionMs": 42.98750000001746,
+      "lcp": 940,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 150213,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 1,
+      "usable": 1972.3354999999865,
+      "interactionMs": 39.2155999999959,
+      "lcp": 972,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 150213,
+      "imageBytes": 0
+    },
+    {
+      "route": "/contact",
+      "run": 2,
+      "usable": 1952.8293999999878,
+      "interactionMs": 57.31580000001122,
+      "lcp": 904,
+      "cls": 0.05613590932805941,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05613590932805941,
+          "nodes": ["MAIN."]
+        }
+      ],
+      "jsBytes": 150213,
+      "imageBytes": 0
+    }
+  ]
+}

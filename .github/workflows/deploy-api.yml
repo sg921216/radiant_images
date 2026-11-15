@@ -1,0 +1,55 @@
+name: Deploy API (gated)
+on:
+  workflow_dispatch:
+    inputs:
+      acceptance_commit:
+        description: Commit with completed acceptance evidence and approved release
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: radiant-production-api
+  cancel-in-progress: false
+jobs:
+  verify:
+    uses: ./.github/workflows/ci.yml
+  deploy:
+    needs: verify
+    if: inputs.acceptance_commit == github.sha
+    environment: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      WEB_ORIGIN: ${{ vars.WEB_ORIGIN }}
+      API_ORIGIN: ${{ vars.API_ORIGIN }}
+      PUBLIC_CONTACT_EMAIL: ${{ vars.PUBLIC_CONTACT_EMAIL }}
+      TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+      API_WORKER_NAME: ${{ vars.API_WORKER_NAME }}
+      D1_DATABASE_NAME: ${{ vars.D1_DATABASE_NAME }}
+      D1_DATABASE_ID: ${{ vars.D1_DATABASE_ID }}
+      MEDIA_BUCKET: ${{ vars.MEDIA_BUCKET }}
+      RECOVERY_BUCKET: ${{ vars.RECOVERY_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '12.18.0'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm security:dependencies && pnpm security:secrets
+      - run: pnpm exec tsx scripts/prepare-release.ts api
+      - name: Apply reviewed forward migrations
+        run: pnpm exec wrangler d1 migrations apply DB --remote --config .wrangler/release-api.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy API
+        run: pnpm exec wrangler deploy --config .wrangler/release-api.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

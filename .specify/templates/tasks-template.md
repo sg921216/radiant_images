@@ -1,252 +1,145 @@
 ---
-
-description: "Task list template for feature implementation"
+description: "Task list template for React and Cloudflare Workers features"
 ---
 
 # Tasks: [FEATURE NAME]
 
 **Input**: Design documents from `/specs/[###-feature-name]/`
-
-**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
-
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
-
-**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+**Prerequisites**: plan.md, spec.md; research.md, data-model.md, and contracts/ when applicable.
+**Constitution**: `.specify/memory/constitution.md`, version [current version].
+**Tests**: Mandatory TDD for executable behavior, including shared foundation and bug fixes.
+Write focused tests, run them to observe a meaningful failure, implement, then refactor green.
+Documentation-only and declarative setup changes use appropriate validation.
+**Organization**: Independently testable story increments in priority order.
 
 ## Format: `[ID] [P?] [Story] Description`
 
-- **[P]**: Can run in parallel (different files, no dependencies)
-- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
-- Include exact file paths in descriptions
+- IDs MUST be unique and sequential in execution order.
+- `[P]` means different files with no unmet dependencies. Tests and their implementation
+  MUST NOT run concurrently; a meaningful failing test is an implementation prerequisite.
+- `[US1]` etc. map story tasks to acceptance criteria; omit story labels for shared tasks.
+- Include exact file paths, requirement references, and expected evidence.
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- React: `apps/web/app/`, `apps/web/tests/`.
+- Workers: `apps/api/src/`, `apps/api/tests/`; D1 migrations and R2 test fixtures.
+- Shared schemas: `packages/shared/src/` and corresponding tests.
+- Playwright: `e2e/`, `playwright.config.ts`; CI: `.github/workflows/`.
+- Use the actual plan layout. Paths below are examples, not additional required features.
 
 <!--
-  ============================================================================
-  IMPORTANT: The tasks below are SAMPLE TASKS for illustration purposes only.
-
-  The /speckit-tasks command MUST replace these with actual tasks based on:
-  - User stories from spec.md (with their priorities P1, P2, P3...)
-  - Feature requirements from plan.md
-  - Entities from data-model.md
-  - Endpoints from contracts/
-
-  Tasks MUST be organized by user story so each story can be:
-  - Implemented independently
-  - Tested independently
-  - Delivered as an MVP increment
-
-  DO NOT keep these sample tasks in the generated tasks.md file.
-  ============================================================================
+Replace every sample with real tasks derived from stories, contracts, and constitution gates.
+Retain mandatory test-first sequencing and quality work. Do not keep sample placeholders.
+No automatic implementation/release pass is allowed when evidence is missing.
 -->
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Project initialization and basic structure
+**Purpose**: Establish reproducible tooling and verify provider/hosting feasibility.
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 Verify hosting/cost/runtime constraints and record evidence in specs/[feature]/research.md
+- [ ] T002 Pin compatible React/Workers tooling and strict TypeScript in package.json, pnpm-lock.yaml, and tsconfig.base.json
+- [ ] T003 [P] Configure Vitest/RTL, Worker integration, and OpenAPI validation in apps/web/vitest.config.ts and apps/api/vitest.config.ts
+- [ ] T004 [P] Configure isolated Playwright fixtures, provider doubles, controlled time, semantic locators, and production test-adapter exclusion in playwright.config.ts and e2e/fixtures.ts
+- [ ] T005 Configure PR Chromium smoke, nightly/release Chromium/Firefox/WebKit, focused-test rejection, fail-on-flaky behavior, at most one diagnostic retry, and sanitized failure artifacts in .github/workflows/ci.yml
 
----
+**Checkpoint**: Toolchain runs; fixtures are repeatable and cannot target production data.
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
+**Purpose**: Build only shared behavior needed by the specified stories.
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+- [ ] T006 Write and run failing migration, owner access, provider failure, and public/private boundary tests in apps/api/tests/foundation.test.ts
+- [ ] T007 [P] Write and run failing shared-validation and shell interaction tests in packages/shared/tests/validation.test.ts and apps/web/tests/shell.test.tsx
+- [ ] T008 Implement required migrations, server authorization, adapters, and sanitized logging in apps/api/src/ to pass T006
+- [ ] T009 Implement schemas and React shell in packages/shared/src/ and apps/web/app/ to pass T007
+- [ ] T010 Refactor with foundation suites green; record red/green commands and outcomes in specs/[feature]/acceptance.md
 
-Examples of foundational tasks (adjust based on your project):
-
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
-
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
-
----
+**Checkpoint**: Server authorization and data boundaries verified before dependent stories.
 
 ## Phase 3: User Story 1 - [Title] (Priority: P1) 🎯 MVP
 
-**Goal**: [Brief description of what this story delivers]
+**Goal**: [Observable business outcome]
+**Independent Test**: [Isolated journey, visible outcome, and persisted/public result]
 
-**Independent Test**: [How to verify this story works on its own]
+### Tests for User Story 1 (MANDATORY)
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
-
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
-
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T011 [P] [US1] Write rule/component tests for [acceptance criteria] in apps/web/tests/[feature].test.tsx
+- [ ] T012 [P] [US1] Write API integration/contract success/error/auth tests in apps/api/tests/[feature].test.ts
+- [ ] T013 [P] [US1] Write full-stack journey and recovery tests in e2e/[feature].spec.ts
+- [ ] T014 [US1] Run T011-T013 and record meaningful behavioral failures in specs/[feature]/acceptance.md before implementation
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T015 [US1] Implement authoritative shared rules and Worker behavior in packages/shared/src/schemas/[feature].ts and apps/api/src/routes/[feature].ts
+- [ ] T016 [US1] Implement accessible React behavior and recovery states in apps/web/app/routes/[feature].tsx
+- [ ] T017 [US1] Refactor green and record contract, journey, privacy, and accessibility evidence in specs/[feature]/acceptance.md
 
-**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
-
----
+**Checkpoint**: Story is independently useful; success and relevant failure paths pass.
 
 ## Phase 4: User Story 2 - [Title] (Priority: P2)
 
-**Goal**: [Brief description of what this story delivers]
+**Goal**: [Observable business outcome]
+**Independent Test**: [How to verify without relying on previous test runs]
 
-**Independent Test**: [How to verify this story works on its own]
+### Tests for User Story 2 (MANDATORY)
 
-### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
-
-- [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T018 [P] [US2] Write component/rule tests in apps/web/tests/[feature2].test.tsx
+- [ ] T019 [P] [US2] Write contract/integration tests in apps/api/tests/[feature2].test.ts
+- [ ] T020 [P] [US2] Write critical E2E/recovery tests in e2e/[feature2].spec.ts
+- [ ] T021 [US2] Run tests to demonstrate behavioral failures in specs/[feature]/acceptance.md
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T023 [US2] Integrate with User Story 1 components (if needed)
+- [ ] T022 [US2] Implement Worker behavior in apps/api/src/routes/[feature2].ts
+- [ ] T023 [US2] Implement React behavior in apps/web/app/routes/[feature2].tsx
+- [ ] T024 [US2] Refactor and verify the story, recording results in specs/[feature]/acceptance.md
 
-**Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
+**Checkpoint**: Both stories pass independently with isolated fixtures.
 
----
-
-## Phase 5: User Story 3 - [Title] (Priority: P3)
-
-**Goal**: [Brief description of what this story delivers]
-
-**Independent Test**: [How to verify this story works on its own]
-
-### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
-
-- [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
-
-### Implementation for User Story 3
-
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
-
-**Checkpoint**: All user stories should now be independently functional
-
----
-
-[Add more user story phases as needed, following the same pattern]
-
----
+[Add further story phases using the same test-fail-implement-refactor pattern.]
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
-**Purpose**: Improvements that affect multiple user stories
+Include these obligations in earlier story phases when they affect that increment.
+Every executable change in these tasks still follows TDD.
 
-- [ ] TXXX [P] Documentation updates in docs/
-- [ ] TXXX Code cleanup and refactoring
-- [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
-- [ ] TXXX Run quickstart.md validation
-
----
+- [ ] TXXX Verify upload bounds/content, EXIF/GPS removal, private originals, permission, and deletion in apps/api/tests/media.test.ts and e2e/gallery.spec.ts
+- [ ] TXXX Verify WCAG 2.2 AA with automated checks plus keyboard/screen-reader review in e2e/accessibility.spec.ts and specs/[feature]/acceptance.md
+- [ ] TXXX Verify mobile/image/script budgets, layout stability, crawlable metadata, sitemap, and private-route noindex in e2e/performance.spec.ts and e2e/seo.spec.ts
+- [ ] TXXX Verify production build, secret/dependency checks, sanitized monitoring, migration recovery, backup/restore, and rollback in .github/workflows/ci.yml and specs/[feature]/quickstart.md
+- [ ] TXXX Verify full browser matrix, manual print/PDF layout, separately identified live-provider checks, and owner content/photo readiness in specs/[feature]/acceptance.md
 
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: No dependencies - can start immediately
-- **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories
-- **User Stories (Phase 3+)**: All depend on Foundational phase completion
-  - User stories can then proceed in parallel (if staffed)
-  - Or sequentially in priority order (P1 → P2 → P3)
-- **Polish (Final Phase)**: Depends on all desired user stories being complete
+- Setup precedes foundation; foundation precedes dependent stories.
+- Each red test run precedes its production implementation, including schemas and helpers.
+- Test authoring may be parallel across independent files. Do not use `[P]` to bypass red.
+- Shared route/config/evidence files require serialized edits.
+- Later stories MUST NOT block an earlier useful increment unless the spec requires them.
+- An increment's applicable release gates MUST pass before its release.
 
-### User Story Dependencies
+### Parallel Example: User Story 1
 
-- **User Story 1 (P1)**: Can start after Foundational (Phase 2) - No dependencies on other stories
-- **User Story 2 (P2)**: Can start after Foundational (Phase 2) - May integrate with US1 but should be independently testable
-- **User Story 3 (P3)**: Can start after Foundational (Phase 2) - May integrate with US1/US2 but should be independently testable
-
-### Within Each User Story
-
-- Tests (if included) MUST be written and FAIL before implementation
-- Models before services
-- Services before endpoints
-- Core implementation before integration
-- Story complete before moving to next priority
-
-### Parallel Opportunities
-
-- All Setup tasks marked [P] can run in parallel
-- All Foundational tasks marked [P] can run in parallel (within Phase 2)
-- Once Foundational phase completes, all user stories can start in parallel (if team capacity allows)
-- All tests for a user story marked [P] can run in parallel
-- Models within a story marked [P] can run in parallel
-- Different user stories can be worked on in parallel by different team members
-
----
-
-## Parallel Example: User Story 1
-
-```bash
-# Launch all tests for User Story 1 together (if tests requested):
-Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
-Task: "Integration test for [user journey] in tests/integration/test_[name].py"
-
-# Launch all models for User Story 1 together:
-Task: "Create [Entity1] model in src/models/[entity1].py"
-Task: "Create [Entity2] model in src/models/[entity2].py"
-```
-
----
+T011, T012, and T013 can be authored independently. T014 runs the tests with a minimal
+runnable harness and verifies meaningful failures. Only then may T015/T016 implement the
+covered behavior. Add focused red tests for any additional behavior discovered.
 
 ## Implementation Strategy
 
-### MVP First (User Story 1 Only)
-
-1. Complete Phase 1: Setup
-2. Complete Phase 2: Foundational (CRITICAL - blocks all stories)
-3. Complete Phase 3: User Story 1
-4. **STOP and VALIDATE**: Test User Story 1 independently
-5. Deploy/demo if ready
-
-### Incremental Delivery
-
-1. Complete Setup + Foundational → Foundation ready
-2. Add User Story 1 → Test independently → Deploy/Demo (MVP!)
-3. Add User Story 2 → Test independently → Deploy/Demo
-4. Add User Story 3 → Test independently → Deploy/Demo
-5. Each story adds value without breaking previous stories
-
-### Parallel Team Strategy
-
-With multiple developers:
-
-1. Team completes Setup + Foundational together
-2. Once Foundational is done:
-   - Developer A: User Story 1
-   - Developer B: User Story 2
-   - Developer C: User Story 3
-3. Stories complete and integrate independently
-
----
+1. Establish a runnable local stack and deterministic fixtures.
+2. Deliver the highest-priority story through red-green-refactor.
+3. Validate it independently, including relevant failures, privacy, and accessibility.
+4. Add stories incrementally; run required regression and E2E gates.
+5. Release only with documented evidence; mocked email acceptance does not prove delivery.
 
 ## Notes
 
-- [P] tasks = different files, no dependencies
-- [Story] label maps task to specific user story for traceability
-- Each user story should be independently completable and testable
-- Verify tests fail before implementing
-- Commit after each task or logical group
-- Stop at any checkpoint to validate story independently
-- Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
+- Each completed behavior MUST have red/green evidence and acceptance traceability.
+- Use behavior assertions; code coverage and snapshots alone are insufficient.
+- Do not add real customer data, production auth state, or live secrets to fixtures.
+- Track a flake with an owner, issue, expiry, and alternative evidence; do not silently skip it.
+- Record OPEN/BLOCKED checks honestly and keep task boxes unchecked until verified.
