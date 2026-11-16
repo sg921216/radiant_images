@@ -1,5 +1,19 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-15 HTTP CPU checkpoint (R-25):** Incremental routing plus three bounded
+bulk-read coordinators resolves the reproduced 14–16-ms cold-read overruns in the sampled
+60-photo/200-client workload. Final samples cover all 13 JSON GET operations: front CPU
+peaks at 8 ms, with 15 ms inside the read objects. All 117 final contract probes pass;
+300 measured bulk reads at concurrency five pass with p95 349/369/385 ms. The final
+local quality check passes 64 files / 287 tests and both builds; all 50 smoke cases
+across five browser projects pass without retries or skips. Temporary Cloudflare
+resources were removed and absence verified, preserving the unrelated existing bucket.
+See acceptance.md and `evidence/cloudflare-api-cpu-remediation.json` for sample limits,
+browser results and source identity. These source changes need remote CI after commit.
+T001 remains open for account-wide usage/plan and wider capacity evidence; T058 needs
+persistent monitoring. T059's committed R-24 acceptance remains complete.
+**54/63 tasks complete, 9 open.**
+
 **2026-11-14 committed R-24 CI checkpoint:** T059 is complete. PR Quality run
 [43675695318](https://github.com/sg921216/radiant_images/actions/runs/43675695318/job/132695230356)
 passes for `c00eaab40235185e7d320176986ccdf3fe4bc334`; the tested PR merge tree exactly

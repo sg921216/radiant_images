@@ -58,6 +58,14 @@ test('prepared deployment config keeps owner allowlist and Google credentials in
       tag: 'scheduled-operations-v1',
       new_sqlite_classes: ['ScheduledOperations'],
     });
+    expect(config.durable_objects.bindings).toContainEqual({
+      name: 'BULK_READS',
+      class_name: 'BulkReads',
+    });
+    expect(config.migrations).toContainEqual({
+      tag: 'bulk-reads-v1',
+      new_sqlite_classes: ['BulkReads'],
+    });
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

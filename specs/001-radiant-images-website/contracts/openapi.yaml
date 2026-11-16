@@ -113,6 +113,19 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
 
+    BulkReadUnavailable:
+      description: Recovery is in progress, or this read model already has eight
+        active bulk reads. No stale content is served. Retry-After is present
+        when temporary read admission is exhausted.
+      headers:
+        Retry-After:
+          description: Suggested delay in seconds when read admission is exhausted.
+          schema: { type: integer, minimum: 1 }
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
   schemas:
     Error:
       type: object
@@ -572,7 +585,7 @@ paths:
           }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          $ref: "#/components/responses/BulkReadUnavailable"
   /pricing:
     get:
       tags: [ public ]
@@ -779,7 +792,7 @@ paths:
         '403': { "$ref": "#/components/responses/Forbidden" }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          $ref: "#/components/responses/BulkReadUnavailable"
     post:
       tags: [ admin-gallery ]
       security: [ { ownerSession: [] } ]
@@ -1265,7 +1278,7 @@ paths:
         '403': { "$ref": "#/components/responses/Forbidden" }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          $ref: "#/components/responses/BulkReadUnavailable"
     post:
       tags: [ admin-clients ]
       security: [ { ownerSession: [] } ]

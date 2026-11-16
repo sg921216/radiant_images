@@ -113,6 +113,22 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**Bulk-read CPU remediation (2026-11-15, R-25):** The private 60-image/200-client
+baseline reproduces a 14-ms first gallery read. Incremental Hono routing reduces that
+sample to 8 ms, but fresh public-bootstrap and client-list reads still take 16/15 ms.
+Keep the incremental router and delegate only these three bulk reads (GET/HEAD) to
+`BulkReads` Durable Objects, keyed separately as `public`, `gallery` and `clients`.
+Each object coordinates admission of at most eight reads (including the five-request
+acceptance profile); excess work returns temporary 503/Retry-After, with no unbounded
+queue. This is a scoped CPU/admission boundary under
+the existing Free-tier constraint, not a single object for all API traffic. The front
+Worker retains restore/owner checks and streams the result; the object repeats those
+checks and queries D1 afresh. It caches no content, sessions or client data and has no
+durable state to restore. Keep HTTP forwarding to preserve response/body semantics.
+Verify CPU, duration/usage impact, authorization, freshness and overload behavior before
+claiming the sampled read headroom is resolved. Account-wide billing and persistent
+monitoring gates remain separate.
+
 **CPU and usage remediation (2026-11-14, R-24):** Both production cron schedules now
 await one `ScheduledOperations` Durable Object for the recovery ledger. It serializes
 maintenance and daily backup/health, permits at most two outstanding jobs, propagates

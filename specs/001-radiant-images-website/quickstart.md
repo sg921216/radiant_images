@@ -428,6 +428,17 @@ monitoring configuration still need to be established.
 
 ## Deployment and rollback preparation (T060)
 
+**R-25 bulk-read prerequisite:** Include `BULK_READS` / `BulkReads` and the
+`bulk-reads-v1` SQLite-class migration from the release generator. GET/HEAD for public
+bootstrap, owner gallery and owner clients use separate named instances, each admitting
+up to eight concurrent reads. Excess admission returns 503 with `Retry-After: 2` and
+no-store; retry after the indicated delay. Restore and owner checks still apply before
+dispatch and inside the object. There is no cached content or authorization state.
+Other endpoints retain their current execution paths. Record front-Worker and DO CPU
+separately, and include DO requests/duration and repeated D1 reads in account usage.
+R-25's disposable synthetic rehearsal is sampled capacity evidence, not a billing cap
+or a persistent production monitor. Run remote Quality on the eventual source commit.
+
 **R-24 operational prerequisites:** Include the `SCHEDULED_OPERATIONS` binding and
 `scheduled-operations-v1` SQLite-class migration from the release generator. Both cron
 expressions dispatch to the same `recovery` object and await completion. Inspect the

@@ -16,6 +16,7 @@ import { questionnaireRoutes } from './routes/questionnaire';
 import { currentPricing } from './services/pricing';
 import { requireOwner } from './middleware/requireOwner';
 import { Hono } from 'hono';
+import { TrieRouter } from 'hono/router/trie-router';
 import { cors } from 'hono/cors';
 import { LIMITS } from '@radiant/shared';
 import type { AppEnv } from './env';
@@ -27,15 +28,19 @@ import { restoreStatus } from './services/backup';
 import { scheduled } from './scheduled';
 import { authenticate } from './services/session';
 import { isGalleryMutation } from './services/galleryMutations';
+import { bulkReadKey } from './services/bulkReads';
 export { JpegValidator } from './services/jpegValidator';
 export { GalleryMutations } from './services/galleryMutations';
 export { ScheduledOperations } from './services/scheduledOperations';
+export { BulkReads } from './services/bulkReads';
 export function createApp(
   runtime: Runtime = productionRuntime,
-  coordinateGallery = false,
+  coordinateResources = false,
   reserveGalleryUpload?: () => Promise<number>,
 ) {
-  const app = new Hono<AppEnv>();
+  // Register the route tree during construction. The default SmartRouter compiles
+  // every route on the first request, consuming the Free Worker's CPU headroom.
+  const app = new Hono<AppEnv>({ router: new TrieRouter() });
   app.use('*', async (c, next) => {
     c.set('requestId', crypto.randomUUID());
     c.header('X-Request-Id', c.get('requestId'));
@@ -65,7 +70,14 @@ export function createApp(
     }),
   );
   app.use('*', async (c, next) => {
-    if (coordinateGallery && isGalleryMutation(c.req.method, c.req.path)) {
+    const readKey = coordinateResources && bulkReadKey(c.req.method, c.req.path);
+    if (readKey) {
+      if (readKey !== 'public')
+        await authenticate(c.env, c.req.header('Authorization'), runtime.now());
+      const response = await c.env.BULK_READS.getByName(readKey).fetch(c.req.raw);
+      return c.newResponse(response.body, response);
+    }
+    if (coordinateResources && isGalleryMutation(c.req.method, c.req.path)) {
       await authenticate(c.env, c.req.header('Authorization'), runtime.now());
       if (!c.env.GALLERY_MUTATIONS)
         throw new ApiFault(

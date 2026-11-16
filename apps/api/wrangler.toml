@@ -14,6 +14,9 @@ class_name = "GalleryMutations"
 [[durable_objects.bindings]]
 name = "SCHEDULED_OPERATIONS"
 class_name = "ScheduledOperations"
+[[durable_objects.bindings]]
+name = "BULK_READS"
+class_name = "BulkReads"
 [[migrations]]
 tag = "jpeg-validator-v1"
 new_sqlite_classes = ["JpegValidator"]
@@ -23,6 +26,9 @@ new_sqlite_classes = ["GalleryMutations"]
 [[migrations]]
 tag = "scheduled-operations-v1"
 new_sqlite_classes = ["ScheduledOperations"]
+[[migrations]]
+tag = "bulk-reads-v1"
+new_sqlite_classes = ["BulkReads"]
 [vars]
 WEB_ORIGIN = "http://127.0.0.1:5173"
 API_ORIGIN = "http://127.0.0.1:8787"

@@ -1,0 +1,2 @@
+# Match Prettier's LF requirement on every checkout, including Windows.
+* text=auto eol=lf

@@ -1,5 +1,57 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-25: HTTP read CPU and bounded admission — 2026-11-15
+
+The private production-code baseline reproduced a 14-ms first gallery request with
+60 synthetic gallery records and 200 clients. Replacing Hono's default SmartRouter with
+its incremental TrieRouter reduced the first gallery sample to 8 ms, but separate fresh
+deployments still used 16 ms for public bootstrap and 15 ms for the client list. Routing
+alone did not resolve the Free Worker's 10-ms budget. Hono documents the router choices
+and configurable router constructor; the installed SmartRouter implementation builds
+its optimized matcher on the first match.
+[Hono routers](https://hono.dev/docs/concepts/routers),
+[Hono constructor](https://hono.dev/docs/api/hono).
+
+Keep TrieRouter and delegate just GET/HEAD for `/public/bootstrap`, `/admin/gallery`
+and `/admin/clients` to separate `BulkReads` Durable Object instances. Each coordinates
+eight active requests, rejects excess work with 503/Retry-After, and releases admission
+on success or failure. This adds bounded coordination for the measured bulk operations;
+other API routes retain their execution paths. The front Worker preserves restore/owner
+checks and streams the response. The object repeats those checks and queries D1 on every
+read. No content, session or authorization cache can delay an owner removal or recovery
+gate. Updated bindings, generated types, release/rehearsal configuration and the three
+503 contracts travel with the code.
+
+The final eight-slot version passed 100 measured reads per delegated operation at
+concurrency five, after ten warm-ups each. Every complete body was received successfully
+and validated against its contract. Nearest-rank p95 through the local binding proxy to
+the private deployed Worker was 349 ms (bootstrap), 369 ms (gallery) and 385 ms (clients).
+These are network-inclusive supplemental measurements, not the prescribed isolated
+loopback performance fixture. Raw timings and sampled CPU, including cold probes, are
+in [the sanitized R-25 record](./evidence/cloudflare-api-cpu-remediation.json).
+
+This change moves CPU rather than eliminating it. Cloudflare documents 10 ms CPU for
+Free Workers and 30 seconds per DO invocation. DO requests and duration, including I/O
+waits, count toward their own allowances; repeated front/object auth and restore checks
+also add D1 work. The final latency cohort's sampled DO wall time peaked at 282 ms;
+5,000 non-overlapping reads at that observed duration and 128 MB would be about 181 GB-s.
+That is a workload estimate, not measured daily billing or a worst-case cap. The
+13,000 GB-s/day Free allowance is shared with other objects and applications; request,
+D1, storage and other account limits still apply.
+[Workers limits](https://developers.cloudflare.com/workers/platform/limits/),
+[DO limits](https://developers.cloudflare.com/durable-objects/platform/limits/),
+[DO pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/).
+
+Two production CPU-profile requests during healthy private traffic returned 404/code
+10393, "No recent executions were found for this Worker." No function-level profile
+was obtained; the diagnosis uses source inspection and controlled deploy/tail comparisons.
+Tail records are partial observations, not an exhaustive invocation census. Some front
+records say `canceled` despite status 200 and successfully consumed/validated bodies;
+the cause is unestablished and no zero-cancellation claim is made. No CPU-limit outcome
+or exception was captured in the final cohort. The private ingress remained disabled
+throughout. T001 stays open for account-wide usage/plan evidence and wider capacity;
+T058 still needs a persistent monitor target and scheduled operation/recipient proof.
+
 ## R-24: Scheduled CPU remediation and upload usage controls — 2026-11-14
 
 The R-23 cron baseline used 32/34/30/43 ms in the ordinary Free Worker. Scheduled

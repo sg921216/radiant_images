@@ -1,5 +1,62 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-15 — HTTP CPU headroom and bulk-read admission (R-25)
+
+Base `2c8ed7fb074fa8e81b456f2fc9cc867f4ed2e942`, plus the uncommitted source hashes in
+[the sanitized R-25 record](./evidence/cloudflare-api-cpu-remediation.json). Existing
+Spec Kit/toolchain changes and the logo asset were preserved. Only temporary private
+Cloudflare resources and synthetic data were used; no public release or real mail send.
+
+The initial first gallery read used 14 ms CPU. TrieRouter reduced that sample to 8 ms,
+but fresh bootstrap/client-list probes still used 16/15 ms. The final implementation
+keeps incremental routing and forwards only the three bulk GET/HEAD operations to
+separate `BulkReads` coordinators. Eight active reads per coordinator are permitted;
+excess admission returns 503/Retry-After without queueing. The front and object both
+apply restore/owner checks. Responses remain streamed, and every admitted read uses
+current D1 data. No content or authorization cache is introduced.
+
+| Check | Observed result |
+| --- | --- |
+| Final source deployments | `96b9f4e5-193f-4493-aef7-04d266372ff2`, `86b3f31c-a8a4-466f-a6f6-6be1dcc0e14e`, `7215f935-5588-424b-805b-df2bd15433ac`; same eight-slot implementation, different cold first-read order. |
+| Fixture | 60 gallery metadata rows, 200 clients, ten questionnaire questions; real D1, no R2 image bodies or provider sends. |
+| Contract reads | **117/117** complete successful responses across all 13 JSON GET operations, three cycles on each final deployment. |
+| Sampled CPU | **107 front invocations, maximum 8 ms**, covering all 13 operations; **65 DO invocations, maximum 15 ms**. Cold questionnaire/client-detail probes used 7/8 ms. No captured CPU-limit outcome or exception. |
+| Concurrent bulk reads | Ten warm-ups then 100 measured reads per operation at concurrency five. **300/300** expected successes and valid bodies; nearest-rank p95 **349 / 369 / 385 ms** for bootstrap/gallery/clients. Includes network through the local remote-binding proxy. |
+| Local quality | `pnpm check`: formatting, lint, types, **64 files / 287 tests**, API dry-run build and frontend production build pass. |
+| Browser smoke | **50/50** cases pass across Chromium desktop/mobile, Firefox desktop and WebKit desktop/mobile, with zero retries/skips/flaky cases (8.8 minutes). Local synthetic-provider adapter; actual DO dispatch is covered by integration/live probes separately. |
+| Private ingress | Public/preview Worker URLs disabled, routes absent, cron absent; both R2 managed domains disabled and no custom domains. |
+| Cleanup | Both buckets verified empty; Worker, its DO namespaces, D1 and temporary buckets deleted. Final inventories show no matching resources; unrelated existing `radiant-001` bucket preserved. Local proxy and both tail sessions stopped. |
+
+Behavioral red/green evidence: the initial forwarding tests failed three cases before
+dispatch existed. The first four-slot implementation then failed the eight-held-read
+regression; the final eight-slot implementation passes all six bulk-read cases. Tests
+exercise the real object for fresh D1 content, removed-owner denial, restore refusal,
+HEAD and unsupported-route behavior, plus bounded admission and slot release after
+injected failures. Release/rehearsal binding and migration tests pass. The three 503
+contracts describe overload as well as restore maintenance.
+
+Earlier full-check attempts included a hook timeout while other test work overlapped,
+a corrected optional-header TypeScript error, and a hook timeout during a run spanning
+a multi-hour clock gap. The fresh final check passed without lengthening timeouts.
+Two function-profile requests returned 404/code 10393 while private traffic succeeded;
+there is no function-level CPU profile. Tail records are partial. Four final front
+records report `canceled` with status 200, while callers consumed and validated complete
+bodies; this is retained as an unexplained observation. The 282-ms maximum sampled DO
+wall time and duration estimate in R-25 do not establish account billing or worst-case
+capacity. Read-probe timing that included contract validation is excluded from latency
+claims; the dedicated latency driver stops timing after full body receipt.
+
+The five-project smoke command used `.wrangler/implementation-matrix.config.ts` and
+`--grep '@smoke'`; the local Firefox executable matches the existing pinned browser
+installation. Source and diagnostic artifact privacy gates report zero blocked findings;
+formatting and `git diff --check` pass. Temporary credential, seed, raw-tail and generated
+private configuration files were removed after saving only sanitized evidence.
+These local changes still need the full remote Quality matrix on their eventual commit.
+T059's prior committed
+R-24 acceptance remains valid; it is not evidence for this new source. T001 stays open
+for account-wide usage/plan and wider capacity evidence. T058 still requires a persistent
+target and scheduled monitoring/recipient verification. **54/63 tasks complete, 9 open.**
+
 ## 2026-11-14 — Committed R-24 remote CI acceptance (T059)
 
 The owner supplied [Quality run 43675695318 / verify job 132695230356](https://github.com/sg921216/radiant_images/actions/runs/43675695318/job/132695230356).

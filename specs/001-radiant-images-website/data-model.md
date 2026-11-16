@@ -485,3 +485,14 @@ Running states retain `lastSucceededAt` from the preceding successful completion
 in-progress record; an error record does not qualify as a success. The independent
 monitor requires a recent successful completion as well as a fresh start. These files
 contain no client identifiers, contact details, credentials or recovery payloads.
+
+### Bulk-read admission (2026-11-15, R-25)
+
+The `BulkReads` Durable Object namespace has three named instances: `public`, `gallery`
+and `clients`. Each holds only an in-memory count of active reads, capped at eight.
+Completion or failure releases a slot; restart resets this ephemeral count. It stores
+no durable rows, content cache, session or authorization decision. D1 remains authoritative
+and every admitted request repeats restore/auth checks and reads current data. Excess
+admission returns a contract-valid 503 with `Retry-After: 2` and `Cache-Control: no-store`.
+The `bulk-reads-v1` SQLite-class migration establishes the namespace; there is no extra
+application-data recovery or retention policy for this coordinator.
