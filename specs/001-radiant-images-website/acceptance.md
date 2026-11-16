@@ -1,5 +1,40 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-16 — T001 committed guard and paginated provider rehearsal (R-29)
+
+**T001 remains open; 55/64 tasks complete.** Tested the committed `c23c943` application
+against disposable real D1/R2/Images resources with public ingress disabled. After seeding
+1,501 small recovery keys, all four application cases pass: unauthorized refusal and PNG,
+10 MiB JPEG and detailed 40-megapixel JPEG upload/read/private-original/delete journeys.
+A separate four-case warm-up also passes. The production backup helper verifies a
+17-table snapshot against a 1,531-object, two-page recovery inventory.
+
+All 92 tail records report `ok`: 63 front samples at maximum 7 ms CPU; 12 gallery DO samples
+at 195 ms; 12 bulk-read DO samples at 7 ms; four JPEG validator samples at 1,300 ms; one
+diagnostic backup DO sample at 31 ms. This advances real pagination/CPU evidence, not
+six-GiB/max-page capacity, peak memory, production cron or complete account metering.
+
+The owner reports the Durable Objects dashboard displays zero usage for November
+14–December 14. API invocation/periodic/SQL-storage datasets remain empty despite direct
+execution proof. These are recorded as a metering discrepancy, not zero consumption.
+GitHub confirms the persistent monitor remains unconfigured. T058 activation and scheduled
+notification delivery remain open.
+
+All temporary objects, Worker, five DO namespaces, D1 and both buckets were removed and
+absence verified; the original bucket remains. Local proxy/tail stopped and temporary
+credentials removed. No public release, paid-plan change or email send occurred.
+
+Exact-head [Quality run 43953953193](https://github.com/sg921216/radiant_images/actions/runs/43953953193)
+**passes**: formatting/lint/types, security checks, **290 tests in 64 files**, both builds,
+and **163 browser/performance checks across five projects**. Twelve expected skips avoid
+rerunning three performance profiles on their four non-target projects. No warnings;
+source/diagnostic privacy checks both pass. The tested PR merge tree is identical to
+`c23c943`; [CI evidence](./evidence/github-ci-r29-20261116.json) records that comparison.
+The changed-source CI gate is resolved. Metering and persistent monitoring remain open.
+[Detailed R-29 evidence](./evidence/cloudflare-t001-r29-20261116.json) links the application
+reports, source hashes, sampled metrics and cleanup results. New edits are documentation
+and evidence only; no application behavior changed during this checkpoint.
+
 ## 2026-11-16 — T001 storage admission and daily usage (R-28)
 
 **T001 remains open; 55/64 tasks complete.** Owner dashboard confirmation resolves

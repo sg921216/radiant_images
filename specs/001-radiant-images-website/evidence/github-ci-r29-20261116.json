@@ -1,0 +1,158 @@
+{
+  "observedAt": "2026-11-16T21:12:36.111Z",
+  "source": "GitHub run/job/commit APIs and completed job log; no raw log or credential retained",
+  "url": "https://github.com/sg921216/radiant_images/actions/runs/43953953193",
+  "jobUrl": "https://github.com/sg921216/radiant_images/actions/runs/43953953193/job/133603431640",
+  "runId": 43953953193,
+  "jobId": 133603431640,
+  "event": "pull_request",
+  "branch": "001-radiant-images-website",
+  "headSha": "c23c9431b94a0221d06392725c948832e5f1585e",
+  "checkoutSha": "0f1eaf99649f897deb30e1b6a71491ee0d048724",
+  "headTreeSha": "47747b87cc87d65017cfdf06e1904123dc6b5797",
+  "checkoutTreeSha": "47747b87cc87d65017cfdf06e1904123dc6b5797",
+  "checkoutTreeMatchesHead": true,
+  "status": "completed",
+  "conclusion": "success",
+  "startedAt": "2026-11-16T20:50:43Z",
+  "completedAt": "2026-11-16T21:12:08Z",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm install --frozen-lockfile",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm format:check",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm lint",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm typecheck",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm security:dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm security:secrets",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm test",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm test:setup",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm exec playwright install --with-deps chromium firefox webkit",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Main branch Chromium smoke",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Pull request, nightly and release browser matrix",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify diagnostic privacy",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "tests": {
+    "files": 64,
+    "passed": 290
+  },
+  "browser": {
+    "passed": 163,
+    "skipped": 12,
+    "durationMinutes": 18.4,
+    "projects": [
+      "chromium-desktop",
+      "chromium-mobile",
+      "firefox-desktop",
+      "webkit-desktop",
+      "webkit-mobile"
+    ],
+    "skipReason": "Only three once-per-run performance profiles skip their four non-target project cells. Functional cases are not quarantined."
+  },
+  "warnings": [],
+  "runner": {
+    "version": "2.338.2",
+    "imageDocumentation": "https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md"
+  },
+  "privacy": [
+    "Privacy gate checked 462 files; 0 blocked.",
+    "Privacy gate checked 10 files; 0 blocked."
+  ],
+  "scope": "Committed c23c943 storage-admission, workflow runtime and navigation-focus acceptance. Subsequent local R-29 evidence-only edits are not part of this tested tree."
+}

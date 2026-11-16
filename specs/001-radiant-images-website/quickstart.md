@@ -484,10 +484,16 @@ receipts or reset the rolling upload allowance to bypass refusal. Public reads a
 photo/client deletion are not disabled by this admission gate. This threshold does
 not replace account budget warnings or promise a maximum invoice.
 
-R-28 records daily Workers/D1 analytics and the private capacity-check probe. Missing
-DO aggregate rows are not zero usage. The owner confirmed that the account Images
-page shows Free on November 16. Persistent monitoring and eventual-commit CI/provider
-acceptance remain explicit gates.
+R-28 records daily Workers/D1 analytics and the private capacity-check probe. R-29 adds
+committed application uploads/deletion with 1,501 small recovery keys forcing real R2
+pagination, plus a verified backup snapshot. All 92 provider tail records report `ok`;
+maximum front CPU is 7 ms. These scoped checks do not establish six-GiB/max-page capacity.
+The owner confirmed that the account Images page shows Free on November 16. DO aggregates
+remain empty and the owner's monthly dashboard displays zeros despite execution proof;
+do not treat that discrepancy as zero consumption. Exact-head Quality run 43953953193
+passes 290 tests and 163 browser/performance checks across five projects, with 12 expected
+duplicate performance skips and an identical tested tree. Persistent monitoring and
+production release acceptance remain explicit gates.
 
 **R-25 bulk-read prerequisite:** Include `BULK_READS` / `BulkReads` and the
 `bulk-reads-v1` SQLite-class migration from the release generator. GET/HEAD for public
@@ -515,8 +521,8 @@ namespace or clear its storage to bypass the allowance. The existing 60-photo an
 bounds still apply. The verified account-wide $1 budget warning uses the existing billing
 recipient and supplements the $10 warning; neither stops billing. R2 is not covered by the
 documented Workers/DO spending limits. R-27 now verifies subscriptions and an empty
-spend-policy list through Billing Read. The Images subscription's free-tier cutoff and
-daily Workers/D1/DO usage still need confirmation; no paid upgrade is selected.
+spend-policy list through Billing Read. R-28 resolves the Images Free label and supplies
+daily Workers/D1 observations. DO metering remains unresolved; no paid upgrade is selected.
 
 Persistent recovery monitoring still needs the actual long-lived recovery bucket,
 verified bucket-only S3 read credentials, repository settings and scheduled notification
@@ -684,8 +690,9 @@ records sampled memory, profiling limitations, CPU observations and complete cle
 ## Independent recovery monitoring and GitHub alerts
 
 The owner selected GitHub failure notifications on 2026-11-14. The implementation is ready
-in `.github/workflows/operations-monitor.yml`; production activation and notification
-receipt are not yet verified. The workflow runs hourly at minute 17 and can also be run
+in `.github/workflows/operations-monitor.yml`; production activation and scheduled
+notification receipt are not yet verified. R-23's manual synthetic notification was
+owner-confirmed. The workflow runs hourly at minute 17 and can also be run
 manually. Node 24 executes the TypeScript checker after a frozen, production-only install
 of its pinned signing/XML dependencies (nine packages including transitive dependencies,
 with install scripts disabled).
@@ -715,6 +722,11 @@ removal is reported for investigation; the monitor never deletes receipts or byp
 preservation. The storage threshold is an alert, not a billing cap or account-wide limit.
 
 Activation checklist for the persistent deployment:
+
+R-29's read-only GitHub inspection confirms the workflow exists and is active, but
+`OPERATIONS_MONITOR_ENABLED` is false/absent, `RECOVERY_BUCKET` is absent, and the three
+repository secrets below are absent. Cloudflare has no persistent Worker or D1 target.
+The disposable rehearsal has been fully removed and must not be used as a monitor target.
 
 1. Deploy the scheduled status-record changes and complete a verified daily backup/health
    run. Keep R2 private. Create R2 **Object Read Only** credentials limited to the recovery

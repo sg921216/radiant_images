@@ -1,5 +1,14 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-16 T001 checkpoint (R-29):** Committed storage guard `c23c943` passes private
+application uploads/deletion with real paginated R2 inventory; production backup helper
+also succeeds. All 92 tail samples are `ok`, front CPU at most 7 ms. Temporary resources
+are removed and absence verified. Owner-reported DO dashboard zeros conflict with live
+execution; aggregate metering remains unresolved. Persistent monitor is unconfigured.
+Exact-head Quality run 43953953193 passes 290 tests and 163 browser/performance checks
+across five projects (12 expected duplicate performance skips), with an identical tested
+tree. **55/64 complete, nine open; T001 unchecked.**
+
 **2026-11-16 T001 checkpoint (R-28):** Owner confirms the account Images page shows
 Free; daily Workers/D1 analytics are below included allowances in the returned rehearsal
 cohorts. Added fail-closed combined R2 capacity checks before image processing and new

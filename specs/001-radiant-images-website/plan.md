@@ -113,6 +113,17 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**2026-11-16 committed guard rehearsal (R-29):** `c23c943` passes private deployed
+upload/read/delete checks with 1,501 synthetic recovery keys forcing real pagination;
+the unchanged backup helper also verifies a 17-table snapshot. Maximum sampled front
+CPU is 7 ms across 63 records; all 29 DO records are `ok`. Every temporary provider
+resource was removed and absence verified. The owner's monthly DO Usage screen shows
+zeros, which does not reconcile with execution logs; empty aggregate queries remain a
+metering gap. Persistent monitoring is confirmed unconfigured. Exact-head CI now passes
+290 tests and 163 browser/performance checks across five projects (12 expected skips),
+with an identical tested merge tree. Keep T001/T058 and deployment/release gates open;
+see research R-29.
+
 **2026-11-16 T001 continuation (R-28):** Images Free is now explicitly confirmed by
 the owner from the account page. Account GraphQL supplies daily Workers/D1 observations
 below included quotas; missing DO aggregates remain a metering limitation. Gallery

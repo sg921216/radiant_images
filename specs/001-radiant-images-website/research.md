@@ -1,5 +1,99 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-29: Committed storage guard under real pagination — 2026-11-16
+
+**T001 advanced; remains open.** The owner committed R-28 as `c23c943`. A new private
+rehearsal deploys that application source with real D1, Standard R2, Images and its four
+production Durable Object classes. workers.dev and preview URLs are verified disabled;
+Wrangler reports no deployment targets and the schedule list is empty. The local
+service-binding proxy is not deployed. No real client data or email is used.
+
+### Application and backup observations
+
+Seeded **1,501 tiny synthetic recovery objects** (13,509 payload bytes) outside normal
+recovery prefixes. This forces the admission guard to inventory unrelated keys and follow
+real R2 pagination. The first application run overlaps seeding and is retained as a warm-up;
+the second starts after all fixture objects are present. Both runs pass their four cases:
+unauthorized upload refusal, PNG, a 10 MiB JPEG and a detailed 40-megapixel JPEG. Each valid
+case verifies regenerated derivatives, metadata removal, private originals, publication,
+deletion and the subsequent public 404. The post-seed upload latencies are 1,783 / 8,081 /
+10,490 ms through the local proxy. No memory-peak or maximum-load claim is made.
+
+After six successful uploads/deletions across the two runs, the recovery inventory holds
+**1,531 objects / 36,707,167 payload bytes**, returned over two pages. A private diagnostic
+DO then imports the unchanged production `createBackup` helper. It creates and verifies a
+7,862-byte, 17-table snapshot against that inventory: 31 ms DO CPU / 2,737 ms wall time,
+with 1 ms front CPU. This is manually invoked helper evidence, not production cron,
+scheduled health or Gmail acceptance. The diagnostic entry point never enters application
+source or the public deployment configuration.
+
+The combined tail contains **92 records, all `ok`, with no recorded exceptions**:
+
+| Execution | Samples | Maximum observed CPU |
+| --- | ---: | ---: |
+| Front Worker | 63 | 7 ms |
+| GalleryMutations | 12 | 195 ms |
+| BulkReads | 12 | 7 ms |
+| JpegValidator | 4 | 1,300 ms |
+| Diagnostic backup DO | 1 | 31 ms |
+
+The front sample stays below the Workers Free 10-ms allowance; DO samples stay below
+their 30-second allowance. The fixture exercises pagination at about 35 MiB of recovery
+payload, not six GiB, twenty pages, provider failure or peak concurrent demand. R-28's
+local refusal tests remain the evidence for exhausted/unavailable storage. Tail CPU and
+wall time cannot substitute for account-wide request/duration metering.
+
+### Account evidence and persistent monitor
+
+At 20:53 UTC, account Workers analytics now includes November 16: 69 requests, zero errors
+and zero client disconnects. This is a partial observation before this new rehearsal,
+not the day's final total. DO invocation/periodic queries remain empty at 21:00 UTC while
+the rehearsal namespaces still exist; SQL-storage aggregates also return no rows.
+
+The owner reports the account Durable Objects Usage screen for **November 14–December
+14** shows duration **0 GB-sec**, requests **0**, SQL/KV storage **0 B**, SQL rows read and
+written **0**, and KV storage operations **0**. Record these as owner-attested displayed
+values. They do not reconcile with direct execution logs and are not accepted as zero
+operational consumption or proof of a daily Free allowance. The display period is monthly;
+the cause of the missing metering remains unestablished. Do not request another Images
+plan confirmation: that separate Free-plan question was resolved in R-28.
+
+Cloudflare documents that DO Free limits reset at 00:00 UTC and exceeding a limit rejects
+further operations of that type. Missing usage observations do not imply permission to
+upgrade, disable controls or label available headroom measured. The documented cutoffs
+and the unresolved observability discrepancy are separate facts.
+[Durable Objects pricing and Free-limit behavior](https://developers.cloudflare.com/durable-objects/platform/pricing/).
+
+GitHub API inspection confirms the recovery workflow is active but its enablement variable
+is false/absent, its bucket variable is absent, and all three required repository secrets
+are absent. No configuration was changed. A persistent recovery target, normal schedules,
+independent monitoring and scheduled recipient proof remain T058/release prerequisites.
+
+### Cleanup and acceptance boundary
+
+Deleted all 1,533 disposable recovery objects, verified both buckets empty, stopped the
+proxy/tail, and removed the Worker, all five associated DO namespaces, D1 and both buckets.
+Provider inventory confirms zero Workers/databases/namespaces and the single pre-existing
+bucket preserved. Removed the temporary local session/secrets and unsanitized tail.
+
+Quality [run 43953953193](https://github.com/sg921216/radiant_images/actions/runs/43953953193)
+**passes** for exact head `c23c9431b94a0221d06392725c948832e5f1585e`. Tested PR merge
+`0f1eaf99649f897deb30e1b6a71491ee0d048724` has the identical tree. Formatting, lint, types,
+dependency/privacy checks, **64 files / 290 tests**, builds and **163 browser/performance
+checks across all five projects** pass. Twelve skips are the expected duplicate cells
+for three once-per-run performance profiles; no functional case is quarantined. Browser
+time is 18.4 minutes; the job completes 20:50:43–21:12:08 UTC with no warnings. Source
+privacy scans 462 files and diagnostic privacy scans ten files, both with zero blocked.
+This closes the changed-source CI gate, including the earlier workflow-runtime and
+navigation-focus changes. The new R-29 evidence-only edits are outside that tested tree.
+[Exact-head CI evidence](./evidence/github-ci-r29-20261116.json).
+
+Evidence: [post-seed application checks](./evidence/cloudflare-gallery-rehearsal-paginated-storage-20261116.json),
+[warm-up checks](./evidence/cloudflare-gallery-rehearsal-storage-admission-20261116.json),
+[source hashes, tail, account/dashboard observations and verified cleanup](./evidence/cloudflare-t001-r29-20261116.json).
+No tracked application behavior changed during R-29. **T001/T058/T060/T063 remain open;
+55/64 tasks complete, nine open.**
+
 ## R-28: Daily usage evidence and storage admission — 2026-11-16
 
 **T001 advanced; remains open.** The owner explicitly confirmed: “My account page

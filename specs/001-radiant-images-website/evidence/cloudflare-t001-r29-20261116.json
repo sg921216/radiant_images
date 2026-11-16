@@ -1,0 +1,1508 @@
+{
+  "task": "T001",
+  "checkpoint": "R-29",
+  "sourceCommit": "c23c9431b94a0221d06392725c948832e5f1585e",
+  "scope": "Private committed application upload rehearsal with paginated real R2 inventory, then production backup helper inside an isolated diagnostic Durable Object. Synthetic data only.",
+  "accountEvidence": {
+    "refresh": {
+      "recordedAt": "2026-11-16T20:53:51.618Z",
+      "query": "{ viewer { accounts(filter:{accountTag:\"ACCOUNT_ID\"}) { durableObjectsInvocationsAdaptiveGroups(limit:10000,filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},orderBy:[date_ASC]) {dimensions{date} sum{requests errors}} durableObjectsPeriodicGroups(limit:10000,filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},orderBy:[date_ASC]) {dimensions{date} sum{duration activeTime cpuTime rowsRead rowsWritten exceededCpuErrors exceededMemoryErrors fatalInternalErrors}} workersInvocationsAdaptive(limit:10000,filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},orderBy:[date_ASC]) {dimensions{date} sum{requests errors cpuTimeUs clientDisconnects}} } } }",
+      "response": {
+        "data": {
+          "viewer": {
+            "accounts": [
+              {
+                "durableObjectsInvocationsAdaptiveGroups": [],
+                "durableObjectsPeriodicGroups": [],
+                "workersInvocationsAdaptive": [
+                  {
+                    "dimensions": {
+                      "date": "2026-11-14"
+                    },
+                    "sum": {
+                      "clientDisconnects": 48,
+                      "cpuTimeUs": 2243552,
+                      "errors": 0,
+                      "requests": 715
+                    }
+                  },
+                  {
+                    "dimensions": {
+                      "date": "2026-11-15"
+                    },
+                    "sum": {
+                      "clientDisconnects": 396,
+                      "cpuTimeUs": 3379747,
+                      "errors": 0,
+                      "requests": 1890
+                    }
+                  },
+                  {
+                    "dimensions": {
+                      "date": "2026-11-16"
+                    },
+                    "sum": {
+                      "clientDisconnects": 0,
+                      "cpuTimeUs": 44338,
+                      "errors": 0,
+                      "requests": 69
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "errors": null
+      }
+    },
+    "duringProbe": {
+      "recordedAt": "2026-11-16T21:00:50.103Z",
+      "query": "{viewer{accounts(filter:{accountTag:\"ACCOUNT_ID\"}){durableObjectsInvocationsAdaptiveGroups(limit:10000,filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},orderBy:[date_ASC]){dimensions{date}sum{requests errors}}durableObjectsPeriodicGroups(limit:10000,filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},orderBy:[date_ASC]){dimensions{date}sum{duration cpuTime rowsRead rowsWritten exceededCpuErrors exceededMemoryErrors fatalInternalErrors}}}}}",
+      "response": {
+        "data": {
+          "viewer": {
+            "accounts": [
+              {
+                "durableObjectsInvocationsAdaptiveGroups": [],
+                "durableObjectsPeriodicGroups": []
+              }
+            ]
+          }
+        },
+        "errors": null
+      }
+    },
+    "sqlStorage": {
+      "recordedAt": "2026-11-16T21:02:25.333Z",
+      "rows": []
+    },
+    "existingBucketStorage": {
+      "recordedAt": "2026-11-16T21:02:25.333Z",
+      "samples": [
+        {
+          "dimensions": {
+            "bucketName": "radiant-001",
+            "datetime": "2026-11-16T20:40:00Z",
+            "storageClass": "InfrequentAccess"
+          },
+          "max": {
+            "metadataSize": 0,
+            "objectCount": 0,
+            "payloadSize": 0
+          }
+        },
+        {
+          "dimensions": {
+            "bucketName": "radiant-001",
+            "datetime": "2026-11-16T20:40:00Z",
+            "storageClass": "Standard"
+          },
+          "max": {
+            "metadataSize": 0,
+            "objectCount": 0,
+            "payloadSize": 0
+          }
+        }
+      ],
+      "limitation": "Sample timestamps are historical; no exact current-byte or billable total claim."
+    },
+    "ownerDashboard": {
+      "provenance": "Owner-reported dashboard values, not independently inspected",
+      "periodLabel": "November 14 \u2013 December 14",
+      "duration": "0 GB-sec",
+      "requests": 0,
+      "totalSqlStorage": "0 B",
+      "totalKvStorage": "0 B",
+      "sqlRowsRead": 0,
+      "sqlRowsWritten": 0,
+      "kvStorageOperations": 0,
+      "interpretation": "Recorded display values conflict with direct execution evidence. They are not accepted as zero operational consumption. Monthly display is not a daily Free-quota measurement."
+    },
+    "conclusion": "Invocation, periodic and SQL storage aggregates remain empty. Root cause unestablished; no zero-usage inference."
+  },
+  "rehearsal": {
+    "worker": "radiant-rehearsal-20261116-9c17e4",
+    "databaseId": "0677278b-2bae-4bd4-9ce9-be2f6fa95cb6",
+    "ingress": {
+      "workersDev": false,
+      "previewUrls": false,
+      "cronSchedules": [],
+      "deployTargets": "none"
+    },
+    "inventoryFixture": {
+      "objects": 1501,
+      "payloadBytes": 13509,
+      "prefix": "capacity-fixtures/",
+      "purpose": "Tiny unrelated keys require full-prefix inventory and actual R2 pagination."
+    },
+    "warmupReport": "cloudflare-gallery-rehearsal-storage-admission-20261116.json",
+    "postSeedReport": "cloudflare-gallery-rehearsal-paginated-storage-20261116.json",
+    "note": "The first run overlapped inventory seeding. The second run began after all 1501 fixture objects were confirmed present.",
+    "backup": {
+      "verified": true,
+      "bytes": 7862,
+      "tables": 17,
+      "snapshotVersion": 1,
+      "probeClass": "BackupCapacityProbe",
+      "frontCpuMs": 1,
+      "objectCpuMs": 31,
+      "objectWallMs": 2737,
+      "limitation": "Production createBackup imported unchanged into diagnostic DO; manually invoked, not normal production cron or Gmail-health acceptance."
+    },
+    "tail": {
+      "records": [
+        {
+          "timestamp": 1794862651116,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 5,
+          "wallMs": 47,
+          "method": "POST",
+          "route": "gallery",
+          "status": 401,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862651903,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 7,
+          "wallMs": 533,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862652416,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 7,
+          "wallMs": 92,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862652579,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 6,
+          "wallMs": 2419,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862653004,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 53,
+          "wallMs": 2057,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862655820,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 5,
+          "wallMs": 91,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862655691,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 241,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862656034,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 230,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862656311,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 142,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862656540,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 5,
+          "wallMs": 189,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862656810,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 35,
+          "method": "GET",
+          "route": "image",
+          "status": 400,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862656893,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 72,
+          "method": "GET",
+          "route": "other",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862657153,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 10,
+          "wallMs": 1829,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862657002,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 4,
+          "wallMs": 1995,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862659060,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 68,
+          "method": "GET",
+          "route": "image",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862660620,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 83,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862660480,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 247,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862667989,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 9,
+          "wallMs": 85,
+          "method": null,
+          "route": "other",
+          "status": null,
+          "rpcMethod": "validate",
+          "className": "JpegValidator",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862663691,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 163,
+          "wallMs": 5901,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862663497,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 6103,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862670561,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 94,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862670458,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 221,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862670715,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 204,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862671014,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 219,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862671317,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 209,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862671576,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 19,
+          "method": "GET",
+          "route": "image",
+          "status": 400,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862671629,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 20,
+          "method": "GET",
+          "route": "other",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862671788,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 15,
+          "wallMs": 2712,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862671683,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 2830,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862674597,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 59,
+          "method": "GET",
+          "route": "image",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862676055,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 86,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862675958,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 204,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862681784,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 1300,
+          "wallMs": 1418,
+          "method": null,
+          "route": "other",
+          "status": null,
+          "rpcMethod": "validate",
+          "className": "JpegValidator",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862678779,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 177,
+          "wallMs": 7573,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862678637,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 7724,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862687333,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 4,
+          "wallMs": 87,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862687157,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 285,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862687476,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 209,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862688053,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 257,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862688383,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 206,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862688644,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 35,
+          "method": "GET",
+          "route": "image",
+          "status": 400,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862688717,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 0,
+          "wallMs": 33,
+          "method": "GET",
+          "route": "other",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862688960,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 19,
+          "wallMs": 2463,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862688816,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 2618,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862691475,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 73,
+          "method": "GET",
+          "route": "image",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862708068,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 16,
+          "method": "POST",
+          "route": "gallery",
+          "status": 401,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862709297,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 82,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862709177,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 226,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862709595,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 36,
+          "wallMs": 1611,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862709465,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 1750,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862711943,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 68,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862711822,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 213,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862712076,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 157,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862712276,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 156,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862712516,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 163,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862712727,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 16,
+          "method": "GET",
+          "route": "image",
+          "status": 400,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862712774,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 0,
+          "wallMs": 17,
+          "method": "GET",
+          "route": "other",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862712907,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 7,
+          "wallMs": 1878,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862712825,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 1972,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862714832,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 51,
+          "method": "GET",
+          "route": "image",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862716412,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 3,
+          "wallMs": 80,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862716317,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 181,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862722981,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 19,
+          "wallMs": 216,
+          "method": null,
+          "route": "other",
+          "status": null,
+          "rpcMethod": "validate",
+          "className": "JpegValidator",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862719456,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 195,
+          "wallMs": 5128,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862719333,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 5260,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862725336,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 67,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862725241,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 183,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862725455,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 146,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862725647,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 185,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862725877,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 204,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862726132,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 37,
+          "method": "GET",
+          "route": "image",
+          "status": 400,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862726202,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 0,
+          "wallMs": 32,
+          "method": "GET",
+          "route": "other",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862726344,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 15,
+          "wallMs": 2304,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862726266,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 2396,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862728695,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 29,
+          "method": "GET",
+          "route": "image",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862730129,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 69,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862729995,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 227,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862737077,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 1096,
+          "wallMs": 1216,
+          "method": null,
+          "route": "other",
+          "status": null,
+          "rpcMethod": "validate",
+          "className": "JpegValidator",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862732707,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 179,
+          "wallMs": 8782,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862732619,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 8881,
+          "method": "POST",
+          "route": "gallery",
+          "status": 201,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862742244,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 4,
+          "wallMs": 71,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": "BulkReads",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862742127,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 193,
+          "method": "GET",
+          "route": "gallery",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862742356,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 136,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862742687,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 167,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862742925,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 153,
+          "method": "GET",
+          "route": "image",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862743131,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 0,
+          "wallMs": 15,
+          "method": "GET",
+          "route": "image",
+          "status": 400,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862743183,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 0,
+          "wallMs": 15,
+          "method": "GET",
+          "route": "other",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862743333,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 20,
+          "wallMs": 1979,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": "GalleryMutations",
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862743232,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 2,
+          "wallMs": 2091,
+          "method": "DELETE",
+          "route": "gallery",
+          "status": 204,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862745354,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 44,
+          "method": "GET",
+          "route": "image",
+          "status": 404,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862834791,
+          "executionModel": "stateless",
+          "outcome": "ok",
+          "cpuMs": 1,
+          "wallMs": 2941,
+          "method": "POST",
+          "route": "other",
+          "status": 200,
+          "rpcMethod": null,
+          "className": null,
+          "exceptionCount": 0
+        },
+        {
+          "timestamp": 1794862835133,
+          "executionModel": "durableObject",
+          "outcome": "ok",
+          "cpuMs": 31,
+          "wallMs": 2737,
+          "method": null,
+          "route": "other",
+          "status": null,
+          "rpcMethod": "check",
+          "className": "BackupCapacityProbe",
+          "exceptionCount": 0
+        }
+      ],
+      "groups": {
+        "stateless": {
+          "count": 63,
+          "cpuMaxMs": 7,
+          "wallMaxMs": 8881,
+          "outcomes": {
+            "ok": 63
+          }
+        },
+        "durableObject": {
+          "count": 29,
+          "cpuMaxMs": 1300,
+          "wallMaxMs": 8782,
+          "outcomes": {
+            "ok": 29
+          }
+        }
+      },
+      "incompleteTrailingRecord": false,
+      "classSummary": {
+        "stateless": {
+          "count": 63,
+          "maxCpuMs": 7,
+          "maxWallMs": 8881
+        },
+        "BulkReads": {
+          "count": 12,
+          "maxCpuMs": 7,
+          "maxWallMs": 94
+        },
+        "GalleryMutations": {
+          "count": 12,
+          "maxCpuMs": 195,
+          "maxWallMs": 8782
+        },
+        "JpegValidator": {
+          "count": 4,
+          "maxCpuMs": 1300,
+          "maxWallMs": 1418
+        },
+        "BackupCapacityProbe": {
+          "count": 1,
+          "maxCpuMs": 31,
+          "maxWallMs": 2737
+        }
+      }
+    },
+    "preBackupInventory": {
+      "recoveryPages": 2,
+      "recoveryCount": 1531,
+      "observedAt": "2026-11-16T21:00:34.3638065Z",
+      "mediaCount": 0
+    }
+  },
+  "cleanup": {
+    "verifiedAt": "2026-11-16T21:03:11.574Z",
+    "workerAbsent": true,
+    "databaseAbsent": true,
+    "namespacesAbsent": true,
+    "bucketsAbsent": true,
+    "existingBucketPreserved": true,
+    "remainingCounts": {
+      "workers": 0,
+      "databases": 0,
+      "namespaces": 0,
+      "buckets": 1
+    },
+    "emptying": {
+      "media": {
+        "deleted": 0,
+        "emptyVerified": true
+      },
+      "recovery": {
+        "deleted": 1533,
+        "emptyVerified": true
+      }
+    },
+    "proxyStopped": true,
+    "tailStopped": true,
+    "temporaryLocalCredentialsRemoved": true,
+    "unsanitizedTailRemoved": true
+  },
+  "limitations": [
+    "Scoped real pagination at about 35 MiB of recovery payload after test deletion, not a 6 GiB or 20-page maximum workload.",
+    "No provider-level storage exhaustion or network outage was injected. R-28 local regressions cover exhausted/unavailable storage refusal.",
+    "Tail observations are samples, not absolute CPU/memory peaks, daily duration totals or account billing measurements.",
+    "The owner confirmed Images Free previously; no paid subscription or spending-limit change was made.",
+    "Persistent recovery monitoring, normal cron completion and scheduled recipient delivery remain unverified."
+  ],
+  "sourceSha256": {
+    "apps/api/src/services/storageCapacity.ts": "1eca48e2ab674807cb4a227b547d4ea68d7ffde8c9fa000708d2962d3613e454",
+    "apps/api/src/services/images.ts": "5130ef917ec425b272812da1c61a5ed53010f9f422e77cb7eba6856c05b479ae",
+    "apps/api/src/services/backup.ts": "4ae93cf6788ed3d4eeb685c3bda22a4884defeef1b14a8d2802f95def66db666",
+    "apps/api/src/services/galleryMutations.ts": "f1d2bf4da351d3a83f6c443fc5b8f928b3765614d59881b1448164dd2b6a1b3d",
+    "scripts/cloudflare-gallery-rehearsal/run.ts": "a6fbf9dd2956222803807105b88b026229cede25e66a4db60076acae0ed92b2a"
+  },
+  "persistentMonitoring": {
+    "observedAt": "2026-11-16T21:01:00.626Z",
+    "enabled": false,
+    "bucketConfigured": false,
+    "requiredSecretPresence": {
+      "CLOUDFLARE_ACCOUNT_ID": false,
+      "R2_MONITOR_ACCESS_KEY_ID": false,
+      "R2_MONITOR_SECRET_ACCESS_KEY": false
+    },
+    "workflow": [
+      {
+        "id": 418824337,
+        "state": "active",
+        "path": ".github/workflows/operations-monitor.yml"
+      }
+    ]
+  },
+  "ciAtCheckpoint": {
+    "observedAt": "2026-11-16T21:12:36.111Z",
+    "evidence": "github-ci-r29-20261116.json",
+    "runId": 43953953193,
+    "status": "completed",
+    "conclusion": "success",
+    "headSha": "c23c9431b94a0221d06392725c948832e5f1585e",
+    "testedTreeMatchesHead": true,
+    "tests": {
+      "files": 64,
+      "passed": 290
+    },
+    "browser": {
+      "passed": 163,
+      "skipped": 12,
+      "durationMinutes": 18.4,
+      "projects": [
+        "chromium-desktop",
+        "chromium-mobile",
+        "firefox-desktop",
+        "webkit-desktop",
+        "webkit-mobile"
+      ],
+      "skipReason": "Only three once-per-run performance profiles skip their four non-target project cells. Functional cases are not quarantined."
+    }
+  },
+  "validation": {
+    "sourceHashesVerified": true,
+    "reportAssertionsVerified": true,
+    "taskCounts": {
+      "complete": 55,
+      "open": 9
+    },
+    "evidenceLinksVerified": true,
+    "privacySourceFiles": 468,
+    "privacyArtifactFiles": 2,
+    "privacyBlocked": 0,
+    "applicationChanges": false
+  },
+  "remainingGates": [
+    "Durable Objects metering discrepancy",
+    "Persistent recovery target, normal schedules, independent monitor and scheduled recipient proof"
+  ]
+}

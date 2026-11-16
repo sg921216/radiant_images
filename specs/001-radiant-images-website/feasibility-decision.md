@@ -21,23 +21,28 @@ dependency-resolution candidate, and the two remaining feasibility issues.
 
 ## Why T001 cannot yet pass
 
-Current checkpoint (R-28, 2026-11-16): the original JPEG and reproduced cold-read CPU
+Current checkpoint (R-29, 2026-11-16): the original JPEG and reproduced cold-read CPU
 issues have provider evidence in R-19–R-25. Billing access is complete under T064/R-27.
-R-28 adds daily Workers/D1 observations and a storage admission fix. Remaining gates:
+R-28 adds daily Workers/D1 observations and a storage admission fix; R-29 verifies the
+committed guard with actual paginated R2 inventory and private application/backup checks.
+Remaining gates:
 
 1. **Remaining resource evidence:** the owner explicitly confirms the account Images
    page shows Free; use its documented 5,000-transformation cutoff without a paid
    upgrade. Daily DO aggregate queries still return no rows despite live execution,
-   including a new private probe before deletion. Preserve this missing-data limitation,
-   not a zero-usage assertion. Tail samples prove execution but not complete metering.
+   including private probes before deletion. The owner's monthly dashboard also displays
+   zeros despite direct execution proof. Preserve this metering discrepancy, not a
+   zero-usage assertion. Tail samples prove execution but not complete metering.
 2. **Operational recovery proof:** R-23's isolated restore, delayed deletion/retry and
    user-confirmed manual notification are accepted scoped evidence. T058 still needs
    a persistent target, normal production schedules, independent monitor activation
    and scheduled recipient proof. Do not create a public deployment to bypass this gate.
-3. **Changed-source acceptance:** R-28's combined-storage guard adds provider inventory
-   work inside the existing gallery/scheduled DO execution paths. Full local quality
-   and scoped provider evidence do not substitute for CI and release checks on the
-   eventual source commit or a full application capacity claim.
+
+**Changed-source CI is resolved:** Quality run 43953953193 for `c23c943` passes static
+checks, 290 tests, builds and 163 browser/performance checks across five projects, with
+12 expected duplicate performance skips and an identical tested merge tree. R-29 adds
+real pagination/CPU evidence. This does not close T060/T063's production acceptance or
+establish unmeasured maximum capacity.
 
 The 6 GiB storage admission threshold, rolling 300-upload allowance and $1/$10
 warnings reduce exposure. They do not impose a $0 account cap or authorize an upgrade.
