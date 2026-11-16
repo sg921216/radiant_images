@@ -113,6 +113,15 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**2026-11-16 delivery follow-up:** The R-25 source passes full remote CI on `e1cea09`.
+Local workflows now pin verified Node 24 action commits and `ubuntu-26.04`, matching the
+successful runner family; Node 24.14.0 and pnpm 12.18.0 remain the application toolchain.
+T061 now moves keyboard focus to public main content after client-side pathname changes,
+including Back/Forward, while initial loads and hash-only navigation keep native focus.
+The owner requested T064 to connect account-scoped Billing Read access and gather the
+remaining T001 account evidence. This follow-up does not authorize a paid upgrade or
+close persistent-monitoring and release gates. See quickstart.md for its read-only scope.
+
 **Bulk-read CPU remediation (2026-11-15, R-25):** The private 60-image/200-client
 baseline reproduces a 14-ms first gallery read. Incremental Hono routing reduces that
 sample to 8 ms, but fresh public-bootstrap and client-list reads still take 16/15 ms.

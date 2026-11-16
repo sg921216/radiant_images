@@ -1,5 +1,30 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-26: Account-scoped Billing Read follow-up — 2026-11-16
+
+The owner requested a separate Billing Read connection to complete the account evidence
+needed by T001 and dependent operational/release work. Live subscription and billing-usage
+GETs return 403 with the existing OAuth connection; these endpoints require an API token
+with Billing Read. Spend-policy GET also returns 403, and its current API schema does not
+declare accepted permissions. Reconnecting the same OAuth scopes is not a resolution.
+
+T064 records the concrete follow-up. Limit its token to Account > Billing > Read and the
+Radiant Images account, with a finite expiry; no Billing Edit or deployment authority is
+needed. Cloudflare documents account-owned token support for Billing and bearer API-token
+support on its official API MCP server. The connection must be verified before claiming
+access or task completion. No token was created in this session.
+[Billing permissions](https://developers.cloudflare.com/billing/understand/billing-permissions/),
+[account token support](https://developers.cloudflare.com/fundamentals/api/get-started/account-owned-tokens/),
+[API MCP authentication](https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/).
+
+Read subscriptions and an explicit billing-period usage window; the generic usage API's
+default is only six hours and limited results can truncate without error. Its metric list
+is not comprehensive for R2, D1 and Durable Objects, so retain gaps or supplement through
+appropriate authorized read-only sources. Record only sanitized plan/allowance/usage/control
+facts. A successful Billing Read connection does not establish an enforced spend cap,
+zero cost, persistent monitoring or release acceptance. The existing $1/$10 budget warnings
+remain unchanged; no upgrade or billing-write permission is selected.
+
 ## R-25: HTTP read CPU and bounded admission — 2026-11-15
 
 The private production-code baseline reproduced a 14-ms first gallery request with

@@ -426,6 +426,44 @@ allows disclosed provider-outage delays; record target misses and verified clean
 claiming an unconditional physical-expiry guarantee. The alert destination and deployed
 monitoring configuration still need to be established.
 
+## Billing Read connection follow-up (T064)
+
+The owner selected this follow-up on 2026-11-16. Current OAuth reads of subscriptions,
+billing usage and spend policies return 403; repeating the same OAuth connection does
+not provide Billing scope. No billing token or replacement connection was created.
+
+1. In Cloudflare, create a custom API token with **Account > Billing > Read** only,
+   limited to the Radiant Images account. An account-owned token is supported for
+   Billing; creating one requires the appropriate account token provisioning role.
+   Select a finite expiry suitable for this verification. Do not add Billing Edit,
+   deployment, payment or account-member permissions.
+2. Configure a separate token-authenticated connection to Cloudflare's official API MCP
+   server, `https://mcp.cloudflare.com/mcp`, using its secure bearer-token credential
+   setting. Keep the existing operational OAuth connection. If the selected client only
+   offers OAuth, use an approved secure API session with the same scoped token instead;
+   do not assume an OAuth reconnect expands permissions. Store the secret through the
+   client's credential mechanism, never in this repository or a chat message.
+3. Verify actual GET access to `/accounts/{account_id}/subscriptions` and
+   `/accounts/{account_id}/billing/usage`. Use explicit billing-period `since`/`until`,
+   daily aggregation and sufficient result limits; the usage endpoint otherwise defaults
+   to six hours and can silently truncate. Record active plans, included allowances,
+   relevant usage and observed charges with their time window. Supplement missing R2,
+   D1, Images or DO metrics through the corresponding authorized read-only sources;
+   the generic billing usage endpoint is not an exhaustive account usage report.
+4. Read available spend policies and existing budget-warning configuration separately.
+   The spend-policy endpoint declares no token permission in the current API schema;
+   retain a gap if it remains denied. Distinguish warning thresholds from enforced
+   controls and do not report a hard cap or zero charge without supporting evidence.
+5. Save only sanitized totals, plan names, dates, control states and limitations. Mark
+   T064 complete only after connection and the required reads are verified; then reassess
+   T001. Persistent monitoring (T058), deployment (T060) and final acceptance (T063)
+   retain their other prerequisites. Revoke or rotate temporary verification access when
+   finished, without changing the operational connection or existing budget warnings.
+
+Sources: [Billing permissions](https://developers.cloudflare.com/billing/understand/billing-permissions/),
+[account-owned token support](https://developers.cloudflare.com/fundamentals/api/get-started/account-owned-tokens/),
+[Cloudflare API MCP authentication](https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/).
+
 ## Deployment and rollback preparation (T060)
 
 **R-25 bulk-read prerequisite:** Include `BULK_READS` / `BulkReads` and the

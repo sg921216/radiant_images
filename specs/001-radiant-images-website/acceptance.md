@@ -1,5 +1,81 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-16 — Committed R-25 CI acceptance and next release checks
+
+Verified [Quality run 43934376056 / job 133534973000](https://github.com/sg921216/radiant_images/actions/runs/43934376056/job/133534973000)
+through the run/job APIs and authenticated completed job log. The run succeeds on
+`e1cea09a750bfa91808dbbef237560aa4cf2cc5c`. Checkout is PR merge
+`7f1cf08856d8416dec35211a286c3b395a5aa622`; its tree and the feature-head tree are both
+`b4e1d262191374d3b1ceea8c9b2dba2f533a197d`. This supplies remote acceptance of the
+committed R-25 CPU/admission changes, not just the earlier baseline.
+
+| Gate | Verified remote result |
+| --- | --- |
+| Static quality and builds | Frozen install, formatting, lint, types, API/frontend builds and test setup pass. |
+| Unit/component/API/contract/tooling | **64 files / 287 tests pass.** |
+| Full browser matrix | **158 pass / 12 expected skips**, 17.8 minutes. All five functional projects run; three performance profiles execute once, and their twelve non-target duplicates skip. |
+| Security and diagnostics | Dependency audit passes; repository privacy checks 455 files with zero blocked, diagnostic privacy checks ten with zero blocked. Failure-only artifact upload correctly skips. |
+| Source/runner identity | Attempt 1, PR event, matching checkout/head trees; runner 2.338.2 with Ubuntu 26.04 image documentation. Job duration 21m14s, ending 19:19:27 UTC. |
+
+[Sanitized run, source identity, steps and result counts](./evidence/github-ci-r25-20261116.json)
+retain no raw job log or authentication credential. T059 remains complete. Prior manual,
+provider, approved-photo, actual-device and production gates are not inferred from CI.
+
+### Continued work: action runtimes and T061 keyboard navigation
+
+The job warns that checkout/setup-node/pnpm setup still declare Node 20 and are being
+forced onto Node 24. All four repository workflows now pin official, verified Node 24
+action commits: checkout 7.0.1, setup-node 7.1.0, pnpm/action-setup 6.1.1, plus
+upload-artifact 7.0.2 on the diagnostic failure path. `ubuntu-26.04` pins the OS family
+observed in this passing run. Application Node 24.14.0 and pnpm 12.18.0 remain unchanged;
+automatic setup-node caching is explicitly disabled. Parsed comparisons against HEAD
+verify every other command, condition, permission, deployment gate, monitor enablement,
+secret reference and artifact retention/privacy rule is preserved. Official manifests
+confirm supported inputs and Node 24 runtimes. Remote execution of these new workflow
+pins still needs their eventual commit's CI; no deployment or monitor dispatch occurred.
+
+Sources: [checkout release](https://github.com/actions/checkout/releases/tag/v7.0.1),
+[setup-node release](https://github.com/actions/setup-node/releases/tag/v7.1.0),
+[pnpm setup release](https://github.com/pnpm/action-setup/releases/tag/v6.1.1),
+[artifact action release](https://github.com/actions/upload-artifact/releases/tag/v7.0.2),
+[runner labels](https://github.com/actions/runner-images#available-images).
+
+A new keyboard regression first fails on the current production build because focus
+remains in navigation after following the Maternity link. `PublicLayout` now focuses
+its main content after pathname changes, including Back/Forward navigation. Initial
+page loads and hash-only navigation retain native focus; focus does not alter scrolling.
+The regression also checks skip-to-content behavior and the mobile menu closing.
+The first rebuilt run passes all **15 navigation/automated accessibility cases** across
+five projects. During diff review, an incidental text-encoding change was removed so
+footer copy remains byte-for-byte equivalent to HEAD; final verification follows below.
+These checks support T061 but do not constitute an actual screen-reader, approved-photo
+or field-performance pass.
+
+Final validation of the corrected source: `pnpm check` passes formatting, lint, types,
+**64 files / 287 tests** and both production builds. The rebuilt final navigation/axe
+matrix passes **15/15**, zero skips/retries/flaky cases across all five projects.
+The full configured suite lists 175 cases in 13 files; this listing is not a new full
+execution. Source and diagnostic privacy scans and final diff checks pass.
+[Sanitized workflow/runtime, source-hash and local verification evidence](./evidence/ci-runtime-accessibility-20261116.json)
+records these results. The new workflow and focus changes remain uncommitted and need
+remote Quality on their eventual commit.
+
+### Owner-requested Billing Read dependency
+
+The owner explicitly requested account-scoped Billing Read as a follow-up. Added **T064**
+with setup and live verification criteria in quickstart.md. This connection has not been
+established. Current subscription, billing usage and spend-policy requests still return
+403; OAuth does not cover the first two endpoints. The current Workers inventory is empty,
+so there is no persistent application to monitor. Plugin discovery supplied no additional
+connection option; Cloudflare's documented API-token bearer connection is the follow-up
+route. No access permissions, tokens, billing settings or production resources changed.
+
+T064 must produce scoped subscription/current-period usage evidence and explicitly
+report unsupported metrics or denied spend controls before reassessing T001. It does
+not waive persistent monitoring (T058), deployment (T060), or final acceptance (T063).
+Adding the requested follow-up changes the register to **54/64 complete, 10 open**;
+none of the previous open tasks was closed by this documentation update.
+
 ## 2026-11-15 — HTTP CPU headroom and bulk-read admission (R-25)
 
 Base `2c8ed7fb074fa8e81b456f2fc9cc867f4ed2e942`, plus the uncommitted source hashes in

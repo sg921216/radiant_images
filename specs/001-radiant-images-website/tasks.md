@@ -1,5 +1,16 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-16 CI and follow-up checkpoint:** Quality run
+[43934376056](https://github.com/sg921216/radiant_images/actions/runs/43934376056/job/133534973000)
+passes on committed R-25 head `e1cea09a750bfa91808dbbef237560aa4cf2cc5c`; the tested PR
+merge tree matches exactly. All 287 tests and 158 browser/performance cases pass, with
+12 declared duplicate performance-profile skips. New local work updates the deprecated
+action runtimes and corrects public-route keyboard focus under T061. The owner explicitly
+requested account-scoped Billing Read connection as a follow-up: **T064 is added and
+open**, supporting T001 and the dependent persistent monitoring/deployment/release gates.
+This adds one tracked dependency without completing any existing gate:
+**54/64 tasks complete, 10 open.** See acceptance.md and the T064 quickstart procedure.
+
 **2026-11-15 HTTP CPU checkpoint (R-25):** Incremental routing plus three bounded
 bulk-read coordinators resolves the reproduced 14–16-ms cold-read overruns in the sampled
 60-photo/200-client workload. Final samples cover all 13 JSON GET operations: front CPU
@@ -283,9 +294,14 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 - [x] T062 Add/run cross-route authorization, injection, session expiry, rate-limit, backup privacy, token-redaction (including auth exchange, questionnaire subject/body, owner-history responses and backups), and PII-log checks in `apps/api/tests/security.test.ts` and `e2e/security.spec.ts`; configure CSP/security headers for Workers Static Assets in `apps/web/public/_headers`, equivalent headers on fallback responses in `apps/web/worker.ts`, and API security headers in `apps/api/src/index.ts`, permitting only required Turnstile/API/PDF sources; verify noindex/no-referrer on private/tokenized routes and do not rely on `_headers` for Worker-generated responses (FR-025/032–035, SC-003).
 - [ ] T063 Run all quickstart suites and manual acceptance, rehearse restore/rollback, verify real-email receipt and all 60-second freshness budgets, and record browser versions, red/green evidence, manual accessibility/print/PDF review, and participant/owner timings using plan.md's human acceptance protocol in `specs/001-radiant-images-website/acceptance.md`. Freeze and execute every N/N-1 browser/OS cell in plan.md's release matrix using actual desktop browsers and physical mobile devices or a real-device service; record exact versions and per-journey evidence. Missing/failed cells are BLOCKED, not satisfied by emulation. Record the predeclared SC-002 denominator and every started SC-008 participant, device split, first-Submit result, assistance and ceil(0.9 × started) threshold. Obtain final logo/photos/copy/pricing/privacy/deposit terms and photo usage/guardian permission; confirm owner approval and actual monitoring of publicContactEmail, exercise the uncertain-delivery recovery instructions, reject local/test placeholder addresses, and replace launch placeholder addresses via `specs/001-radiant-images-website/quickstart.md` before release (SC-001/008/010/012, QR-001–005).
 
+## Owner-requested dependency follow-up (2026-11-16)
+
+- [ ] T064 Connect a Cloudflare API token limited to Account > Billing > Read for the Radiant Images account, using the token-authenticated Cloudflare API MCP connection or an approved secure read-only API session. Follow `quickstart.md`'s Billing Read procedure; do not put the token in chat, source, CI artifacts or evidence. Verify successful live subscription and explicit billing-period usage reads, separately inspect available spend controls, and record only sanitized plan, usage, allowance and alert/control evidence in `research.md` and `acceptance.md`. Treat unsupported metrics or still-denied controls as explicit gaps. Reassess T001 after verification; do not infer a billing cap, paid-plan approval or production acceptance. This task is owner-authorized for follow-up; the connection has not yet been established.
+
 ## Dependencies and Execution Order
 
 ```text
+Billing Read follow-up (T064) -> T001 account evidence
 Setup (T001–T006)
   -> Foundation (T007–T015)
      -> US1 (T016–T025) -> lead-capture MVP
@@ -306,6 +322,7 @@ All six completed stories -> release checks (T058–T063)
   Independent tests can be authored concurrently, but their implementations wait for red.
 - Every route task includes mounting its router in `apps/api/src/index.ts` or registering its page in `apps/web/app/routes.ts` as needed. These shared-file edits must be serialized even when endpoint/component bodies are built in parallel. T057 checks the final assembled route inventory.
 - `specs/001-radiant-images-website/acceptance.md` is a shared evidence log: serialize updates. Never mark a real-provider or human acceptance check complete based only on mocks.
+- T064 supplies the remaining account billing evidence for T001. Completing T064 does not by itself close T001 or T058; persistent deployment, monitoring and release acceptance still require their own evidence.
 - T001 is a feasibility gate: unresolved provider constraints block dependent production work, but do not justify silently replacing the agreed hosting model. Record required spec/plan/contract adjustments before implementing affected behavior.
 
 ## Parallel Execution Examples
@@ -358,7 +375,7 @@ T059 and T060 can run concurrently after T058; their first successful execution 
 | SC-007/010                   | T037–T042, T063                                           |
 | SC-012                       | T048, T057, T063                                          |
 | QR-001                       | T001, T032–T036, T063                                     |
-| QR-002                       | T001, T007, T047/T050, T052, T058, T062/T063              |
+| QR-002                       | T001/T064, T007, T047/T050, T052, T058, T062/T063              |
 | QR-003/004                   | T003, T021, T061                                          |
 | QR-005 / Constitution III–IV | T006, all behavior tasks, T025–T057, T058–T063            |
 
