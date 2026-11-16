@@ -1,5 +1,34 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-16 — T064 Billing Read acceptance (R-27)
+
+**T064 complete; 55/64 tasks complete, 9 open.** Verified the owner-created account
+token as active and used the approved secure read-only API fallback. The configured
+token MCP session was not exposed by this host; it is not claimed as independently
+tested. Account subscription, explicit-period usage, spend-policy and billing-history
+GETs all succeed. No raw token, recipient address, invoice identifier or billing profile
+is retained. No billing or deployment changes were made.
+
+| Acceptance check | Result |
+| --- | --- |
+| Token verification | HTTP 200, active; expiry November 24 04:59:59 UTC. Full policy not inspected. |
+| Plans | R2 Paid and Images Stream Basic; both report USD 0 base price, state Paid, November 14–December 14 subscription period. |
+| Explicit usage window | Generic endpoint accepts November 14 02:45:48–November 16 20:12:26 UTC, daily, limit 10,000; returns no usage rows. Not interpreted as zero. |
+| Supplemental usage | v1 billable usage returns seven records for November 14–15: 0.0040398683 GB-month R2 storage, 831 Class A, 850 Class B, 49 image transformations; reported charges $0. No current-day/final-invoice assertion. |
+| Spending controls | Spend-policy list is empty. Existing $1/$10 warnings remain enabled with one email recipient each; no hard cap is established. |
+| Preserved gaps | v2 usage HTTP 403/code 1171; daily Workers/D1/DO totals missing; Images Free cutoff not proven by returned plan. |
+| Operational inventory | Zero Workers, D1 databases and DO namespaces; one existing R2 bucket preserved. No persistent monitor target. |
+
+This closes the Billing Read access dependency, not T001's remaining account-plan,
+capacity and usage-control evidence. T058/T060/T063 remain open. Images plan
+confirmation must precede reliance on a Free overage cutoff; no paid upgrade is selected.
+See [research R-27](./research.md#r-27-billing-read-verified-and-account-evidence--2026-11-16)
+and [sanitized evidence](./evidence/cloudflare-billing-read-20261116.json).
+
+Documentation/evidence validation: JSON parsing, recorded-total recomputation, task
+count and evidence-link checks, repository privacy scan and `git diff --check` pass.
+No application code changed, so runtime suites were not repeated for this entry.
+
 ## 2026-11-16 — Committed R-25 CI acceptance and next release checks
 
 Verified [Quality run 43934376056 / job 133534973000](https://github.com/sg921216/radiant_images/actions/runs/43934376056/job/133534973000)
@@ -61,6 +90,8 @@ records these results. The new workflow and focus changes remain uncommitted and
 remote Quality on their eventual commit.
 
 ### Owner-requested Billing Read dependency
+
+Historical request checkpoint; completed by the T064 acceptance entry above.
 
 The owner explicitly requested account-scoped Billing Read as a follow-up. Added **T064**
 with setup and live verification criteria in quickstart.md. This connection has not been

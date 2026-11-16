@@ -428,9 +428,17 @@ monitoring configuration still need to be established.
 
 ## Billing Read connection follow-up (T064)
 
-The owner selected this follow-up on 2026-11-16. Current OAuth reads of subscriptions,
-billing usage and spend policies return 403; repeating the same OAuth connection does
-not provide Billing scope. No billing token or replacement connection was created.
+**Verified 2026-11-16; T064 complete.** The owner-created account token is active
+until November 24 04:59:59 UTC. The configured token MCP session was not exposed by
+this host, so verification used the approved secure read-only REST fallback. Subscription,
+explicit-period usage and spend-policy GETs succeeded. Detailed v1 billable usage
+reports R2/Images usage through November 15; generic usage has no rows, restricted v2
+is denied, and daily Workers/D1/DO totals remain unverified. See research R-27 and
+`evidence/cloudflare-billing-read-20261116.json`. Preserve these gaps when repeating:
+successful access alone is not proof of complete metering or zero cost.
+
+The procedure below remains the repeatable setup/verification scope. Existing OAuth
+alone cannot read Billing; no additional billing-write permission is required.
 
 1. In Cloudflare, create a custom API token with **Account > Billing > Read** only,
    limited to the Radiant Images account. An account-owned token is supported for
@@ -490,10 +498,10 @@ rejections occur before reservation. At exhaustion, uploads return 429 and a
 `Retry-After` value; photo deletion and reads remain available. Do not delete the DO
 namespace or clear its storage to bypass the allowance. The existing 60-photo and byte
 bounds still apply. The verified account-wide $1 budget warning uses the existing billing
-recipient and supplements the $10 warning; neither stops billing. R2 has no documented
-account spending limit. Subscription/spend-policy verification needs an authorized
-billing dashboard session or Billing Read credential; the current OAuth connection gets
-403. No paid upgrade is selected.
+recipient and supplements the $10 warning; neither stops billing. R2 is not covered by the
+documented Workers/DO spending limits. R-27 now verifies subscriptions and an empty
+spend-policy list through Billing Read. The Images subscription's free-tier cutoff and
+daily Workers/D1/DO usage still need confirmation; no paid upgrade is selected.
 
 Persistent recovery monitoring still needs the actual long-lived recovery bucket,
 verified bucket-only S3 read credentials, repository settings and scheduled notification

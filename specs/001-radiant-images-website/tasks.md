@@ -1,6 +1,14 @@
 # Tasks: Radiant Images Photography Website
 
-**2026-11-16 CI and follow-up checkpoint:** Quality run
+**2026-11-16 Billing Read checkpoint (R-27): T064 complete.** The scoped token is
+active; approved read-only API verification succeeds for subscriptions, explicit-period
+usage and spend policies. Supplemental billing records report $0 for the returned
+November 14–15 R2/Images usage. No spend policy is configured; $1/$10 budget warnings
+remain enabled. T001 retains daily Workers/D1/DO usage, Images plan/cutoff and wider
+capacity/control gaps; persistent monitoring and release gates remain open.
+**55/64 tasks complete, 9 open.** See acceptance.md and the sanitized billing evidence.
+
+**2026-11-16 CI and follow-up checkpoint (historical):** Quality run
 [43934376056](https://github.com/sg921216/radiant_images/actions/runs/43934376056/job/133534973000)
 passes on committed R-25 head `e1cea09a750bfa91808dbbef237560aa4cf2cc5c`; the tested PR
 merge tree matches exactly. All 287 tests and 158 browser/performance cases pass, with
@@ -296,7 +304,7 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 
 ## Owner-requested dependency follow-up (2026-11-16)
 
-- [ ] T064 Connect a Cloudflare API token limited to Account > Billing > Read for the Radiant Images account, using the token-authenticated Cloudflare API MCP connection or an approved secure read-only API session. Follow `quickstart.md`'s Billing Read procedure; do not put the token in chat, source, CI artifacts or evidence. Verify successful live subscription and explicit billing-period usage reads, separately inspect available spend controls, and record only sanitized plan, usage, allowance and alert/control evidence in `research.md` and `acceptance.md`. Treat unsupported metrics or still-denied controls as explicit gaps. Reassess T001 after verification; do not infer a billing cap, paid-plan approval or production acceptance. This task is owner-authorized for follow-up; the connection has not yet been established.
+- [x] T064 Connect a Cloudflare API token limited to Account > Billing > Read for the Radiant Images account, using the token-authenticated Cloudflare API MCP connection or an approved secure read-only API session. Follow `quickstart.md`'s Billing Read procedure; do not put the token in chat, source, CI artifacts or evidence. Verify successful live subscription and explicit billing-period usage reads, separately inspect available spend controls, and record only sanitized plan, usage, allowance and alert/control evidence in `research.md` and `acceptance.md`. Treat unsupported metrics or still-denied controls as explicit gaps. Reassess T001 after verification; do not infer a billing cap, paid-plan approval or production acceptance. Completed 2026-11-16 through the approved secure read-only API fallback; research R-27 and `evidence/cloudflare-billing-read-20261116.json` record successful reads and explicit remaining gaps.
 
 ## Dependencies and Execution Order
 

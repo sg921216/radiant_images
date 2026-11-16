@@ -1,6 +1,76 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-27: Billing Read verified and account evidence — 2026-11-16
+
+**T064 is complete.** The owner-created account token verifies as active, expiring
+2026-11-24 04:59:59 UTC. The separate token-backed MCP configuration exists, but this
+host did not expose that connection or inherit the newly saved environment variable.
+Used T064's approved read-only REST fallback with the secret loaded from the Windows
+User environment into a scoped child process. No secret is retained in repository
+evidence. Verification proves target-account access; it does not independently attest
+every token-policy permission. The operational OAuth connection remains unchanged.
+
+Subscriptions, explicit-period billing usage, spend policies and billing history all
+return HTTP 200. Two subscriptions report `R2 Paid` and `Images Stream Basic`, each
+with `state: Paid`, base price USD 0 and current period November 14–December 14.
+Their component values describe subscription settings, not measured consumption.
+No Workers paid subscription is returned. Workers' `standard` usage-model setting
+does not by itself establish a paid subscription.
+
+The generic usage request explicitly spans `2026-11-14T02:45:48Z` through
+`2026-11-16T20:12:26Z`, daily aggregation, limit 10,000. Its actual response differs
+from the OpenAPI array: zero rows, null data and empty totals, with the echoed end
+rounded to `2026-11-16T23:59:59Z`. Missing data is **not zero usage**. Supplemented
+with the account billable-usage v1 alpha API: coverage is true; the billing period
+starts November 14 00:00 UTC, and the explicit November 14–16 query returns seven
+records covering November 14–15 (latest exclusive end November 16 00:00 UTC).
+
+| Returned metric | Recorded consumption | Included monthly allowance | Reported charge |
+| --- | ---: | ---: | ---: |
+| R2 Standard storage | 0.0040398683 GB-month | 10 GB-month | $0 |
+| R2 Class A operations | 831 | 1,000,000 | $0 |
+| R2 Class B operations | 850 | 10,000,000 | $0 |
+| Images transformations | 49 | 5,000 | $0 |
+
+These are account totals for the returned records, including earlier rehearsals;
+they are not current storage size, today's full usage or a final invoice. Billing
+history is empty. Restricted billable-usage v2 returns HTTP 403/code 1171. Historical
+daily Workers, D1 and DO totals are absent from these billing reads and remain a gap.
+[R2 allowances](https://developers.cloudflare.com/r2/pricing/),
+[Images pricing](https://developers.cloudflare.com/images/pricing/).
+
+The spend-policy list succeeds and is empty. Separate OAuth reads confirm the
+existing **$1 and $10 account budget warnings**, both enabled with one email recipient;
+recipient details are omitted. Current spend-management documentation supports
+Workers and Durable Objects separately, excludes R2/Images from those controls,
+and does not guarantee an invoice ceiling even when a limit is enabled. No limit,
+subscription, recipient or billing setting was changed.
+[Spending controls](https://developers.cloudflare.com/billing/manage/spend-management/).
+
+Rechecked documented Free allowances: Workers 100,000 requests/day and 10-ms HTTP CPU;
+D1 five million rows read/day, 100,000 written/day and 5 GB; SQLite DO 100,000
+requests/day and 13,000 GB-s/day. These are planning limits, not measured remaining
+account headroom. R2's included tier applies only to Standard storage; Infrequent
+Access is enabled on this account but has no included free tier.
+[Workers/D1 pricing](https://developers.cloudflare.com/workers/platform/pricing/),
+[DO pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/).
+
+**T001 remains open.** Images and transformations are enabled, with zero hosted-image
+storage allowance. The returned subscription does not verify the earlier owner-reported
+Images Free cutoff. Reconcile that account plan before assuming new transformations
+will stop at 5,000; the documented paid alternative charges $0.50/1,000 beyond the
+included amount. R-24's application upload/retention limits still apply, but are not
+an account-wide cap. Current inventory is zero Workers, zero D1 databases, zero DO
+namespaces and one preserved R2 bucket. T058 has no persistent application to monitor;
+T060/T063 retain their release prerequisites. No infrastructure or token policy changed.
+
+[Sanitized API evidence, windows, allowances and limitations](./evidence/cloudflare-billing-read-20261116.json).
+The register is now **55/64 complete, 9 open**. Temporary access can be revoked after
+remaining billing verification; token revocation was not performed with this read-only credential.
+
 ## R-26: Account-scoped Billing Read follow-up — 2026-11-16
+
+Historical pre-connection checkpoint; superseded by verified R-27 above.
 
 The owner requested a separate Billing Read connection to complete the account evidence
 needed by T001 and dependent operational/release work. Live subscription and billing-usage

@@ -1,0 +1,501 @@
+{
+  "recorded_at": "2026-11-16T20:12:26Z",
+  "task": "T064",
+  "account": "Radiant Images",
+  "method": "Read-only HTTPS API using account-owned token from Windows User environment; separate operational OAuth preserved.",
+  "credential_value_retained": false,
+  "writes_performed": false,
+  "token_verification": {
+    "http_status": 200,
+    "success": true,
+    "errors": [],
+    "status": "active",
+    "expires_on": "2026-11-24T04:59:59Z",
+    "not_before": null
+  },
+  "subscriptions": {
+    "http_status": 200,
+    "success": true,
+    "errors": [],
+    "result_info": {
+      "page": 1,
+      "per_page": 25,
+      "total_pages": 1,
+      "count": 2,
+      "total_count": 2,
+      "next_page": false
+    },
+    "plans": [
+      {
+        "state": "Paid",
+        "price": 0,
+        "currency": "USD",
+        "frequency": "monthly",
+        "current_period_start": "2026-11-14T02:45:48Z",
+        "current_period_end": "2026-12-14T00:00:00Z",
+        "rate_plan": {
+          "id": "images_v2_stream_basic",
+          "public_name": "Images Stream Basic",
+          "scope": "account"
+        },
+        "component_values": [
+          {
+            "name": "images_storage_per_hundred_thousand",
+            "value": 0,
+            "kind": "sum"
+          },
+          {
+            "name": "image_delivered_per_hundred_thousand",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "stream_storage_thousand_minutes",
+            "value": 0,
+            "kind": "sum"
+          },
+          {
+            "name": "stream_viewed_thousand_minutes",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "image_unique_transformations",
+            "value": 1,
+            "kind": "usage"
+          }
+        ]
+      },
+      {
+        "state": "Paid",
+        "price": 0,
+        "currency": "USD",
+        "frequency": "monthly",
+        "current_period_start": "2026-11-14T02:45:48Z",
+        "current_period_end": "2026-12-14T00:00:00Z",
+        "rate_plan": {
+          "id": "r2_paid",
+          "public_name": "R2 Paid",
+          "scope": "account"
+        },
+        "component_values": [
+          {
+            "name": "r2_storage",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_class_a_operations",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_class_b_operations",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_ia_enabled",
+            "value": 1,
+            "kind": "enum"
+          },
+          {
+            "name": "r2_ia_storage",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_ia_class_a_operations",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_ia_class_b_operations",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_ia_data_retrieval",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_data_catalog_operations",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_data_catalog_bytes_processed",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2_data_catalog_objects_processed",
+            "value": 1,
+            "kind": "usage"
+          },
+          {
+            "name": "r2sql_bytes_read",
+            "value": 1,
+            "kind": "usage"
+          }
+        ]
+      }
+    ]
+  },
+  "billing_usage": {
+    "http_status": 200,
+    "success": true,
+    "errors": [],
+    "query": {
+      "since": "2026-11-14T02:45:48Z",
+      "until": "2026-11-16T20:12:26Z",
+      "time_delta": "day",
+      "limit": 10000,
+      "metrics": "workersRequests,workersKVReads,imageResizingRequests,mediaUniqueTransformations"
+    },
+    "result_info": null,
+    "result_type": "dict",
+    "result_keys": [
+      "rows",
+      "data",
+      "data_lag",
+      "min",
+      "max",
+      "totals",
+      "query"
+    ],
+    "response": {
+      "rows": 0,
+      "data": null,
+      "data_lag": 0,
+      "totals": {},
+      "query": {
+        "dimensions": [],
+        "metrics": [
+          "workersRequests",
+          "workersKVReads",
+          "imageResizingRequests",
+          "mediaUniqueTransformations"
+        ],
+        "since": "2026-11-14T02:45:48Z",
+        "until": "2026-11-16T23:59:59Z",
+        "time_delta": "day",
+        "limit": 10000
+      }
+    }
+  },
+  "spend_policies": {
+    "http_status": 200,
+    "success": true,
+    "errors": [],
+    "result_type": "list",
+    "policy_count": 0,
+    "policy_field_names": []
+  },
+  "billing_history": {
+    "http_status": 200,
+    "success": true,
+    "errors": [],
+    "result_info": {
+      "page": 1,
+      "per_page": 50,
+      "next_page": false
+    },
+    "result_type": "list",
+    "record_count": 0,
+    "record_field_names": [],
+    "entries": []
+  },
+  "supplemental_billable_usage": {
+    "/billable-usage/info": {
+      "http_status": 200,
+      "success": true,
+      "errors": [],
+      "query": null,
+      "covered": true,
+      "subscription_periods": [
+        {
+          "billing_cycle_anchor_timestamp": "2026-12-14T00:00:00Z",
+          "start_timestamp": "2026-11-14T00:00:00Z",
+          "end_timestamp": null
+        }
+      ]
+    },
+    "/billable-usage": {
+      "http_status": 200,
+      "success": true,
+      "errors": [],
+      "query": {
+        "from": "2026-11-14",
+        "to": "2026-11-16"
+      },
+      "record_count": 7,
+      "records": [
+        {
+          "ServiceName": "R2 Data Storage (First 10GB-Month included)",
+          "ServiceFamilyName": "R2",
+          "BillingCurrency": "USD",
+          "BillingPeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+          "ConsumedQuantity": 0.0040380623,
+          "ConsumedUnit": "GB-months",
+          "PricingQuantity": 0,
+          "PricingUnit": "GB-months",
+          "BilledCost": 0,
+          "ContractedCost": 0,
+          "CumulatedContractedCost": 0
+        },
+        {
+          "ServiceName": "R2 Storage Class B Operations (First 10M included)",
+          "ServiceFamilyName": "R2",
+          "BillingCurrency": "USD",
+          "BillingPeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+          "ConsumedQuantity": 219,
+          "ConsumedUnit": "",
+          "PricingQuantity": 0,
+          "PricingUnit": "Count",
+          "BilledCost": 0,
+          "ContractedCost": 0,
+          "CumulatedContractedCost": 0
+        },
+        {
+          "ServiceName": "R2 Storage Class A Operations (First 1M included)",
+          "ServiceFamilyName": "R2",
+          "BillingCurrency": "USD",
+          "BillingPeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+          "ConsumedQuantity": 371,
+          "ConsumedUnit": "",
+          "PricingQuantity": 0,
+          "PricingUnit": "Count",
+          "BilledCost": 0,
+          "ContractedCost": 0,
+          "CumulatedContractedCost": 0
+        },
+        {
+          "ServiceName": "Images Transformed (first 5K included)",
+          "ServiceFamilyName": "Stream",
+          "BillingCurrency": "USD",
+          "BillingPeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+          "ConsumedQuantity": 49,
+          "ConsumedUnit": "",
+          "PricingQuantity": 0,
+          "PricingUnit": "Count",
+          "BilledCost": 0,
+          "ContractedCost": 0,
+          "CumulatedContractedCost": 0
+        },
+        {
+          "ServiceName": "R2 Data Storage (First 10GB-Month included)",
+          "ServiceFamilyName": "R2",
+          "BillingCurrency": "USD",
+          "BillingPeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodStart": "2026-11-15T00:00:00Z",
+          "ChargePeriodEnd": "2026-11-16T00:00:00Z",
+          "ConsumedQuantity": 1.8059666666666668e-06,
+          "ConsumedUnit": "GB-months",
+          "PricingQuantity": 0,
+          "PricingUnit": "GB-months",
+          "BilledCost": 0,
+          "ContractedCost": 0,
+          "CumulatedContractedCost": 0
+        },
+        {
+          "ServiceName": "R2 Storage Class B Operations (First 10M included)",
+          "ServiceFamilyName": "R2",
+          "BillingCurrency": "USD",
+          "BillingPeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodStart": "2026-11-15T00:00:00Z",
+          "ChargePeriodEnd": "2026-11-16T00:00:00Z",
+          "ConsumedQuantity": 631,
+          "ConsumedUnit": "",
+          "PricingQuantity": 0,
+          "PricingUnit": "Count",
+          "BilledCost": 0,
+          "ContractedCost": 0,
+          "CumulatedContractedCost": 0
+        },
+        {
+          "ServiceName": "R2 Storage Class A Operations (First 1M included)",
+          "ServiceFamilyName": "R2",
+          "BillingCurrency": "USD",
+          "BillingPeriodStart": "2026-11-14T00:00:00Z",
+          "ChargePeriodStart": "2026-11-15T00:00:00Z",
+          "ChargePeriodEnd": "2026-11-16T00:00:00Z",
+          "ConsumedQuantity": 460,
+          "ConsumedUnit": "",
+          "PricingQuantity": 0,
+          "PricingUnit": "Count",
+          "BilledCost": 0,
+          "ContractedCost": 0,
+          "CumulatedContractedCost": 0
+        }
+      ]
+    },
+    "/billable/usage": {
+      "http_status": 403,
+      "success": false,
+      "errors": [
+        {
+          "code": 1171,
+          "message": "billable-usage.api.resource.insufficient_permissions"
+        }
+      ],
+      "query": {
+        "from": "2026-11-14",
+        "to": "2026-11-16"
+      }
+    }
+  },
+  "verification_completed_at": "2026-11-16T20:14:07Z",
+  "source_commit": "4dd8958",
+  "credential_scope": {
+    "owner_requested": "Account > Billing > Read, Radiant Images account only",
+    "verified": "Active account-owned token and successful target-account read requests",
+    "limitation": "The full token policy was not inspected; exclusive permissions and resource scope are not independently attested by the verify endpoint.",
+    "mcp_configured": true,
+    "mcp_token_session_verified": false,
+    "fallback": "Token-authenticated read-only REST session expressly allowed by T064; Windows User environment used in a scoped child process."
+  },
+  "reported_usage_summary": {
+    "charge_period_start": "2026-11-14T00:00:00Z",
+    "charge_period_end_exclusive": "2026-11-16T00:00:00Z",
+    "record_count": 7,
+    "totals_by_metric": {
+      "R2 Data Storage (First 10GB-Month included)": {
+        "consumed_quantity": 0.0040398682666666665,
+        "unit": "GB-months",
+        "reported_billed_cost_usd": 0
+      },
+      "R2 Storage Class B Operations (First 10M included)": {
+        "consumed_quantity": 850,
+        "unit": "Count",
+        "reported_billed_cost_usd": 0
+      },
+      "R2 Storage Class A Operations (First 1M included)": {
+        "consumed_quantity": 831,
+        "unit": "Count",
+        "reported_billed_cost_usd": 0
+      },
+      "Images Transformed (first 5K included)": {
+        "consumed_quantity": 49,
+        "unit": "Count",
+        "reported_billed_cost_usd": 0
+      }
+    },
+    "reported_billed_cost_usd": 0,
+    "interpretation": "Only returned November 14-15 records; not current-day usage, a final invoice, or an account-wide zero-cost guarantee."
+  },
+  "operational_oauth_reads": {
+    "budget_warnings": [
+      {
+        "enabled": true,
+        "type": "billing_budget_alert",
+        "threshold_usd": 1,
+        "email_recipient_count": 1
+      },
+      {
+        "enabled": true,
+        "type": "billing_budget_alert",
+        "threshold_usd": 10,
+        "email_recipient_count": 1
+      }
+    ],
+    "workers_count": 0,
+    "d1_databases_count": 0,
+    "durable_object_namespaces_count": 0,
+    "r2_buckets_count": 1,
+    "existing_r2_bucket_preserved": true,
+    "workers_account_settings": {
+      "default_usage_model": "standard",
+      "green_compute": false
+    },
+    "images_hosted_storage": {
+      "current": 0,
+      "allowed": 0
+    },
+    "relevant_entitlements": {
+      "images.enabled": true,
+      "images.transformations_enabled": true,
+      "images.storage": 0,
+      "image_resizing.enabled": true,
+      "r2.enabled": true,
+      "r2.infrequent_access": true
+    },
+    "interpretation": "Current inventory and enabled features do not supply historical daily usage or prove the Images Free overage cutoff."
+  },
+  "documented_allowances": {
+    "workers_free": {
+      "requests_per_day": 100000,
+      "http_cpu_ms": 10,
+      "source": "https://developers.cloudflare.com/workers/platform/pricing/"
+    },
+    "d1_free": {
+      "rows_read_per_day": 5000000,
+      "rows_written_per_day": 100000,
+      "total_storage_gb": 5,
+      "source": "https://developers.cloudflare.com/workers/platform/pricing/"
+    },
+    "durable_objects_free": {
+      "requests_per_day": 100000,
+      "duration_gb_seconds_per_day": 13000,
+      "source": "https://developers.cloudflare.com/durable-objects/platform/pricing/"
+    },
+    "r2_standard": {
+      "storage_gb_month_per_month": 10,
+      "class_a_per_month": 1000000,
+      "class_b_per_month": 10000000,
+      "infrequent_access_included": false,
+      "source": "https://developers.cloudflare.com/r2/pricing/"
+    },
+    "images": {
+      "included_transformations_per_month": 5000,
+      "free_overage": "New transformations rejected",
+      "paid_overage_usd_per_1000": 0.5,
+      "account_free_cutoff_verified": false,
+      "source": "https://developers.cloudflare.com/images/pricing/"
+    }
+  },
+  "controls": {
+    "spend_policy_count": 0,
+    "account_hard_cap_verified": false,
+    "budget_alerts_are_warnings_only": true,
+    "documented_spend_policy_products": [
+      "Workers",
+      "Durable Objects"
+    ],
+    "r2_images_spend_policy_coverage": false,
+    "spend_limit_is_invoice_guarantee": false,
+    "source": "https://developers.cloudflare.com/billing/manage/spend-management/",
+    "existing_application_controls": {
+      "upload_attempts_per_rolling_30_days": 300,
+      "maximum_current_portfolio_images": 60,
+      "evidence": "research.md R-24; not newly exercised by this billing verification"
+    }
+  },
+  "remaining_gaps": [
+    "Generic billing/usage returns zero rows, null data and empty totals; missing values are not treated as zero. Server echoes until at end of UTC day despite the explicit current-time request.",
+    "Alpha billable-usage v1 supplies R2 and Images records through November 16 00:00 UTC only; current-day consumption and final charges remain unreported.",
+    "Restricted alpha billable/usage v2 returns HTTP 403, code 1171; no permission expansion was attempted.",
+    "Historical daily Workers, D1 and Durable Objects totals are not supplied by these billing reads; current zero resource counts do not imply zero historical usage.",
+    "Subscriptions report R2 Paid and Images Stream Basic with state Paid and base price USD 0. Component values are subscription settings, not consumption. No Workers paid subscription was returned; standard usage-model setting alone is not a paid-plan assertion.",
+    "The Images plan name and enabled transformations do not establish rejection after the included allowance. Reconcile the account plan with the earlier owner-reported Images Free selection before relying on that cutoff.",
+    "No persistent application or recovery-monitor target exists. Wider capacity, monitoring, delivery and production acceptance gates remain open."
+  ],
+  "task_outcome": {
+    "T064": "complete",
+    "T001": "open",
+    "T058": "open",
+    "T060": "open",
+    "T063": "open",
+    "complete_tasks": 55,
+    "total_tasks": 64
+  }
+}

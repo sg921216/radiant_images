@@ -118,9 +118,12 @@ Local workflows now pin verified Node 24 action commits and `ubuntu-26.04`, matc
 successful runner family; Node 24.14.0 and pnpm 12.18.0 remain the application toolchain.
 T061 now moves keyboard focus to public main content after client-side pathname changes,
 including Back/Forward, while initial loads and hash-only navigation keep native focus.
-The owner requested T064 to connect account-scoped Billing Read access and gather the
-remaining T001 account evidence. This follow-up does not authorize a paid upgrade or
-close persistent-monitoring and release gates. See quickstart.md for its read-only scope.
+T064 is now complete through the approved secure Billing Read API fallback (R-27).
+Subscriptions and explicit-period usage reads succeed; reported November 14–15 R2/Images
+charges are $0, spend policies are empty and existing $1/$10 budget warnings are enabled.
+Daily Workers/D1/DO usage and the Images plan's Free overage cutoff remain unverified;
+T001 retains these and wider capacity/control gates. This does not authorize a paid
+upgrade or close persistent monitoring and release gates. See quickstart.md and R-27.
 
 **Bulk-read CPU remediation (2026-11-15, R-25):** The private 60-image/200-client
 baseline reproduces a 14-ms first gallery read. Incremental Hono routing reduces that
