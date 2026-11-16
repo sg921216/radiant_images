@@ -13,6 +13,7 @@ import { InvalidImage, type ImageInputs, type VerifiedImages } from './imageProv
 import { ApiFault, validate } from '../middleware/validate';
 import { auditedMutation } from './mutation';
 import { fallbackAudit } from './audit';
+import { requireStorageCapacity } from './storageCapacity';
 type GalleryRow = {
   id: string;
   tag: string;
@@ -124,6 +125,19 @@ export async function uploadImage(
       'Image validation is not configured. No image was published.',
     );
   let verified: VerifiedImages;
+  try {
+    await requireStorageCapacity(
+      env,
+      input.original.length +
+        Object.values(IMAGE_VARIANTS).reduce((sum, variant) => sum + variant.bytes, 0),
+    );
+  } catch {
+    throw new ApiFault(
+      503,
+      'storage_capacity_unavailable',
+      'Photo storage is full or could not be checked. No image was published. Try again after recovery cleanup.',
+    );
+  }
   try {
     verified = await runtime.validateImages(
       input,

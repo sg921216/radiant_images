@@ -1,5 +1,36 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-16 — T001 storage admission and daily usage (R-28)
+
+**T001 remains open; 55/64 tasks complete.** Owner dashboard confirmation resolves
+Images Free plan selection. Successful GraphQL queries now supply daily Workers/D1
+usage: November 14/15 requests 715/1,890, D1 reads 1,234/94,023 and writes 698/2,511.
+All returned daily observations are below included allowances. Missing DO aggregates
+remain missing data, not zero consumption; Workers disconnect counts remain disclosed.
+
+Implemented a combined MEDIA/RECOVERY admission check before image processing and
+backup export. It requires room within six GiB minus 32 MiB headroom for the bounded
+new write; inventory failures also refuse. Uploads return 503 with
+`storage_capacity_unavailable`; backup failures enter the existing scheduled-failure
+path. Reads, deletion and recovery processing remain available. This closes the
+previous “warn but continue writing” path without claiming an atomic/account-wide cap.
+
+| Validation | Result |
+| --- | --- |
+| Red step | Exhausted/unreadable storage still admitted uploads (201); exhausted combined storage still created a backup. Fixed after observing those failures. |
+| Full local check | Formatting, lint, types, 64 files / 290 tests and both builds pass. |
+| Browser regression | Chromium desktop gallery: 2/2 pass, zero retries; upload/edit/reorder/delete and 60-image responsive/filtering journeys. |
+| Live scoped guard probe | 34/34 private checks against real R2 succeed; ten DO tail samples at 1 ms CPU, ten front samples at 0 ms reporting resolution; all outcomes `ok`. |
+| Provider limits | Probe uses the production helper, empty buckets and a synthetic DO counter. Large/paginated/error inventories are covered locally; this is not full application acceptance. |
+| Cleanup | Probe Worker, DO namespace and both buckets absent; original bucket preserved; proxy/tail sessions stopped. |
+
+Evidence: [daily account usage](./evidence/cloudflare-account-capacity-20261116.json),
+[storage checks, source hashes and provider cleanup](./evidence/cloudflare-storage-admission-20261116.json).
+See [research R-28](./research.md#r-28-daily-usage-evidence-and-storage-admission--2026-11-16)
+for the owner confirmation, metrics limitations and current task boundary.
+Persistent monitoring/scheduled recipient proof and eventual-commit CI/release checks
+remain open. No paid upgrade, live mail or public application deployment occurred.
+
 ## 2026-11-16 — T064 Billing Read acceptance (R-27)
 
 **T064 complete; 55/64 tasks complete, 9 open.** Verified the owner-created account

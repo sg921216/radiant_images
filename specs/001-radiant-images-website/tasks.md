@@ -1,5 +1,13 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-16 T001 checkpoint (R-28):** Owner confirms the account Images page shows
+Free; daily Workers/D1 analytics are below included allowances in the returned rehearsal
+cohorts. Added fail-closed combined R2 capacity checks before image processing and new
+backups. Local quality: 64 files / 290 tests and both builds pass; Chromium gallery
+2/2 passes. Private provider helper probe: 34/34 checks; resources removed and verified.
+DO aggregate metering, persistent recovery monitoring and eventual-commit CI/release
+acceptance remain open. **T001 remains unchecked; 55/64 complete, 9 open.**
+
 **2026-11-16 Billing Read checkpoint (R-27): T064 complete.** The scoped token is
 active; approved read-only API verification succeeds for subscriptions, explicit-period
 usage and spend policies. Supplemental billing records report $0 for the returned

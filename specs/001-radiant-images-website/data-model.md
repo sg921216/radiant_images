@@ -67,6 +67,24 @@ the external-transform candidate must establish private-byte access, output safe
 the approved cost constraints. Keep staged/recovery objects in the total storage budget;
 the 60-row publication limit does not bound storage churn.
 
+Storage admission (R-28): before provider processing, an upload inventories all objects
+in both MEDIA and RECOVERY, including staged/orphaned and recovery keys. Require the
+observed total plus original bytes and maximum regenerated variants to fit within
+6 GiB minus 32 MiB headroom. New daily backups use the same check with their 16 MiB
+maximum before reading/exporting tables. Read inventories in pages of 1,000, at most
+20 pages per bucket, with an eight-second request and 30-second overall deadline;
+unknown sizes, broken pagination, unavailable inventory or exhausted headroom fail
+closed. Upload refusal is HTTP 503 `storage_capacity_unavailable`; backup refusal
+fails the scheduled job so independent monitoring can detect it. Once cleanup restores
+headroom, ordinary admission resumes. The rolling upload-attempt allowance is still
+consumed after its earlier reservation, including a later capacity refusal.
+
+This is a conservative application admission threshold, not an atomic storage
+reservation or account spending cap. Concurrent jobs, deletion receipts and necessary
+recovery writes can change storage after enumeration. Existing reads, deletion and
+restore/cleanup paths remain available; monitoring and verified cleanup are still
+required, and unrelated account buckets are outside this check.
+
 Queries: home gallery = all ordered by `sort_order`; service page = `WHERE tag = :shootType` ordered.
 
 ### `banners` (FR-012–014)

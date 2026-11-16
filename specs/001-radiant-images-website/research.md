@@ -1,5 +1,92 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-28: Daily usage evidence and storage admission — 2026-11-16
+
+**T001 advanced; remains open.** The owner explicitly confirmed: “My account page
+shows Free.” This resolves R-27's Images plan ambiguity as owner-attested dashboard
+evidence. The documented Free plan includes 5,000 unique transformations per calendar
+month and rejects new transformations beyond that allowance. Both Free and Paid include
+5,000; the allowance alone would not have established the account plan. No subscription
+was changed. The account's two Images analytics values of 49 are cumulative snapshots,
+not 98 transformations. [Images pricing](https://developers.cloudflare.com/images/pricing/).
+
+Existing operational OAuth can query GraphQL analytics. Requested UTC dates November
+14–16, daily groups, limit 10,000, without filtering to a particular Worker or D1 database:
+
+| UTC date | Workers requests | D1 rows read | D1 rows written |
+| --- | ---: | ---: | ---: |
+| November 14 | 715 | 1,234 | 698 |
+| November 15 | 1,890 | 94,023 | 2,511 |
+
+The largest observations are 1.89% of Workers' 100,000/day, 1.88% of D1's five million
+reads/day and 2.511% of its 100,000 writes/day. They describe these rehearsal days, not
+future peak demand. Workers reports zero errors but 48/396 client disconnects; do not
+claim every request completed. No November 16 row was returned at collection time.
+Adaptive operational analytics are not an exact billing ledger.
+[Workers metrics](https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-workers-metrics/),
+[D1 metrics](https://developers.cloudflare.com/d1/observability/metrics-analytics/),
+[analytics limits](https://developers.cloudflare.com/analytics/graphql-api/).
+
+Both DO invocation and periodic aggregate datasets return no rows for the same dates.
+A separate SQL aggregate also returns none. Dataset settings report enabled, 90-day
+lookback, 32-day query range and a 10,000-row limit, so the gap is not explained by a
+24-hour retention allowance. R-20/R-21 retained provider metrics and the new live probe
+below prove execution; empty current queries are not zero usage. Root cause remains
+unestablished. [Account observations and limits](./evidence/cloudflare-account-capacity-20261116.json).
+
+### Storage-control defect and fix
+
+R-24 limits upload churn, and the independent monitor alerts on recovery storage, but
+neither stopped uploads/new backups when delayed cleanup accumulated actual objects.
+New regression tests first demonstrate valid uploads returning 201 under exhausted or
+unreadable inventory and backup creation succeeding with six GiB already observed.
+
+`requireStorageCapacity` now streams inventory metadata from both MEDIA and RECOVERY,
+including all staged, orphaned and recovery objects. Before image-provider processing,
+require current bytes plus the original and maximum regenerated variants to fit within
+**6 GiB minus 32 MiB headroom**. Backup creation checks with its 16 MiB maximum before
+exporting tables. Inventory is bounded to 1,000 objects/page and 20 pages/bucket; each
+list has an eight-second deadline, with 30 seconds overall. Unverifiable sizes, broken
+pagination, unavailable inventory, or insufficient room fail closed. Upload refusal is
+HTTP 503 `storage_capacity_unavailable`; backup refusal fails the scheduled job.
+
+Tests prove pagination, combined bucket accounting, refusal before Images calls/no
+publication, recovery after cleanup, no new backup at capacity, and continued public
+reads/photo deletion during pressure. The earlier rolling upload reservation still
+counts a later capacity refusal. This is an admission threshold, not an atomic storage
+reservation or an account cap: concurrent operations, preserved deletion receipts,
+necessary recovery writes and unrelated buckets remain operational considerations.
+The 32 MiB reserve reduces overlap exposure; it does not prove a maximum invoice.
+
+### Validation and scoped provider evidence
+
+`pnpm check` passes formatting, lint, types, **64 files / 290 tests** and both builds.
+The Chromium desktop gallery suite passes **2/2**, with no retry, covering the full
+upload/edit/reorder/delete journey plus 60-image filtering/responsive layouts. Other
+browser projects were not rerun for this backend-only change; eventual-commit CI remains
+required.
+
+A disposable private Worker imported the production capacity helper and invoked it
+inside a SQLite DO against two empty real Standard R2 buckets. **34/34 checks pass**:
+24 initial requests plus ten while tailing. The twenty tail records cover ten front
+and ten DO executions, all `ok`; front CPU is 0 ms at provider resolution, DO CPU 1 ms,
+and DO wall time 110–200 ms. This narrow probe includes a synthetic invocation counter;
+it is not a full application capacity rehearsal, absolute peak or large-bucket test.
+No Images or email calls were made and no R2 objects were written. Fresh DO aggregate
+queries still returned no rows before deletion, with ingestion delay not ruled out.
+
+workers.dev and preview URLs were verified disabled; only a local service-binding proxy
+invoked the probe. The Worker, DO namespace and both buckets were deleted and absence
+verified. The pre-existing R2 bucket remains. No persistent deployment exists.
+[Guard source hashes, red/green checks, probe/tail and cleanup evidence](./evidence/cloudflare-storage-admission-20261116.json).
+
+**Remaining gates:** DO aggregate metering is unavailable; T058 still needs the
+persistent recovery target, production schedules, independent monitoring and scheduled
+recipient proof. The changed application source needs its eventual-commit CI/release
+acceptance. Preserve the accepted R-23 private restore/retry/manual-notification proof
+and R-25 sampled CPU results without extending them to unmeasured production demand.
+T001/T058/T060/T063 remain unchecked; **55/64 tasks complete, 9 open**.
+
 ## R-27: Billing Read verified and account evidence — 2026-11-16
 
 **T064 is complete.** The owner-created account token verifies as active, expiring

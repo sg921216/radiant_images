@@ -21,21 +21,27 @@ dependency-resolution candidate, and the two remaining feasibility issues.
 
 ## Why T001 cannot yet pass
 
-1. **Operational recovery proof:** the owner's policy amendment replaces unconditional
-   physical-deletion deadlines. Production must still prove verified deletion, retry after
-   failure, independent monitoring of missed/stale jobs, owner alerting, safe receipt
-   retention and refusal of expired/unsafe restores. Provider delays must be disclosed.
-2. **Image resource and usage budgets:** R-19 resolves the reproduced damaged-JPEG gap
-   with strict scan validation before Images transformation. The owner authorized a
-   temporary private deployed rehearsal on 2026-11-14. R-20 records 11/11 passing checks,
-   private originals, metadata-free derivatives and successful concurrency admission.
-   Upload/delete now run in a per-portfolio Durable Object; observed front-Worker CPU
-   fell from 109 ms to 7 ms in that cohort. R-21 adds coordinator memory p99 of ~39 MiB
-   in four successful slow-stream uploads (~68 MiB in the broader diagnostic cohort).
-   This closes missing sampled-memory evidence; percentiles are not absolute peaks.
-   A separate cold gallery-list GET reached 12 ms, so general API CPU headroom and
-   account-wide usage/overage controls still need resolution. T034 is complete; T001
-   remains open. All temporary resources were removed. See [research R-21](./research.md#r-21-gallery-memory-and-independent-recovery-monitoring--2026-11-14).
+Current checkpoint (R-28, 2026-11-16): the original JPEG and reproduced cold-read CPU
+issues have provider evidence in R-19–R-25. Billing access is complete under T064/R-27.
+R-28 adds daily Workers/D1 observations and a storage admission fix. Remaining gates:
+
+1. **Remaining resource evidence:** the owner explicitly confirms the account Images
+   page shows Free; use its documented 5,000-transformation cutoff without a paid
+   upgrade. Daily DO aggregate queries still return no rows despite live execution,
+   including a new private probe before deletion. Preserve this missing-data limitation,
+   not a zero-usage assertion. Tail samples prove execution but not complete metering.
+2. **Operational recovery proof:** R-23's isolated restore, delayed deletion/retry and
+   user-confirmed manual notification are accepted scoped evidence. T058 still needs
+   a persistent target, normal production schedules, independent monitor activation
+   and scheduled recipient proof. Do not create a public deployment to bypass this gate.
+3. **Changed-source acceptance:** R-28's combined-storage guard adds provider inventory
+   work inside the existing gallery/scheduled DO execution paths. Full local quality
+   and scoped provider evidence do not substitute for CI and release checks on the
+   eventual source commit or a full application capacity claim.
+
+The 6 GiB storage admission threshold, rolling 300-upload allowance and $1/$10
+warnings reduce exposure. They do not impose a $0 account cap or authorize an upgrade.
+T001 remains unchecked until remaining requirements have evidence.
 
 Sources: [R2 lifecycle behavior](https://developers.cloudflare.com/r2/buckets/object-lifecycles/),
 [Workers limits](https://developers.cloudflare.com/workers/platform/limits/),

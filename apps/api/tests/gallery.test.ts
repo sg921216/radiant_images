@@ -66,6 +66,62 @@ test('upload publishes only after four private writes and exposes descriptive or
     ).json(),
   ).toEqual([image]);
 });
+
+test('upload refuses combined storage pressure before image processing and resumes after cleanup', async () => {
+  const run = runtime();
+  const validateImages = vi.fn(run.validateImages!);
+  let recoveryBytes = 5.5 * 1024 ** 3;
+  const list = vi.fn(async (options?: R2ListOptions) => ({
+    objects: [{ size: options?.cursor ? recoveryBytes : 0.5 * 1024 ** 3 }],
+    truncated: !options?.cursor,
+    ...(options?.cursor ? {} : { cursor: 'second-page' }),
+  }));
+  const recovery = new Proxy(env.RECOVERY, {
+    get: (target, key) =>
+      key === 'list'
+        ? list
+        : typeof Reflect.get(target, key) === 'function'
+          ? Reflect.get(target, key).bind(target)
+          : Reflect.get(target, key),
+  });
+  const response = await upload(form(), { ...env, RECOVERY: recovery }, { ...run, validateImages });
+  expect(response.status).toBe(503);
+  expect(await response.json()).toMatchObject({ error: { code: 'storage_capacity_unavailable' } });
+  expect(validateImages).not.toHaveBeenCalled();
+  expect((await env.MEDIA.list()).objects).toHaveLength(0);
+  expect(list).toHaveBeenCalledWith(expect.objectContaining({ cursor: 'second-page' }));
+  recoveryBytes = 0;
+  const resumed = await upload(form(), { ...env, RECOVERY: recovery }, { ...run, validateImages });
+  expect(resumed.status).toBe(201);
+  expect(validateImages).toHaveBeenCalledOnce();
+  const image = (await resumed.json()) as GalleryImage;
+  recoveryBytes = 5.5 * 1024 ** 3;
+  expect((await createApp().request(`/images/${image.id}/full`, {}, env)).status).toBe(200);
+  const removed = await createApp(run).request(
+    `/admin/gallery/${image.id}`,
+    { method: 'DELETE', headers: { Authorization: authorization } },
+    { ...env, RECOVERY: recovery },
+  );
+  expect(removed.status).toBe(204);
+});
+
+test('upload refuses unmeasurable storage without calling the image provider', async () => {
+  const validateImages = vi.fn(runtime().validateImages!);
+  const media = new Proxy(env.MEDIA, {
+    get: (target, key) =>
+      key === 'list'
+        ? async () => {
+            throw new Error('synthetic_list_failure');
+          }
+        : typeof Reflect.get(target, key) === 'function'
+          ? Reflect.get(target, key).bind(target)
+          : Reflect.get(target, key),
+  });
+  const response = await upload(form(), { ...env, MEDIA: media }, { ...runtime(), validateImages });
+  expect(response.status).toBe(503);
+  expect(validateImages).not.toHaveBeenCalled();
+  expect((await env.MEDIA.list()).objects).toHaveLength(0);
+});
 test('missing/blank/long alt, mismatched MIME/size/dimensions, forged and metadata-bearing variants cannot publish', async () => {
   for (const alt of ['', '   ', 'x'.repeat(201)])
     expect((await upload(form(alt))).status).toBe(400);

@@ -113,6 +113,17 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**2026-11-16 T001 continuation (R-28):** Images Free is now explicitly confirmed by
+the owner from the account page. Account GraphQL supplies daily Workers/D1 observations
+below included quotas; missing DO aggregates remain a metering limitation. Gallery
+uploads and new backups now inventory combined MEDIA/RECOVERY storage before provider
+processing/export and refuse when the bounded new write does not fit within six GiB
+minus 32 MiB headroom or inventory cannot be verified. Existing gallery/scheduled DO
+execution paths keep this scan off the front Worker. Lists are bounded by page count
+and timeout. This is conservative admission, not an atomic or account-wide cap.
+Local quality and a private production-helper probe pass; persistent monitoring and
+eventual-commit CI/release acceptance remain open. See research R-28 and acceptance.md.
+
 **2026-11-16 delivery follow-up:** The R-25 source passes full remote CI on `e1cea09`.
 Local workflows now pin verified Node 24 action commits and `ubuntu-26.04`, matching the
 successful runner family; Node 24.14.0 and pnpm 12.18.0 remain the application toolchain.

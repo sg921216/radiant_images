@@ -67,6 +67,32 @@ test('private backup excludes transient state and restore replays independent de
   await reopenAfterRestore(env);
   expect((await createApp().request('/public/bootstrap', {}, env)).status).toBe(200);
 });
+
+test('new backups stop when combined media and recovery storage has no safe headroom', async () => {
+  const media = new Proxy(env.MEDIA, {
+    get: (target, key) =>
+      key === 'list'
+        ? async () => ({ objects: [{ size: 5 * 1024 ** 3 }], truncated: false })
+        : typeof Reflect.get(target, key) === 'function'
+          ? Reflect.get(target, key).bind(target)
+          : Reflect.get(target, key),
+  });
+  const recovery = new Proxy(env.RECOVERY, {
+    get: (target, key) =>
+      key === 'list'
+        ? async (options?: R2ListOptions) =>
+            options?.prefix
+              ? target.list(options)
+              : { objects: [{ size: 1024 ** 3 }], truncated: false }
+        : typeof Reflect.get(target, key) === 'function'
+          ? Reflect.get(target, key).bind(target)
+          : Reflect.get(target, key),
+  });
+  await expect(createBackup({ ...env, MEDIA: media, RECOVERY: recovery }, now)).rejects.toThrow(
+    'storage_capacity_unavailable',
+  );
+  expect((await env.RECOVERY.list({ prefix: 'backups/' })).objects).toHaveLength(0);
+});
 test('missing or incomplete independent ledger blocks restore and public access', async () => {
   const key = await createBackup(env, now);
   await deleteClient(env, ids[0]!, now, 'owner@example.invalid', 'synthetic');

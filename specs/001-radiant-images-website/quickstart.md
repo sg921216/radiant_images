@@ -474,6 +474,21 @@ Sources: [Billing permissions](https://developers.cloudflare.com/billing/underst
 
 ## Deployment and rollback preparation (T060)
 
+**R-28 storage admission prerequisite:** Deploy `storageCapacity.ts` with the gallery
+and backup services. Uploads check combined MEDIA/RECOVERY inventory before calling
+Images; backups check before export. At 6 GiB minus 32 MiB headroom minus the bounded
+new allocation, or when inventory cannot be established, uploads return 503
+`storage_capacity_unavailable` and backups fail visibly. Inspect independent monitoring
+and actual bucket usage, verify cleanup, then retry; do not erase required recovery
+receipts or reset the rolling upload allowance to bypass refusal. Public reads and
+photo/client deletion are not disabled by this admission gate. This threshold does
+not replace account budget warnings or promise a maximum invoice.
+
+R-28 records daily Workers/D1 analytics and the private capacity-check probe. Missing
+DO aggregate rows are not zero usage. The owner confirmed that the account Images
+page shows Free on November 16. Persistent monitoring and eventual-commit CI/provider
+acceptance remain explicit gates.
+
 **R-25 bulk-read prerequisite:** Include `BULK_READS` / `BulkReads` and the
 `bulk-reads-v1` SQLite-class migration from the release generator. GET/HEAD for public
 bootstrap, owner gallery and owner clients use separate named instances, each admitting

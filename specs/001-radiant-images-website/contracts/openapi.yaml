@@ -814,6 +814,12 @@ paths:
         Authentication and byte-limit rejections precede reservation. Exhaustion returns
         429 with Retry-After before image processing. Reads and deletion remain available.
         This application allowance is not an account-wide billing cap.
+        Before provider processing, enumerate both application R2 buckets, including
+        staged and recovery objects. Refuse with 503 storage_capacity_unavailable if
+        current bytes plus the maximum new object bytes exceed 6 GiB minus 32 MiB
+        headroom, or inventory cannot be verified. Enumeration is limited to 20 pages
+        per bucket and 30 seconds overall. This is admission control, not an atomic
+        storage reservation. Existing reads, deletion and recovery remain available.
         T001's bounded decoder feasibility proof is still required before implementation.
         Header inspection alone does not establish full decoding. Flattening an animation
         is not rejection of animated input. Provider failure must never publish unvalidated
@@ -922,7 +928,11 @@ paths:
         '429': { "$ref": "#/components/responses/TooManyRequests" }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          description: Restore is in progress, or combined storage capacity is exhausted
+            or cannot be verified (storage_capacity_unavailable).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
   /admin/gallery/order:
     put:
       tags: [ admin-gallery ]
