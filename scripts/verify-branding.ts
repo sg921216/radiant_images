@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
-import { mkdir, writeFile, readFile } from 'node:fs/promises';
-import { chromium } from '@playwright/test';
+import { mkdir, readdir, writeFile, readFile } from 'node:fs/promises';
+import { chromium, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { isIP } from 'node:net';
 
 const publicSite = process.argv.includes('--public');
-const config: { origin: string } = JSON.parse(await readFile('apps/web/branding.json', 'utf-8'));
+const config: { origin: string; contactEmail: string } = JSON.parse(
+  await readFile('apps/web/branding.json', 'utf-8'),
+);
 const origin = publicSite ? config.origin : 'http://127.0.0.1:4193';
 const reviewDirectory = `.wrangler/branding-review/${publicSite ? 'public' : 'local'}`;
 const resolvedAddress = process.env.BRANDING_VERIFY_ADDRESS;
@@ -19,6 +21,27 @@ const browser = await chromium.launch({
 const results: { path: string; width: number; accessibilityViolations: number }[] = [];
 try {
   await mkdir(reviewDirectory, { recursive: true });
+  if (process.argv.includes('--match-build')) {
+    const output = 'apps/web/dist/branding';
+    const context = await browser.newContext({ baseURL: origin });
+    const page = await context.newPage();
+    const routes: Record<string, string> = {
+      'index.html': '/',
+      'privacy.html': '/privacy',
+      '404.html': '/missing.js',
+    };
+    for (const file of await readdir(output)) {
+      if (file === '_headers') continue;
+      const path = routes[file] ?? `/${file}`;
+      const expected = await readFile(`${output}/${file}`);
+      await expect(async () => {
+        const response = await page.goto(path);
+        assert.equal(response?.status(), file === '404.html' ? 404 : 200, path);
+        assert.ok((await response.body()).equals(expected), `Published bytes differ for ${path}`);
+      }).toPass({ timeout: 60_000 });
+    }
+    await context.close();
+  }
   for (const width of [320, 768, 1280]) {
     const context = await browser.newContext({
       viewport: { width, height: 900 },
@@ -36,7 +59,7 @@ try {
       );
       assert.ok(await page.locator('a[href="/privacy"]').count());
       assert.equal(await page.locator('script, iframe, form').count(), 0);
-      assert.ok(await page.locator('a[href="mailto:radiantimages.ct@gmail.com"]').count());
+      assert.ok(await page.locator(`a[href="mailto:${config.contactEmail}"]`).count());
       assert.equal(
         await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
         true,
