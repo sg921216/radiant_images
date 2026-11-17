@@ -1,5 +1,21 @@
 # Tasks: Radiant Images Photography Website
 
+
+**2026-11-17 supplied-content intake:** Reviewed the portfolio, business card, sprig,
+moodboard, pricing guide and both READMEs; preserved originals. Prepared 17 local,
+metadata-stripped JPEG upload candidates with draft alt text and a schema-valid draft
+for the three supported pricing categories. See [content-intake.md](content-intake.md)
+and `evidence/content-intake-20261117.json`. Eleven originals exceed 10 MiB; all photos
+are maternity. Website/contact discrepancies, conditional deposit/fee wording, extra
+service categories and missing permission/newborn/family inputs remain explicit.
+Nothing was published or written to live application data. T061/T063 remain open;
+**57/67 full tasks complete**. DOCX review was text/structure only, not rendered layout.
+
+- [X] Inventory and analyze supplied brand/content materials (T063 content substep).
+- [X] Prepare and locally validate 17 upload candidates and draft alt descriptions (T061/T063 substep).
+- [X] Transcribe and schema-check supported pricing draft; record unsupported categories and policy conflicts (T063 substep).
+- [ ] Confirm final content/fees, photo selection/usage permission, additional gallery coverage and treatment of extra services (T063 remaining).
+
 **2026-11-17 owner handoff:** The owner confirms submission and reports Google's exact
 data-access status: **“Your app's data access is under review.”** This supersedes the
 unsaved-form checkpoint below. Pause interactive work at the owner's request; resume

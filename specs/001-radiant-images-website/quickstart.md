@@ -887,7 +887,7 @@ are in `evidence/private-browser-live-runs-20261117.json` and acceptance.md.
 | Print/PDF                          | Physical print plus owner content/readability review                                                                       | Local PDF rendering evidence only                       |
 | Live browser matrix                | Exact N/N-1 versions at release freeze, every plan.md browser/OS/device cell                                               | Every actual-browser/device cell BLOCKED pending access |
 | Deployed freshness/performance     | Live providers and deployed cache/clock/HTTPS observations                                                                 | Private live public-contact propagation 16.305 s; removed-option display 14.713 s; full profile remains separate |
-| Content/privacy                    | Logo, 60 approved photo assets, copy, pricing, privacy/deposit terms, usage/guardian permissions, monitored public contact | Logo approved and integrated November 17; remaining owner content/assets pending |
+| Content/privacy                    | Logo, up to 60 approved photo assets, copy, pricing, privacy/deposit terms, usage/guardian permissions, monitored public contact | Logo approved; 17 maternity photos and pricing intake prepared locally (see content-intake.md); permissions, final policies and newborn/family photos pending |
 
 For each participant record started/completed/abandoned, device, first Submit result, any
 assistance and elapsed time. For email record provider health, first Submit, API outcome,

@@ -1,5 +1,16 @@
 # Implementation evidence: Radiant Images
 
+
+**2026-11-17 supplied-content intake:** Reviewed the portfolio, business card, sprig,
+moodboard, pricing guide and both READMEs; preserved originals. Prepared 17 local,
+metadata-stripped JPEG upload candidates with draft alt text and a schema-valid draft
+for the three supported pricing categories. See [content-intake.md](content-intake.md)
+and `evidence/content-intake-20261117.json`. Eleven originals exceed 10 MiB; all photos
+are maternity. Website/contact discrepancies, conditional deposit/fee wording, extra
+service categories and missing permission/newborn/family inputs remain explicit.
+Nothing was published or written to live application data. T061/T063 remain open;
+**57/67 full tasks complete**. DOCX review was text/structure only, not rendered layout.
+
 ## 2026-11-17 — Owner confirms Google data-access review submitted; break requested
 
 The owner reports submission of the verification package and Google's exact status:

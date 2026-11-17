@@ -27,3 +27,12 @@ Sharp's default output strips source metadata. The CSS blends the white backgrou
 with the site's cream while preserving the supplied file and full composition.
 The owner confirmed use of this logo on 2026-11-17. Approval of the remaining launch
 content stays part of T063.
+
+## Additional supplied materials (2026-11-17)
+
+See [content intake](../../../specs/001-radiant-images-website/content-intake.md)
+for the portfolio inventory, brand/contact discrepancies, pricing draft and permission
+gaps. Originals remain unchanged and must not be copied into public assets. Prepared
+upload candidates live only in ignored `.wrangler/asset-review/uploads/`; the tracked
+evidence manifest records their hashes and proposed alt text. All 17 supplied photos
+are maternity images. Final selection and usage permission remain T063 gates.
