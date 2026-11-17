@@ -194,6 +194,14 @@ Rebuild after application changes before rerunning browser tests. Inspect the HT
 | `pnpm security:secrets`      | Scan repository files for secret patterns.                                                                     |
 | `pnpm security:dependencies` | Audit dependencies for moderate-or-higher vulnerabilities.                                                     |
 
+The workspace patches `picomatch@4.0.7` in the build and test toolchain for
+[GHSA-fc5q-39xc-vjpf](https://github.com/advisories/GHSA-fc5q-39xc-vjpf). The patch
+flattens simple repeated wildcard patterns and treats complex single-branch wildcard
+repetitions as literals. The production audit runs with the full policy. The development
+exception requires the exact patched lockfile entry and an advisory with no published
+fix. When the advisory lists a fix, CI flags it again. Upgrade the dependency, then
+remove the patch and its audit exception.
+
 ## Troubleshooting
 
 - **API errors or missing tables/content:** run both local migration and seed commands, then
