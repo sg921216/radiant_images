@@ -1,0 +1,80 @@
+name: Deploy public branding
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-branding.yml'
+      - 'apps/web/app/routes/branding.tsx'
+      - 'apps/web/app/components/HomeIntro.tsx'
+      - 'apps/web/app/styles/brand.css'
+      - 'apps/web/app/styles/branding.css'
+      - 'apps/web/assets/logo-*.webp'
+      - 'apps/web/public/*.webp'
+      - 'apps/web/branding.json'
+      - 'apps/web/wrangler.branding.jsonc'
+      - 'apps/web/tests/branding.test.tsx'
+      - 'scripts/prepare-branding.ts'
+      - 'scripts/verify-branding.ts'
+      - 'scripts/tests/branding-build.test.ts'
+      - 'package.json'
+      - 'apps/web/package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.npmrc'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: radiant-production-branding
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    environment:
+      name: branding-production
+      url: https://radiantimagesct.com
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      BRANDING_CONFIG: apps/web/wrangler.branding.jsonc
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # A retry of an older run should publish the current release branch.
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.14.0'
+          package-manager-cache: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        with:
+          version: '12.18.0'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec vitest run apps/web/tests/branding.test.tsx scripts/tests/branding-build.test.ts
+      - run: pnpm branding:build
+      - run: pnpm exec wrangler versions upload --config "$BRANDING_CONFIG" --dry-run
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Verify the release locally
+        run: |
+          pnpm exec wrangler dev --config "$BRANDING_CONFIG" --ip 127.0.0.1 --port 4193 > "$RUNNER_TEMP/branding-wrangler.log" 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          curl --fail --silent --show-error --retry 20 --retry-connrefused --retry-delay 1 http://127.0.0.1:4193/ --output /dev/null
+          pnpm branding:verify --match-build
+      - name: Publish the verified build
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          : "${CLOUDFLARE_ACCOUNT_ID:?Set the CLOUDFLARE_ACCOUNT_ID Actions secret}"
+          : "${CLOUDFLARE_API_TOKEN:?Set CLOUDFLARE_API_TOKEN in the branding-production environment}"
+          tag="gh-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          message="Deploy public branding from $(git rev-parse HEAD)"
+          pnpm exec wrangler versions upload --config "$BRANDING_CONFIG" --tag "$tag" --message "$message"
+          pnpm exec wrangler versions deploy --config "$BRANDING_CONFIG" --version-tag "$tag@100" --message "$message" --yes
+      - name: Verify the public website
+        run: pnpm branding:verify --public --match-build

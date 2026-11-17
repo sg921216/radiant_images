@@ -129,6 +129,20 @@ Use the automated browser workflow below to exercise sign-in, inquiries, gallery
 workflows with synthetic data and controlled providers. For provider-connected setup, see the
 [feature quickstart](specs/001-radiant-images-website/quickstart.md).
 
+## Deploy the public homepage and privacy policy
+
+Push branding changes to `main` to publish them to <https://radiantimagesct.com>.
+In GitHub Actions, **Deploy public branding → Run workflow → main** also rebuilds and
+publishes the current `main`. Runs deploy one at a time to the `radiant-images-branding`
+Worker. Each run tests the standalone build, checks it in Chromium, and verifies the
+files and pages served over public HTTPS after deployment.
+
+The workflow reads the repository secret `CLOUDFLARE_ACCOUNT_ID` and the
+`branding-production` environment secret `CLOUDFLARE_API_TOKEN`. The Cloudflare
+account token needs **Individual Workers Editor** for `radiant-images-branding`.
+The workflow publishes versions to the existing custom domain. The full web application
+and API use their own gated workflows.
+
 ## Tests and checks
 
 ### Unit, component, and API integration tests

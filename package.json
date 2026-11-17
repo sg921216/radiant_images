@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "concurrently -k -n api,web \"pnpm --filter @radiant/api dev\" \"pnpm --filter @radiant/web dev\"",
     "build": "pnpm -r build",
+    "branding:build": "tsx scripts/prepare-branding.ts",
+    "branding:verify": "tsx scripts/verify-branding.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
