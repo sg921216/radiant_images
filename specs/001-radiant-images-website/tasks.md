@@ -1,5 +1,27 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 owner handoff:** The owner confirms submission and reports Google's exact
+data-access status: **“Your app's data access is under review.”** This supersedes the
+unsaved-form checkpoint below. Pause interactive work at the owner's request; resume
+when Google approves or requests additional information. T066 remains open for the
+review outcome/applicable requirements and limits; T067 still requires the normal
+post-rotation scheduled health evidence. **57/67 complete**.
+
+- [X] Submit the Google data-access verification package (owner-confirmed).
+- [ ] Record Google's review decision/required follow-up and applicable limits (T066 remaining).
+
+**2026-11-17 verification-form follow-up:** Requirements checklist passes 16/16.
+Read-only S3 monitoring at 19:06 UTC passes, retaining the 18:56 manual Gmail-health
+timestamp; the normal November 18 03:00 UTC daily run is still future evidence.
+Owner reports and subsequent native Chrome inspection confirm unverified data access
+and missing scope justifications/intended usage/demo video. Both justifications are now
+entered in the open form and Email productivity is selected. Save is disabled without
+the demo YouTube URL, so no saved configuration/review submission is claimed. Draft text
+and a recording outline are in quickstart.md. T066/T067 remain open; **57/67 complete**.
+
+- [X] Inspect actual Google data-access requirements and prepare/enter scope explanations (T066 partial).
+- [ ] Obtain applicable Google approval/requirements and record actual limits (T066 remaining; owner confirms the verification package is submitted).
+
 **2026-11-17 18:56 UTC production consent:** Owner confirms verified published Branding
 and Audience **In production**. Fresh consent grants both Gmail scopes; replacement
 Worker secret is installed and deployed manual daily Gmail health verifies the intended

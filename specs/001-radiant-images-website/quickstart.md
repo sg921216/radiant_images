@@ -4,6 +4,15 @@ This guide proves the feature works against the [spec](./spec.md) acceptance sce
 
 ## 2026-11-17 — Google production handoff (T066 → T067)
 
+**Latest owner update — under review:** The owner confirms the verification package
+was submitted and reports **“Your app's data access is under review.”** Await Google's
+decision or requests before resuming T066. The unsaved-form/demo preparation notes below
+are historical; do not repeat submission or rotate the installed grant on their basis.
+Interactive work is paused at the owner's request. On return, recheck the normal
+post-rotation daily health after November 18 03:00 UTC for T067. Approval, actual user
+limits and that scheduled result are not yet established. No automatic follow-up task
+was created during this handoff.
+
 **18:56 UTC installed state (supersedes pending-token notes below):** Owner confirms
 Audience **In production** and verified published branding. Both Gmail scopes were
 granted freshly and `GMAIL_REFRESH_TOKEN` was installed on private API version
@@ -19,28 +28,23 @@ Gmail-health run (November 17 22:00 EST); a manual DO invocation is not that evi
 Recheck using `node --import tsx .wrangler/acceptance/s3-snapshot.mjs latest` with the
 existing ignored local read-only S3 setup, and retain sanitized health/backup timestamps.
 
-**Latest owner report:** Branding/Audience were configured, the ownership issue was
-resolved, and Google now says “Your branding has been verified and is being shown to
-users.” Brand approval is established by that owner report. Exact Audience production
-status, remaining scope-verification requirements and limits still need confirmation;
-brand verification alone does not establish them. A fresh local consent helper is
-running for owner completion. No replacement grant is installed yet. The unavailable
-console state described below is historical, before this owner report.
+**Historical pre-submission checkpoint:** Record the actual OAuth/scope-use demo and supply its YouTube
+URL in Data Access. Chrome access now works through native Computer Use after the owner
+enabled access and requested another attempt; the extension browser host remains unavailable.
+The console confirms both Gmail scopes are unverified and requires scope justifications,
+intended data usage and a demo video. Both justification fields are populated in the open
+form (888 and 949 characters), with **Email productivity** selected. **Save is disabled**
+while the video URL is missing: these are unsaved form edits, not a submitted review.
+Owner reports establish resolved ownership, verified published Branding and Audience
+**In production**; scope approval remains separate. Actual user-cap usage is not recorded.
+The independent read-only S3 check passes with no issues. Its Gmail timestamp remains
+18:56:10.936 UTC (manual daily invocation); maintenance completed at 19:06:01.974 UTC.
+Do not rotate the installed grant again merely to check the upcoming cron.
+Manual human/device acceptance remains deferred. Historical pre-installation states are
+retained in acceptance.md, not instructions to preserve a token file that was removed.
 
-**18:53 UTC consent update:** The new grant was received locally, refresh succeeds,
-both scopes are present and the intended primary sender is confirmed via HTTP 200
-send-as lookup. The owner still sees Google's unverified-app access warning. Exact
-Audience publishing status and the applicable scope-verification path remain unresolved.
-The fresh token is in ignored `.gmail-refresh-token.secret`, not yet provisioned;
-preserve it until provisioning succeeds, then remove it. The deployed grant is unchanged.
-
-The owner has resumed Google production setup; the earlier deferral of T066/T067 is
-superseded. Manual human/device acceptance remains deferred. In this session browser
-discovery reported `The browser access host is unavailable`, and selecting Chrome
-returned `Computer Use was not approved to use Google Chrome`. No Google console
-status, ownership verification, production publication or new grant was observed.
-
-In the **existing production-bound Google Cloud project**, open Google Auth Platform
+Completed setup values below are retained for reference and recovery. In the
+**existing production-bound Google Cloud project**, open Google Auth Platform
 → Branding and use these approved values:
 
 | Field | Value |
@@ -86,14 +90,63 @@ approved; do not invent one or reuse the privacy URL as a terms page.
    time, scope names and sanitized health outcomes only. Production refresh tokens can
    still be revoked/expire; retain existing failure monitoring and recovery procedures.
 
-T066/T067 remain unchecked until the respective evidence exists. The old Testing grant
-still has its recorded November 23, 21:28 EST expiry estimate. No private application
-release or real email send is required for this handoff.
+T066/T067 remain unchecked until the respective evidence exists. The old Testing grant's
+November 23 expiry estimate is historical and superseded by the installed production-mode
+grant. Steps 5–7 describe recovery if a replacement becomes necessary; they are already
+complete for this rotation except for the normal scheduled health evidence. No private
+application release or real email send is required for this handoff.
 
 Checked against Google's [brand verification guidance](https://developers.google.com/identity/verification/authentication-verification),
 [verification exceptions](https://support.google.com/cloud/answer/13464323?hl=en),
 [Gmail scopes](https://developers.google.com/workspace/gmail/api/auth/scopes) and
 [token expiry guidance](https://developers.google.com/identity/protocols/oauth2#expiration).
+
+### T066 verification form and demo preparation
+
+The console's current Data Access form requires sensitive and restricted scope
+justifications, a restricted-scope feature category, and a YouTube demo URL. No review
+was submitted and no credentials, scopes or public application access were changed.
+
+**Sensitive scope justification (888 characters, entered in Chrome):**
+
+Radiant Images is a photography business application. The authorized owner connects the business Gmail account so the server can forward visitor inquiries and send owner-initiated client emails and questionnaire invitations using users.messages.send. gmail.send supplies send-only access without inbox-reading, draft-management or mailbox-modification permissions; narrower Gmail add-on scopes cannot support this standalone server application. Visitors and clients do not connect their Gmail accounts. Recipient addresses, subjects and bodies are sent to Gmail for delivery. Accepted client sends retain the returned message ID and application email history, with questionnaire links omitted. Inquiry contents are transient and are not saved as inquiry records. Tokens remain server-side. We do not read inbox messages or use Google data for advertising, sale or generalized AI training.
+
+**Restricted scope justification (949 characters, entered in Chrome):**
+
+Radiant Images uses gmail.settings.basic only for GET users/me/settings/sendAs. When the owner saves the configured sender address, and during scheduled Gmail health checks, the server confirms the address matches the primary account or an alias with accepted verification status. This prevents use of an unverified From address. We inspect sendAsEmail, isPrimary and verificationStatus transiently; the app stores the configured sender and sanitized health outcome, not the returned alias list. We do not create or change aliases, settings, filters, forwarding or signatures, or read inbox messages. gmail.send and Google sign-in email scopes do not authorize this endpoint. Its other supported scopes grant mailbox-reading/modification or full-mail access, so settings.basic is the most limited documented permission for this required sender check. Tokens remain server-side and data is used only for the disclosed business communication features.
+
+**Intended usage:** Email productivity, for inquiry forwarding and owner-initiated
+client/session communication with verified sender configuration. Selection is a factual
+description of the feature, not Google's determination of eligibility or approval.
+
+**Demo recording outline (not yet recorded/uploaded):**
+
+1. Use the existing isolated private review application with synthetic client data and
+   designated test recipients. Show the app name, homepage and linked privacy policy.
+2. Demonstrate Google sign-in and the Gmail connection/consent flow, showing both scope
+   permissions and the expected unverified-app notice. The owner handles authentication
+   and any warning continuation. Do not capture passwords, tokens, authorization codes,
+   unrelated tabs/mail or real client information. Do not replace the installed production
+   grant just to make a video; any demonstration grant is separate and must be cleaned up.
+3. Demonstrate the configured sender check in Settings and explain that the backend only
+   reads send-as addresses to validate a primary/accepted alias. Show a rejected unverified
+   sender and retained configuration, then the intended valid sender.
+4. Demonstrate an inquiry forwarded to the designated mailbox and an owner-composed client
+   message/questionnaire invitation with synthetic data. Show provider-accepted UI results
+   and receipt, avoiding usable questionnaire tokens in the shared recording.
+5. Explain server-side token storage, transient inquiry handling and client history with
+   omitted questionnaire links. Show the policy and explain account-connection revocation.
+6. Include every OAuth client assigned to the project, as the console requests; inventory
+   these before recording. Supply the actual YouTube URL only after recording, review and
+   authorized upload, then save/read back the fields and finish verification submission.
+
+Source code reviewed: `apps/api/src/services/email.ts`, `apps/api/src/scheduled.ts`,
+`apps/api/src/routes/admin/config.ts`, `scripts/gmail-consent.ts` and the published policy
+source. Google's [sendAs.list authorization](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs/list)
+does not accept `gmail.send`; deleting the restricted permission would break the current
+sender-validation feature. [Restricted-scope guidance](https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification)
+describes review and possible assessment requirements. No exemption, assessment completion,
+paid assessment budget or approval is established here.
 
 ## 2026-11-17 — Homepage/privacy preparation for Google (T065)
 

@@ -1,0 +1,37 @@
+{
+  "observedAt": "2026-11-17T19:06:15.330Z",
+  "maintenance": {
+    "version": 1,
+    "status": "ok",
+    "startedAt": "2026-11-17T19:06:00.463Z",
+    "finishedAt": "2026-11-17T19:06:01.974Z"
+  },
+  "backup": {
+    "version": 1,
+    "status": "ok",
+    "startedAt": "2026-11-17T18:56:09.060Z",
+    "finishedAt": "2026-11-17T18:56:10.375Z"
+  },
+  "health": {
+    "at": "2026-11-17T18:56:10.936Z",
+    "gmail": "verified",
+    "failures": {
+      "inquiry": 0,
+      "auth": 0,
+      "image": 0
+    }
+  },
+  "backupCount": 4,
+  "totalBackupBytes": 26738,
+  "newestBackupCreatedAt": "2026-11-17T18:56:09.363Z",
+  "monitor": {
+    "ok": true,
+    "issues": [],
+    "counts": {
+      "overdueRecovery": 0,
+      "missedRemovalTarget": 0,
+      "overdueReceipts": 0,
+      "recoveryBytes": 27122
+    }
+  }
+}

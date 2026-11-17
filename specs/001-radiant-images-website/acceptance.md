@@ -1,5 +1,53 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-17 — Owner confirms Google data-access review submitted; break requested
+
+The owner reports submission of the verification package and Google's exact status:
+**“Your app's data access is under review.”** Evidence is owner-reported console status;
+no additional browser inspection was performed. This supersedes the prior unsaved-form
+checkpoint. Submission is complete, but scope approval, applicable follow-up requirements
+and actual limits remain pending under T066. T067 still needs the normal post-rotation
+scheduled health result after November 18 03:00 UTC; no future execution is claimed.
+
+The owner requested a break until approval or further requirements. Interactive work
+is paused with handoff notes in todo.md, tasks.md and quickstart.md. No deployment,
+credential rotation, new scheduled automation or release approval occurred. Overall
+status remains **57/67 tasks complete**. Documentation-only update; validated with a
+whitespace diff check.
+
+## 2026-11-17 — Verification draft prepared; scheduled health still pending
+
+The requirements checklist passes 16/16. Existing Git, ESLint and Prettier ignore
+configuration covers the detected stack, generated output and secrets; this private
+workspace package does not need a publishing ignore file. No application behavior changed.
+
+At 19:06:15.330 UTC the existing bucket-scoped read-only S3 monitor passes with no
+issues, overdue recovery copies, missed removal targets or overdue receipts. Maintenance
+completed at 19:06:01.974 UTC. Backup completion remains 18:56:10.375 UTC and Gmail health
+remains verified at 18:56:10.936 UTC, with zero inquiry/auth/image failures. Four backups
+total 26,738 bytes; recovery inventory totals 27,122 bytes. This rechecks the current
+healthy state; it is not a new Gmail invocation or evidence for the upcoming daily cron.
+Sanitized readback: `evidence/google-production-followup-20261117.json`.
+
+Browser discovery initially reports an unavailable host and Chrome selection is denied.
+After the owner enables access and requests another attempt, native Chrome access works.
+The owner reports Branding verified but Data Access unverified/verification required.
+Inspection of Prepare for verification confirms the selected app name, public homepage,
+privacy URL and domain, both Gmail scopes unverified, and missing scope justification,
+intended data usage and demo video. Current user-cap usage was not inspected.
+
+The Data Access form now contains code-reviewed justifications: 888 characters for
+gmail.send and 949 for gmail.settings.basic. Email productivity is selected and visibly
+confirmed. Save is disabled because the YouTube URL is empty. These are **unsaved form
+edits**, not saved settings, a submitted review, scope approval or an exemption. Text and
+the actual-demo outline are retained in quickstart.md. No video was recorded/uploaded,
+no Gmail grant was rotated, no email was sent and no application release occurred.
+
+T066 needs the real demo URL, saved/submitted package, applicable Google review outcomes
+and actual limits. T067 still needs normal post-rotation November 18 03:00 UTC scheduled
+health. Manual human/device acceptance and final content remain deferred. **57/67 tasks
+complete**; no remaining full task gate is closed by this draft preparation.
+
 ## 2026-11-17 18:56 UTC — Production Gmail grant installed and deployed health verified
 
 The owner explicitly confirms Audience publishing status **In production**, following
