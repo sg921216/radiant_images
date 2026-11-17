@@ -18,24 +18,40 @@ const pending = {
   ],
 };
 afterEach(() => vi.unstubAllGlobals());
-test('public questionnaire validates required answers and accepts a single submission', async () => {
-  const fetcher = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) =>
-    init?.method === 'POST'
-      ? Response.json({ status: 'submitted' }, { status: 201 })
-      : Response.json(pending),
-  );
-  vi.stubGlobal('fetch', fetcher);
-  render(<QuestionnaireForm token={'a'.repeat(43)} />);
-  await screen.findByLabelText('Choose your setting');
-  const user = userEvent.setup();
-  await user.click(screen.getByRole('button', { name: 'Submit questionnaire' }));
-  expect(fetcher).toHaveBeenCalledTimes(1);
-  await user.selectOptions(screen.getByLabelText('Choose your setting'), 'Garden');
-  await user.click(screen.getByRole('button', { name: 'Submit questionnaire' }));
-  await screen.findByText('Thank you. Your questionnaire has been submitted.');
-  expect(screen.queryByRole('button', { name: 'Submit questionnaire' })).not.toBeInTheDocument();
-  expect(fetcher).toHaveBeenCalledTimes(2);
-});
+test.each(['short_text', 'long_text', 'single_choice'] as const)(
+  'public questionnaire explains an unanswered required %s field and accepts a single submission',
+  async (kind) => {
+    const fetcher = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) =>
+      init?.method === 'POST'
+        ? Response.json({ status: 'submitted' }, { status: 201 })
+        : Response.json({
+            ...pending,
+            questions: [
+              {
+                ...pending.questions[0],
+                kind,
+                options: kind === 'single_choice' ? ['Studio', 'Garden'] : null,
+              },
+            ],
+          }),
+    );
+    vi.stubGlobal('fetch', fetcher);
+    render(<QuestionnaireForm token={'a'.repeat(43)} />);
+    const answer = await screen.findByLabelText('Choose your setting');
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: 'Submit questionnaire' }));
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('alert')).toHaveFocus();
+    expect(answer).toHaveAttribute('aria-invalid', 'true');
+    expect(answer).toHaveAccessibleErrorMessage('Please answer this question.');
+    if (kind === 'single_choice') await user.selectOptions(answer, 'Garden');
+    else await user.type(answer, 'Garden');
+    await user.click(screen.getByRole('button', { name: 'Submit questionnaire' }));
+    await screen.findByText('Thank you. Your questionnaire has been submitted.');
+    expect(screen.queryByRole('button', { name: 'Submit questionnaire' })).not.toBeInTheDocument();
+    expect(fetcher).toHaveBeenCalledTimes(2);
+  },
+);
 test('lost submission response retains answers and checks status without blindly resubmitting', async () => {
   let checks = 0;
   const fetcher = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {

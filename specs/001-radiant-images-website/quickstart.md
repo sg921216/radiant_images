@@ -71,6 +71,86 @@ API CPU headroom remain release evidence.
 
 ## Separate provider-connected setup
 
+### Controlled browser access on the owner's Windows computer (November 17)
+
+This is private acceptance against the existing deployed API/D1/R2, not the isolated
+synthetic-provider suite. Use only the two owner-designated receiving inboxes saved in
+ignored `.env.acceptance`. Public API workers.dev/preview/routes and R2 access stay disabled.
+Google production setup/final content remain deferred. The temporary Gmail grant must be
+replaced before approximately **November 23, 2026, 9:28 p.m. Eastern**.
+
+The web URL is **http://127.0.0.1:4273** and owner entry is
+**http://127.0.0.1:4273/admin/login**. The API's loopback port is 8793. Access works only
+on this computer. `scripts/private-browser/api.jsonc` binds the deployed API through
+Wrangler's authenticated remote service; it never adds an owner session or bypasses Google.
+Do not deploy these local gateways, bind them to a network interface, or add a public tunnel.
+
+In the existing Google OAuth web client, preserve the Gmail-consent redirect and add
+**`http://127.0.0.1:8793/auth/google/callback`** to authorized redirect URIs. Keep Testing
+audience mode and the existing Gmail scopes/grant. This URI adjustment is private login
+setup, not T065–T067 production acceptance. Google permits loopback redirect URIs for testing:
+[OAuth redirect rules](https://developers.google.com/identity/protocols/oauth2/web-server#uri-validation).
+The first attempted owner sign-in reported `redirect_uri_mismatch`. At 04:12 UTC the owner
+confirmed successful dashboard login and a read-only D1 check corroborated a live session
+created at 04:10 UTC. Login is now verified. Do not paste codes, tokens or passwords into
+chat or evidence.
+
+The deployed API configuration now declares the two loopback origins. The designated owner
+is stored in `OWNER_ALLOWLIST`; `TURNSTILE_SECRET` is server-side. The real widget's public
+site key is `0x4AAAAAAGEioZgDan3nTzgi`, restricted to `127.0.0.1` with no pre-clearance.
+No dummy CAPTCHA response or provider adapter may substitute for live acceptance. Automatic
+invocation logs/traces are off to avoid storing OAuth/questionnaire URLs; the independent
+operations monitor and sanitized application logs remain enabled. Do not capture live
+browser traces, request bodies, screenshots of inboxes, or raw tokenized URLs.
+
+The active frontend is an isolated copy in `.wrangler/private-browser/web-client`. To prepare
+a new copy, stop only the two local acceptance processes first; verify that the resolved
+copy destination is inside this repository's `.wrangler/private-browser/`, archive the prior
+build if needed, and build with these process-scoped public variables:
+
+```powershell
+$env:VITE_API_ORIGIN='http://127.0.0.1:8793'
+$env:VITE_WEB_ORIGIN='http://127.0.0.1:4273'
+$env:VITE_TURNSTILE_SITE_KEY='0x4AAAAAAGEioZgDan3nTzgi'
+$env:VITE_PUBLIC_CONTACT_EMAIL='hello@example.invalid'
+pnpm --filter @radiant/web build
+# Copy to an absent destination; do not recursively nest client/ inside an old copy.
+Copy-Item -LiteralPath 'apps/web/build/client' -Destination '.wrangler/private-browser/web-client' -Recurse
+```
+
+The public contact value above is intentionally a private-test placeholder; final monitored
+recovery-contact approval is still open. Never infer it from the private sender/recipient.
+Use a fresh terminal for ordinary tests so their builds do not inherit these variables.
+Start the following commands in separate terminals from the repository root:
+
+```powershell
+$env:WRANGLER_SEND_METRICS='false'
+$env:WRANGLER_WRITE_LOGS='false'
+pnpm exec wrangler dev --config scripts/private-browser/api.jsonc --ip 127.0.0.1 --port 8793 --inspector-port 9253 --show-interactive-dev-session=false --log-level error
+```
+
+```powershell
+$env:WRANGLER_SEND_METRICS='false'
+$env:WRANGLER_WRITE_LOGS='false'
+pnpm exec wrangler dev --config scripts/private-browser/web.jsonc --ip 127.0.0.1 --port 4273 --inspector-port 9254 --show-interactive-dev-session=false --log-level error
+```
+
+Check that all four ports listen on `127.0.0.1`. Bootstrap should return 200; anonymous
+`/admin/config` should return 401; a foreign Origin or Host should return 403 before remote
+forwarding. Recheck Cloudflare ingress and R2 privacy after any deployment. Stopping these
+processes closes browser access without interrupting the deployed schedules or monitor.
+
+Before live sends, finish owner login and real CAPTCHA verification, establish mailbox
+receipt observation, and use the predeclared ledger
+`evidence/private-browser-live-runs-20261117.json`. Run ten distinct inquiries to the initial
+inbox, then change Settings to the second inbox and run ten more. Pace at no more than five
+inquiry POSTs per fixed ten-minute IP window; negative cases consume the same limit and
+belong outside the healthy cohorts. Record every attempt and each actual receipt timestamp;
+Gmail acceptance alone is not delivery. Never blindly retry an uncertain outcome. The two
+synthetic client workflows must use the designated recipients and preserve questionnaire
+token redaction, client isolation and snapshot checks. Human timing, screen-reader review
+and the release device matrix retain the plan's separate requirements.
+
 T001 and separately scoped authorization must be resolved first. Provision the approved D1,
 media and recovery buckets using the pinned `pnpm exec wrangler`, record the returned IDs,
 and configure the release inventory described below. Creation commands do not automatically
@@ -245,6 +325,11 @@ clock applies to each Submit, not to the duration of the complete acceptance run
 
 ## Human acceptance (SC-001/008/010/012)
 
+The owner deferred manual testing until the end on 2026-11-17. The prepared
+`owner-timed-01` case has not started and must not count as a timed attempt. Resume these
+checks only when requested, using the updated verified build and preserving the existing
+private-access boundary. The local required-answer feedback fix has not yet been deployed.
+
 Preregister at least 10 first-time participants, with at least five mobile and five desktop,
 before sessions. Follow plan.md's identical goal/synthetic-data script with healthy controlled
 providers. Include everyone who starts; record device group, first Submit outcome, assistance,
@@ -319,7 +404,7 @@ full SC-004 benchmark. Step 2 verifies layout only, not the three-second timing 
 ### Settings (User Story 5)
 
 19. Change `inquiry_recipient` to a second mailbox → next inquiry arrives there. — US5-AS1
-20. Add a shoot location → new `/contact` load shows it. Remove it while a form is open, submit → `stale_option` error prompting reselect. — US5-AS2/3
+20. Add a shoot location → new `/contact` load shows it. Remove it while a form is open, submit → validation rejects the removed selection and prompts reselect while preserving the draft. If refreshed options have already reached the form, shared client validation rejects before a POST; independently verify server-side stale-option rejection (HTTP 400 `validation_failed`, no dispatch) in the API integration suite. Do not claim a live HTTP code when the browser rejected locally. — US5-AS2/3
 21. Save an invalid sender address (not the Gmail account/alias) → 400; previous config intact. — US5-AS4
 
     Save a separately approved **Public contact email** → Contact and recovery instructions
@@ -564,22 +649,24 @@ never roll back the deletion ledger. Rebuild/redeploy the matching prior fronten
 and verify direct public/admin/callback/questionnaire navigation, CORS and HTTPS. Do not
 describe the local fallback checks as a remote rollback or HTTPS rehearsal.
 
-## Release acceptance register (T063; all live/human rows OPEN)
+## Release acceptance register (T063; partial private live evidence)
 
-The local-development exception excludes live provider acceptance and recruitment. Prepare
-the following record before a separately authorized run:
+The local-development exception excludes live provider acceptance and recruitment. The
+owner separately authorized the private live runs recorded below on 2026-11-17. Public
+access remains disabled; the human/device/content gates are still open. Detailed timestamps
+are in `evidence/private-browser-live-runs-20261117.json` and acceptance.md.
 
 | Check                              | Predeclared sample or inventory                                                                                            | Current evidence                                        |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| Initial inquiry mailbox delivery   | 10 distinct eligible inquiries with healthy providers; keep every started eligible attempt                                 | No live attempts                                        |
-| Changed-recipient mailbox delivery | A separate 10 distinct inquiries after saving settings                                                                     | No live attempts                                        |
+| Initial inquiry mailbox delivery   | 10 distinct eligible inquiries with healthy providers; keep every started eligible attempt                                 | 10 submitted / accepted / received; all Inbox and under 300 s |
+| Changed-recipient mailbox delivery | A separate 10 distinct inquiries after saving settings                                                                     | 10 submitted / accepted / received under 300 s; 3 Inbox / 7 Spam |
 | First-time usability SC-008        | 10 adults: 5 desktop, 5 mobile; unassisted; at least ceil(0.9 × started) successes; all started attempts retained          | No participants enrolled                                |
 | Discovery SC-001                   | Goal-to-visible-acceptance time, under four minutes; same participant records                                              | No human timings                                        |
-| Owner workflow SC-012              | Loaded dashboard through required workflow, under three minutes without coaching                                           | Synthetic automation only                               |
-| Accessibility                      | Keyboard plus representative screen-reader and meaningful photo-alt review                                                 | Automated axe/keyboard evidence only                    |
+| Owner workflow SC-012              | Loaded dashboard through required workflow, under three minutes without coaching                                           | Agent-run real receipt/response/isolation/snapshot checks pass; human timing pending |
+| Accessibility                      | Keyboard plus representative screen-reader and meaningful photo-alt review                                                 | Automated evidence plus Chrome FAQ keyboard/200% zoom sample; screen-reader/final-photo review pending |
 | Print/PDF                          | Physical print plus owner content/readability review                                                                       | Local PDF rendering evidence only                       |
 | Live browser matrix                | Exact N/N-1 versions at release freeze, every plan.md browser/OS/device cell                                               | Every actual-browser/device cell BLOCKED pending access |
-| Deployed freshness/performance     | Live providers and deployed cache/clock/HTTPS observations                                                                 | Local controlled results only                           |
+| Deployed freshness/performance     | Live providers and deployed cache/clock/HTTPS observations                                                                 | Private live public-contact propagation 16.305 s; removed-option display 14.713 s; full profile remains separate |
 | Content/privacy                    | Logo, 60 approved photo assets, copy, pricing, privacy/deposit terms, usage/guardian permissions, monitored public contact | Owner approval/assets pending                           |
 
 For each participant record started/completed/abandoned, device, first Submit result, any

@@ -35,7 +35,12 @@ export function answersSchema(questions: Question[]) {
   const shape: Record<string, z.ZodType> = {};
   for (const question of questions) {
     let field = z
-      .string()
+      .string({
+        error: (issue) =>
+          question.required && issue.input === undefined
+            ? 'Please answer this question.'
+            : undefined,
+      })
       .trim()
       .max(question.kind === 'short_text' ? 300 : 4000);
     if (question.required) field = field.min(1, 'Please answer this question.');

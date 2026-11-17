@@ -38,10 +38,11 @@ new_sqlite_classes = ["ScheduledOperations"]
 tag = "bulk-reads-v1"
 new_sqlite_classes = ["BulkReads"]
 
-# Deliberately unroutable until origins and live sign-in/CAPTCHA pass acceptance.
+# Browser acceptance uses the authenticated remote binding from loopback gateways.
+# These origins do not enable Worker ingress; public routes remain disabled above.
 [vars]
-WEB_ORIGIN = "https://web.acceptance.invalid"
-API_ORIGIN = "https://api.acceptance.invalid"
+WEB_ORIGIN = "http://127.0.0.1:4273"
+API_ORIGIN = "http://127.0.0.1:8793"
 
 [[d1_databases]]
 binding = "DB"
@@ -59,13 +60,13 @@ bucket_name = "radiant-images-recovery"
 [triggers]
 crons = ["*/5 * * * *", "0 3 * * *"]
 
-# Private operational acceptance only; reassess sampling/privacy before public release.
+# Retain sanitized application logs and independent R2/GitHub monitoring. Automatic
+# invocation URLs and traces could capture OAuth codes or questionnaire tokens.
 [observability]
 enabled = true
 head_sampling_rate = 1
 [observability.logs]
 enabled = true
-invocation_logs = true
+invocation_logs = false
 [observability.traces]
-enabled = true
-head_sampling_rate = 1
+enabled = false

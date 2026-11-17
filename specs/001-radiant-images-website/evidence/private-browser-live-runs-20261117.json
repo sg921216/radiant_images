@@ -1,0 +1,704 @@
+{
+  "declaredAt": "2026-11-16T23:06:22.029103-05:00",
+  "sourceHead": "7b6e88c7407de21824908885586991a3b1135b0b",
+  "mailboxesStoredInIgnoredFile": ".env.acceptance",
+  "protocol": {
+    "allStartedSubmissionsRemainInDenominator": true,
+    "allMustBeAcceptedAndReceivedWithinSeconds": 300,
+    "rateLimit": "5 inquiry POSTs per IP per fixed 600-second UTC window; pace across windows, never reset limits or spoof IPs",
+    "negativeCasesSeparate": true,
+    "automaticSendRetries": false,
+    "receiptEvidence": "Recipient mailbox Received/internal arrival time or timestamped recipient observation; Gmail send acceptance alone is insufficient",
+    "subjectsAndBodies": "Clearly labelled PRIVATE TEST with case ID; synthetic contact/session details only"
+  },
+  "runs": [
+    {
+      "runId": "private-20261117-initial",
+      "task": "T025",
+      "recipientRole": "initial inquiry inbox",
+      "predeclaredCount": 10,
+      "status": "passed",
+      "submitted": 10,
+      "accepted": 10,
+      "received": 10,
+      "cases": [
+        {
+          "caseId": "initial-01",
+          "submittedAt": "2026-11-17T04:25:55.116Z",
+          "acceptedAt": "2026-11-17T04:25:56.551Z",
+          "receivedAt": "2026-11-17T04:26:27.426Z",
+          "submitToReceiptSeconds": 32.31,
+          "outcome": "accepted_and_received",
+          "receiptEvidence": "Timestamped Gmail recipient Inbox observation; conservative upper bound, not exact server arrival time",
+          "acknowledgementObservedAt": "2026-11-17T04:26:04.884Z"
+        },
+        {
+          "caseId": "initial-02",
+          "submittedAt": "2026-11-17T04:28:43.779Z",
+          "acceptedAt": "2026-11-17T04:28:45.05Z",
+          "receivedAt": "2026-11-17T04:29:49.059Z",
+          "submitToReceiptSeconds": 65.28,
+          "outcome": "accepted_and_received",
+          "receiptEvidence": "Timestamped Gmail matching case search, message labelled Inbox; conservative upper bound",
+          "acknowledgementObservedAt": "2026-11-17T04:28:54.958Z"
+        },
+        {
+          "caseId": "initial-03",
+          "submittedAt": "2026-11-17T04:35:34.281Z",
+          "acceptedAt": "2026-11-17T04:35:35.667Z",
+          "receivedAt": "2026-11-17T04:36:03.15Z",
+          "submitToReceiptSeconds": 28.869,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:35:43.017Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, distinct matching case ID; conservative upper bound"
+        },
+        {
+          "caseId": "initial-04",
+          "submittedAt": "2026-11-17T04:34:55.353Z",
+          "acceptedAt": "2026-11-17T04:34:56.295Z",
+          "receivedAt": "2026-11-17T04:36:03.15Z",
+          "submitToReceiptSeconds": 67.797,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:35:04.046Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, distinct matching case ID; conservative upper bound"
+        },
+        {
+          "caseId": "initial-05",
+          "submittedAt": "2026-11-17T04:33:56.547Z",
+          "acceptedAt": "2026-11-17T04:33:57.614Z",
+          "receivedAt": "2026-11-17T04:36:03.15Z",
+          "submitToReceiptSeconds": 126.603,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:34:08.408Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, distinct matching case ID; conservative upper bound"
+        },
+        {
+          "caseId": "initial-06",
+          "submittedAt": "2026-11-17T04:43:19.891Z",
+          "acceptedAt": "2026-11-17T04:43:20.907Z",
+          "receivedAt": "2026-11-17T04:43:52.091Z",
+          "submitToReceiptSeconds": 32.2,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:43:30.089Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, ten distinct matching case IDs; conservative upper bound"
+        },
+        {
+          "caseId": "initial-07",
+          "submittedAt": "2026-11-17T04:42:49.046Z",
+          "acceptedAt": "2026-11-17T04:42:50.034Z",
+          "receivedAt": "2026-11-17T04:43:52.091Z",
+          "submitToReceiptSeconds": 63.045,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:42:57.970Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, ten distinct matching case IDs; conservative upper bound"
+        },
+        {
+          "caseId": "initial-08",
+          "submittedAt": "2026-11-17T04:42:20.131Z",
+          "acceptedAt": "2026-11-17T04:42:21.222Z",
+          "receivedAt": "2026-11-17T04:43:52.091Z",
+          "submitToReceiptSeconds": 91.96,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:42:29.335Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, ten distinct matching case IDs; conservative upper bound"
+        },
+        {
+          "caseId": "initial-09",
+          "submittedAt": "2026-11-17T04:41:47.663Z",
+          "acceptedAt": "2026-11-17T04:41:48.708Z",
+          "receivedAt": "2026-11-17T04:43:52.091Z",
+          "submitToReceiptSeconds": 124.428,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:41:59.615Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, ten distinct matching case IDs; conservative upper bound"
+        },
+        {
+          "caseId": "initial-10",
+          "submittedAt": "2026-11-17T04:41:20.909Z",
+          "acceptedAt": "2026-11-17T04:41:22.007Z",
+          "receivedAt": "2026-11-17T04:43:52.091Z",
+          "submitToReceiptSeconds": 151.182,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T04:41:30.201Z",
+          "receiptEvidence": "Timestamped Gmail cohort search restricted to Inbox, ten distinct matching case IDs; conservative upper bound"
+        }
+      ],
+      "completedAt": "2026-11-17T04:43:52.091Z"
+    },
+    {
+      "runId": "private-20261117-updated",
+      "task": "T046",
+      "recipientRole": "updated inquiry inbox",
+      "predeclaredCount": 10,
+      "status": "passed",
+      "submitted": 10,
+      "accepted": 10,
+      "received": 10,
+      "cases": [
+        {
+          "caseId": "updated-01",
+          "submittedAt": "2026-11-17T05:13:21.941Z",
+          "acceptedAt": "2026-11-17T05:13:22.964Z",
+          "receivedAt": "2026-11-17T05:13:24Z",
+          "submitToReceiptSeconds": 2.059,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:13:26.940Z",
+          "lastReceiptCheckAt": "2026-11-17T05:19:11.713Z",
+          "receiptObservedAt": "2026-11-17T05:27:16.251Z",
+          "receiptFolder": "Spam",
+          "receiptEvidence": "Yahoo raw message X-Apparently-To receipt timestamp; matching case ID and Spam folder verified",
+          "authentication": {
+            "spf": "pass",
+            "dkim": "pass",
+            "dmarc": "pass"
+          }
+        },
+        {
+          "caseId": "updated-02",
+          "submittedAt": "2026-11-17T05:12:54.255Z",
+          "acceptedAt": "2026-11-17T05:12:55.271Z",
+          "receivedAt": "2026-11-17T05:12:56Z",
+          "submitToReceiptSeconds": 1.745,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:12:58.652Z",
+          "lastReceiptCheckAt": "2026-11-17T05:19:11.713Z",
+          "receiptObservedAt": "2026-11-17T05:26:32.768Z",
+          "receiptFolder": "Spam",
+          "receiptEvidence": "Yahoo raw message X-Apparently-To receipt timestamp; matching case ID and Spam folder verified",
+          "authentication": {
+            "spf": "pass",
+            "dkim": "pass",
+            "dmarc": "pass"
+          }
+        },
+        {
+          "caseId": "updated-03",
+          "submittedAt": "2026-11-17T05:12:32.532Z",
+          "acceptedAt": "2026-11-17T05:12:33.759Z",
+          "receivedAt": "2026-11-17T05:12:35Z",
+          "submitToReceiptSeconds": 2.468,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:12:36.342Z",
+          "lastReceiptCheckAt": "2026-11-17T05:19:11.713Z",
+          "receiptObservedAt": "2026-11-17T05:25:25.212Z",
+          "receiptFolder": "Spam",
+          "receiptEvidence": "Yahoo raw message X-Apparently-To receipt timestamp; matching case ID and Spam folder verified",
+          "authentication": {
+            "spf": "pass",
+            "dkim": "pass",
+            "dmarc": "pass"
+          }
+        },
+        {
+          "caseId": "updated-04",
+          "submittedAt": "2026-11-17T05:12:06.324Z",
+          "acceptedAt": "2026-11-17T05:12:07.484Z",
+          "receivedAt": "2026-11-17T05:14:31.691Z",
+          "submitToReceiptSeconds": 145.367,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:12:10.118Z",
+          "receiptEvidence": "Timestamped Yahoo message inspection; Inbox label and exact case ID verified; conservative upper bound",
+          "receiptFolder": "Inbox"
+        },
+        {
+          "caseId": "updated-05",
+          "submittedAt": "2026-11-17T05:11:24.808Z",
+          "acceptedAt": "2026-11-17T05:11:26.157Z",
+          "receivedAt": "2026-11-17T05:11:28Z",
+          "submitToReceiptSeconds": 3.192,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:11:29.141Z",
+          "lastReceiptCheckAt": "2026-11-17T05:19:11.713Z",
+          "receiptObservedAt": "2026-11-17T05:24:13.613Z",
+          "receiptFolder": "Spam",
+          "receiptEvidence": "Yahoo raw message X-Apparently-To receipt timestamp; matching case ID and Spam folder verified",
+          "authentication": {
+            "spf": "pass",
+            "dkim": "pass",
+            "dmarc": "pass"
+          }
+        },
+        {
+          "caseId": "updated-06",
+          "submittedAt": "2026-11-17T05:35:42.413Z",
+          "acceptedAt": "2026-11-17T05:35:43.700Z",
+          "receivedAt": "2026-11-17T05:37:11.079Z",
+          "submitToReceiptSeconds": 88.666,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:35:51.004Z",
+          "receiptFolder": "Spam",
+          "receiptEvidence": "Timestamped direct Yahoo Spam message inspection; exact case ID; conservative upper bound"
+        },
+        {
+          "caseId": "updated-07",
+          "submittedAt": "2026-11-17T05:35:10.019Z",
+          "acceptedAt": "2026-11-17T05:35:11.065Z",
+          "receivedAt": "2026-11-17T05:37:00.358Z",
+          "submitToReceiptSeconds": 110.339,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:35:16.639Z",
+          "receiptFolder": "Spam",
+          "receiptEvidence": "Timestamped direct Yahoo Spam message inspection; exact case ID; conservative upper bound"
+        },
+        {
+          "caseId": "updated-08",
+          "submittedAt": "2026-11-17T05:34:26.889Z",
+          "acceptedAt": "2026-11-17T05:34:27.937Z",
+          "receivedAt": "2026-11-17T05:38:02.999Z",
+          "submitToReceiptSeconds": 216.11,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:34:31.466Z",
+          "receiptFolder": "Inbox",
+          "receiptEvidence": "Timestamped direct Yahoo Inbox message inspection; exact case ID; conservative upper bound"
+        },
+        {
+          "caseId": "updated-09",
+          "submittedAt": "2026-11-17T05:34:04.388Z",
+          "acceptedAt": "2026-11-17T05:34:05.507Z",
+          "receivedAt": "2026-11-17T05:36:48.951Z",
+          "submitToReceiptSeconds": 164.563,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:34:08.742Z",
+          "receiptFolder": "Spam",
+          "receiptEvidence": "Timestamped direct Yahoo Spam message inspection; exact case ID; conservative upper bound"
+        },
+        {
+          "caseId": "updated-10",
+          "submittedAt": "2026-11-17T05:33:38.110Z",
+          "acceptedAt": "2026-11-17T05:33:39.348Z",
+          "receivedAt": "2026-11-17T05:37:52.896Z",
+          "submitToReceiptSeconds": 254.786,
+          "outcome": "accepted_and_received",
+          "acknowledgementObservedAt": "2026-11-17T05:33:42.378Z",
+          "receiptFolder": "Inbox",
+          "receiptEvidence": "Timestamped direct Yahoo Inbox message inspection; exact case ID; conservative upper bound"
+        }
+      ],
+      "deliveryInvestigation": {
+        "observedAt": "2026-11-17T05:19:11.713Z",
+        "gmailSentCases": [
+          "updated-01",
+          "updated-02",
+          "updated-03",
+          "updated-04",
+          "updated-05"
+        ],
+        "oldestPendingDestinationVerified": true,
+        "gmailMatchingBounceObserved": false,
+        "yahooAllInboxCategoriesTestMessages": 1,
+        "yahooSpamCohortSearchMatches": 0,
+        "receiptTimingGate": "All ten submitted cases accepted and received within 300 seconds; four exact Yahoo headers and six conservative timestamped observations.",
+        "cause": "Yahoo Spam classification; SPF, DKIM and DMARC all pass on the four Spam messages.",
+        "spamFolderDirectInspection": "Four exact cases verified in Spam: updated-01, updated-02, updated-03, updated-05.",
+        "resolvedAt": "2026-11-17T05:27:16.251Z",
+        "classification": {
+          "Inbox": 3,
+          "Spam": 7
+        },
+        "rawMailOrSessionUrlsStored": false
+      },
+      "completedAt": "2026-11-17T05:38:02.999Z",
+      "deliveryQualityFinding": "3 Inbox / 7 Spam; all ten received within 300 seconds, no send retries."
+    }
+  ],
+  "ownerWorkflow": {
+    "status": "deferred_by_owner_not_started",
+    "timing": "Unassisted owner from loaded dashboard to create client, send template email, send questionnaire; strictly under 180 seconds",
+    "recipients": "Both designated inboxes, distinct synthetic clients",
+    "agentPreparation": {
+      "templateSaved": true,
+      "templateName": "PRIVATE TEST workflow 20261117",
+      "templateSubject": "PRIVATE TEST client-workflow {{lastName}}",
+      "clientsCreated": 3,
+      "questionnaireMasterCreated": true,
+      "checklistMasterCreated": true
+    },
+    "agentWorkflowStatus": "Live template/invitation delivery, response isolation and closure, checklist propagation/removal, immutable snapshots after edit/reorder/deletion, and final-master rendering/submission all verified. Unassisted owner timing remains pending.",
+    "clientCases": [
+      {
+        "caseId": "client-gmail-01",
+        "clientId": "01M7M0AM9BJ8SMZ31N9NE4RB7V",
+        "recipientRole": "initial designated inbox",
+        "templateEmailSubmittedAt": "2026-11-17T05:41:40.555Z",
+        "templateEmailAcceptedObservedAt": "2026-11-17T05:41:45.029Z",
+        "questionnaireSubmittedAt": "2026-11-17T05:42:08.005Z",
+        "questionnaireAcceptedObservedAt": "2026-11-17T05:42:13.949Z",
+        "invitationId": "01M7M0DSMGKVEKA7M4N0Z5C16A",
+        "usableLinkOmittedFromHistory": true,
+        "templateEmailReceiptObservedAt": "2026-11-17T05:44:47.530Z",
+        "questionnaireReceiptObservedAt": "2026-11-17T05:44:47.530Z",
+        "templateEmailReceiptFolder": "Inbox",
+        "questionnaireReceiptFolder": "Inbox",
+        "receiptEvidence": "Timestamped Gmail Inbox search showing exact template case ID and the only session questionnaire invitation.",
+        "templateEmailSubmitToReceiptUpperBoundSeconds": 186.975,
+        "questionnaireSubmitToReceiptUpperBoundSeconds": 159.525,
+        "questionnaireAnswerSubmittedAt": "2026-11-17T05:52:32.291Z",
+        "questionnaireCompletionObservedAt": "2026-11-17T05:52:37.415Z",
+        "completedReloadObservedAt": "2026-11-17T05:52:49.213Z",
+        "completedReloadHasEditableAnswer": false,
+        "originalQuestionSnapshotObserved": true,
+        "serverResponseSubmittedAt": "2026-11-17T05:52:33.124Z",
+        "savedEmailCount": 2,
+        "responseCount": 1,
+        "ownerCorrectResponseObservedAt": "2026-11-17T05:54:04.963Z"
+      },
+      {
+        "caseId": "client-yahoo-01",
+        "clientId": "01M7M0FK92H2DRQFPGJ3FX7BNF",
+        "recipientRole": "changed designated inbox",
+        "templateEmailSubmittedAt": "2026-11-17T05:43:30.651Z",
+        "templateEmailAcceptedObservedAt": "2026-11-17T05:43:36.993Z",
+        "questionnaireSubmittedAt": "2026-11-17T05:43:51.899Z",
+        "questionnaireAcceptedObservedAt": "2026-11-17T05:43:56.624Z",
+        "invitationId": "01M7M0GZ74GVPC57Q3Y3649N8N",
+        "usableLinkOmittedFromHistory": true,
+        "templateEmailReceiptObservedAt": "2026-11-17T05:46:57.459Z",
+        "questionnaireReceiptObservedAt": "2026-11-17T05:46:43.475Z",
+        "templateEmailReceiptFolder": "Spam",
+        "questionnaireReceiptFolder": "Inbox",
+        "receiptEvidence": "Timestamped direct Yahoo folder observations showing exact template case ID and the only session questionnaire invitation.",
+        "templateEmailSubmitToReceiptUpperBoundSeconds": 206.808,
+        "questionnaireSubmitToReceiptUpperBoundSeconds": 171.576,
+        "questionnaireAnswerSubmittedAt": "2026-11-17T05:48:31.095Z",
+        "completedReloadObservedAt": "2026-11-17T05:49:07.573Z",
+        "completedReloadHasEditableAnswer": false,
+        "requiredAnswerValidationObserved": true,
+        "originalQuestionSnapshotObserved": true,
+        "serverResponseSubmittedAt": "2026-11-17T05:48:31.717Z",
+        "savedEmailCount": 2,
+        "responseCount": 1,
+        "ownerCorrectResponseObservedAt": "2026-11-17T05:59:13.520Z"
+      }
+    ],
+    "questionnaireSnapshotCheck": {
+      "masterChangedAfterBothInvitationsAt": "2026-11-17T05:45:57.240Z",
+      "originalPrompt": "PRIVATE TEST: Enter a synthetic test response (no personal details).",
+      "newMasterPrompt": "PRIVATE TEST MASTER VERSION 2: Existing invitations must keep the original question.",
+      "invitationRendering": "Both invitations rendered their original question after the master was changed; both submitted successfully."
+    },
+    "checklistIsolation": {
+      "completedForGmailAt": "2026-11-17T05:54:45.361Z",
+      "databaseVerifiedAt": "2026-11-17T05:54:52.896Z",
+      "gmailCompleted": true,
+      "yahooCompleted": false,
+      "yahooUncheckedUiObservedAt": "2026-11-17T05:59:13.520Z"
+    },
+    "checklistMasterChecks": {
+      "addedItemId": "01M7M1F5E6TGK7QHCYJ59CZ9WM",
+      "addedSaveAt": "2026-11-17T06:00:38.086Z",
+      "addedItemIncompleteForBothAndProgressPreservedVerifiedAt": "2026-11-17T06:01:06.063Z",
+      "bothClientsReloadedAndNewItemVisible": true,
+      "renameAndReorderSavedAt": "2026-11-17T06:01:41.671Z",
+      "repeatSaveAt": "2026-11-17T06:01:49.385Z",
+      "readOnlyVerificationAt": "2026-11-17T06:01:58.862Z",
+      "labelsAndOrderUpdated": true,
+      "retainedProgressPreserved": true,
+      "duplicateStates": 0,
+      "removal": {
+        "status": "passed",
+        "actionTimeApproval": true,
+        "submittedAt": "2026-11-17T13:46:01.543Z",
+        "databaseVerifiedAt": "2026-11-17T13:46:14.210Z",
+        "removedMasterRows": 0,
+        "removedStateRows": 0,
+        "remainingItemsPerClient": 1,
+        "retainedCompletedByClient": {
+          "client-gmail-01": true,
+          "client-yahoo-01": false,
+          "client-initialization-03": false
+        },
+        "gmailReloadObservedAt": "2026-11-17T13:47:15.253Z",
+        "yahooReloadObservedAt": "2026-11-17T13:47:22.203Z"
+      },
+      "newClientInitialization": {
+        "clientId": "01M7MT9QXB5Q3PMSB9QAGNHWYW",
+        "caseId": "client-initialization-03",
+        "submittedAt": "2026-11-17T13:14:17.717Z",
+        "uiObservedAt": "2026-11-17T13:14:32.603Z",
+        "databaseVerifiedAt": "2026-11-17T13:14:44.438Z",
+        "masterItems": 2,
+        "completedItems": 0
+      }
+    },
+    "expandedSnapshotCheck": {
+      "clientId": "01M7MT9QXB5Q3PMSB9QAGNHWYW",
+      "invitationId": "01M7MTDBK62253PB9TK4AGBBAX",
+      "masterSavedAt": "2026-11-17T13:15:43.007Z",
+      "questionCount": 2,
+      "originalQuestionIds": [
+        "01M7M095B9KHMVX5APB2QP7JN2",
+        "01M7MTBMPFHPDKW5THRBH4AQH8"
+      ],
+      "originalChoicePrompt": "PRIVATE TEST CHOICE VERSION 1: Select an original choice.",
+      "originalChoices": [
+        "PRIVATE TEST original A",
+        "PRIVATE TEST original B"
+      ],
+      "inviteSubmittedAt": "2026-11-17T13:16:16.348Z",
+      "inviteAcceptedAt": "2026-11-17T13:16:17.318Z",
+      "receiptObservedAt": "2026-11-17T13:17:44.644Z",
+      "receiptFolder": "Inbox",
+      "receiptUpperBoundSeconds": 88.296,
+      "receiptEvidence": "Timestamped Gmail Inbox observation of the newly received 08:16 Eastern default questionnaire invitation; opened its private link. Invitation sends use the fixed subject, independent of the template-email draft.",
+      "renderedLatestMaster": true,
+      "responseSubmittedAt": "2026-11-17T13:21:11.016Z",
+      "serverResponseSubmittedAt": "2026-11-17T13:21:12.089Z",
+      "successObservedAt": "2026-11-17T13:21:25.106Z",
+      "responseCount": 1,
+      "selectedChoice": "PRIVATE TEST original B",
+      "postResponseMasterMutation": "edited_prompts_reordered_questions_and_changed_choices",
+      "masterMutationSubmittedAt": "2026-11-17T13:22:18.410Z",
+      "originalSnapshotDatabaseVerifiedAt": "2026-11-17T13:22:49.614Z",
+      "originalPromptsOrderChoicesAndAnswersVisibleAt": "2026-11-17T13:22:54.602Z",
+      "completedReloadObservedAt": "2026-11-17T13:23:32.163Z",
+      "completedReloadHasEditableAnswer": false,
+      "masterQuestionDeletion": "completed_with_action_time_confirmation",
+      "newInvitationAfterFinalMutation": {
+        "invitationId": "01M7MV30JWTCTNCVWJM34D5G5H",
+        "submittedAt": "2026-11-17T13:28:05.995Z",
+        "acceptedAt": "2026-11-17T13:28:06.942Z",
+        "acceptedUiObservedAt": "2026-11-17T13:28:22.214Z",
+        "savedEmailCount": 1,
+        "snapshotQuestionCount": 1,
+        "snapshotUsesUpdatedPromptAndChoices": true,
+        "receiptStatus": "received",
+        "publicRendering": "verified_updated_single_question_and_choices",
+        "interruption": "Chrome restored by user; receipt verified without any retry send.",
+        "receiptObservedAt": "2026-11-17T13:31:06.524Z",
+        "receiptFolder": "Inbox",
+        "submitToReceiptUpperBoundSeconds": 180.529,
+        "publicRenderingObservedAt": "2026-11-17T13:33:06.569Z",
+        "ownerHistoryVisible": false,
+        "responseSubmittedAt": "2026-11-17T13:33:40.807Z",
+        "serverResponseSubmittedAt": "2026-11-17T13:33:41.611Z",
+        "successObservedAt": "2026-11-17T13:34:26.498Z",
+        "responseCount": 1,
+        "distinctInvitationResponsesVerifiedAt": "2026-11-17T13:34:39.993Z"
+      },
+      "masterQuestionDeletedAt": "2026-11-17T13:27:26.769Z",
+      "deletedMasterAbsentAndSnapshotRetainedVerifiedAt": "2026-11-17T13:27:37.581Z",
+      "historyAfterDeletionObservedAt": "2026-11-17T13:27:49.250Z",
+      "status": "passed",
+      "bothCompletedVersionsVisibleWithTheirOwnPromptsChoicesAndAnswersAt": "2026-11-17T13:38:59.860Z"
+    },
+    "ownerTimingPreparation": {
+      "dashboardLoadedAt": "2026-11-17T13:55:15.825Z",
+      "timerStarted": false,
+      "ownerAvailability": "Manual testing deferred until the end by user; timer never started.",
+      "fixtureVerifiedAt": "2026-11-17T13:55:45.421Z"
+    },
+    "timedRuns": [
+      {
+        "caseId": "owner-timed-01",
+        "declaredAt": "2026-11-17T13:56:23.191329+00:00",
+        "status": "deferred_not_started",
+        "performer": "awaiting Rebekah readiness confirmation",
+        "recipientRole": "initial designated inbox",
+        "syntheticClientFirstName": "PRIVATE TEST",
+        "syntheticClientLastName": "owner-timed-01",
+        "shootType": "family",
+        "templateName": "PRIVATE TEST workflow 20261117",
+        "goal": "From loaded owner dashboard, create the specified synthetic client, send one saved-template email and one questionnaire invitation. Optional client fields blank. No navigation help or documentation during the timed attempt.",
+        "limitSecondsExclusive": 180,
+        "allStartedAttemptsRetained": true,
+        "timerStarted": false,
+        "startTrigger": "Start now goal signal after Rebekah readiness confirmation",
+        "completionEvidence": "Visible completion of both sends, saved history and actual mailbox receipts; performer attestation for assistance recorded separately.",
+        "deferredAt": "2026-11-17T13:58:10.904641+00:00",
+        "reason": "User requested holding manual testing until the end; no timed attempt started."
+      }
+    ]
+  },
+  "humanCohort": {
+    "status": "not_recruited",
+    "minimumParticipants": 10,
+    "minimumMobile": 5,
+    "minimumDesktop": 5,
+    "protocol": "Predeclare actual cohort before any session; include all starts and require ceil(0.9 * starts) first-Submit successes without coaching"
+  },
+  "deferred": [
+    "Google production T065-T067",
+    "Final content/photos/privacy approvals T023/T063"
+  ],
+  "temporaryGmailConsentReplaceBefore": "2026-11-24T02:28:00Z",
+  "browserSession": {
+    "connectedAt": "2026-11-17T04:23:40Z",
+    "control": "Windows Computer Use controlling visible Chrome Incognito",
+    "extensionStatus": "Browser access host unavailable; native Chrome window available",
+    "ownerDashboardObserved": true,
+    "initialRecipientMailboxObserved": true,
+    "updatedRecipientMailboxObserved": true,
+    "publicIngressRecheckedAt": "2026-11-17T13:25:55.540Z",
+    "workersDevEnabled": false,
+    "previewsEnabled": false,
+    "workerCustomDomains": 0,
+    "manualCaptcha": "Fresh per-inquiry interactive checks; require action-time confirmation or user completion",
+    "latestConnectionDiagnostic": {
+      "observedAt": "2026-11-17T04:58:55.696331+00:00",
+      "chromeRunning": true,
+      "extensionInstalled": true,
+      "extensionEnabled": true,
+      "extensionProfile": "Default",
+      "nativeHostManifestCorrect": true,
+      "nativeHostRegistryCorrect": true,
+      "browserConnectionAttempts": 2,
+      "browserConnectionError": "The browser access host is unavailable",
+      "nextAction": "Restart ChatGPT desktop app and resume the same conversation; preserve private deployment and completed delivery evidence"
+    },
+    "resumption": {
+      "extensionConnection": "Browser access host still unavailable",
+      "nativeChromeControl": "working",
+      "localGateways": "Restarted after app restart; listeners verified on 127.0.0.1 only",
+      "updatedRecipientMailboxSignedIn": true,
+      "updatedCohortSearchBeforeSending": "No messages matched"
+    },
+    "loopbackListenersRecheckedAt": "2026-11-17T13:25:55.540Z",
+    "loopbackPorts": [
+      4273,
+      8793,
+      9253,
+      9254
+    ]
+  },
+  "settingsChecks": {
+    "invalidSave": {
+      "attemptedAt": "2026-11-17T04:49:50.071Z",
+      "uiMessage": "Check the settings below. Nothing has been changed.",
+      "storedOriginalRecipientSenderPublicContactVerifiedAt": "2026-11-17T04:50:05.769Z",
+      "passed": true
+    },
+    "recipientChange": {
+      "submittedAt": "2026-11-17T04:50:14.146Z",
+      "storedUpdatedRecipientVerifiedAt": "2026-11-17T04:50:21.803Z",
+      "senderAndPublicContactUnchanged": true,
+      "uiSavedObserved": true
+    },
+    "publicContactFreshness": {
+      "submittedAt": "2026-11-17T04:50:41.626Z",
+      "alreadyOpenContactObservedAt": "2026-11-17T04:50:57.931Z",
+      "seconds": 16.305,
+      "privateRecipientAndSenderUnchanged": true,
+      "syntheticPlaceholderOnly": true,
+      "restoreSubmittedAt": "2026-11-17T04:51:13.439Z",
+      "restoredValueVerifiedAt": "2026-11-17T05:04:23.741Z"
+    },
+    "staleForm": {
+      "status": "passed",
+      "caseId": "negative-stale-01",
+      "temporaryLocationSavedAt": "2026-11-17T06:03:21.334Z",
+      "temporaryLocation": "PRIVATE TEST temporary location",
+      "newContactLoadIncludesOption": true,
+      "selectedOnOpenForm": true,
+      "submitted": true,
+      "separateFromHealthyCohorts": true,
+      "temporaryLocationRemovedAt": "2026-11-17T13:34:57.219Z",
+      "alreadyOpenFormNoLongerAvailableObservedAt": "2026-11-17T13:35:11.932Z",
+      "removedOptionPropagationUpperBoundSeconds": 14.713,
+      "selectedLabel": "PRIVATE TEST temporary location (no longer available)",
+      "currentVerificationFeedback": "Verification is unavailable. Please try again shortly.",
+      "restoredLocationsAndPrivateAddressInvariantsVerifiedAt": "2026-11-17T13:37:21.010Z",
+      "browserSubmitClickedAt": "2026-11-17T13:43:59.061Z",
+      "rejectionObservedAt": "2026-11-17T13:44:04.734Z",
+      "captchaCompletedWithActionTimeApproval": true,
+      "feedback": [
+        "Please check the highlighted fields.",
+        "Choose a current location."
+      ],
+      "draftFieldsRetained": [
+        "firstName",
+        "lastName",
+        "email",
+        "shootType",
+        "message"
+      ],
+      "rejectionLayer": "shared client validation before API call, established by refreshed options, displayed feedback and source path",
+      "liveHttpStatusObserved": false,
+      "inquirySendAuditVerifiedAt": "2026-11-17T13:45:00.758Z",
+      "inquirySendAuditCount": 20,
+      "lastInquirySendAt": "2026-11-17T05:35:43.700Z",
+      "emailSent": false
+    },
+    "unverifiedSender": {
+      "submittedAt": "2026-11-17T06:02:58.315Z",
+      "rejectionObservedAt": "2026-11-17T06:03:11.972Z",
+      "uiMessage": "Choose the Gmail identity or an accepted send-as alias.",
+      "databaseVerifiedAt": "2026-11-17T06:03:05.187Z",
+      "senderRecipientPublicContactAndOptionsPreserved": true,
+      "previousUpdatedAtPreserved": "2026-11-17T04:51:14.114Z",
+      "passed": true
+    },
+    "taskStatus": {
+      "task": "T046",
+      "status": "complete",
+      "basis": "Live recipient receipt, public-contact propagation, atomic invalid settings/sender rejection and stale-form rejection plus green settings/API integration coverage."
+    }
+  },
+  "manualChromeChecks": {
+    "testedAt": "2026-11-17T13:24:34.359Z",
+    "browser": "Google Chrome 157.0.8103.79",
+    "os": "Windows NT 10.0.26200.0",
+    "nativeChromeWindowWidth": 587,
+    "scope": "FAQ keyboard and text reflow sample; live owner/form checks elsewhere in this ledger. Not the full release matrix or screen-reader review.",
+    "faqSkipLinkVisibleFocus": true,
+    "faqSkipLinkMovesToMain": true,
+    "faqAccordionKeyboardOpened": true,
+    "faqAccordionVisibleFocus": true,
+    "faqTextReflowAt200PercentObserved": true,
+    "screenReader": "pending",
+    "finalPhotoAltReview": "deferred_final_content",
+    "screenshotsRetained": false,
+    "screenReaderAppsInConnectedInventory": []
+  },
+  "ciRecheck": {
+    "observedAt": "2026-11-17T13:27:37Z",
+    "runId": 44011757954,
+    "conclusion": "success",
+    "sourceHead": "7b6e88c7407de21824908885586991a3b1135b0b",
+    "workspaceHeadMatches": true,
+    "uncommittedGatewayAndEvidenceOutsideRun": true
+  },
+  "manualTestingDeferral": {
+    "requestedAt": "2026-11-17T13:58:10.904652+00:00",
+    "scope": "Manual testing until the end, including owner/participant usability and manual browser/accessibility checks. Continue useful non-manual implementation and verification work.",
+    "ownerTimedAttemptsStarted": 0
+  },
+  "automatedFollowup": {
+    "finding": "Untouched required questionnaire answers displayed a raw schema type error.",
+    "status": "fixed_and_locally_validated",
+    "implementation": "Shared schema customizes the error for absent required answers only.",
+    "webRed": {
+      "failed": 3,
+      "passed": 1,
+      "questionKinds": [
+        "short_text",
+        "long_text",
+        "single_choice"
+      ]
+    },
+    "apiRed": {
+      "failed": 1,
+      "unselected": 7
+    },
+    "focusedGreen": {
+      "files": 3,
+      "passed": 17
+    },
+    "fullLocalSuite": {
+      "files": 65,
+      "passed": 305,
+      "durationSeconds": 98.35
+    },
+    "typecheck": "passed",
+    "lint": "passed",
+    "productionBuild": "passed",
+    "remoteCiIncludesFix": false,
+    "deployed": false,
+    "isolatedPrivateFrontendUpdated": false,
+    "manualRetest": "deferred_until_end_by_user",
+    "sourceFiles": [
+      "packages/shared/src/schemas/questionnaire.ts",
+      "apps/web/tests/questionnaire.test.tsx",
+      "apps/api/tests/questionnaire.test.ts"
+    ]
+  }
+}

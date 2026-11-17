@@ -114,8 +114,15 @@ test('snapshot answer validation, exact 30-day expiry and client deletion close 
     client = await prepare(f);
   expect((await f.call(`/admin/clients/${client.id}/questionnaires`, 'POST')).status).toBe(201);
   const secret = token(f);
+  const unanswered = await f.call(`/questionnaire/${secret}`, 'POST', { answers: {} });
+  expect(unanswered.status).toBe(400);
+  expect(await unanswered.json()).toMatchObject({
+    error: {
+      code: 'validation_failed',
+      fields: { [`answers.${question.id}`]: 'Please answer this question.' },
+    },
+  });
   for (const answers of [
-    {},
     { [question.id]: 'Other' },
     { [question.id]: ['Garden'] },
     { [question.id]: 'Garden', unknown: 'extra' },

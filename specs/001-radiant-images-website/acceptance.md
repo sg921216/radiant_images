@@ -1,5 +1,303 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-17 — Manual testing deferred; required-answer feedback fixed locally
+
+The user requested holding manual testing until the end and continuing useful non-manual
+work. `owner-timed-01` was prepared but **never started**; zero owner attempts enter the
+timing denominator. Owner/participant usability, representative screen-reader and manual
+browser/device checks remain deferred alongside the existing Google production and final
+content deferrals. T057/T061/T063 are not closed by automated evidence.
+
+A specific finding from the live questionnaire checks was reproduced automatically:
+submitting an untouched required answer displayed “Invalid input: expected string,
+received undefined.” The shared answer schema now gives missing required answers the
+existing human-readable “Please answer this question” message. The customization applies
+only to absent required answers, preserving optional answers, type checks, length limits
+and snapshot choice validation. It uses the documented per-schema error customization
+([Zod error customization](https://zod.dev/error-customization)).
+
+Red/green evidence:
+
+- The enhanced web regression failed for all three question kinds (short text, long text,
+  single choice), reproducing the raw schema message: **3 failed / 1 passed**.
+- The API regression separately failed on the same missing-answer message: **1 failed**;
+  seven unrelated cases were unselected in that diagnostic command, not quarantined.
+- After the shared-schema fix, the focused web/API/shared workflow selection passes
+  **17/17 tests**. The web cases verify focused error summaries, accessible field error
+  text, no invalid POST, a corrected valid submission and no repeat-submit control.
+- The complete local suite passes **65 files / 305 tests** (`pnpm test`, 98.35 seconds).
+  Whole-repository lint, type checking and the production build also pass. The API build
+  is a dry run; the web build generates all seven public routes and SPA fallback.
+
+This is an **uncommitted local fix**, outside the earlier green GitHub run for `7b6e88c`.
+It has not been deployed or copied into the isolated private-browser frontend. The live
+API, existing browser sessions and disabled public ingress were not changed. Recheck the
+updated build during the eventual manual pass after CI/private-deployment preparation.
+Task completion remains **56/67**; this improves existing T057/T061 acceptance work.
+
+## 2026-11-17 13:50 UTC — Settings acceptance and checklist removal complete
+
+The user approved the pending CAPTCHA and permanent test-checklist removal. Chrome was
+used at its current window size. The current Turnstile check completed successfully;
+`negative-stale-01` was submitted through the form at **13:43:59.061 UTC**. The refreshed
+form rejected the removed location and displayed “Please check the highlighted fields”
+and “Choose a current location” at **13:44:04.734 UTC**. First/last name, email, shoot type
+and message remained intact. Shared client validation rejects this case before its API
+call; no live HTTP error code is claimed. The read-only audit at **13:45:00.758 UTC** still
+contains exactly **20 inquiry sends**, with the latest at **05:35:43.700 UTC**. The negative
+case remains separate from both ten-case delivery cohorts.
+
+This satisfies US5-AS3's rejected stale selection with reselect guidance. Existing green
+API integration coverage independently verifies stale options return HTTP 400 without
+dispatch. Quickstart step 20 now describes these two paths instead of implying that the
+live browser must observe a `stale_option` HTTP code. Combined with the recipient delivery,
+atomic invalid-settings/sender rejection and public-contact propagation evidence above,
+**T046 is complete**. There was no executable-code change or new deployment.
+
+The added synthetic checklist item was removed and saved at **13:46:01.543 UTC**. At
+**13:46:14.210 UTC**, D1 verifies zero remaining rows for that master item and its states
+across all three clients. Each client retains one item: Gmail remains complete, Yahoo and
+the initialization client remain incomplete. Reloaded Gmail and Yahoo client pages show
+only the retained, renamed item at **13:47:15.253 / 13:47:22.203 UTC**. This completes the
+live checklist propagation/removal checks without resetting existing progress.
+
+**56/67 tasks complete.** T057 still requires Rebekah's unassisted under-three-minute
+workflow timing; the dashboard was prepared at **13:49:44.239 UTC**, but no owner timer has
+started. T025/T061/T063 retain the participant, representative screen-reader, actual-device
+and deferred-content gates. No screen-reader application appeared in the connected-app
+inventory; that observation is not a screen-reader test or an installed-software inventory.
+Public access remains disabled and Google production/final content remain deferred.
+
+## 2026-11-17 13:35 UTC — Client delivery, isolation and questionnaire snapshots
+
+Visible Chrome checks now cover three synthetic clients. Both designated inboxes received
+their template email and first questionnaire invitation within 300 seconds: four accepted
+and received messages, with conservative receipt bounds of **159.525–206.808 seconds**.
+The Yahoo template email arrived in Spam; the other three arrived in Inbox. Both clients
+submitted a questionnaire exactly once, reopened links showed completion without editable
+answers, and the owner UI displayed each response under the correct client. Usable links
+remain omitted from owner email history and retained evidence.
+
+Checklist checks passed for separate client completion, propagation of a new incomplete
+item to both existing clients, renamed/reordered labels without lost progress, repeated
+save without duplicates/reset, and a third client starting with both items incomplete.
+Permanent removal of the added checklist item still awaits the requested action-time
+confirmation. The automated transaction-failure checks remain separate from live UI evidence.
+
+An expanded two-question invitation reached Gmail Inbox in **88.296 seconds**. After its
+response, changing prompts, question order and choice text/order preserved the original
+snapshot and answers in both D1 and the owner UI. With explicit action-time confirmation,
+the short-text master question was then deleted; the completed response still retained
+both original questions and choices. A distinct invitation from the final master reached
+Gmail Inbox in **180.529 seconds**, rendered only the revised single-choice question and
+its revised options, exposed no owner history, and submitted successfully. D1 records one
+response for each invitation. At **13:38:59.860 UTC**, the owner UI showed both completed
+versions with their respective original/revised prompts, choices and answers. No uncertain
+send was retried.
+
+Actual Settings UI rejected an unverified sender with “Choose the Gmail identity or an
+accepted send-as alias.” Read-only D1 verification confirmed the previous sender, recipient,
+public contact, options and update timestamp were intact. A temporary location was added
+and selected on a new Contact form, then removed/restored at **13:34:57.219 UTC**. The
+already-open form marked it “no longer available” at **13:35:11.932 UTC** (a **14.713-second**
+upper bound). The separate negative case `negative-stale-01` has not been submitted: its
+CAPTCHA confirmation is pending, so server rejection and reselect feedback remain open.
+
+The installed browser is **Chrome 157.0.8103.79 on Windows NT 10.0.26200.0**. A live FAQ
+sample confirmed visible skip-link focus, keyboard access to main content and expandable
+answers, and readable wrapping/visible focus at 200% zoom in a 587-pixel-wide native window.
+This is partial manual evidence, not screen-reader, final-photo-alt or full N/N-1 device
+acceptance. Browser screenshots and usable questionnaire URLs were not retained as artifacts.
+
+At **13:25:55 UTC**, all four local gateway/inspector ports still listened only on
+`127.0.0.1`; workers.dev and previews remained disabled with no Worker custom domains.
+GitHub run `44011757954` was rechecked as successful for the unchanged workspace HEAD
+`7b6e88c7407de21824908885586991a3b1135b0b`. Uncommitted gateway/evidence work remains outside
+that remote run. See `evidence/private-browser-live-runs-20261117.json` for case timestamps.
+
+T025/T046/T057/T061/T063 remain open. Outstanding evidence includes the stale-form Submit,
+checklist removal, unassisted owner timing, preregistered participant cohort, representative
+screen-reader review and actual release browser/device matrix. Agent-operated workflows
+do not substitute for human timings. Google production and final content remain deferred;
+temporary Gmail consent must be replaced before **2026-11-23 21:28 Eastern**.
+
+## 2026-11-17 05:38 UTC — Changed-recipient run complete, 10/10 received
+
+The predeclared changed-recipient run is complete: **10 submitted / 10 accepted / 10
+received**, with all Submit-to-receipt timings below 300 seconds and no send retries.
+Yahoo placed **3 in Inbox and 7 in Spam**. Exact receipt headers for four cases and
+timestamped, exact-case mailbox observations for six cases establish timings of
+**1.745–254.786 seconds**. Provider acceptance is separately corroborated by ten sanitized
+`inquiry.send` audit events. The final five were submitted within the 05:30–05:40 UTC
+window, respecting the five-per-window limit.
+
+Both initial and changed-recipient SC-002 runs now pass their delivery/timing gate.
+Yahoo's Spam classification remains an explicit delivery-quality finding; messages were
+not moved or resent to improve the result. T046 still needs the actual stale-form check,
+and T025/T057/T061/T063 retain their other manual, human/device and deferred-content gates.
+
+## 2026-11-17 05:27 UTC — First five changed-recipient receipts verified
+
+The changed-recipient run has **5 submitted / 5 accepted / 5 received** of ten predeclared
+cases, with no retries. Yahoo placed updated-04 in Inbox and updated-01/02/03/05 in Spam.
+The initial Inbox and Spam search results missed the four Spam messages; direct folder
+inspection and exact case IDs resolve the earlier delivery uncertainty. Yahoo raw-message
+receipt headers establish Submit-to-receipt times of **2.059, 1.745, 2.468 and 3.192 seconds**
+for updated-01/02/03/05 respectively. Updated-04's timestamped Inbox observation provides a
+**145.367-second upper bound**. All five meet the 300-second receipt budget, while Spam
+classification remains a practical delivery finding. SPF, DKIM and DMARC pass on all four
+inspected Spam messages. No messages were moved, resent or excluded from the denominator.
+
+Only sanitized timestamps, case IDs, authentication outcomes and folder labels are retained
+in the live-run ledger; raw mail/session URLs are not stored. Updated-06 through updated-10
+remain unsubmitted at this checkpoint. T046 and the broader human/device gates remain open.
+
+## 2026-11-17 05:04 UTC — Private settings and access reverified
+
+Actual owner-browser settings checks passed. An invalid public-contact address combined
+with a draft recipient change produced “Nothing has been changed”; read-only D1 checks
+confirmed that recipient, sender and public contact all retained their original values.
+A subsequent valid save changed only the private inquiry recipient to the designated
+second inbox, with the sender and public contact unchanged.
+
+An independent synthetic public-contact change appeared in an already-open Contact page
+after **16.305 seconds**, within the 60-second budget. The original synthetic placeholder
+was restored. At **05:04:23.741 UTC**, D1 booleans confirm the changed private recipient,
+unchanged sender and restored public contact. No private mailbox address was published.
+The same checkpoint confirms workers.dev and previews disabled and zero Worker custom
+domains. Following the desktop-app restart, both local gateways were restarted and their
+listeners verified on `127.0.0.1` only.
+
+The changed-recipient run remains unsubmitted at this checkpoint. Native Chrome controls
+are usable despite the unavailable browser-extension host; URL-guard interruptions have
+required resuming and rebuilding unsent forms. Settings stale-form behavior, changed-inbox
+receipt evidence, clients/questionnaires and human/device gates remain open. Detailed
+timestamps are retained in the live-run ledger.
+
+## 2026-11-17 04:44 UTC — Initial healthy-provider run passes 10/10
+
+The predeclared initial run is complete: **10 submitted / 10 accepted / 10 received**.
+All ten distinct case IDs are visible in the designated recipient's Gmail Inbox. Every
+started submission succeeded without a send retry. Submit-to-observed-receipt upper bounds
+range from **28.869 to 151.182 seconds**, all below 300 seconds. Separate `inquiry.send`
+audit events record provider acceptance for all ten; mailbox observations establish receipt.
+The final five were submitted in the 04:40–04:50 UTC window, preserving the five-per-window
+limit. The ledger retains all timestamps and conservative observation-based timings.
+
+This satisfies only T025's initial SC-002 live-delivery run. The changed-recipient run,
+client/questionnaire delivery, unassisted owner/participant timings, physical-browser/device
+matrix, manual accessibility and deferred content/Google production gates remain open.
+
+## 2026-11-17 04:36 UTC — First five live inquiry receipts verified
+
+Visible Chrome Incognito is accessible through Windows Computer Use. The browser extension
+host remains unavailable. The actual owner dashboard and the designated initial recipient's
+Gmail mailbox are visible. Five distinct predeclared inquiries have been submitted through
+the real form and real Turnstile, accepted by the deployed API, and found in the recipient
+Inbox: **submitted 5 / accepted 5 / received 5**, of the declared ten. No send retries were
+performed. Interactive CAPTCHA checks were completed by the user or after action-time
+confirmation. Native-control URL/geometry interruptions did not trigger additional sends.
+
+Case-order Submit-to-observed-receipt upper bounds are **32.310, 65.280, 28.869, 67.797,
+126.603 seconds** for initial-01 through initial-05. These are timestamped mailbox
+observations, not exact message-server arrival times. Separate sanitized D1 audit timestamps
+corroborate provider acceptance. Every started submission remains in the declared run;
+initial-06 through initial-10 and the changed-recipient cohort remain unsubmitted at this
+checkpoint. Full details are in [the live-run ledger](./evidence/private-browser-live-runs-20261117.json).
+
+The 04:25 UTC ingress recheck confirms workers.dev and previews disabled and zero Worker
+custom domains. Public access remains disabled. T025/T046/T057/T061/T063 remain open;
+agent-operated tests do not satisfy the unassisted owner or participant/device gates.
+
+## 2026-11-17 04:12 UTC — Owner Google login verified
+
+The owner reports that login now works. Read-only production D1 verification at
+**04:12:24.922 UTC** finds one owner session, created at **04:10:00.220 UTC** and last used
+at **04:11:03.344 UTC**, with its absolute expiry still in the future. Only aggregate session
+counts/times were read; no bearer, token hash, identity grant or owner email was retrieved.
+This corroborates the owner's successful dashboard report and resolves the earlier
+`redirect_uri_mismatch` blocker. It does not establish logout/expiry or non-owner acceptance.
+
+The configured sender and initial recipient match their designated values (verified as
+booleans). There are no inquiry/client-email audit records, clients, client-email history
+rows or questionnaire invitations yet. Both predeclared ten-inquiry runs remain unstarted.
+Loopback web/API listeners remain bound to `127.0.0.1`. Browser-control inventory still
+contains no browsers, and no mailbox connector is available. The remaining execution
+dependency is browser access or owner-assisted live form/receipt observations, not more
+infrastructure provisioning. Public access, deferred production/content work and the
+November 23, 21:28 EST temporary-consent replacement deadline remain unchanged.
+
+## 2026-11-17 — CI passes; controlled browser access prepared
+
+The owner authorized the focused sequence T025/T046/T057/T061/T063, selected this Windows
+computer for loopback testing, designated two receiving inboxes, and identified the Google
+owner account. Actual addresses are retained in ignored `.env.acceptance` and the private
+Worker secret/configuration, not in this evidence. The first designated inbox is the initial
+inquiry recipient, the second is the changed recipient, and distinct synthetic clients will
+exercise both. No real email has been sent at this checkpoint.
+
+[Quality run 44011757954](https://github.com/sg921216/radiant_images/actions/runs/44011757954)
+completed successfully at **04:00:35 UTC** on `7b6e88c7407de21824908885586991a3b1135b0b`.
+The PR checkout `eda500f319509609c79cc4f7b8e9681d8f75a506` has the same tree. All quality,
+security, build and privacy steps pass: **64 files / 292 tests; 163 browser/performance
+passes across five projects; 12 declared non-target performance skips**. No functional
+quarantine or warning is recorded. [Sanitized CI evidence](./evidence/github-ci-r30-20261117.json).
+The new gateway work below is uncommitted local work and is not covered by that remote run.
+
+`scripts/private-browser/` provides local web/API gateways with exact loopback host and
+Origin checks. Only browser top-level GET navigations may arrive from Google/mail; other
+cross-site requests are rejected. The API uses a remote service binding to the existing
+`radiant-images-api`, preserving its authentication, CORS, cookies and responses without
+credential injection, redirect following or retries. Both serving and inspector ports
+4273/8793/9254/9253 bind only `127.0.0.1`. The frontend build is copied to an ignored isolated
+directory so ordinary CI/local builds cannot silently replace the active acceptance UI.
+No gateway is deployed and no tunnel is used. [Cloudflare remote bindings](https://developers.cloudflare.com/workers/local-development/).
+
+The persistent API now uses web `http://127.0.0.1:4273` and API
+`http://127.0.0.1:8793` origins. A managed Turnstile widget is restricted to `127.0.0.1`
+and its secret plus the selected `OWNER_ALLOWLIST` are installed server-side. Existing
+Gmail/auth/rate-limit secrets remain. Normal five-minute and 03:00 UTC schedules remain.
+Automatic invocation logging and traces are disabled before tokenized browser workflows;
+sanitized application logs and independent R2/GitHub monitoring remain enabled.
+Invocation logs include request URLs; see [Cloudflare logging](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs).
+Final reads confirm workers.dev/previews disabled, no Worker custom domains, and both R2
+managed public endpoints disabled with no custom domains. No public launch occurred.
+
+The first bootstrap check returned **500 `content_unavailable`** because the private
+operational environment had no pricing/pages/FAQ. A guarded, transactional 14-statement
+initialization adds labelled private-test content and the selected initial inquiry recipient,
+preserving the verified sender and synthetic public recovery address. It creates no client
+or owner-session data and does not constitute final content approval. Bootstrap now returns
+200 with four pages, four FAQs, three test packages and zero gallery images. Exact-origin
+CORS works; sender/recipient stay absent from public config. Unauthenticated owner reads
+return 401, untrusted Origin and rebound Host probes return 403.
+
+Local red/green evidence: the initial forwarding stub fails six host/origin boundary
+assertions; the guard passes all nine cases. Two additional regressions first fail for
+top-level questionnaire/email and Google callback navigation; the narrowed navigation
+exception then passes. Final focused command
+`pnpm exec vitest run scripts/tests/private-browser.test.ts scripts/tests/web-worker.test.ts scripts/tests/security-headers.test.ts --project tooling`
+passes **15/15 tests**. Tooling typecheck, whole-repository lint/format, both gateway dry runs,
+production web build and source privacy (480 files, zero blocked) pass.
+
+**Current blocker:** the owner reached Google and reported `400 redirect_uri_mismatch`.
+The existing OAuth client needs `http://127.0.0.1:8793/auth/google/callback` added to its
+authorized redirects while preserving the prior Gmail-consent callback. Browser control
+reports no available browsers, so the owner is completing this console change. Owner login
+is not yet a pass. Real Turnstile success/replay, inquiry and client/questionnaire receipt,
+settings propagation, human timings and manual screen-reader/device checks remain pending.
+[Setup evidence](./evidence/private-browser-setup-20261117.json) and
+[predeclared mail ledger](./evidence/private-browser-live-runs-20261117.json) retain these limits.
+
+The mail ledger declares **10 initial + 10 changed-recipient inquiries**, all started attempts
+in their respective denominators, no automatic retries, and independent mailbox timestamps.
+Respect the shipped five-per-IP/600-second inquiry window; do not reset counters or rotate
+identities to accelerate acceptance. Each message must arrive within 300 seconds of its own
+Submit. Negative tests remain separate. Actual human recruitment and the full release-time
+N/N-1 device matrix are still required; neither automation nor this loopback setup satisfies
+them. **55/67 tasks complete; T025/T046/T057/T061/T063 remain open.** T065–T067 and final
+content stay deferred; replace Testing Gmail consent before **November 23, 21:28 EST**.
+
 ## 2026-11-17 03:29 UTC — Scheduled alert received and recovery verified (R-30 final testing checkpoint)
 
 **The five focused private operational checks pass.** The owner explicitly confirmed

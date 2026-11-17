@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  // Local use only. Never deploy this gateway or expose it through a tunnel.
+  "name": "radiant-images-browser-api-local",
+  "account_id": "c99576a777ec2286fcd04b8433231159",
+  "main": "api.ts",
+  "compatibility_date": "2026-11-16",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [],
+  "services": [{ "binding": "API", "service": "radiant-images-api", "remote": true }],
+  "dev": { "ip": "127.0.0.1", "port": 8793, "inspector_port": 9253 },
+  "observability": { "enabled": false },
+  "send_metrics": false,
+}

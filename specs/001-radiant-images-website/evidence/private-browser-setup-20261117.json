@@ -1,0 +1,289 @@
+{
+  "recordedAt": "2026-11-17T04:08:00Z",
+  "sourceHead": "7b6e88c7407de21824908885586991a3b1135b0b",
+  "scope": "Private loopback browser preparation; no public release and no live email sent.",
+  "setup": {
+    "observedAt": "2026-11-17T04:02:26.511Z",
+    "sitekey": "0x4AAAAAAGEioZgDan3nTzgi",
+    "domains": [
+      "127.0.0.1"
+    ],
+    "mode": "managed",
+    "clearance": "no_clearance",
+    "worker": "radiant-images-api",
+    "requiredSecretNames": [
+      "AUTH_KEY",
+      "GMAIL_REFRESH_TOKEN",
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "OWNER_ALLOWLIST",
+      "RATE_LIMIT_KEY",
+      "TURNSTILE_SECRET"
+    ],
+    "secretPrinted": false
+  },
+  "privacy": {
+    "observedAt": "2026-11-17T04:07:34.514Z",
+    "workerPublic": {
+      "enabled": false,
+      "previews_enabled": false
+    },
+    "customWorkerDomains": 0,
+    "mediaPublic": false,
+    "mediaCustom": {
+      "domains": []
+    },
+    "recoveryPublic": false,
+    "recoveryCustom": {
+      "domains": []
+    },
+    "observability": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "redact_query_string": false,
+      "logs": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "persist": true,
+        "invocation_logs": false
+      },
+      "traces": {
+        "enabled": false,
+        "persist": true,
+        "head_sampling_rate": 1
+      }
+    },
+    "origins": [
+      {
+        "name": "API_ORIGIN",
+        "value": "http://127.0.0.1:8793"
+      },
+      {
+        "name": "WEB_ORIGIN",
+        "value": "http://127.0.0.1:4273"
+      }
+    ],
+    "requiredSecretPresence": {
+      "OWNER_ALLOWLIST": true,
+      "TURNSTILE_SECRET": true,
+      "GMAIL_REFRESH_TOKEN": true,
+      "GOOGLE_CLIENT_ID": true,
+      "GOOGLE_CLIENT_SECRET": true
+    }
+  },
+  "transport": {
+    "initialBootstrap": {
+      "status": 500,
+      "code": "content_unavailable",
+      "cause": "Empty pricing/content tables"
+    },
+    "remediation": "Seeded 14 statements: labelled synthetic pricing/pages/FAQ and designated initial recipient; no client, auth/session or final content fixture.",
+    "bootstrap": {
+      "status": 200,
+      "pages": 4,
+      "faq": 4,
+      "pricingPackages": 3,
+      "gallery": 0,
+      "cors": "http://127.0.0.1:4273",
+      "privateSenderRecipientAbsent": true
+    },
+    "anonymousOwnerStatus": 401,
+    "untrustedOriginStatus": 403,
+    "reboundHostStatus": 403,
+    "webLoginStatus": 200,
+    "listeners": [
+      {
+        "port": 4273,
+        "address": "127.0.0.1"
+      },
+      {
+        "port": 8793,
+        "address": "127.0.0.1"
+      },
+      {
+        "port": 9253,
+        "address": "127.0.0.1"
+      },
+      {
+        "port": 9254,
+        "address": "127.0.0.1"
+      }
+    ],
+    "httpChecks": {
+      "observedAt": "2026-11-17T04:10:38.180831+00:00",
+      "checks": [
+        {
+          "port": 4273,
+          "route": "/",
+          "scenario": "anonymous",
+          "status": 200,
+          "expected": 200,
+          "pass": true,
+          "noindex": null
+        },
+        {
+          "port": 4273,
+          "route": "/contact",
+          "scenario": "anonymous",
+          "status": 200,
+          "expected": 200,
+          "pass": true,
+          "noindex": null
+        },
+        {
+          "port": 4273,
+          "route": "/admin/login",
+          "scenario": "anonymous",
+          "status": 200,
+          "expected": 200,
+          "pass": true,
+          "noindex": "noindex, nofollow"
+        },
+        {
+          "port": 4273,
+          "route": "/admin/callback",
+          "scenario": "foreign-navigation",
+          "status": 200,
+          "expected": 200,
+          "pass": true,
+          "noindex": "noindex, nofollow"
+        },
+        {
+          "port": 4273,
+          "route": "/q/{fixture}",
+          "scenario": "foreign-navigation",
+          "status": 200,
+          "expected": 200,
+          "pass": true,
+          "noindex": "noindex, nofollow"
+        },
+        {
+          "port": 4273,
+          "route": "/missing-acceptance-file.js",
+          "scenario": "anonymous",
+          "status": 404,
+          "expected": 404,
+          "pass": true,
+          "noindex": null
+        },
+        {
+          "port": 4273,
+          "route": "/",
+          "scenario": "rebound-host",
+          "status": 403,
+          "expected": 403,
+          "pass": true,
+          "noindex": "noindex, nofollow"
+        },
+        {
+          "port": 8793,
+          "route": "/public/bootstrap",
+          "scenario": "origin-check",
+          "status": 200,
+          "expected": 200,
+          "pass": true,
+          "noindex": null
+        },
+        {
+          "port": 8793,
+          "route": "/admin/config",
+          "scenario": "anonymous",
+          "status": 401,
+          "expected": 401,
+          "pass": true,
+          "noindex": null
+        },
+        {
+          "port": 8793,
+          "route": "/public/bootstrap",
+          "scenario": "origin-check",
+          "status": 403,
+          "expected": 403,
+          "pass": true,
+          "noindex": "noindex, nofollow"
+        },
+        {
+          "port": 8793,
+          "route": "/public/bootstrap",
+          "scenario": "rebound-host",
+          "status": 403,
+          "expected": 403,
+          "pass": true,
+          "noindex": "noindex, nofollow"
+        }
+      ],
+      "allPassed": true
+    }
+  },
+  "login": {
+    "status": "verified",
+    "observedAt": "2026-11-17T04:12:24.922Z",
+    "evidence": [
+      "Owner reports successful login",
+      "Read-only D1 aggregate session metadata"
+    ],
+    "sessions": 1,
+    "latestCreatedAt": "2026-11-17T04:10:00.220Z",
+    "latestSeenAt": "2026-11-17T04:11:03.344Z",
+    "unexpiredAbsoluteSessions": 1,
+    "previousError": "redirect_uri_mismatch",
+    "previousErrorResolved": true,
+    "requiredAuthorizedRedirectUri": "http://127.0.0.1:8793/auth/google/callback",
+    "browserControlAvailable": false,
+    "rawCredentialsRead": false
+  },
+  "validation": {
+    "initialRed": "6 behavioural gateway boundary failures",
+    "initialGreen": "9 passed",
+    "followupRed": "2 top-level mail/Google redirect failures",
+    "finalGreen": "15 passed across gateway, web worker and security-header suites",
+    "toolsTypecheck": "passed",
+    "lint": "passed",
+    "format": "passed",
+    "privacy": "482 files; 0 blocked",
+    "apiDryRun": "passed",
+    "webDryRun": "passed",
+    "webProductionBuild": "passed",
+    "remoteCIForNewGateway": "not_run"
+  },
+  "limitations": [
+    "Live Turnstile success/replay not verified",
+    "No real inquiry/client/questionnaire sends or receipt timings",
+    "No human, screen-reader or actual-device acceptance",
+    "Final content and Google production deferred",
+    "Agent-operated live forms and inbox verification await browser access or owner-assisted execution"
+  ],
+  "temporaryConsentReplaceBefore": "2026-11-24T02:28:00Z",
+  "monitorAfterSetup": {
+    "observedAt": "2026-11-17T04:09:29.270Z",
+    "ok": true,
+    "issues": [],
+    "counts": {
+      "overdueRecovery": 0,
+      "missedRemovalTarget": 0,
+      "overdueReceipts": 0,
+      "recoveryBytes": 2856
+    }
+  },
+  "liveWorkflowBaseline": {
+    "inquiryAndClientEmailAuditRows": 0,
+    "clients": 0,
+    "clientEmails": 0,
+    "questionnaireInvites": 0,
+    "initialRecipientMatches": true,
+    "senderMatches": true
+  },
+  "browserConnectionDiagnostic": {
+    "observedAt": "2026-11-17T04:15:30.273020+00:00",
+    "userRequestedVisibleBrowser": true,
+    "runtimeDiscovery": "No browser available after reconnect",
+    "chromeRunning": true,
+    "chatgptExtensionInstalled": false,
+    "nativeHostManifestPresent": false,
+    "nativeHostRegistryEntryPresent": false,
+    "configurationPluginEnabled": true,
+    "requiredAction": "Complete Chrome/Browser installation through desktop Settings > Computer Use; do not manually repair the native host",
+    "officialSetupGuide": "https://learn.chatgpt.com/docs/chrome-extension",
+    "browserAutomationStarted": false
+  }
+}

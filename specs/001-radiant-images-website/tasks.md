@@ -1,5 +1,58 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 manual-testing deferral and automated follow-up:** The owner requested holding
+manual testing until the end. The prepared `owner-timed-01` attempt never started. Human
+timings, screen-reader review and manual device checks remain deferred, as do Google
+production and final content. A live-observed required-question error was reproduced by
+failing component/API regressions and fixed locally with clear, accessible feedback.
+All **65 local test files / 305 tests**, lint, type checking and production builds pass.
+The fix is uncommitted and not deployed; the prior green remote CI run does not include it.
+**56/67 tasks complete**; no human or production gate is closed by this follow-up.
+
+**2026-11-17 private-browser sequence:** Committed `7b6e88c` passes Quality run
+`44011757954`: 64 files / 292 tests and 163 browser/performance passes, with 12 declared
+duplicate performance skips and identical head/merge trees. Loopback-only web/API gateways
+are running on this Windows computer; real D1/R2/API ingress remains private. The designated
+owner allow-list and loopback Turnstile widget are installed. Labelled test content resolves
+the previously empty pricing/bootstrap data. The owner confirms successful Google login;
+04:12 UTC read-only D1 verification finds one session created at 04:10:00 UTC and used at
+04:11:03 UTC. The earlier `redirect_uri_mismatch` is resolved. Windows Computer Use now
+operates visible Chrome; the browser extension host remains unavailable. At 04:44 UTC,
+the initial cohort passes **10 submitted / 10 accepted / 10 received**, each observed in the
+recipient Inbox within 300 seconds (28.869–151.182 seconds). At 05:38 UTC, the changed-recipient
+run is complete with **10 submitted / 10 accepted / 10 received**: three Inbox
+and seven Spam messages, all within 300 seconds (1.745–254.786 seconds). Raw Yahoo receipt
+headers resolve the earlier search-based uncertainty; Spam classification remains a
+delivery-quality finding. No cases were retried or excluded.
+At 13:50 UTC, both designated clients' template/questionnaire emails and two additional
+snapshot-test invitations have actual receipt evidence within 300 seconds. Responses stay
+isolated; original questions/choices survive master edits, reordering and an approved
+question deletion. Checklist add/rename/reorder/repeat-save/new-client/removal checks pass
+without lost progress. Invalid sender rejection passes. The removed location appeared
+unavailable on the open form within 14.713 seconds; after the approved CAPTCHA, Submit
+rejected it with reselect guidance and retained the draft. The negative case sent no email.
+A Chrome FAQ keyboard/200% zoom sample adds partial manual evidence.
+The two predeclared inquiry cohorts and subsequent cases are recorded in
+`evidence/private-browser-live-runs-20261117.json`. Settings acceptance is complete;
+screen-reader review and human/device acceptance remain open. New local gateway changes
+pass 15 focused tests, typecheck, lint, formatting and privacy checks but are outside that
+remote CI run. **56/67 tasks complete. T046 is complete; T025/T057/T061/T063 remain unchecked.**
+Google production T065–T067 and final content remain deferred. Replace temporary Gmail
+consent before approximately **November 23, 2026, 9:28 p.m. Eastern**.
+
+Focused browser sequence progress (does not close the full task gates):
+
+- [X] Confirm CI for the committed operational/Gmail changes.
+- [X] Prepare and verify loopback-only access while public API/R2 access stays disabled.
+- [X] Verify the designated owner's actual Google login (owner report plus live session metadata).
+- [X] Complete the two predeclared real-mail inquiry cohorts and receipt timings.
+- [X] Verify settings changes, both client workflows and questionnaire receipt/submission.
+- [ ] Finish manual accessibility, unassisted owner/participant timing and actual-device checks.
+
+Client email receipt, questionnaire submission/isolation, master snapshot behavior and
+checklist propagation/removal are verified. The under-three-minute owner timing remains
+a separate human gate under T057; preparing its dashboard does not start or satisfy it.
+
 **2026-11-17 03:29 UTC focused operational acceptance complete:** The normal daily
 backup/Gmail health run passes. Actual scheduled GitHub run `44010000756` detects the
 controlled fault; the owner confirms receiving its alert. The correct bucket reference
@@ -354,7 +407,7 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 - [x] T043 [P] [US5] Write configuration contract/integration and contact interaction cases in `apps/api/tests/config.test.ts` and `e2e/settings.spec.ts` for sender verification failure, malformed addresses, empty/duplicate options, atomic saves, stale forms, and subsequent inquiry delivery. Cover required/nonempty valid publicContactEmail, explicit public labeling, independence from private recipient/sender, safe public bootstrap projection, failed-save preservation, and 60-second recovery-address propagation (FR-028/029/030, SC-005).
 - [x] T044 [US5] Implement shared configuration validation and protected GET/PUT /admin/config in `packages/shared/src/schemas/config.ts` and `apps/api/src/routes/admin/config.ts`; verify sender using T013, persist all-or-nothing, audit outcomes, and validate required publicContactEmail independently and expose it through bootstrap without deriving/exposing private sender/recipient values (FR-028/029/032).
 - [x] T045 [US5] Build recipient/sender, required publicContactEmail explicitly labeled as publicly displayed and monitored for recovery, ordered location/referral, and IANA-timezone settings with saved-state/error feedback in `apps/web/app/routes/admin/settings.tsx`; retain previous settings on failed saves (FR-028/029).
-- [ ] T046 [US5] Run settings suites and quickstart steps 19–21; repeat SC-002's predeclared healthy-provider run of at least 10 distinct inquiries to the updated real mailbox, retain submitted/accepted/received counts and timings, verify an independent public-contact update reaches Contact/recovery within 60 seconds without exposing/changing private addresses, and record stale-form behavior and 60-second propagation in `specs/001-radiant-images-website/acceptance.md` (SC-002/005).
+- [X] T046 [US5] Run settings suites and quickstart steps 19–21; repeat SC-002's predeclared healthy-provider run of at least 10 distinct inquiries to the updated real mailbox, retain submitted/accepted/received counts and timings, verify an independent public-contact update reaches Contact/recovery within 60 seconds without exposing/changing private addresses, and record stale-form behavior and 60-second propagation in `specs/001-radiant-images-website/acceptance.md` (SC-002/005).
 
 ## Phase 8: US6 — Owner Manages Clients and Session Workflows (P6)
 
