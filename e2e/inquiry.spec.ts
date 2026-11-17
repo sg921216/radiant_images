@@ -30,6 +30,56 @@ test('@smoke public navigation and service discovery', async ({ page }) => {
   await page.getByRole('link', { name: 'Book Now', exact: true }).first().click();
   await expect(page.getByLabel('First name', { exact: true })).toBeVisible();
 });
+test('@smoke supplied logo stays visible without covering desktop or mobile navigation', async ({
+  page,
+}, info) => {
+  for (const width of [320, 768, 1001, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/about');
+    const brand = page.getByRole('link', {
+      name: 'Radiant Images Photography by Rebekah Galarza',
+      exact: true,
+    });
+    const logo = brand.getByRole('img');
+    await expect(logo).toBeVisible();
+    await logo.evaluate((image: HTMLImageElement) => image.decode());
+    const box = (await logo.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(width);
+    expect(box.width / box.height).toBeCloseTo(2, 1);
+    const menu = page.getByRole('button', { name: 'Menu', exact: true });
+    const nav = page.getByRole('navigation', { name: 'Main navigation' });
+    if (width <= 1000) {
+      await expect(nav).toBeHidden();
+      const menuBox = (await menu.boundingBox())!;
+      expect(box.x + box.width).toBeLessThan(menuBox.x);
+      await menu.click();
+      await expect(nav.getByRole('link')).toHaveCount(6);
+      const faq = nav.getByRole('link', { name: 'FAQ', exact: true });
+      await expect(faq).toBeVisible();
+      await faq.focus();
+      await page.keyboard.press('Escape');
+      await expect(menu).toBeFocused();
+      await expect(nav).toBeHidden();
+    } else {
+      await expect(menu).toBeHidden();
+      expect(box.x + box.width / 2).toBeCloseTo(width / 2, 0);
+      for (const label of ['Maternity', 'Newborn', 'Family']) {
+        const link = (await nav.getByRole('link', { name: label, exact: true }).boundingBox())!;
+        expect(link.x + link.width).toBeLessThan(box.x);
+      }
+      for (const label of ['About', 'Contact', 'FAQ']) {
+        const link = (await nav.getByRole('link', { name: label, exact: true }).boundingBox())!;
+        expect(link.x).toBeGreaterThan(box.x + box.width);
+      }
+    }
+    if (info.project.name === 'chromium-desktop')
+      await page.screenshot({ path: info.outputPath(`logo-${width}.png`) });
+    await brand.click();
+    await expect(page).toHaveURL('/');
+    await expect(page.getByRole('main')).toBeFocused();
+  }
+});
 test('@smoke contact keeps its public recovery address available', async ({ page }) => {
   await page.goto('/contact');
   await expect(page.getByRole('link', { name: 'hello@example.invalid' })).toHaveAttribute(

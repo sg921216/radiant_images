@@ -1,5 +1,21 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 local logo follow-up:** The supplied `apps/web/assets/Logo.jpg` is now
+integrated into the public header through responsive 320/640-pixel WebP assets. The
+original is unchanged; the header retains its Home link, accessible brand name,
+centered desktop placement and narrow-screen menu. Local quality passes **65 files /
+305 tests**, and **80 selected browser checks** pass across the five configured
+projects using this workstation's existing Firefox launch configuration. All **40 mobile
+profile samples** pass with logo transfers included. The owner confirmed using this logo.
+The loopback-only frontend copy now includes it; **19 read-only HTTP checks** pass.
+The deployed API and live acceptance data are unchanged. Evidence is in
+`evidence/local-logo-implementation-20261117.json` and `acceptance.md`.
+**56/67 tasks complete.** Remaining content approval, manual/human/device acceptance and
+Google production remain deferred; this partial content work does not close T063.
+
+- [X] Integrate and verify the supplied logo in the local public header (T020/T063 follow-up).
+- [X] Include static logo image responses in the mobile transfer-budget measurement (T061 follow-up).
+
 **2026-11-17 CI/private-update follow-up:** Quality run `44108958097` passes for the current
 source head `aebde5d`, including unit tests and the full browser matrix. The private API
 and isolated loopback frontend now include the required-answer feedback fix. All 20

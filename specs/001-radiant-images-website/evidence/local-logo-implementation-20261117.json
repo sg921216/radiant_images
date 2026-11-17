@@ -1,0 +1,309 @@
+{
+  "recordedAt": "2026-11-17T15:52:57.845Z",
+  "baseCommit": "9676d8a3b33b7647fcd595446720650a5b8319fe",
+  "uncommitted": true,
+  "ownerConfirmedLogo": true,
+  "assets": [
+    {
+      "file": "Logo.jpg",
+      "bytes": 476288,
+      "sha256": "b3d08a374c860ef9c311e084bd0e45cba9c96c1371b2ecfe4048c52b14c90141"
+    },
+    {
+      "file": "logo-320.webp",
+      "bytes": 5600,
+      "sha256": "1afb073bbb46db289338bbe8ef608a6e2e009972c86d1a96f21e80f93ae726c8"
+    },
+    {
+      "file": "logo-640.webp",
+      "bytes": 14808,
+      "sha256": "9d726aff762a9dbc1061e04c4b544fd152cf3b60633affbd2e56627a8afa815b"
+    }
+  ],
+  "sourceSha256": {
+    "apps/web/app/components/Header.tsx": "62c9927cb450923792e6da436bf39109983e728e7982c0306eaf4d596cd87171",
+    "apps/web/app/styles/theme.css": "2cb3d5da195647bf3ad82929f3502bd1eb4d905c018963451f2b7ddd11a8dcfb",
+    "apps/web/tests/publicContent.test.tsx": "3b813bd37de1390ec74503cd1d73a8f7dd8230aa3efd5c9ce7a4ceb244840f13",
+    "e2e/inquiry.spec.ts": "17dc12ad57e3d1942e94829e8e67294bd1f43523f330c83757e9f8e18e984a6f",
+    "e2e/performance.spec.ts": "ea50253c66430cc4670a09098ce8e47b01c7e4ef6f46be5d3f7aac0d7401fc0c"
+  },
+  "quality": {
+    "command": "pnpm check",
+    "passed": true,
+    "testFiles": 65,
+    "tests": 305,
+    "durationSeconds": 96.57
+  },
+  "redEvidence": [
+    {
+      "case": "accessible brand image",
+      "failed": 1,
+      "passed": 3
+    },
+    {
+      "case": "mobile static logo transfer",
+      "failed": 1,
+      "error": "Missing visible image transfer"
+    }
+  ],
+  "initialBrowserRun": {
+    "passed": 62,
+    "failed": 18,
+    "firefoxLaunchFailures": 16,
+    "webkitFocusTestFailures": 2
+  },
+  "finalBrowserRuns": [
+    {
+      "projects": [
+        "firefox-desktop"
+      ],
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "config": ".wrangler/firefox-local.config.ts"
+    },
+    {
+      "projects": [
+        "chromium-desktop",
+        "chromium-mobile",
+        "webkit-desktop",
+        "webkit-mobile"
+      ],
+      "passed": 64,
+      "failed": 0,
+      "skipped": 0,
+      "retries": 0,
+      "config": "playwright.config.ts"
+    }
+  ],
+  "mobileProfile": {
+    "passed": true,
+    "samples": 40,
+    "source": "local-logo-mobile-profile-20261117.json",
+    "summaries": [
+      {
+        "route": "/",
+        "samples": 5,
+        "medianUsableMs": 1847.6643000000004,
+        "maxLcpMs": 848,
+        "maxCls": 0.05448021537315878,
+        "maxJsBytes": 150844,
+        "maxImageBytes": 5600,
+        "maxInteractionMs": 66.14960000000065
+      },
+      {
+        "route": "/maternity",
+        "samples": 5,
+        "medianUsableMs": 2547.010299999998,
+        "maxLcpMs": 2364,
+        "maxCls": 0.05448021537315878,
+        "maxJsBytes": 187771,
+        "maxImageBytes": 65172,
+        "maxInteractionMs": 66.76030000000173
+      },
+      {
+        "route": "/newborn",
+        "samples": 5,
+        "medianUsableMs": 2550.046699999999,
+        "maxLcpMs": 2352,
+        "maxCls": 0.05448021537315878,
+        "maxJsBytes": 187765,
+        "maxImageBytes": 63180,
+        "maxInteractionMs": 64.33060000000114
+      },
+      {
+        "route": "/family",
+        "samples": 5,
+        "medianUsableMs": 2545.5929000000033,
+        "maxLcpMs": 2404,
+        "maxCls": 0.05448021537315878,
+        "maxJsBytes": 187762,
+        "maxImageBytes": 65404,
+        "maxInteractionMs": 64.09889999999723
+      },
+      {
+        "route": "/about",
+        "samples": 5,
+        "medianUsableMs": 2499.6814000000013,
+        "maxLcpMs": 992,
+        "maxCls": 0.05448021537315878,
+        "maxJsBytes": 185128,
+        "maxImageBytes": 5600,
+        "maxInteractionMs": 66.59590000000026
+      },
+      {
+        "route": "/faq",
+        "samples": 5,
+        "medianUsableMs": 2098.487399999998,
+        "maxLcpMs": 1000,
+        "maxCls": 0.05448021537315878,
+        "maxJsBytes": 185026,
+        "maxImageBytes": 5600,
+        "maxInteractionMs": 83.16009999999369
+      },
+      {
+        "route": "/contact",
+        "samples": 5,
+        "medianUsableMs": 2159.633400000006,
+        "maxLcpMs": 1000,
+        "maxCls": 0.05448021537315878,
+        "maxJsBytes": 154622,
+        "maxImageBytes": 5600,
+        "maxInteractionMs": 62.28080000000773
+      },
+      {
+        "route": "/q/{token}",
+        "samples": 5,
+        "medianUsableMs": 1888.8506000000052,
+        "maxLcpMs": 1616,
+        "maxCls": 0.005908903394889466,
+        "maxJsBytes": 147427,
+        "maxImageBytes": 0,
+        "maxInteractionMs": 21.223100000002887
+      }
+    ]
+  },
+  "privatePreview": {
+    "checkedAt": "2026-11-17T15:52:27.670Z",
+    "checks": [
+      {
+        "name": "Public logo markup /",
+        "passed": true
+      },
+      {
+        "name": "Public logo markup /maternity",
+        "passed": true
+      },
+      {
+        "name": "Public logo markup /newborn",
+        "passed": true
+      },
+      {
+        "name": "Public logo markup /family",
+        "passed": true
+      },
+      {
+        "name": "Public logo markup /about",
+        "passed": true
+      },
+      {
+        "name": "Public logo markup /faq",
+        "passed": true
+      },
+      {
+        "name": "Public logo markup /contact",
+        "passed": true
+      },
+      {
+        "name": "Logo 320 URL",
+        "passed": true
+      },
+      {
+        "name": "Logo 320 served bytes",
+        "passed": true
+      },
+      {
+        "name": "Logo 640 URL",
+        "passed": true
+      },
+      {
+        "name": "Logo 640 served bytes",
+        "passed": true
+      },
+      {
+        "name": "Private fallback /admin/login",
+        "passed": true
+      },
+      {
+        "name": "Private fallback /q/{token}",
+        "passed": true
+      },
+      {
+        "name": "Missing source/asset /missing-logo-test.webp",
+        "passed": true
+      },
+      {
+        "name": "Missing source/asset /assets/Logo.jpg",
+        "passed": true
+      },
+      {
+        "name": "Foreign Origin",
+        "passed": true
+      },
+      {
+        "name": "Cross-site fetch",
+        "passed": true
+      },
+      {
+        "name": "Foreign Host (raw HTTP header)",
+        "passed": true
+      },
+      {
+        "name": "Anonymous API owner access",
+        "passed": true
+      }
+    ],
+    "passed": 19,
+    "deployedApiChanged": false,
+    "liveMessagesSent": 0,
+    "frontendFilesVerified": 57,
+    "rollbackDirectory": ".wrangler/private-browser/web-client-before-logo-20261117",
+    "originsVerified": {
+      "defaultBuild": true,
+      "privateBuild": true
+    },
+    "listeners": [
+      {
+        "port": 4273,
+        "address": "127.0.0.1"
+      },
+      {
+        "port": 8793,
+        "address": "127.0.0.1"
+      },
+      {
+        "port": 9253,
+        "address": "127.0.0.1"
+      },
+      {
+        "port": 9254,
+        "address": "127.0.0.1"
+      }
+    ]
+  },
+  "taskStatus": {
+    "complete": 56,
+    "total": 67,
+    "open": [
+      "T001",
+      "T023",
+      "T025",
+      "T057",
+      "T058",
+      "T060",
+      "T061",
+      "T063",
+      "T065",
+      "T066",
+      "T067"
+    ]
+  },
+  "limitations": [
+    "Synthetic mobile portfolio fixture; final approved-photo acceptance remains open",
+    "Automated browser engines are not actual release device/browser matrix evidence",
+    "No human timing or representative screen-reader acceptance",
+    "No remote CI on these uncommitted changes; no public release"
+  ],
+  "security": {
+    "dependencyAudit": "No known vulnerabilities",
+    "artifactPrivacy": {
+      "files": 30,
+      "blocked": 0
+    },
+    "repositoryPrivacy": {
+      "files": 487,
+      "blocked": 0
+    }
+  }
+}

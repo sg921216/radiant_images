@@ -85,6 +85,12 @@ on this computer. `scripts/private-browser/api.jsonc` binds the deployed API thr
 Wrangler's authenticated remote service; it never adds an owner session or bypasses Google.
 Do not deploy these local gateways, bind them to a network interface, or add a public tunnel.
 
+The November 17 logo update is present in the isolated frontend copy. The owner-approved
+source is `apps/web/assets/Logo.jpg`; responsive derivatives and their reproduction
+instructions are alongside it. All 19 read-only update checks pass. The prior frontend
+is archived at `.wrangler/private-browser/web-client-before-logo-20261117`. The API,
+Google configuration and live acceptance data were not changed; human testing stays deferred.
+
 In the existing Google OAuth web client, preserve the Gmail-consent redirect and add
 **`http://127.0.0.1:8793/auth/google/callback`** to authorized redirect URIs. Keep Testing
 audience mode and the existing Gmail scopes/grant. This URI adjustment is private login
@@ -670,7 +676,7 @@ are in `evidence/private-browser-live-runs-20261117.json` and acceptance.md.
 | Print/PDF                          | Physical print plus owner content/readability review                                                                       | Local PDF rendering evidence only                       |
 | Live browser matrix                | Exact N/N-1 versions at release freeze, every plan.md browser/OS/device cell                                               | Every actual-browser/device cell BLOCKED pending access |
 | Deployed freshness/performance     | Live providers and deployed cache/clock/HTTPS observations                                                                 | Private live public-contact propagation 16.305 s; removed-option display 14.713 s; full profile remains separate |
-| Content/privacy                    | Logo, 60 approved photo assets, copy, pricing, privacy/deposit terms, usage/guardian permissions, monitored public contact | Owner approval/assets pending                           |
+| Content/privacy                    | Logo, 60 approved photo assets, copy, pricing, privacy/deposit terms, usage/guardian permissions, monitored public contact | Logo approved and integrated November 17; remaining owner content/assets pending |
 
 For each participant record started/completed/abandoned, device, first Submit result, any
 assistance and elapsed time. For email record provider health, first Submit, API outcome,

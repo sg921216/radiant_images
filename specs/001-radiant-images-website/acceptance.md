@@ -1,5 +1,85 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-17 — Supplied logo integrated locally
+
+Implementation resumed on `9676d8a3b33b7647fcd595446720650a5b8319fe` with existing
+uncommitted Spec Kit/toolchain files and `apps/web/assets/Logo.jpg`. Those existing
+files were preserved. The requirements checklist passes all 16 items; the repository's
+Git, ESLint and Prettier ignore rules already cover the detected setup.
+
+The owner explicitly confirmed using `Logo.jpg` for the website during this pass.
+The public header now uses the supplied logo instead of the text placeholder. The
+original 1774 × 887 JPEG is unchanged. Responsive WebP derivatives are **5,600 bytes
+(320 × 160)** and **14,808 bytes (640 × 320)**, with no EXIF/IPTC/XMP metadata. The
+original **476,288-byte** JPEG is not referenced or shipped in the web build. Source
+hash and reproducible generation instructions are in `apps/web/assets/README.md`.
+[Vite asset imports](https://vite.dev/guide/assets.html) give the derivatives hashed
+build URLs. The header reserves the 2:1 aspect ratio, exposes the full brand text as
+the image alternative, retains its Home link and uses the existing responsive navigation.
+
+Red/green and verification evidence:
+
+- The component regression first failed because the brand link contained no accessible
+  logo image (**1 failed / 3 passed**). After implementation, all four cases pass.
+- The existing mobile performance test then failed with **Missing visible image transfer**:
+  its response collector only tracked `/images/`, while the visible logo is a built static
+  asset. The collector now uses the browser's image resource type, retaining the existing
+  complete-body byte measurement, viewport selection and budgets.
+- `pnpm check` passes formatting, lint, all TypeScript projects, **65 files / 305 tests**
+  (96.57 seconds), and both production builds. The API build is a dry run. The final
+  CSS blend adjustment was rebuilt and formatting/lint/tooling types were rechecked.
+- The first browser selection passed 62 cases and failed 18. Sixteen could not start
+  Firefox from the default cache. The existing `.wrangler/firefox-local.config.ts` points
+  at the owner's previously installed pinned browser; its executable SHA-256 still matches
+  the recorded `a8fa6c08d8a9e8cb961e74a626dd2f4c5064a853de38bcde3df3cb145ec44530`.
+  No browser was installed and no security setting was changed.
+- The other two initial failures were in the new logo test on WebKit: a pointer click
+  does not ensure keyboard focus is inside the menu. The test now focuses the visible FAQ
+  link before pressing Escape, then verifies menu closure and focus return. No product
+  handler, timeout, retry or expectation was weakened.
+- Final targeted runs pass **64/64 Chromium/WebKit desktop/mobile cases** and **16/16
+  Firefox cases**, zero retries or skips. They cover inquiry success/failure/recovery,
+  public/owner/questionnaire automated accessibility, SEO, built fallbacks and asset 404s.
+  The new logo case checks 320/768/1001/1280-pixel layouts, decoded images, desktop center
+  and link separation, mobile-menu operation, Escape focus return and Home navigation.
+- Automated screenshots at 320 and 1280 pixels were inspected: the full logo is visible,
+  its background blends with the cream header, and navigation does not overlap. This is
+  agent visual QA, not the deferred manual accessibility or actual-device acceptance.
+- Final repository privacy scanning passes (**487 files, zero blocked**) and the dependency
+  audit reports no known vulnerabilities. Final artifact scanning passes **30 files,
+  zero blocked**.
+
+The corrected mobile profile passes **40 cold-cache samples**, five per public route
+including the token-redacted questionnaire. Route median usable times are **1.848–2.550 s**;
+the largest LCP sample is **2.404 s**, CLS **0.0545**, initial JavaScript **187,771 bytes**,
+and above-fold image bodies **65,404 bytes**. All existing per-route/sample gates pass.
+This remains the synthetic 60-image fixture with controlled providers and 200 ms CAPTCHA
+readiness, not approved portfolio photography, live Turnstile, field INP or real-device
+acceptance. Runner/browser details and all timings are retained in
+`evidence/local-logo-mobile-profile-20261117.json`.
+
+At **15:52 UTC**, the isolated frontend at `http://127.0.0.1:4273` was updated with the
+same logo implementation and the documented private build variables. All **57 files**
+in the staged copy matched their build hashes before activation. The prior copy remains
+at `.wrangler/private-browser/web-client-before-logo-20261117` for rollback. Only the local
+frontend gateway was restarted; the API gateway and deployed API were not changed.
+All four gateway/inspector ports still bind only to `127.0.0.1`.
+
+All **19 read-only HTTP checks** pass: the seven prerendered routes contain the logo,
+both responsive variants serve byte-identical WebP, private deep links retain noindex and
+no-referrer, source/missing assets remain 404, foreign Origin/Host and cross-site requests
+return 403, and anonymous owner API access returns 401. The Host probe uses raw HTTP
+because Node fetch does not preserve that supplied header. The normal synthetic-origin
+build was restored afterward; the isolated private copy remains independent. Sanitized
+checks, source/asset hashes and test counts are in
+`evidence/local-logo-implementation-20261117.json`.
+
+The source changes are uncommitted and have no new remote CI result. Provider configuration
+and live acceptance data are unchanged. No live messages or human timing attempts were
+started. **56/67 tasks remain complete**: T001, T023, T025, T057,
+T058, T060, T061, T063 and T065–T067 retain their recorded external/deferred requirements.
+Approval of this logo does not approve the remaining launch content or close T063.
+
 ## 2026-11-17 15:31 UTC — CI passed and private build updated
 
 GitHub Quality run [44108958097](https://github.com/sg921216/radiant_images/actions/runs/44108958097)

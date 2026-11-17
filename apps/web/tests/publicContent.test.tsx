@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from 'vitest';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { PublicLayout } from '../app/components/PublicLayout';
 import { PublicContentProvider, usePublicContent } from '../app/lib/publicContent';
@@ -34,9 +34,14 @@ test('layout provides main landmark, skip navigation and a visible brand link', 
   expect(screen.getByRole('main')).toHaveTextContent('Test content');
   expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('href', '#main');
   expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('tabindex', '0');
-  expect(
-    screen.getByRole('link', { name: /Radiant Images.*Photography by Rebekah/ }),
-  ).toHaveAttribute('href', '/');
+  const brand = screen.getByRole('link', { name: /Radiant Images.*Photography by Rebekah/ });
+  expect(brand).toHaveAttribute('href', '/');
+  const logo = within(brand).getByRole('img', {
+    name: 'Radiant Images Photography by Rebekah Galarza',
+  });
+  expect(logo).toBeVisible();
+  expect(Number(logo.getAttribute('width')) / Number(logo.getAttribute('height'))).toBe(2);
+  expect(logo).not.toHaveAttribute('loading', 'lazy');
 });
 test('public data refreshes by 25 seconds and retains last good content during an outage', async () => {
   function Probe() {
