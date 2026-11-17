@@ -328,7 +328,10 @@ clock applies to each Submit, not to the duration of the complete acceptance run
 The owner deferred manual testing until the end on 2026-11-17. The prepared
 `owner-timed-01` case has not started and must not count as a timed attempt. Resume these
 checks only when requested, using the updated verified build and preserving the existing
-private-access boundary. The local required-answer feedback fix has not yet been deployed.
+private-access boundary. The required-answer feedback fix passed CI run `44108958097`
+for `aebde5d` and was applied to the private API/isolated frontend on 2026-11-17. Twenty
+read-only HTTP checks pass; see `evidence/private-build-update-20261117.json`. Reload the
+site at the start of the eventual manual pass so already-open tabs use the updated assets.
 
 Preregister at least 10 first-time participants, with at least five mobile and five desktop,
 before sessions. Follow plan.md's identical goal/synthetic-data script with healthy controlled

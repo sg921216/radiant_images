@@ -1,12 +1,19 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 CI/private-update follow-up:** Quality run `44108958097` passes for the current
+source head `aebde5d`, including unit tests and the full browser matrix. The private API
+and isolated loopback frontend now include the required-answer feedback fix. All 20
+read-only HTTP checks pass; public ingress stays disabled and recorded test-data counts
+are unchanged. See `evidence/github-ci-private-update-20261117.json` and
+`evidence/private-build-update-20261117.json`. No manual test or owner timing has started.
+
 **2026-11-17 manual-testing deferral and automated follow-up:** The owner requested holding
 manual testing until the end. The prepared `owner-timed-01` attempt never started. Human
 timings, screen-reader review and manual device checks remain deferred, as do Google
 production and final content. A live-observed required-question error was reproduced by
 failing component/API regressions and fixed locally with clear, accessible feedback.
 All **65 local test files / 305 tests**, lint, type checking and production builds pass.
-The fix is uncommitted and not deployed; the prior green remote CI run does not include it.
+The fix was subsequently committed in `aebde5d`, passed CI and updated privately as above.
 **56/67 tasks complete**; no human or production gate is closed by this follow-up.
 
 **2026-11-17 private-browser sequence:** Committed `7b6e88c` passes Quality run
@@ -34,9 +41,10 @@ rejected it with reselect guidance and retained the draft. The negative case sen
 A Chrome FAQ keyboard/200% zoom sample adds partial manual evidence.
 The two predeclared inquiry cohorts and subsequent cases are recorded in
 `evidence/private-browser-live-runs-20261117.json`. Settings acceptance is complete;
-screen-reader review and human/device acceptance remain open. New local gateway changes
-pass 15 focused tests, typecheck, lint, formatting and privacy checks but are outside that
-remote CI run. **56/67 tasks complete. T046 is complete; T025/T057/T061/T063 remain unchecked.**
+screen-reader review and human/device acceptance remain open. Gateway changes passed 15
+focused tests, typecheck, lint, formatting and privacy checks at the initial checkpoint;
+they are now included in the later passing `44108958097` CI run above.
+**56/67 tasks complete. T046 is complete; T025/T057/T061/T063 remain unchecked.**
 Google production T065–T067 and final content remain deferred. Replace temporary Gmail
 consent before approximately **November 23, 2026, 9:28 p.m. Eastern**.
 

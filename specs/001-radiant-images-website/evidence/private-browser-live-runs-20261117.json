@@ -655,7 +655,8 @@
     "conclusion": "success",
     "sourceHead": "7b6e88c7407de21824908885586991a3b1135b0b",
     "workspaceHeadMatches": true,
-    "uncommittedGatewayAndEvidenceOutsideRun": true
+    "uncommittedGatewayAndEvidenceOutsideRun": true,
+    "scope": "Historical check before the questionnaire feedback commit; superseded for current build by ciPrivateUpdate."
   },
   "manualTestingDeferral": {
     "requestedAt": "2026-11-17T13:58:10.904652+00:00",
@@ -664,7 +665,7 @@
   },
   "automatedFollowup": {
     "finding": "Untouched required questionnaire answers displayed a raw schema type error.",
-    "status": "fixed_and_locally_validated",
+    "status": "ci_passed_and_privately_updated",
     "implementation": "Shared schema customizes the error for absent required answers only.",
     "webRed": {
       "failed": 3,
@@ -691,14 +692,26 @@
     "typecheck": "passed",
     "lint": "passed",
     "productionBuild": "passed",
-    "remoteCiIncludesFix": false,
-    "deployed": false,
-    "isolatedPrivateFrontendUpdated": false,
+    "remoteCiIncludesFix": true,
+    "deployed": true,
+    "isolatedPrivateFrontendUpdated": true,
     "manualRetest": "deferred_until_end_by_user",
     "sourceFiles": [
       "packages/shared/src/schemas/questionnaire.ts",
       "apps/web/tests/questionnaire.test.tsx",
       "apps/api/tests/questionnaire.test.ts"
-    ]
+    ],
+    "sourceHead": "aebde5d5b47a7209b32d8f274276d72948814925",
+    "ciRunId": 44108958097,
+    "privateBuildEvidence": "private-build-update-20261117.json",
+    "apiVersionId": "5684931a-d5f1-4ff7-9055-8eba1210904a",
+    "httpChecksPassed": 20
+  },
+  "ciPrivateUpdate": {
+    "runId": 44108958097,
+    "conclusion": "success",
+    "sourceHead": "aebde5d5b47a7209b32d8f274276d72948814925",
+    "workspaceHeadMatches": true,
+    "evidence": "github-ci-private-update-20261117.json"
   }
 }

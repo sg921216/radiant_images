@@ -1,5 +1,36 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-17 15:31 UTC — CI passed and private build updated
+
+GitHub Quality run [44108958097](https://github.com/sg921216/radiant_images/actions/runs/44108958097)
+passes for `aebde5d5b47a7209b32d8f274276d72948814925`, matching the current source checkout.
+The required formatting, lint, type, dependency/privacy, unit-test, build and full browser
+matrix steps pass. The run completed at **15:18:59 UTC**. Run/job API evidence is retained
+in `evidence/github-ci-private-update-20261117.json`; this check does not claim remote test
+counts or head/merge tree equality because the job log was not available anonymously.
+
+The private acceptance API was dry-run validated and deployed at **15:27:54 UTC** as
+version `5684931a-d5f1-4ff7-9055-8eba1210904a`. Its bindings, secret names, compatibility
+date, schedules and observability settings are unchanged. No secrets or migrations were
+applied. The frontend was rebuilt with the documented loopback settings, copied into the
+isolated private directory and both local gateways restarted. The copied files match the
+build byte-for-byte. The previous Worker version and local frontend archive are recorded
+for rollback in `evidence/private-build-update-20261117.json`.
+
+All **20 read-only HTTP checks pass**: seven public routes, owner/questionnaire fallbacks
+and private headers, missing-asset 404, bootstrap/CORS, anonymous owner 401, foreign
+Origin/Host and cross-site fetch 403 on both gateways, and the current questionnaire asset.
+All four gateway/debug listeners bind only to `127.0.0.1`. Worker public/preview ingress,
+custom domains/routes and both R2 public endpoints remain disabled. The after-update audit
+retains **3 clients, 6 client emails, 4 invitations/responses, 1 checklist item, 3 checklist
+states and 20 inquiry sends**. The settings update timestamp is unchanged. These are
+aggregate preservation checks, not a full database diff. No live messages were sent.
+
+The required-answer feedback fix is now present in the private API/frontend. A visible
+browser retest remains deferred with all manual testing; no owner attempt has started.
+Task completion stays **56/67**. Google production and final content remain deferred.
+Replace the temporary Gmail consent before **2026-11-23 at 9:28 p.m. Eastern**.
+
 ## 2026-11-17 — Manual testing deferred; required-answer feedback fixed locally
 
 The user requested holding manual testing until the end and continuing useful non-manual
@@ -29,10 +60,10 @@ Red/green evidence:
   Whole-repository lint, type checking and the production build also pass. The API build
   is a dry run; the web build generates all seven public routes and SPA fallback.
 
-This is an **uncommitted local fix**, outside the earlier green GitHub run for `7b6e88c`.
-It has not been deployed or copied into the isolated private-browser frontend. The live
-API, existing browser sessions and disabled public ingress were not changed. Recheck the
-updated build during the eventual manual pass after CI/private-deployment preparation.
+At this earlier checkpoint, the fix was uncommitted and outside the green GitHub run for
+`7b6e88c`; the live API and isolated frontend were unchanged. The 15:31 UTC checkpoint
+above supersedes that deployment status after the `aebde5d` commit and passing CI run.
+Recheck the updated build during the eventual manual pass.
 Task completion remains **56/67**; this improves existing T057/T061 acceptance work.
 
 ## 2026-11-17 13:50 UTC — Settings acceptance and checklist removal complete

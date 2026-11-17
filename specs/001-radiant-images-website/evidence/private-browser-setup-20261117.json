@@ -285,5 +285,13 @@
     "requiredAction": "Complete Chrome/Browser installation through desktop Settings > Computer Use; do not manually repair the native host",
     "officialSetupGuide": "https://learn.chatgpt.com/docs/chrome-extension",
     "browserAutomationStarted": false
+  },
+  "latestPrivateBuildUpdate": {
+    "recordedAt": "2026-11-17T15:32:57.722493+00:00",
+    "sourceHead": "aebde5d5b47a7209b32d8f274276d72948814925",
+    "apiVersionId": "5684931a-d5f1-4ff7-9055-8eba1210904a",
+    "evidence": "private-build-update-20261117.json",
+    "publicAccessDisabled": true,
+    "manualTestingDeferred": true
   }
 }
