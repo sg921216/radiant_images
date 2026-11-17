@@ -4,6 +4,26 @@ import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { assertLocalTarget } from './local-target';
+const gmailScopes = [
+  'https://www.googleapis.com/auth/gmail.send',
+  'https://www.googleapis.com/auth/gmail.settings.basic',
+];
+const incompleteConsent =
+  'Grant both requested Gmail permissions (gmail.send and gmail.settings.basic), then restart the local tool.';
+export async function saveConsentToken(
+  data: { refresh_token?: unknown; scope?: unknown },
+  output: string,
+): Promise<void> {
+  const granted = new Set(typeof data.scope === 'string' ? data.scope.split(/\s+/) : []);
+  if (!gmailScopes.every((scope) => granted.has(scope))) throw new Error(incompleteConsent);
+  if (typeof data.refresh_token !== 'string' || !data.refresh_token)
+    throw new Error('Consent did not return a refresh token.');
+  await writeFile(output, data.refresh_token + '\n', {
+    encoding: 'utf8',
+    flag: 'wx',
+    mode: 0o600,
+  });
+}
 export function consentUrl(
   clientId: string,
   redirect: string,
@@ -16,8 +36,7 @@ export function consentUrl(
     client_id: clientId,
     redirect_uri: redirect,
     response_type: 'code',
-    scope:
-      'https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.settings.basic',
+    scope: gmailScopes.join(' '),
     access_type: 'offline',
     prompt: 'consent',
     state,
@@ -67,14 +86,10 @@ async function main() {
         }),
         signal: AbortSignal.timeout(10000),
       });
-      const data = (await result.json()) as { refresh_token?: string };
+      const data = (await result.json()) as { refresh_token?: unknown; scope?: unknown };
       if (!result.ok || !data.refresh_token)
         throw new Error('Consent did not return a refresh token.');
-      await writeFile(output, data.refresh_token + '\n', {
-        encoding: 'utf8',
-        flag: 'wx',
-        mode: 0o600,
-      });
+      await saveConsentToken(data, output);
       response.writeHead(200, {
         'Content-Type': 'text/plain',
         'Cache-Control': 'no-store',
@@ -85,10 +100,23 @@ async function main() {
         'Refresh token saved to the ignored .gmail-refresh-token.secret file. Store it as a Worker secret, then remove this local file.',
       );
       server.close();
-    })().catch(() => {
-      response.writeHead(500, { 'Content-Type': 'text/plain' });
-      response.end('Consent failed. Restart the local tool.');
-      console.error('Consent failed; credentials and provider responses were not logged.');
+    })().catch((error: unknown) => {
+      const partial = error instanceof Error && error.message === incompleteConsent;
+      response.writeHead(partial ? 400 : 500, {
+        'Content-Type': 'text/plain',
+        'Cache-Control': 'no-store',
+        'Referrer-Policy': 'no-referrer',
+      });
+      response.end(
+        partial
+          ? `Consent incomplete. ${incompleteConsent}`
+          : 'Consent failed. Restart the local tool.',
+      );
+      console.error(
+        partial
+          ? incompleteConsent
+          : 'Consent failed; credentials and provider responses were not logged.',
+      );
       server.close();
     });
   });

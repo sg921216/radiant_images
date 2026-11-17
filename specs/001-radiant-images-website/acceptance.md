@@ -1,5 +1,250 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-17 03:29 UTC — Scheduled alert received and recovery verified (R-30 final testing checkpoint)
+
+**The five focused private operational checks pass.** The owner explicitly confirmed
+**“Received scheduled alert”** for the actual scheduled failure below, separately from
+the earlier manual test. The persistent environment and normal schedules remain active;
+all public API/R2 ingress remains disabled. Broader production/release acceptance is not
+closed: Google Testing consent is temporary and T065–T067 remain deferred (55/67 tasks).
+
+- [Scheduled fault run 44010000756](https://github.com/sg921216/radiant_images/actions/runs/44010000756) has `event: schedule`, actor `sg921216`, and creation time **03:24:37 UTC** for the normal **03:17 UTC** slot. It fails at the real S3 monitoring step with the expected sanitized read-failure message; the synthetic notification shortcut is skipped.
+- The bounded helper restores `RECOVERY_BUCKET=radiant-images-recovery` before [recovery run 44010074349](https://github.com/sg921216/radiant_images/actions/runs/44010074349), created at **03:25:13 UTC**. This recovery is a manual dispatch and succeeds with `ok: true`, no issues and 2,856 recovery bytes.
+- The owner confirms the scheduled notification at the final 03:29 UTC recording. GitHub's late creation is retained as observed scheduling latency, not represented as an exact-minute delivery guarantee.
+- Final reads at 03:27 UTC confirm hourly monitoring enabled, the correct recovery bucket, no active test fault, only `radiant-images-api` remaining, both Worker public subdomain modes disabled, no Worker custom domains, and both R2 managed/custom public paths disabled/absent. Normal five-minute and 03:00 UTC crons remain unchanged. The temporary proxy/operator and local refresh-token copies are gone; the one-time fault helper exited successfully.
+
+The actual normal daily cron/Gmail evidence is recorded immediately below. Independent
+post-test S3 reads still show healthy maintenance, verified Gmail, three valid backups
+totaling 2,472 bytes and no overdue recovery/receipt cleanup. No Gmail message was sent;
+notification receipt concerns the explicitly requested GitHub monitoring alert.
+
+Usage reconciliation through **03:25:04 UTC** records **70 DO calls** (67 automatic
+maintenance, one automatic daily operation and two manual daily operations), all `ok`.
+Account and namespace GraphQL counts both report 27 on November 16 and 43 on November 17,
+with zero errors; periodic totals agree to meaningful precision. Maximum observed scheduled
+front CPU is 1 ms and DO CPU is 49 ms. November 14/15 history remains absent. A fresh,
+separate Billing Read query still returns only seven older R2/Images records and cannot
+establish current DO usage. The [Cloudflare investigation packet](./evidence/cloudflare-do-investigation-20261116.md)
+retains that historical gap without treating missing data as zero consumption.
+
+[Sanitized final evidence](./evidence/cloudflare-private-operations-20261116.json) includes
+the scheduled event, failure log check, restoration, healthy recovery log, owner receipt,
+final privacy/configuration reads and usage reconciliation. The Gmail primary-address
+fix passes 33 focused tests, API typecheck, focused lint and source formatting; the consent
+helper additionally rejects partial grants. Source privacy and whitespace checks pass.
+
+## 2026-11-17 03:01 UTC — Normal daily cron and Gmail health verified (R-30 follow-up)
+
+The actual `0 3 * * *` Cloudflare cron ran on version
+`5868ab73-0666-4598-a8dc-dd759e9579ff`; the temporary operator was already removed and
+no manual invocation was made for this observation. The backup finished with read-back
+verification at **03:00:07.819 UTC**, and real Gmail health at **03:00:08.372 UTC** is
+`verified`, with all three failure counts zero. Independent S3 reads find three valid
+backups totaling 2,472 bytes and a healthy overall recovery inventory of 2,856 bytes.
+
+Persisted Workers Observability confirms the real scheduled front event (record
+`01M7KQ559B000000000000000A`) and its production DO call
+(`01M7KQ5586000000000000005X`), sharing trace `eefed8024d054b0ed6ea52fe054202a7`.
+Both return `ok`; front CPU is 0 ms at provider resolution, DO CPU 37 ms, wall times
+4,074/4,058 ms. The following five-minute maintenance cron also succeeds, with front/DO
+CPU 0/12 ms and a completion signal at 03:01:01.100 UTC. This is actual normal scheduled
+execution and live Gmail verification, distinct from the earlier manual/synthetic evidence.
+
+The 03:17 UTC scheduled monitoring fault, owner notification receipt and subsequent
+recovery are still pending. Long-lived Google production consent remains T065–T067;
+the current seven-day Testing grant is not a production-consent completion.
+
+## 2026-11-17 02:38 UTC — Gmail health and manual monitoring cycle pass (R-30 follow-up)
+
+The owner's repeated Testing consent grants both `gmail.send` and `gmail.settings.basic`.
+Refresh and send-as lookup return 200, identifying the configured mailbox as the primary
+address. This exposed a real-provider bug: `senderVerification` required
+`verificationStatus=accepted`, but Google's `verificationStatus` applies only to custom
+aliases. `apps/api/src/services/email.ts` now accepts a matching address with Google's
+read-only `isPrimary=true`, while custom aliases still require accepted verification.
+Pending, missing-status, malformed-primary and nonmatching addresses remain rejected.
+[Google SendAs field semantics](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs).
+
+Two regression assertions failed before the fix (provider primary lookup and the persisted
+health signal); **33/33 tests across providers, operations, config, consent and monitoring**
+then passed. API typecheck, focused ESLint and changed-source formatting pass. The patched
+API was deployed privately as `40bd0e33-0229-4ce9-9d53-fd5886453202`; provisioning the three
+Google/Gmail secrets produced active version `5868ab73-0666-4598-a8dc-dd759e9579ff`.
+Existing AUTH/RATE_LIMIT secrets remain. Both public subdomain modes remain disabled and
+the normal cron expressions are unchanged. This is a new tested source patch, not the
+unchanged-source assertion from the earlier R-30 checkpoint.
+
+Private settings now contain the owner-selected sender; unrelated inquiry/public-contact
+addresses remain deliberately invalid acceptance placeholders, with private fixture choices.
+No public contact address or final copy was inferred or published. A manual production DO
+invocation completed maintenance, read-back-verified a new 930-byte backup, and wrote
+**`gmail: verified` at 02:33:56.882 UTC**, with zero inquiry/auth/image failures. Two retained
+backups total 1,542 bytes; the monitor's complete recovery inventory totals 1,926 bytes.
+No Gmail message was sent. Both temporary local refresh-token files were removed after
+live verification; the valid token is stored as a Worker secret. The Testing grant was
+obtained about **November 17 02:28:55 UTC** and is temporary (seven-day lifetime, approximately
+November 24 02:28 UTC / November 23 21:28 EST). T065–T067 remain deferred production work.
+
+Authenticated S3 monitoring now returns `ok: true`, no issues and no overdue cleanup.
+GitHub hourly monitoring is enabled with the verified bucket-only read credentials:
+
+- [Healthy run 44003968086](https://github.com/sg921216/radiant_images/actions/runs/44003968086): success; real S3 monitor reports `ok: true`.
+- [Controlled fault 44004156968](https://github.com/sg921216/radiant_images/actions/runs/44004156968): the real monitoring step fails after temporarily changing only the repository bucket variable to a nonexistent acceptance target.
+- [Recovered run 44004223073](https://github.com/sg921216/radiant_images/actions/runs/44004223073): success after restoring `RECOVERY_BUCKET=radiant-images-recovery`; real monitor reports `ok: true` again.
+
+The bounded fault helper restores the correct configuration in `finally`; restoration and
+enabled monitoring were read back. No recovery object or application resource was altered
+for this fault. These three runs are **workflow_dispatch**, not scheduled-run evidence.
+The actual 03:00 UTC daily backup and 03:17 UTC scheduled alert/receipt checks are pending.
+The workflow ran default-branch `d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61`; its real checker
+matches local source, while the feature branch's newer pinned action references remain
+separate. No new full CI/browser result is inferred. **55/67 tasks complete; T001/T058 open.**
+
+## 2026-11-17 02:27 UTC — Recovery credentials verified and staged (R-30 follow-up)
+
+The owner saved the new R2 S3 credentials in the ignored `.env.recovery-monitor` file.
+Direct S3 checks with that pair return **200** for recovery listing and **403** for
+`radiant-images-media` listing, unrelated `radiant-001` listing and an empty uniquely named
+write probe to the recovery bucket. No probe object was created. The real monitor also
+reads all fixed operational signals and recovery metadata successfully; its sole issue
+is **`gmail_unavailable`**, with no overdue recovery/receipt cleanup and 999 recovery bytes.
+These are authenticated provider checks, not mocks. The owner-reported expiration is
+November 16, 2027; rotate the credential before that date.
+
+The exact verified pair was uploaded through GitHub's encrypted-secret API and both
+`R2_MONITOR_ACCESS_KEY_ID` and `R2_MONITOR_SECRET_ACCESS_KEY` are now present. The repository
+bucket variable names `radiant-images-recovery`. **`OPERATIONS_MONITOR_ENABLED=false`**
+is retained until a healthy baseline is established; GitHub execution and scheduled
+notification receipt remain unverified. No Billing Read credential was accessed or reused.
+The repeated Gmail consent is still pending: neither a new consent token file nor a
+refresh-token value in `.env.acceptance` is present. The earlier send-only token remains
+undeployed. T001/T058 and the deferred production-consent tasks remain open (55/67 complete).
+
+Workers Observability now records **56 automatic maintenance calls and 57 production DO
+calls**, including the initial manual daily operation, all `ok`. Maximum front CPU is 1 ms;
+the maximum DO sample is still the initial 49-ms manual call. GraphQL reports 27 requests
+on November 16 and 30 on November 17, zero errors, with identical account/namespace counts
+and periodic sums. November 14/15 rows remain absent. This supports the active environment's
+execution/reporting agreement while retaining the historical investigation gap. The first
+normal daily backup is still due at **November 17 03:00 UTC / November 16 22:00 EST**.
+Sanitized results are appended to
+[the operational evidence](./evidence/cloudflare-private-operations-20261116.json).
+
+## 2026-11-16 — Persistent private operational environment (R-30)
+
+**23:04 UTC private-testing follow-up:** At the owner's request, the remaining Google
+homepage/privacy, Branding/Production and fresh production-consent work is explicitly
+deferred as T065–T067. **55/67 tasks complete; 12 open.** The owner obtained a Testing
+grant at 22:58 UTC, but live validation refreshed it successfully with only `gmail.send`;
+`gmail.settings.basic` was absent and the send-as lookup returned 403. This is incomplete
+consent, not a Gmail-health pass. The incomplete token was preserved in an ignored local
+secret file, never deployed; a new consent attempt requesting both permissions is pending.
+The local consent helper now checks both granted scopes before saving a token or returning
+success; a regression reproduces rejection of partial grants and preservation of an
+existing token. Both tooling tests and tooling typecheck pass. No message was sent.
+
+Read-only Workers Observability now records 15 successful automatic maintenance calls
+plus the initial manual daily DO call (16 DO calls total). All recorded outcomes are `ok`;
+automatic front CPU is 0–1 ms and maintenance DO CPU is 12–19 ms. The 23:04 GraphQL query
+reports 16 requests and zero errors in both account-wide and namespace aggregates, with
+matching periodic sums. The earlier current-environment cross-query difference has
+resolved at this observation; November 14/15 history remains absent and is retained in
+the Cloudflare investigation packet. Daily cron execution still awaits 03:00 UTC.
+
+The owner is creating `radiant-images-recovery-monitor` with the single recovery bucket's
+`Workers R2 Storage Bucket Item Read` policy and reports expiry November 16, 2027.
+Record rotation before that date; actual credential scope and GitHub activation remain
+pending until the new S3 pair is saved and tested.
+Follow-up validation also passes focused ESLint, repository formatting and the privacy
+gate (471 files, zero blocked); task IDs are unique with the 55/67 count confirmed.
+The temporary private operator prepared for the next health check was removed at
+23:10 UTC while credentials remain pending; the provider inventory again contains only
+the persistent API Worker. Normal schedules and persistent D1/R2 resources remain active.
+
+**Google consent follow-up:** The owner reports that External production publication is
+blocked until Branding has a valid app name, support email, homepage URL and privacy-policy
+URL. Long-lived Gmail consent therefore has an explicit branding/privacy dependency despite
+the remaining operational work proceeding separately from final site content. Testing with
+the intended mailbox added as an approved test user can support temporary acceptance, but
+its Gmail refresh token expires after seven days. No successful consent, token provisioning,
+public page publication or Gmail-health pass is inferred. Quickstart records the corrected
+procedure; T001/T058 and the task count remain unchanged.
+
+**Private infrastructure is established; operational acceptance remains incomplete.**
+The owner explicitly requested this setup while privacy copy/photos proceed separately.
+The existing application source at `fb67738294d9b7c84f7c665516d8dd22595b8b4f` is unchanged
+from the tested `c23c943` API/shared source. No public release or real email send occurred.
+
+The new `apps/api/wrangler.acceptance.toml` deploys `radiant-images-api` with all four
+production SQLite Durable Object classes, the dedicated `radiant-images` D1 database and
+private `radiant-images-media` / `radiant-images-recovery` buckets in ENAM. All three
+migrations are applied. API reads verify workers.dev and preview URLs disabled; account
+Worker custom domains are empty. Both buckets have managed public access disabled and
+no custom domains. The configuration has no routes. These resources are intentionally
+long-lived; do not apply the historical disposable-rehearsal cleanup to them.
+
+The normal schedules are configured: maintenance every five minutes and backup/health
+at **03:00 UTC daily** (22:00 New York during EST). A temporary private operator invoked
+the existing production `ScheduledOperations` DO once, without a provider double:
+
+- Maintenance completed at **21:43:54.646 UTC**.
+- Backup completed and read-back verification passed at **21:43:56.365 UTC**. The initial
+  empty-data backup is 612 bytes; metadata records 28-day expiry at December 14 21:43:55.283.
+- Health at **21:43:56.674 UTC** correctly reports `gmail: unavailable`, with zero
+  inquiry/auth/image failures. The long-lived database has no client/content fixtures.
+- The independent local binding observer, using the shipped monitor logic and actual R2
+  inventory, reports only `gmail_unavailable`; recovery totals 999 bytes at observation.
+  This is not the S3/GitHub transport acceptance.
+- The daily invocation above is **manual production-DO evidence**, not proof that the
+  configured daily cron has fired. Its first 03:00 UTC opportunity is November 17.
+  Two actual `*/5 * * * *` invocations were subsequently captured at **21:51:00.042**
+  and **21:56:00.236 UTC**, both `ok`, with zero-ms front CPU at provider resolution.
+  Their production DO calls report 16/12 ms CPU, 1,645/1,837 ms wall time and no exceptions.
+  The first automatic maintenance completion signal is 21:51:01.677 UTC.
+
+The saved Google/Gmail values in `apps/api/.dev.vars` are placeholders and remain so.
+The owner asked which environment and requested complete setup instructions; a separate
+ignored root `.env.acceptance` template now holds the real-environment setup fields. Real client
+credentials, refresh-token consent (`gmail.send` and `gmail.settings.basic`), and the
+intended sender address were requested through the existing ignored-file workflow.
+The old `.env.recovery-monitor` credential returns 403 listing the new recovery bucket.
+Account token management also returns 403 (code 9109); fresh bucket-only Object Read Only
+S3 credentials were requested. The Billing Read credential was neither accessed nor reused.
+
+GitHub repository configuration is staged with `RECOVERY_BUCKET=radiant-images-recovery`,
+the account-ID secret and **`OPERATIONS_MONITOR_ENABLED=false`**. The two R2 secrets remain
+absent. The workflow was disabled/re-enabled as authenticated `sg921216` to establish the
+intended scheduled actor; this does not prove notification preferences or receipt. No
+failure notification was dispatched in this setup. The default-branch checker and lockfile
+match local source; its workflow still has older action references, while the updated pinned
+workflow remains on the feature branch. Healthy/fault/recovered and scheduled receipt
+remain unverified pending real credentials/Gmail health.
+
+The active namespace's account-wide and namespace-specific GraphQL aggregates were empty
+at 21:48 without API errors while tail and persisted Workers Observability proved execution. The initial
+production DO sample reports `ok`, 49 ms CPU, 4,462 ms wall time and no exceptions. Dataset
+settings were rechecked at 21:51 UTC: enabled, 90-day lookback, 32-day query range and
+10,000-row limit. At **21:57:18 UTC**, namespace aggregates began reporting **three requests**,
+matching the three captured production DO calls, with zero errors. The broader account query
+returned two requests and still no November 14/15 rows. This is partial reporting recovery;
+cross-query ingestion delay/sampling and historical missing usage remain unresolved. The
+[Cloudflare investigation packet](./evidence/cloudflare-do-investigation-20261116.md)
+is prepared, not submitted; missing usage is not counted as zero consumption.
+
+Validation: explicit-config deployment dry-run succeeds; Wrangler-generated acceptance
+bindings agree with the existing types; API typecheck passes; **21/21 focused tests across
+four operations/monitor/release-gate files** pass. The source privacy gate checks 471 files
+with zero blocked; `git diff --check` passes. No application behavior changed, so the prior
+full CI/browser evidence remains separately identified rather than claimed as a new run.
+See [sanitized operational evidence](./evidence/cloudflare-private-operations-20261116.json)
+for versions, privacy settings, scheduler results, GitHub status and metering queries.
+The temporary operator was deleted and its absence verified at 21:57 UTC; the local
+proxy and tail stopped. Only the persistent API Worker remains; D1/R2/DO resources and
+normal schedules stay active.
+
+**55/67 tasks complete; 12 open. T001/T058/T060/T063/T065–T067 remain open.** Public ingress,
+final content/privacy/photos and broader real-provider/human release gates remain pending.
+
 ## 2026-11-16 — T001 committed guard and paginated provider rehearsal (R-29)
 
 **T001 remains open; 55/64 tasks complete.** Tested the committed `c23c943` application

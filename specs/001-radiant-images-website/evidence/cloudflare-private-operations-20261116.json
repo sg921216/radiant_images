@@ -1,0 +1,2197 @@
+{
+  "checkpoint": "R-30",
+  "observedAt": "2026-11-16T21:59:17.099281+00:00",
+  "source": {
+    "head": "fb67738294d9b7c84f7c665516d8dd22595b8b4f",
+    "applicationMatchesTestedCommit": true,
+    "applicationBehaviorChanged": false,
+    "config": "apps/api/wrangler.acceptance.toml",
+    "configSha256": "a47cfb7e23b90d356b675c43c01466a0a032a2ad96db07fce74a281d4aa6583f"
+  },
+  "authorization": "Owner-requested long-lived private operational acceptance; final privacy copy and photos separate",
+  "resources": {
+    "database": {
+      "uuid": "003885df-e1f5-4bc1-acf6-8a21915e7406",
+      "name": "radiant-images",
+      "created_at": "2026-11-16T21:40:03.311Z",
+      "version": "production",
+      "file_size": 8192,
+      "num_tables": 0,
+      "primary_location_hint": "ENAM",
+      "created_in_region": "ENAM",
+      "jurisdiction": null,
+      "read_replication": {
+        "mode": "disabled"
+      }
+    },
+    "buckets": [
+      {
+        "name": "radiant-images-media",
+        "creation_date": "2026-11-16T21:40:05.506Z",
+        "location": "ENAM",
+        "storage_class": "Standard",
+        "jurisdiction": "default"
+      },
+      {
+        "name": "radiant-images-recovery",
+        "creation_date": "2026-11-16T21:40:06.512Z",
+        "location": "ENAM",
+        "storage_class": "Standard",
+        "jurisdiction": "default"
+      }
+    ]
+  },
+  "privacy": [
+    {
+      "path": "/workers/scripts/radiant-images-api/subdomain",
+      "result": {
+        "enabled": false,
+        "previews_enabled": false
+      }
+    },
+    {
+      "path": "/workers/scripts/radiant-images-api/schedules",
+      "result": {
+        "schedules": [
+          {
+            "cron": "0 3 * * *",
+            "created_on": "2026-11-16T21:41:22.664353Z",
+            "modified_on": "2026-11-16T21:41:22.664353Z"
+          },
+          {
+            "cron": "*/5 * * * *",
+            "created_on": "2026-11-16T21:41:22.664353Z",
+            "modified_on": "2026-11-16T21:41:22.664353Z"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/workers/domains",
+      "result": []
+    },
+    {
+      "path": "/workers/durable_objects/namespaces",
+      "result": [
+        {
+          "id": "dfbe36245d36432ead412c456914a8fe",
+          "name": "radiant-images-api_BulkReads",
+          "script": "radiant-images-api",
+          "class": "BulkReads",
+          "use_sqlite": true
+        },
+        {
+          "id": "70ebe406aa8d4144a8fdeb743a41e173",
+          "name": "radiant-images-api_GalleryMutations",
+          "script": "radiant-images-api",
+          "class": "GalleryMutations",
+          "use_sqlite": true
+        },
+        {
+          "id": "b03ad31fdbbd4d83b91761ef0aed45b4",
+          "name": "radiant-images-api_JpegValidator",
+          "script": "radiant-images-api",
+          "class": "JpegValidator",
+          "use_sqlite": true
+        },
+        {
+          "id": "22cf4ea67a7f4cc6bc8a172621a398e6",
+          "name": "radiant-images-api_ScheduledOperations",
+          "script": "radiant-images-api",
+          "class": "ScheduledOperations",
+          "use_sqlite": true
+        }
+      ]
+    },
+    {
+      "path": "/r2/buckets/radiant-images-media/domains/managed",
+      "result": {
+        "enabled": false,
+        "bucketId": "58a668486c554b388c1b251287885ad1",
+        "domain": "pub-58a668486c554b388c1b251287885ad1.r2.dev"
+      }
+    },
+    {
+      "path": "/r2/buckets/radiant-images-media/domains/custom",
+      "result": {
+        "domains": []
+      }
+    },
+    {
+      "path": "/r2/buckets/radiant-images-recovery/domains/managed",
+      "result": {
+        "enabled": false,
+        "bucketId": "a246910975f7454cbd6def3f3b3a1d8f",
+        "domain": "pub-a246910975f7454cbd6def3f3b3a1d8f.r2.dev"
+      }
+    },
+    {
+      "path": "/r2/buckets/radiant-images-recovery/domains/custom",
+      "result": {
+        "domains": []
+      }
+    }
+  ],
+  "initialProductionSchedulerCall": {
+    "observedAt": "2026-11-16T21:43:57.547309+00:00",
+    "invocation": "manual-production-do",
+    "signals": {
+      "operations/maintenance.json": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-16T21:43:52.473Z",
+        "finishedAt": "2026-11-16T21:43:54.646Z"
+      },
+      "operations/backup.json": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-16T21:43:54.980Z",
+        "finishedAt": "2026-11-16T21:43:56.365Z"
+      },
+      "health/latest.json": {
+        "at": "2026-11-16T21:43:56.674Z",
+        "gmail": "unavailable",
+        "failures": {
+          "inquiry": 0,
+          "auth": 0,
+          "image": 0
+        }
+      },
+      "backups": [
+        {
+          "size": 612,
+          "createdAt": "2026-11-16T21:43:55.283Z",
+          "expiresAt": "2026-12-14T21:43:55.283Z"
+        }
+      ]
+    }
+  },
+  "latestSignals": {
+    "observedAt": "2026-11-16T21:54:37.311284+00:00",
+    "signals": {
+      "operations/maintenance.json": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-16T21:51:00.321Z",
+        "finishedAt": "2026-11-16T21:51:01.677Z"
+      },
+      "operations/backup.json": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-16T21:43:54.980Z",
+        "finishedAt": "2026-11-16T21:43:56.365Z"
+      },
+      "health/latest.json": {
+        "at": "2026-11-16T21:43:56.674Z",
+        "gmail": "unavailable",
+        "failures": {
+          "inquiry": 0,
+          "auth": 0,
+          "image": 0
+        }
+      },
+      "backups": [
+        {
+          "size": 612,
+          "createdAt": "2026-11-16T21:43:55.283Z",
+          "expiresAt": "2026-12-14T21:43:55.283Z"
+        }
+      ]
+    }
+  },
+  "tailInvocations": [
+    {
+      "eventTimestamp": 1794865432472,
+      "event": {
+        "rpcMethod": "run"
+      },
+      "scriptName": "radiant-images-api",
+      "scriptVersion": {
+        "id": "1e957798-4d86-47ce-82fb-ca095b89ca43"
+      },
+      "entrypoint": "ScheduledOperations",
+      "executionModel": "durableObject",
+      "outcome": "ok",
+      "cpuTime": 49,
+      "wallTime": 4462,
+      "exceptions": []
+    },
+    {
+      "eventTimestamp": 1794865860303,
+      "event": {
+        "rpcMethod": "run"
+      },
+      "scriptName": "radiant-images-api",
+      "scriptVersion": {
+        "id": "1e957798-4d86-47ce-82fb-ca095b89ca43"
+      },
+      "entrypoint": "ScheduledOperations",
+      "executionModel": "durableObject",
+      "outcome": "ok",
+      "cpuTime": 16,
+      "wallTime": 1645,
+      "exceptions": []
+    },
+    {
+      "eventTimestamp": 1794865860042,
+      "event": {
+        "cron": "*/5 * * * *",
+        "scheduledTime": 1794865859065
+      },
+      "scriptName": "radiant-images-api",
+      "scriptVersion": {
+        "id": "1e957798-4d86-47ce-82fb-ca095b89ca43"
+      },
+      "entrypoint": "default",
+      "executionModel": "stateless",
+      "outcome": "ok",
+      "cpuTime": 0,
+      "wallTime": 1774,
+      "exceptions": []
+    },
+    {
+      "eventTimestamp": 1794866160709,
+      "event": {
+        "rpcMethod": "run"
+      },
+      "scriptName": "radiant-images-api",
+      "scriptVersion": {
+        "id": "1e957798-4d86-47ce-82fb-ca095b89ca43"
+      },
+      "entrypoint": "ScheduledOperations",
+      "executionModel": "durableObject",
+      "outcome": "ok",
+      "cpuTime": 12,
+      "wallTime": 1837,
+      "exceptions": []
+    },
+    {
+      "eventTimestamp": 1794866160236,
+      "event": {
+        "cron": "*/5 * * * *",
+        "scheduledTime": 1794866159065
+      },
+      "scriptName": "radiant-images-api",
+      "scriptVersion": {
+        "id": "1e957798-4d86-47ce-82fb-ca095b89ca43"
+      },
+      "entrypoint": "default",
+      "executionModel": "stateless",
+      "outcome": "ok",
+      "cpuTime": 0,
+      "wallTime": 2128,
+      "exceptions": []
+    }
+  ],
+  "persistedObservability": {
+    "observedAt": "2026-11-16T21:46:21.424Z",
+    "queryId": "radiant-private-acceptance-r30",
+    "timeframe": {
+      "from": 1794865200000,
+      "to": 1794865542835
+    },
+    "invocations": [
+      {
+        "timestamp": 1794865436893,
+        "recordId": "01M7K5266X000000000000006A",
+        "traceId": "db769962c90c6ab616a3b62f9d793ebf",
+        "truncated": false,
+        "scriptName": "radiant-images-api",
+        "scriptVersion": {
+          "id": "1e957798-4d86-47ce-82fb-ca095b89ca43"
+        },
+        "durableObjectId": "e4b2c60461e62a76163d6970127e6ca28d4a44b23a4bdaa78490f6eeaaf99c57",
+        "eventType": "jsrpc",
+        "entrypoint": "ScheduledOperations",
+        "executionModel": "durableObject",
+        "event": {
+          "rpcMethods": [
+            "run"
+          ],
+          "rpcCallCount": 1
+        },
+        "outcome": "ok",
+        "wallTimeMs": 4462,
+        "cpuTimeMs": 49
+      }
+    ]
+  },
+  "independentBindingObserver": {
+    "observedAt": "2026-11-16T21:51:19.969Z",
+    "transport": "independent local observer through remote R2 binding, not S3/GitHub",
+    "ok": false,
+    "issues": [
+      "gmail_unavailable"
+    ],
+    "counts": {
+      "overdueRecovery": 0,
+      "missedRemovalTarget": 0,
+      "overdueReceipts": 0,
+      "recoveryBytes": 999
+    }
+  },
+  "github": {
+    "observedAt": "2026-11-16T21:50:22.019596+00:00",
+    "actor": "sg921216",
+    "workflowId": 418824337,
+    "workflowState": "active",
+    "enabled": false,
+    "bucket": "radiant-images-recovery",
+    "secrets": {
+      "CLOUDFLARE_ACCOUNT_ID": true,
+      "R2_MONITOR_ACCESS_KEY_ID": false,
+      "R2_MONITOR_SECRET_ACCESS_KEY": false
+    }
+  },
+  "defaultBranchMonitorSource": {
+    ".github/workflows/operations-monitor.yml": {
+      "mainSha": "161a7d0ce154aff98714a905501ed82aef41015d",
+      "matchesLocal": false
+    },
+    "scripts/operations-monitor.ts": {
+      "mainSha": "0b6fa683cce9898d05ccae23113ccedd4806124b",
+      "matchesLocal": true
+    },
+    "package.json": {
+      "mainSha": "466e9e6902123412b41a58ff13ac418a9a788609",
+      "matchesLocal": true
+    },
+    "pnpm-lock.yaml": {
+      "mainSha": "a3ee3f56dc2827680344f56b22baf43004225706",
+      "matchesLocal": true
+    }
+  },
+  "credentialStatus": {
+    "gmailValuesArePlaceholders": true,
+    "senderAddressPending": true,
+    "existingS3RecoveryReadStatus": 403,
+    "newBucketOnlyS3CredentialsPending": true,
+    "accountTokenManagementStatus": 403,
+    "accountTokenManagementErrorCode": 9109,
+    "billingTokenUsed": false,
+    "credentialValuesRecorded": false,
+    "realGmailFile": ".env.acceptance",
+    "refreshTokenFile": ".gmail-refresh-token.secret",
+    "localDevelopmentCredentialsPreserved": true
+  },
+  "metering": {
+    "observedAt": "2026-11-16T21:48:17.022Z",
+    "query": "{viewer{accounts(filter:{accountTag:\"c99576a777ec2286fcd04b8433231159\"}){accountInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},limit:10000){dimensions{date}sum{requests errors wallTime}}accountPeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}}namespaceInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-16\",date_leq:\"2026-11-16\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{requests errors wallTime}}namespacePeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-16\",date_leq:\"2026-11-16\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}}}}}",
+    "response": {
+      "data": {
+        "viewer": {
+          "accounts": [
+            {
+              "accountInvocations": [],
+              "accountPeriodic": [],
+              "namespaceInvocations": [],
+              "namespacePeriodic": []
+            }
+          ]
+        }
+      },
+      "errors": null
+    }
+  },
+  "meteringDatasetSettings": {
+    "observedAt": "2026-11-16T21:51:18.268Z",
+    "datasets": {
+      "durableObjectsInvocationsAdaptiveGroups": {
+        "enabled": true,
+        "maxDuration": 2764800,
+        "maxPageSize": 10000,
+        "notOlderThan": 7776000
+      },
+      "durableObjectsPeriodicGroups": {
+        "enabled": true,
+        "maxDuration": 2764800,
+        "maxPageSize": 10000,
+        "notOlderThan": 7776000
+      }
+    }
+  },
+  "verification": {
+    "dryRun": "passed",
+    "migrationsApplied": [
+      "0001_initial.sql",
+      "0002_lifecycle.sql",
+      "0003_restore_state.sql"
+    ],
+    "generatedTypes": "acceptance bindings agree with existing ApiBindings",
+    "apiTypecheck": "passed",
+    "focusedTests": {
+      "files": 4,
+      "passed": 21,
+      "command": "pnpm exec vitest run --project api apps/api/tests/operations.test.ts --project tooling scripts/tests/operations-monitor.test.ts scripts/tests/release-gate.test.ts scripts/tests/release-config.test.ts"
+    },
+    "sourcePrivacy": {
+      "files": 471,
+      "blocked": 0
+    },
+    "diffWhitespace": "passed",
+    "formatCheck": "passed; TOML additionally parsed with tomllib and validated by Wrangler"
+  },
+  "limitations": [
+    "Manual daily invocation is not automatic daily-cron evidence.",
+    "Gmail is unavailable; no live email was sent.",
+    "Initial backup contains no client/content fixtures.",
+    "S3/GitHub healthy-fault-recovered and scheduled notification receipt remain unverified.",
+    "The existing default-branch workflow still has older action references; the checker and lockfile match local.",
+    "Current namespace usage is now nonzero and matches captured request count; broader account and historical reporting remain unresolved.",
+    "All release tasks remain gated; no public frontend is deployed."
+  ],
+  "persistentResourcesLeftActive": true,
+  "temporaryOperatorCleanup": {
+    "persistentApiPresent": true,
+    "temporaryOperatorAbsent": true,
+    "remainingWorkers": [
+      "radiant-images-api"
+    ]
+  },
+  "taskStatus": {
+    "completed": 55,
+    "total": 64,
+    "T001": "open",
+    "T058": "open",
+    "T060": "open",
+    "T063": "open"
+  },
+  "finalMetering": {
+    "observedAt": "2026-11-16T21:57:18.452Z",
+    "cleanup": {
+      "persistentApiPresent": true,
+      "temporaryOperatorAbsent": true,
+      "remainingWorkers": [
+        "radiant-images-api"
+      ]
+    },
+    "query": "{viewer{accounts(filter:{accountTag:\"c99576a777ec2286fcd04b8433231159\"}){accountInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},limit:10000){dimensions{date}sum{requests errors wallTime}}accountPeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}}namespaceInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date:\"2026-11-16\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{requests errors wallTime}}namespacePeriodic:durableObjectsPeriodicGroups(filter:{date:\"2026-11-16\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}}}}}",
+    "response": {
+      "data": {
+        "viewer": {
+          "accounts": [
+            {
+              "accountInvocations": [
+                {
+                  "dimensions": {
+                    "date": "2026-11-16"
+                  },
+                  "sum": {
+                    "errors": 0,
+                    "requests": 2,
+                    "wallTime": 6108038
+                  }
+                }
+              ],
+              "accountPeriodic": [
+                {
+                  "dimensions": {
+                    "date": "2026-11-16"
+                  },
+                  "sum": {
+                    "activeTime": 6299512,
+                    "cpuTime": 61769,
+                    "duration": 0.806337536,
+                    "rowsRead": 0,
+                    "rowsWritten": 0
+                  }
+                }
+              ],
+              "namespaceInvocations": [
+                {
+                  "dimensions": {
+                    "date": "2026-11-16"
+                  },
+                  "sum": {
+                    "errors": 0,
+                    "requests": 3,
+                    "wallTime": 7945421
+                  }
+                }
+              ],
+              "namespacePeriodic": [
+                {
+                  "dimensions": {
+                    "date": "2026-11-16"
+                  },
+                  "sum": {
+                    "activeTime": 7945208,
+                    "cpuTime": 78357,
+                    "duration": 1.016986624,
+                    "rowsRead": 0,
+                    "rowsWritten": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "errors": null
+    }
+  },
+  "localProxyAndTailStopped": true,
+  "automaticMaintenance": {
+    "capturedInvocations": 2,
+    "allOutcomes": "ok",
+    "frontCpuMs": [
+      0,
+      0
+    ],
+    "durableObjectCpuMs": [
+      16,
+      12
+    ],
+    "firstCompletionSignal": "2026-11-16T21:51:01.677Z"
+  },
+  "meteringInterpretation": "Initially empty; namespace now reports 3 requests matching 3 captured DO calls. Broad account query reports 2 requests; prior-day rehearsal usage remains missing. Ingestion/sampling or provider cause not established.",
+  "testingFollowup": {
+    "ownerDirection": "Defer Google production setup as T065-T067; continue private Testing acceptance",
+    "gmailInitialConsent": {
+      "observedAt": "2026-11-16T23:03:12.632Z",
+      "grantMode": "external-testing",
+      "refreshTokenFileModifiedAt": "2026-11-16T22:58:59.947Z",
+      "refreshStatus": 200,
+      "requiredScopes": {
+        "gmail.send": true,
+        "gmail.settings.basic": false
+      },
+      "senderLookupStatus": 403,
+      "intendedSenderVerified": false,
+      "ok": false
+    },
+    "gmailProvisioned": false,
+    "repeatConsentPending": true,
+    "r2OwnerReportedExpiry": "2027-11-16",
+    "r2CredentialsPending": true,
+    "maintenanceInvocations": {
+      "observedAt": "2026-11-16T23:04:52.886Z",
+      "returnedEvents": 32,
+      "invocations": [
+        {
+          "timestamp": 1794870061701,
+          "id": "01M7K9FAM5000000000000000A",
+          "traceId": "4ce7c35b33625040371277ffc8faca09",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794870059.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 1947
+        },
+        {
+          "timestamp": 1794870061630,
+          "id": "01M7K9FAHY000000000000002T",
+          "traceId": "4ce7c35b33625040371277ffc8faca09",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 13,
+          "wallTimeMs": 1664
+        },
+        {
+          "timestamp": 1794869762195,
+          "id": "01M7K9664K000000000000000A",
+          "traceId": "610f96aaf7ab04f4ed775713a50b2cdb",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794869759.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2021
+        },
+        {
+          "timestamp": 1794869762167,
+          "id": "01M7K9663Q000000000000002T",
+          "traceId": "610f96aaf7ab04f4ed775713a50b2cdb",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 12,
+          "wallTimeMs": 1928
+        },
+        {
+          "timestamp": 1794869461687,
+          "id": "01M7K8X0NQ000000000000000A",
+          "traceId": "9a2ce8355ef5d10ae22289b2947909c2",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794869459.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 1849
+        },
+        {
+          "timestamp": 1794869461635,
+          "id": "01M7K8X0M3000000000000002T",
+          "traceId": "9a2ce8355ef5d10ae22289b2947909c2",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 16,
+          "wallTimeMs": 1752
+        },
+        {
+          "timestamp": 1794869161782,
+          "id": "01M7K8KVSP000000000000000A",
+          "traceId": "25dd5d1f74ee39b0f11ad14c59fd2c6d",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794869159.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 1879
+        },
+        {
+          "timestamp": 1794869161717,
+          "id": "01M7K8KVQN000000000000002T",
+          "traceId": "25dd5d1f74ee39b0f11ad14c59fd2c6d",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 19,
+          "wallTimeMs": 1862
+        },
+        {
+          "timestamp": 1794868862321,
+          "id": "01M7K8AQBH000000000000000A",
+          "traceId": "10d11eab1fbbadce4a825b0bace8fae4",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794868859.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2690
+        },
+        {
+          "timestamp": 1794868862258,
+          "id": "01M7K8AQ9J000000000000002T",
+          "traceId": "10d11eab1fbbadce4a825b0bace8fae4",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 19,
+          "wallTimeMs": 2294
+        },
+        {
+          "timestamp": 1794868562065,
+          "id": "01M7K81J4H000000000000000A",
+          "traceId": "513ef0aa4723f7f8d36939435a7ed53b",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794868559.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2093
+        },
+        {
+          "timestamp": 1794868562033,
+          "id": "01M7K81J3H000000000000002T",
+          "traceId": "513ef0aa4723f7f8d36939435a7ed53b",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 13,
+          "wallTimeMs": 2076
+        },
+        {
+          "timestamp": 1794868262486,
+          "id": "01M7K7RDJP000000000000000A",
+          "traceId": "4e66c3992d0e41a882c1ba03138f8d50",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794868259.065
+          },
+          "cpuTimeMs": 1,
+          "wallTimeMs": 2087
+        },
+        {
+          "timestamp": 1794868262400,
+          "id": "01M7K7RDG0000000000000002T",
+          "traceId": "4e66c3992d0e41a882c1ba03138f8d50",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 12,
+          "wallTimeMs": 1936
+        },
+        {
+          "timestamp": 1794867961558,
+          "id": "01M7K7F7PP000000000000000A",
+          "traceId": "a076a48271e84393af2fca9545dd3395",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794867959.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 1805
+        },
+        {
+          "timestamp": 1794867961535,
+          "id": "01M7K7F7NZ000000000000002T",
+          "traceId": "a076a48271e84393af2fca9545dd3395",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 13,
+          "wallTimeMs": 1719
+        },
+        {
+          "timestamp": 1794867662560,
+          "id": "01M7K763Q0000000000000000A",
+          "traceId": "63ad995ee791c931447a27eed777ddbb",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794867659.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2728
+        },
+        {
+          "timestamp": 1794867662425,
+          "id": "01M7K763JS000000000000002T",
+          "traceId": "63ad995ee791c931447a27eed777ddbb",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 15,
+          "wallTimeMs": 2277
+        },
+        {
+          "timestamp": 1794867362460,
+          "id": "01M7K6WYMW000000000000000A",
+          "traceId": "f98b4bc5e4fc4e24f6c65650cded1232",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794867359.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2582
+        },
+        {
+          "timestamp": 1794867362326,
+          "id": "01M7K6WYGP000000000000002T",
+          "traceId": "f98b4bc5e4fc4e24f6c65650cded1232",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 12,
+          "wallTimeMs": 2148
+        },
+        {
+          "timestamp": 1794867062341,
+          "id": "01M7K6KSJ5000000000000000A",
+          "traceId": "32247d89e5684404d7cc5c9db93320ac",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794867059.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2388
+        },
+        {
+          "timestamp": 1794867062281,
+          "id": "01M7K6KSG9000000000000002T",
+          "traceId": "32247d89e5684404d7cc5c9db93320ac",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 18,
+          "wallTimeMs": 2120
+        },
+        {
+          "timestamp": 1794866762285,
+          "id": "01M7K6AMHD000000000000000A",
+          "traceId": "98f3e1ef25060cda98eae7789841a728",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794866759.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2497
+        },
+        {
+          "timestamp": 1794866762220,
+          "id": "01M7K6AMFC000000000000002T",
+          "traceId": "98f3e1ef25060cda98eae7789841a728",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 14,
+          "wallTimeMs": 2211
+        },
+        {
+          "timestamp": 1794866462693,
+          "id": "01M7K61FZ5000000000000000A",
+          "traceId": "a07109f2381914dc6f987271bb63d3be",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794866459.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2900
+        },
+        {
+          "timestamp": 1794866462622,
+          "id": "01M7K61FWY000000000000002T",
+          "traceId": "a07109f2381914dc6f987271bb63d3be",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 13,
+          "wallTimeMs": 2445
+        },
+        {
+          "timestamp": 1794866162457,
+          "id": "01M7K5RARS000000000000000A",
+          "traceId": "3f77cb2f1352500a1970f9ae2caa0d83",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794866159.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 2128
+        },
+        {
+          "timestamp": 1794866162349,
+          "id": "01M7K5RAND000000000000002T",
+          "traceId": "3f77cb2f1352500a1970f9ae2caa0d83",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 12,
+          "wallTimeMs": 1837
+        },
+        {
+          "timestamp": 1794865861922,
+          "id": "01M7K5F592000000000000000A",
+          "traceId": "021e703b5983042377c54d1e5f90bd21",
+          "outcome": "ok",
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794865859.065
+          },
+          "cpuTimeMs": 0,
+          "wallTimeMs": 1774
+        },
+        {
+          "timestamp": 1794865861887,
+          "id": "01M7K5F57Z000000000000002T",
+          "traceId": "021e703b5983042377c54d1e5f90bd21",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 16,
+          "wallTimeMs": 1645
+        },
+        {
+          "timestamp": 1794865436893,
+          "id": "01M7K5266X000000000000006A",
+          "traceId": "db769962c90c6ab616a3b62f9d793ebf",
+          "outcome": "ok",
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "cpuTimeMs": 49,
+          "wallTimeMs": 4462
+        }
+      ]
+    },
+    "metering": {
+      "observedAt": "2026-11-16T23:04:34.908Z",
+      "query": "{viewer{accounts(filter:{accountTag:\"c99576a777ec2286fcd04b8433231159\"}){accountInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},limit:10000){dimensions{date}sum{requests errors wallTime}} accountPeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-16\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}} namespaceInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date:\"2026-11-16\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{requests errors wallTime}} namespacePeriodic:durableObjectsPeriodicGroups(filter:{date:\"2026-11-16\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}}}}}",
+      "response": {
+        "data": {
+          "viewer": {
+            "accounts": [
+              {
+                "accountInvocations": [
+                  {
+                    "dimensions": {
+                      "date": "2026-11-16"
+                    },
+                    "sum": {
+                      "errors": 0,
+                      "requests": 16,
+                      "wallTime": 34386154
+                    }
+                  }
+                ],
+                "accountPeriodic": [
+                  {
+                    "dimensions": {
+                      "date": "2026-11-16"
+                    },
+                    "sum": {
+                      "activeTime": 34384804,
+                      "cpuTime": 272944,
+                      "duration": 4.401254912,
+                      "rowsRead": 0,
+                      "rowsWritten": 0
+                    }
+                  }
+                ],
+                "namespaceInvocations": [
+                  {
+                    "dimensions": {
+                      "date": "2026-11-16"
+                    },
+                    "sum": {
+                      "errors": 0,
+                      "requests": 16,
+                      "wallTime": 34386154
+                    }
+                  }
+                ],
+                "namespacePeriodic": [
+                  {
+                    "dimensions": {
+                      "date": "2026-11-16"
+                    },
+                    "sum": {
+                      "activeTime": 34384804,
+                      "cpuTime": 272944,
+                      "duration": 4.401254912,
+                      "rowsRead": 0,
+                      "rowsWritten": 0
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "errors": null
+      }
+    },
+    "taskStatus": {
+      "completed": 55,
+      "total": 67,
+      "open": 12
+    },
+    "consentHelperValidation": {
+      "partialGrantRejected": true,
+      "existingTokenPreserved": true,
+      "testsPassed": 2,
+      "toolingTypecheck": "pass"
+    },
+    "validation": {
+      "toolingTestsPassed": 2,
+      "toolingTypecheck": "pass",
+      "focusedEslint": "pass",
+      "formatCheck": "pass",
+      "privacyGate": {
+        "files": 471,
+        "blocked": 0
+      },
+      "taskIdAudit": {
+        "unique": 67,
+        "complete": 55
+      },
+      "diffCheck": "pass"
+    },
+    "asOf": "2026-11-16T23:10:17.801487+00:00"
+  },
+  "r2SetupFollowup": {
+    "scope": {
+      "observedAt": "2026-11-17T02:25:15.020Z",
+      "recoveryRead": 200,
+      "bucketScopedReadOnly": true,
+      "mediaRead": 403,
+      "otherBucketRead": 403,
+      "recoveryWrite": 403
+    },
+    "s3Monitor": {
+      "observedAt": "2026-11-17T02:25:47.142Z",
+      "ok": false,
+      "issues": [
+        "gmail_unavailable"
+      ],
+      "counts": {
+        "overdueRecovery": 0,
+        "missedRemovalTarget": 0,
+        "overdueReceipts": 0,
+        "recoveryBytes": 999
+      }
+    },
+    "github": {
+      "observedAt": "2026-11-17T02:26:11.171037+00:00",
+      "actor": "sg921216",
+      "workflowId": 418824337,
+      "workflowState": "active",
+      "enabled": false,
+      "bucket": "radiant-images-recovery",
+      "secrets": {
+        "CLOUDFLARE_ACCOUNT_ID": true,
+        "R2_MONITOR_ACCESS_KEY_ID": true,
+        "R2_MONITOR_SECRET_ACCESS_KEY": true
+      }
+    },
+    "provider": {
+      "metering": {
+        "observedAt": "2026-11-17T02:27:18.293Z",
+        "query": "{viewer{accounts(filter:{accountTag:\"c99576a777ec2286fcd04b8433231159\"}){accountInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-17\"},limit:10000){dimensions{date}sum{requests errors wallTime}} accountPeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-17\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}} namespaceInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-16\",date_leq:\"2026-11-17\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{requests errors wallTime}} namespacePeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-16\",date_leq:\"2026-11-17\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}}}}}",
+        "response": {
+          "data": {
+            "viewer": {
+              "accounts": [
+                {
+                  "accountInvocations": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 27,
+                        "wallTime": 57888794
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 30,
+                        "wallTime": 79159783
+                      }
+                    }
+                  ],
+                  "accountPeriodic": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "activeTime": 57886489,
+                        "cpuTime": 434696,
+                        "duration": 7.409470591999999,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "activeTime": 79155912,
+                        "cpuTime": 410812,
+                        "duration": 10.131956736000001,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    }
+                  ],
+                  "namespaceInvocations": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 27,
+                        "wallTime": 57888794
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 30,
+                        "wallTime": 79159783
+                      }
+                    }
+                  ],
+                  "namespacePeriodic": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "activeTime": 57886489,
+                        "cpuTime": 434696,
+                        "duration": 7.409470591999999,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "activeTime": 79155912,
+                        "cpuTime": 410812,
+                        "duration": 10.131956736000001,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "errors": null
+        }
+      },
+      "observability": {
+        "observedAt": "2026-11-17T02:27:44.218Z",
+        "returnedEvents": 114,
+        "durableObjectCalls": 57,
+        "scheduledCalls": 56,
+        "nonOk": 0,
+        "frontCpuMsMax": 1,
+        "doCpuMsMax": 49,
+        "latest": [
+          {
+            "timestamp": 1794882362803,
+            "id": "01M7KN6QDK000000000000000A",
+            "cron": "*/5 * * * *",
+            "outcome": "ok",
+            "cpuTimeMs": 0,
+            "wallTimeMs": 2889
+          },
+          {
+            "timestamp": 1794882062921,
+            "id": "01M7KMXJJ9000000000000000A",
+            "cron": "*/5 * * * *",
+            "outcome": "ok",
+            "cpuTimeMs": 0,
+            "wallTimeMs": 2970
+          },
+          {
+            "timestamp": 1794881762473,
+            "id": "01M7KMMD59000000000000000A",
+            "cron": "*/5 * * * *",
+            "outcome": "ok",
+            "cpuTimeMs": 0,
+            "wallTimeMs": 2915
+          }
+        ]
+      }
+    },
+    "ownerReportedCredentialExpiry": "2027-11-16",
+    "gmailConsentPending": true,
+    "automaticDailyBackupPending": true,
+    "healthyFaultRecoveredPending": true,
+    "scheduledNotificationReceiptPending": true
+  },
+  "gmailAndManualMonitorFollowup": {
+    "observedAt": "2026-11-17T02:42:46.354405+00:00",
+    "consent": {
+      "observedAt": "2026-11-17T02:32:08.941Z",
+      "grantMode": "external-testing",
+      "refreshTokenFileModifiedAt": "2026-11-17T02:28:55.949Z",
+      "refreshStatus": 200,
+      "requiredScopes": {
+        "gmail.send": true,
+        "gmail.settings.basic": true
+      },
+      "senderLookupStatus": 200,
+      "intendedSenderVerified": true,
+      "ok": true
+    },
+    "provision": {
+      "observedAt": "2026-11-17T02:33:00.265Z",
+      "exitCode": 0,
+      "secretNames": [
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "GMAIL_REFRESH_TOKEN"
+      ],
+      "ok": true
+    },
+    "deployments": {
+      "observedAt": "2026-11-17T02:38:05.493Z",
+      "deployments": [
+        {
+          "id": "18574758-7019-4380-bc29-0f848cd0c0b9",
+          "created_on": "2026-11-17T02:33:01.777985Z",
+          "versions": [
+            {
+              "version_id": "5868ab73-0666-4598-a8dc-dd759e9579ff",
+              "percentage": 100
+            }
+          ]
+        },
+        {
+          "id": "eaf96f06-f6c3-4357-87ef-a25964794484",
+          "created_on": "2026-11-17T02:32:43.867093Z",
+          "versions": [
+            {
+              "version_id": "40bd0e33-0229-4ce9-9d53-fd5886453202",
+              "percentage": 100
+            }
+          ]
+        },
+        {
+          "id": "2260b7d9-a09d-4a6e-9820-775be55ff0bd",
+          "created_on": "2026-11-16T21:43:02.426805Z",
+          "versions": [
+            {
+              "version_id": "1e957798-4d86-47ce-82fb-ca095b89ca43",
+              "percentage": 100
+            }
+          ]
+        }
+      ],
+      "errors": []
+    },
+    "emailServiceSha256": "4ef38409bb87201848fcaa2f45e258ad93ce1d15389cb394a24028b543c0b12b",
+    "regression": {
+      "red": {
+        "testsFailed": 2,
+        "files": [
+          "providers.test.ts",
+          "operations.test.ts"
+        ]
+      },
+      "green": {
+        "testsPassed": 33,
+        "files": 5
+      },
+      "apiTypecheck": "pass",
+      "focusedEslint": "pass",
+      "changedSourceFormatting": "pass"
+    },
+    "manualDaily": {
+      "observedAt": "2026-11-17T02:33:56.093Z",
+      "invocation": {
+        "completed": true,
+        "invocation": "manual-production-do"
+      },
+      "maintenance": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T02:33:53.665Z",
+        "finishedAt": "2026-11-17T02:33:54.814Z"
+      },
+      "backup": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T02:33:55.058Z",
+        "finishedAt": "2026-11-17T02:33:56.281Z"
+      },
+      "health": {
+        "at": "2026-11-17T02:33:56.882Z",
+        "gmail": "verified",
+        "failures": {
+          "inquiry": 0,
+          "auth": 0,
+          "image": 0
+        }
+      },
+      "backups": [
+        {
+          "size": 612,
+          "createdAt": "2026-11-16T21:43:55.283Z",
+          "expiresAt": "2026-12-14T21:43:55.283Z"
+        },
+        {
+          "size": 930,
+          "createdAt": "2026-11-17T02:33:55.340Z",
+          "expiresAt": "2026-12-15T02:33:55.340Z"
+        }
+      ]
+    },
+    "localRefreshTokenFilesRemoved": true,
+    "provisionalSettings": "Owner-selected Gmail sender; inquiry/public contact use acceptance.invalid; private fixture choices; no public contact approval inferred",
+    "manualMonitorCycle": {
+      "startedAt": "2026-11-17T02:35:43.050500+00:00",
+      "kind": "manual bounded monitor-configuration fault",
+      "baselineRunId": 44003968086,
+      "stages": [
+        {
+          "id": 44004156968,
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44004156968",
+          "event": "workflow_dispatch",
+          "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+          "phase": "fault",
+          "monitorStep": [
+            {
+              "name": "Independently inspect private recovery metadata",
+              "conclusion": "failure"
+            }
+          ]
+        },
+        {
+          "id": 44004223073,
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44004223073",
+          "event": "workflow_dispatch",
+          "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+          "phase": "recovered",
+          "monitorStep": [
+            {
+              "name": "Independently inspect private recovery metadata",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "faultMayBeActive": false,
+      "faultRun": {
+        "workflow_run_id": 44004156968,
+        "run_url": "https://api.github.com/repos/sg921216/radiant_images/actions/runs/44004156968",
+        "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44004156968"
+      },
+      "restoredAt": "2026-11-17T02:36:18.561700+00:00",
+      "recoveryRun": {
+        "workflow_run_id": 44004223073,
+        "run_url": "https://api.github.com/repos/sg921216/radiant_images/actions/runs/44004223073",
+        "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44004223073"
+      },
+      "passed": true,
+      "finishedAt": "2026-11-17T02:36:51.289068+00:00"
+    },
+    "baselineGitHubLog": {
+      "runId": 44003968086,
+      "monitorResults": [
+        {
+          "ok": true,
+          "issues": [],
+          "counts": {
+            "overdueRecovery": 0,
+            "missedRemovalTarget": 0,
+            "overdueReceipts": 0,
+            "recoveryBytes": 1926
+          }
+        }
+      ]
+    },
+    "recoveredGitHubLog": {
+      "runId": 44004223073,
+      "monitorResults": [
+        {
+          "ok": true,
+          "issues": [],
+          "counts": {
+            "overdueRecovery": 0,
+            "missedRemovalTarget": 0,
+            "overdueReceipts": 0,
+            "recoveryBytes": 1926
+          }
+        }
+      ]
+    },
+    "currentGitHub": {
+      "observedAt": "2026-11-17T02:39:35.303775+00:00",
+      "actor": "sg921216",
+      "workflowId": 418824337,
+      "workflowState": "active",
+      "enabled": true,
+      "bucket": "radiant-images-recovery",
+      "secrets": {
+        "CLOUDFLARE_ACCOUNT_ID": true,
+        "R2_MONITOR_ACCESS_KEY_ID": true,
+        "R2_MONITOR_SECRET_ACCESS_KEY": true
+      }
+    },
+    "s3BeforeScheduledDaily": {
+      "observedAt": "2026-11-17T02:40:37.675Z",
+      "maintenance": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T02:36:00.619Z",
+        "finishedAt": "2026-11-17T02:36:01.674Z"
+      },
+      "backup": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T02:33:55.058Z",
+        "finishedAt": "2026-11-17T02:33:56.281Z"
+      },
+      "health": {
+        "at": "2026-11-17T02:33:56.882Z",
+        "gmail": "verified",
+        "failures": {
+          "inquiry": 0,
+          "auth": 0,
+          "image": 0
+        }
+      },
+      "backupCount": 2,
+      "totalBackupBytes": 1542,
+      "newestBackupCreatedAt": "2026-11-17T02:33:55.340Z",
+      "monitor": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 1926
+        }
+      }
+    },
+    "temporaryOperatorRemovedAt": "2026-11-17T02:40:40.627Z",
+    "onlyPersistentWorkerRemains": true,
+    "publicIngressEnabled": false
+  },
+  "activeBillingFollowup": {
+    "observedAt": "2026-11-17T02:56:17.992Z",
+    "query": {
+      "from": "2026-11-14",
+      "to": "2026-11-17"
+    },
+    "infoSuccess": true,
+    "infoResult": {
+      "covered": true,
+      "subscriptions": [
+        {
+          "start_timestamp": "2026-11-14T00:00:00Z",
+          "billing_cycle_anchor_timestamp": "2026-12-14T00:00:00Z"
+        }
+      ]
+    },
+    "success": true,
+    "errors": [],
+    "recordCount": 7,
+    "records": [
+      {
+        "ServiceName": "R2 Data Storage (First 10GB-Month included)",
+        "ServiceFamilyName": "R2",
+        "ChargePeriodStart": "2026-11-14T00:00:00Z",
+        "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+        "ConsumedQuantity": 0.0040380623,
+        "ConsumedUnit": "GB-months",
+        "BilledCost": 0
+      },
+      {
+        "ServiceName": "R2 Storage Class B Operations (First 10M included)",
+        "ServiceFamilyName": "R2",
+        "ChargePeriodStart": "2026-11-14T00:00:00Z",
+        "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+        "ConsumedQuantity": 219,
+        "ConsumedUnit": "",
+        "BilledCost": 0
+      },
+      {
+        "ServiceName": "R2 Storage Class A Operations (First 1M included)",
+        "ServiceFamilyName": "R2",
+        "ChargePeriodStart": "2026-11-14T00:00:00Z",
+        "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+        "ConsumedQuantity": 371,
+        "ConsumedUnit": "",
+        "BilledCost": 0
+      },
+      {
+        "ServiceName": "Images Transformed (first 5K included)",
+        "ServiceFamilyName": "Stream",
+        "ChargePeriodStart": "2026-11-14T00:00:00Z",
+        "ChargePeriodEnd": "2026-11-15T00:00:00Z",
+        "ConsumedQuantity": 49,
+        "ConsumedUnit": "",
+        "BilledCost": 0
+      },
+      {
+        "ServiceName": "R2 Data Storage (First 10GB-Month included)",
+        "ServiceFamilyName": "R2",
+        "ChargePeriodStart": "2026-11-15T00:00:00Z",
+        "ChargePeriodEnd": "2026-11-16T00:00:00Z",
+        "ConsumedQuantity": 1.8059666666666668e-06,
+        "ConsumedUnit": "GB-months",
+        "BilledCost": 0
+      },
+      {
+        "ServiceName": "R2 Storage Class B Operations (First 10M included)",
+        "ServiceFamilyName": "R2",
+        "ChargePeriodStart": "2026-11-15T00:00:00Z",
+        "ChargePeriodEnd": "2026-11-16T00:00:00Z",
+        "ConsumedQuantity": 631,
+        "ConsumedUnit": "",
+        "BilledCost": 0
+      },
+      {
+        "ServiceName": "R2 Storage Class A Operations (First 1M included)",
+        "ServiceFamilyName": "R2",
+        "ChargePeriodStart": "2026-11-15T00:00:00Z",
+        "ChargePeriodEnd": "2026-11-16T00:00:00Z",
+        "ConsumedQuantity": 460,
+        "ConsumedUnit": "",
+        "BilledCost": 0
+      }
+    ]
+  },
+  "actualDailyCronFollowup": {
+    "s3Readback": {
+      "observedAt": "2026-11-17T03:01:23.554Z",
+      "maintenance": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T03:00:59.956Z",
+        "finishedAt": "2026-11-17T03:01:01.100Z"
+      },
+      "backup": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T03:00:06.392Z",
+        "finishedAt": "2026-11-17T03:00:07.819Z"
+      },
+      "health": {
+        "at": "2026-11-17T03:00:08.372Z",
+        "gmail": "verified",
+        "failures": {
+          "inquiry": 0,
+          "auth": 0,
+          "image": 0
+        }
+      },
+      "backupCount": 3,
+      "totalBackupBytes": 2472,
+      "newestBackupCreatedAt": "2026-11-17T03:00:06.732Z",
+      "monitor": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 2856
+        }
+      }
+    },
+    "providerInvocations": {
+      "observedAt": "2026-11-17T03:01:40.149Z",
+      "invocations": [
+        {
+          "timestamp": 1794884461330,
+          "id": "01M7KQ6RRJ000000000000000A",
+          "traceId": "c4865942baf58f2315ec607523759b18",
+          "scriptVersion": {
+            "id": "5868ab73-0666-4598-a8dc-dd759e9579ff"
+          },
+          "eventType": "scheduled",
+          "event": {
+            "cron": "*/5 * * * *",
+            "scheduledTime": 1794884459.065
+          },
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "outcome": "ok",
+          "cpuTimeMs": 0,
+          "wallTimeMs": 1447
+        },
+        {
+          "timestamp": 1794884461274,
+          "id": "01M7KQ6RPT000000000000002T",
+          "traceId": "c4865942baf58f2315ec607523759b18",
+          "scriptVersion": {
+            "id": "5868ab73-0666-4598-a8dc-dd759e9579ff"
+          },
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "outcome": "ok",
+          "cpuTimeMs": 12,
+          "wallTimeMs": 1437
+        },
+        {
+          "timestamp": 1794884408619,
+          "id": "01M7KQ559B000000000000000A",
+          "traceId": "eefed8024d054b0ed6ea52fe054202a7",
+          "scriptVersion": {
+            "id": "5868ab73-0666-4598-a8dc-dd759e9579ff"
+          },
+          "eventType": "scheduled",
+          "event": {
+            "cron": "0 3 * * *",
+            "scheduledTime": 1794884403.458
+          },
+          "executionModel": "stateless",
+          "entrypoint": "default",
+          "outcome": "ok",
+          "cpuTimeMs": 0,
+          "wallTimeMs": 4074
+        },
+        {
+          "timestamp": 1794884408582,
+          "id": "01M7KQ5586000000000000005X",
+          "traceId": "eefed8024d054b0ed6ea52fe054202a7",
+          "scriptVersion": {
+            "id": "5868ab73-0666-4598-a8dc-dd759e9579ff"
+          },
+          "eventType": "jsrpc",
+          "event": {
+            "rpcMethods": [
+              "run"
+            ],
+            "rpcCallCount": 1
+          },
+          "executionModel": "durableObject",
+          "entrypoint": "ScheduledOperations",
+          "outcome": "ok",
+          "cpuTimeMs": 37,
+          "wallTimeMs": 4058
+        }
+      ]
+    },
+    "manualInvocation": false,
+    "temporaryOperatorAbsent": true
+  },
+  "scheduledAcceptanceFinal": {
+    "recordedAt": "2026-11-17T03:29:29.141193+00:00",
+    "scheduledCycle": {
+      "preparedAt": "2026-11-17T02:43:39.257296+00:00",
+      "kind": "bounded real scheduled monitor-configuration fault",
+      "windowStart": "2026-11-17T03:15:00+00:00",
+      "expectedCron": "17 * * * *",
+      "maximumFaultMinutes": 20,
+      "faultMayBeActive": false,
+      "stages": [
+        {
+          "id": 44010000756,
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44010000756",
+          "event": "schedule",
+          "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+          "created_at": "2026-11-17T03:24:37Z",
+          "phase": "scheduled-fault",
+          "actor": "sg921216",
+          "monitorStep": [
+            {
+              "name": "Independently inspect private recovery metadata",
+              "conclusion": "failure"
+            }
+          ]
+        },
+        {
+          "id": 44010074349,
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44010074349",
+          "event": "workflow_dispatch",
+          "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+          "created_at": "2026-11-17T03:25:13Z",
+          "phase": "recovered",
+          "actor": "sg921216",
+          "monitorStep": [
+            {
+              "name": "Independently inspect private recovery metadata",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "baselineS3": {
+        "observedAt": "2026-11-17T03:15:01.693Z",
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 2856
+        }
+      },
+      "faultStartedAt": "2026-11-17T03:15:01.705472+00:00",
+      "scheduledRunId": 44010000756,
+      "scheduledFaultVerified": true,
+      "restoredAt": "2026-11-17T03:25:10.618088+00:00",
+      "recoveryRun": {
+        "workflow_run_id": 44010074349,
+        "run_url": "https://api.github.com/repos/sg921216/radiant_images/actions/runs/44010074349",
+        "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44010074349"
+      },
+      "recovered": true,
+      "passed": true,
+      "notificationReceipt": {
+        "status": "owner-confirmed",
+        "answer": "Received scheduled alert",
+        "scheduledRunId": 44010000756,
+        "recordedAt": "2026-11-17T03:29:29.140327+00:00"
+      },
+      "finishedAt": "2026-11-17T03:25:33.312178+00:00"
+    },
+    "scheduledFaultProof": {
+      "id": 44010000756,
+      "event": "schedule",
+      "conclusion": "failure",
+      "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44010000756",
+      "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+      "created_at": "2026-11-17T03:24:37Z",
+      "actor": "sg921216",
+      "syntheticShortcutSkipped": true,
+      "monitorStep": [
+        {
+          "name": "Independently inspect private recovery metadata",
+          "conclusion": "failure"
+        }
+      ],
+      "expectedMonitorReadFailureText": true,
+      "monitorResults": []
+    },
+    "recoveryProof": {
+      "id": 44010074349,
+      "event": "workflow_dispatch",
+      "conclusion": "success",
+      "html_url": "https://github.com/sg921216/radiant_images/actions/runs/44010074349",
+      "head_sha": "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+      "created_at": "2026-11-17T03:25:13Z",
+      "actor": "sg921216",
+      "syntheticShortcutSkipped": true,
+      "monitorStep": [
+        {
+          "name": "Independently inspect private recovery metadata",
+          "conclusion": "success"
+        }
+      ],
+      "expectedMonitorReadFailureText": false,
+      "monitorResults": [
+        {
+          "ok": true,
+          "issues": [],
+          "counts": {
+            "overdueRecovery": 0,
+            "missedRemovalTarget": 0,
+            "overdueReceipts": 0,
+            "recoveryBytes": 2856
+          }
+        }
+      ]
+    },
+    "finalS3": {
+      "observedAt": "2026-11-17T03:27:17.332Z",
+      "maintenance": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T03:26:00.360Z",
+        "finishedAt": "2026-11-17T03:26:01.356Z"
+      },
+      "backup": {
+        "version": 1,
+        "status": "ok",
+        "startedAt": "2026-11-17T03:00:06.392Z",
+        "finishedAt": "2026-11-17T03:00:07.819Z"
+      },
+      "health": {
+        "at": "2026-11-17T03:00:08.372Z",
+        "gmail": "verified",
+        "failures": {
+          "inquiry": 0,
+          "auth": 0,
+          "image": 0
+        }
+      },
+      "backupCount": 3,
+      "totalBackupBytes": 2472,
+      "newestBackupCreatedAt": "2026-11-17T03:00:06.732Z",
+      "monitor": {
+        "ok": true,
+        "issues": [],
+        "counts": {
+          "overdueRecovery": 0,
+          "missedRemovalTarget": 0,
+          "overdueReceipts": 0,
+          "recoveryBytes": 2856
+        }
+      }
+    },
+    "finalGitHub": {
+      "observedAt": "2026-11-17T03:27:14.975361+00:00",
+      "actor": "sg921216",
+      "workflowId": 418824337,
+      "workflowState": "active",
+      "enabled": true,
+      "bucket": "radiant-images-recovery",
+      "secrets": {
+        "CLOUDFLARE_ACCOUNT_ID": true,
+        "R2_MONITOR_ACCESS_KEY_ID": true,
+        "R2_MONITOR_SECRET_ACCESS_KEY": true
+      }
+    },
+    "finalPrivacy": {
+      "observedAt": "2026-11-17T03:27:20.305Z",
+      "responses": [
+        {
+          "name": "workers",
+          "success": true,
+          "names": [
+            "radiant-images-api"
+          ]
+        },
+        {
+          "name": "apiIngress",
+          "success": true,
+          "result": {
+            "enabled": false,
+            "previews_enabled": false
+          }
+        },
+        {
+          "name": "workerCustomDomains",
+          "success": true,
+          "result": []
+        },
+        {
+          "name": "schedules",
+          "success": true,
+          "result": {
+            "schedules": [
+              {
+                "cron": "0 3 * * *",
+                "created_on": "2026-11-16T21:41:22.664353Z",
+                "modified_on": "2026-11-16T21:41:22.664353Z"
+              },
+              {
+                "cron": "*/5 * * * *",
+                "created_on": "2026-11-16T21:41:22.664353Z",
+                "modified_on": "2026-11-16T21:41:22.664353Z"
+              }
+            ]
+          }
+        },
+        {
+          "name": "managed:radiant-images-media",
+          "success": true,
+          "enabled": false
+        },
+        {
+          "name": "custom:radiant-images-media",
+          "success": true,
+          "result": {
+            "domains": []
+          }
+        },
+        {
+          "name": "managed:radiant-images-recovery",
+          "success": true,
+          "enabled": false
+        },
+        {
+          "name": "custom:radiant-images-recovery",
+          "success": true,
+          "result": {
+            "domains": []
+          }
+        }
+      ]
+    },
+    "usageReconciliation": {
+      "metering": {
+        "observedAt": "2026-11-17T03:25:04.640Z",
+        "query": "{viewer{accounts(filter:{accountTag:\"c99576a777ec2286fcd04b8433231159\"}){accountInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-17\"},limit:10000){dimensions{date}sum{requests errors wallTime}} accountPeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-14\",date_leq:\"2026-11-17\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}} namespaceInvocations:durableObjectsInvocationsAdaptiveGroups(filter:{date_geq:\"2026-11-16\",date_leq:\"2026-11-17\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{requests errors wallTime}} namespacePeriodic:durableObjectsPeriodicGroups(filter:{date_geq:\"2026-11-16\",date_leq:\"2026-11-17\",namespaceId:\"22cf4ea67a7f4cc6bc8a172621a398e6\"},limit:10000){dimensions{date}sum{cpuTime duration activeTime rowsRead rowsWritten}}}}}",
+        "response": {
+          "data": {
+            "viewer": {
+              "accounts": [
+                {
+                  "accountInvocations": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 27,
+                        "wallTime": 57888794
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 43,
+                        "wallTime": 106911555
+                      }
+                    }
+                  ],
+                  "accountPeriodic": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "activeTime": 57886489,
+                        "cpuTime": 434696,
+                        "duration": 7.409470591999999,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "activeTime": 106906475,
+                        "cpuTime": 630125,
+                        "duration": 13.684028799999997,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    }
+                  ],
+                  "namespaceInvocations": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 27,
+                        "wallTime": 57888794
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "errors": 0,
+                        "requests": 43,
+                        "wallTime": 106911555
+                      }
+                    }
+                  ],
+                  "namespacePeriodic": [
+                    {
+                      "dimensions": {
+                        "date": "2026-11-16"
+                      },
+                      "sum": {
+                        "activeTime": 57886489,
+                        "cpuTime": 434696,
+                        "duration": 7.409470592000001,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    },
+                    {
+                      "dimensions": {
+                        "date": "2026-11-17"
+                      },
+                      "sum": {
+                        "activeTime": 106906475,
+                        "cpuTime": 630125,
+                        "duration": 13.684028799999998,
+                        "rowsRead": 0,
+                        "rowsWritten": 0
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "errors": null
+        }
+      },
+      "observability": {
+        "observedAt": "2026-11-17T03:25:43.432Z",
+        "timeframe": {
+          "from": "2026-11-16T21:40:00Z",
+          "to": "2026-11-17T03:25:04Z"
+        },
+        "returnedEvents": 139,
+        "durableObjectCalls": 70,
+        "scheduledCalls": 68,
+        "dailyCrons": 1,
+        "maintenanceCrons": 67,
+        "nonOk": 0,
+        "frontCpuMsMax": 1,
+        "doCpuMsMax": 49
+      }
+    },
+    "focusedOperationalChecks": "passed with temporary Testing consent; durable Google production setup remains deferred",
+    "taskStatus": {
+      "completed": 55,
+      "total": 67,
+      "open": 12,
+      "T001": "open",
+      "T058": "open",
+      "deferred": [
+        "T065",
+        "T066",
+        "T067"
+      ]
+    }
+  }
+}

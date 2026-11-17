@@ -113,6 +113,22 @@ upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in 
 
 ## Technical Context
 
+**Persistent private operational setup (2026-11-16, R-30):** The owner's next focused
+sequence authorizes a long-lived private target while final copy/photos proceed separately.
+Use `apps/api/wrangler.acceptance.toml` for the existing production API entry point,
+four SQLite DO classes, dedicated D1 and two private Standard R2 buckets. Keep workers.dev,
+preview URLs and routes disabled. Preserve the tested compatibility date and normal cron
+expressions. This configuration is separate from public `prepare-release.ts`; existing
+public-release gates remain unchanged. Record manual scheduler calls separately from
+actual Cloudflare cron invocations, and genuine Gmail health separately from backup success.
+Do not replace missing consent with a provider double. GitHub receives only S3 Object
+Read Only credentials verified for the recovery bucket, never the Billing Read token.
+The owner explicitly deferred Google production setup as T065–T067: approved real
+homepage/privacy pages, Branding/Production and applicable verification, then fresh
+production consent and actual scheduled health. Private testing may use an approved
+test-user grant with both Gmail scopes, recorded as temporary (seven-day Testing lifetime).
+Keep final photos and broader content approval under T063.
+
 **2026-11-16 committed guard rehearsal (R-29):** `c23c943` passes private deployed
 upload/read/delete checks with 1,501 synthetic recovery keys forcing real pagination;
 the unchanged backup helper also verifies a 17-table snapshot. Maximum sampled front

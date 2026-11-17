@@ -218,7 +218,7 @@ test('health signal reports only bounded status and failure counts without conta
       return Response.json(
         url.includes('oauth2')
           ? { access_token: 'synthetic' }
-          : { sendAs: [{ sendAsEmail: 'owner@example.invalid', verificationStatus: 'accepted' }] },
+          : { sendAs: [{ sendAsEmail: 'owner@example.invalid', isPrimary: true }] },
       );
     },
   });

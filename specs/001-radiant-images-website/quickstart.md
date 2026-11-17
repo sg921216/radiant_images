@@ -689,10 +689,129 @@ records sampled memory, profiling limitations, CPU observations and complete cle
 
 ## Independent recovery monitoring and GitHub alerts
 
-The owner selected GitHub failure notifications on 2026-11-14. The implementation is ready
-in `.github/workflows/operations-monitor.yml`; production activation and scheduled
-notification receipt are not yet verified. R-23's manual synthetic notification was
-owner-confirmed. The workflow runs hourly at minute 17 and can also be run
+### Persistent private target (R-30, 2026-11-16)
+
+The owner authorized private operational acceptance independently of final copy/photos.
+The persistent resource configuration is `apps/api/wrangler.acceptance.toml`:
+
+| Resource | Persistent identity |
+| --- | --- |
+| API Worker | `radiant-images-api` |
+| D1 database | `radiant-images` / `003885df-e1f5-4bc1-acf6-8a21915e7406` |
+| Portfolio bucket | `radiant-images-media` |
+| Recovery bucket | `radiant-images-recovery` |
+| Maintenance | `*/5 * * * *` (UTC) |
+| Daily backup and Gmail health | `0 3 * * *` (UTC) |
+
+Workers.dev, preview URLs and routes are disabled; neither R2 bucket has a public managed
+domain or custom domain. No public frontend is deployed. All three D1 migrations are
+applied. This database starts without client/content fixtures; a small empty-data backup
+is an operational bootstrapping observation, not final content acceptance.
+
+Use the explicit config for every remote operation. Dry-run with
+`pnpm exec wrangler deploy --dry-run --config apps/api/wrangler.acceptance.toml`.
+An authorized private update uses the same command without `--dry-run`. Keep the existing
+public release generator and its incomplete-task refusal intact. Do not deploy the default
+local config or use the old disposable rehearsal names. Do not delete these persistent
+resources during diagnostic cleanup.
+
+Keep `apps/api/.dev.vars` as development placeholders. The ignored root `.env.acceptance`
+template is for the real production-bound private environment. Fill `GOOGLE_CLIENT_ID`,
+`GOOGLE_CLIENT_SECRET` and `GMAIL_SENDER_ADDRESS` there. Use the Google Cloud project
+reserved for the real deployment, enable Gmail API, configure Google Auth Platform branding,
+and choose External for ordinary Gmail or Internal only for an eligible Workspace organization.
+Add `https://www.googleapis.com/auth/gmail.send` and
+`https://www.googleapis.com/auth/gmail.settings.basic` in Data Access. Create a **Web
+application** OAuth client with the exact authorized redirect
+`http://127.0.0.1:8085/callback`; no JavaScript origin is needed by the consent helper.
+Do not register the deliberately invalid acceptance API origin.
+
+For durable External consent, set Audience publishing status to **In production** before
+generating the final refresh token: Testing authorizations for these Gmail scopes expire
+after seven days. OAuth publication is separate from exposing the Cloudflare application.
+`gmail.settings.basic` is restricted; follow Google's applicable verification or limited-use/
+internal exception, and do not invent public privacy URLs to pass a verification prompt.
+[Google audience](https://support.google.com/cloud/answer/15549945),
+[verification exceptions](https://support.google.com/cloud/answer/13464323),
+[Gmail scopes](https://developers.google.com/workspace/gmail/api/auth/scopes).
+
+**Owner-observed Google publishing blocker (R-30 follow-up):** The console refuses to
+switch this External app to production until a valid app name, support email, homepage URL
+and privacy-policy URL are configured on Branding. A verification exemption does not
+establish that these required fields can be omitted. Do not enter invented URLs or expose
+the private application to satisfy the form. Long-lived Gmail consent now depends on
+genuine, owner-approved public branding/privacy pages; those can be hosted separately
+while the application and recovery resources remain private. Google's brand-verification
+guidance requires an owned/verified homepage domain, a description of the app, and a
+linked privacy policy disclosing Google-data access/use/storage/sharing.
+[Branding requirements](https://support.google.com/cloud/answer/13464321).
+
+To continue bounded acceptance before those pages are ready, leave the OAuth app in
+**Testing**, add the intended sending Gmail account under **Audience → Test users → Add
+users**, save, and restart the local consent command below. Use the new authorization URL
+and that exact account. Record the resulting grant as temporary, with its seven-day expiry;
+do not call it long-lived Gmail acceptance or silently refresh consent as a permanent
+workaround. After branding/publication is resolved, obtain fresh production consent and
+replace the temporary refresh token. This does not change the Cloudflare ingress boundary.
+The owner deferred this production setup as T065 (approved real pages), T066 (Branding,
+Production and applicable verification), and T067 (fresh consent and scheduled health).
+
+From the repository root run
+`node --env-file=.env.acceptance --import tsx scripts/gmail-consent.ts`, open its printed
+Google URL on this computer, sign into the intended sending mailbox, and select **both**
+requested permission checkboxes before continuing. Granting only send-mail access is
+insufficient for sender verification: the live partial-grant attempt returned 403 from
+the send-as lookup. The helper now rejects incomplete scope grants without saving a token;
+restart it and use the newly printed URL if this happens.
+The helper saves the refresh token in ignored `.gmail-refresh-token.secret` without printing
+it. It is optional to duplicate that token into `GMAIL_REFRESH_TOKEN` in `.env.acceptance`;
+the operator can read the separate secret file directly. Never paste credentials into chat.
+Provision only the three real Google/Gmail values as Worker secrets using protected file/stdin
+input. Obtain the intended sender address and initialize the private site settings before
+expecting Gmail health to be verified. Do not publish a contact address by inference.
+No real inquiry/email send is needed merely to inspect verified send-as status.
+
+**Current private-testing state (November 17 02:38 UTC):** Both scopes are granted and
+the sender is verified by the deployed health check. Gmail's primary address may omit
+`verificationStatus` because that field applies only to custom aliases; the tested adapter
+accepts a matching `isPrimary=true` address or an accepted custom alias. The three real
+Google/Gmail values are Worker secrets and transient local refresh-token files were removed.
+This Testing grant was obtained about November 17 02:28 UTC; its seven-day lifetime reaches
+approximately November 24 02:28 UTC (November 23 21:28 EST). T067 tracks replacement after
+the deferred production setup. Do not mistake today's passing health check for durable
+production consent. Private settings retain deliberately invalid inquiry/public-contact
+addresses until those separate settings are approved.
+
+Create fresh **R2 Object Read Only** credentials scoped only to `radiant-images-recovery`
+and store the two S3 values in ignored `.env.recovery-monitor`. The old rehearsal credentials
+return 403 for this new bucket. The connected Cloudflare OAuth cannot manage account API
+tokens (403); creating the R2 credentials requires the owner's dashboard/token authority.
+The Billing Read token is unrelated and must not be copied into the monitor.
+In the Cloudflare dashboard select the account above, open **R2 Object Storage → Overview**,
+then **Account Details → API Tokens → Manage**. Create an account API token (or user API token
+if account tokens are unavailable), name it `radiant-images-recovery-monitor`, choose
+**Object Read only**, and restrict it to the single `radiant-images-recovery` bucket.
+Use a lifetime appropriate to unattended monitoring and record any chosen rotation deadline.
+For the owner's November 16, 2026 token setup, the selected expiration is **November 16,
+2027**. Rotate the S3 pair in the ignored file and GitHub secrets before that date, repeat
+the scope/healthy checks below, and retire the old pair only after the replacement passes.
+Copy the resulting **Access Key ID** and **Secret Access Key** into the two existing entries
+in `.env.recovery-monitor`; do not substitute the displayed general API token. The secret
+access key is shown only once. [R2 credential creation](https://developers.cloudflare.com/r2/api/tokens/).
+Before GitHub provisioning, verify recovery listing/operational reads succeed, media and
+unrelated-bucket listings return 403, and an empty uniquely named recovery write probe
+returns 403. If an incorrectly scoped credential writes the probe, remove exactly that
+probe and reject the credential; never accept broader access as a workaround.
+
+The remainder of this section describes the monitor's established behavior. Historical
+R-29 statements about absent Workers/databases are superseded by the persistent inventory
+above. Current acceptance evidence is recorded in acceptance.md.
+
+The owner selected GitHub failure notifications on 2026-11-14. R-30 now verifies enabled
+private-environment monitoring, a real scheduled failure (`44010000756`), owner-confirmed
+receipt, restored configuration and healthy recovery (`44010074349`). The scheduled run
+was created at 03:24:37 UTC for the 03:17 slot; scheduling may be delayed. R-23's earlier
+manual synthetic notification remains separate evidence. The workflow runs hourly at minute 17 and can also be run
 manually. Node 24 executes the TypeScript checker after a frozen, production-only install
 of its pinned signing/XML dependencies (nine packages including transitive dependencies,
 with install scripts disabled).
@@ -721,12 +840,14 @@ metadata, incomplete pagination and oversized responses fail the check. Delayed 
 removal is reported for investigation; the monitor never deletes receipts or bypasses safe
 preservation. The storage threshold is an alert, not a billing cap or account-wide limit.
 
-Activation checklist for the persistent deployment:
+Activation and re-verification checklist for the persistent deployment:
 
-R-29's read-only GitHub inspection confirms the workflow exists and is active, but
-`OPERATIONS_MONITOR_ENABLED` is false/absent, `RECOVERY_BUCKET` is absent, and the three
-repository secrets below are absent. Cloudflare has no persistent Worker or D1 target.
-The disposable rehearsal has been fully removed and must not be used as a monitor target.
+Current R-30 state: the persistent private API/D1/R2 target exists, all three repository
+secrets below are installed, `RECOVERY_BUCKET=radiant-images-recovery`, and
+`OPERATIONS_MONITOR_ENABLED=true`. The normal daily backup and live Gmail health passed
+on the actual 03:00 UTC cron. Use the checklist for future configuration/re-verification,
+preserving the existing target. The deleted disposable rehearsal must never be reused as
+the monitor target. Temporary Google consent still requires the deferred T065–T067 work.
 
 1. Deploy the scheduled status-record changes and complete a verified daily backup/health
    run. Keep R2 private. Create R2 **Object Read Only** credentials limited to the recovery

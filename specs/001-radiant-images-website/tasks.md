@@ -1,5 +1,70 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 03:29 UTC focused operational acceptance complete:** The normal daily
+backup/Gmail health run passes. Actual scheduled GitHub run `44010000756` detects the
+controlled fault; the owner confirms receiving its alert. The correct bucket reference
+is restored, recovery run `44010074349` passes, and normal monitoring remains enabled.
+Public API/R2 access is still disabled; temporary operators and token files are removed.
+Current account/namespace usage agrees with all 70 DO calls captured through 03:25 UTC;
+historical missing usage remains documented for Cloudflare. **55/67 tasks complete.**
+The focused private tests pass with temporary consent; T001/T058 and broader release
+acceptance remain open, including deferred Google production work T065–T067.
+
+**2026-11-17 03:01 UTC scheduled backup checkpoint:** The normal `0 3 * * *` invocation
+completed backup/read-back verification and real Gmail health (`verified`, zero failures).
+Persisted provider logs show the actual scheduled front invocation and production DO,
+both `ok` on version `5868ab73-0666-4598-a8dc-dd759e9579ff`; five-minute maintenance
+also continues successfully. Scheduled alert receipt/recovery is the remaining focused
+test. Temporary Testing consent and the broader T001/T058 production gates remain tracked.
+
+**2026-11-17 02:38 UTC Gmail/monitoring checkpoint:** Complete temporary Testing consent
+is now installed. A reproduced primary-address verification bug is fixed and deployed;
+33 focused tests pass. The production DO completes backup and real Gmail health, and
+GitHub's manual healthy → controlled fault → recovered cycle passes with the correct
+bucket reference restored and hourly monitoring enabled. Actual 03:00 UTC daily execution
+and 03:17 UTC scheduled notification receipt remain pending. T065–T067 still gate durable
+production consent; the Testing grant has a seven-day lifetime from about November 17
+02:28 UTC. **55/67 tasks complete; T001/T058 remain unchecked.**
+
+**2026-11-17 02:27 UTC R2 follow-up (November 16 local):** The new credentials pass
+recovery listing/operational reads; media and unrelated-bucket reads and a recovery write
+probe all return 403. The exact verified pair is now staged in GitHub secrets for
+`radiant-images-recovery`. Activation awaits a healthy baseline: the live S3 monitor's
+only issue is `gmail_unavailable`, and complete two-scope Gmail consent is still pending.
+The selected R2 credential expiry is November 16, 2027; rotate before then. Persisted
+observability shows 56 successful maintenance crons plus the initial manual DO call;
+account and namespace metrics agree on 57 calls. **55/67 tasks complete; T001/T058 open.**
+
+**2026-11-16 persistent operational setup (R-30):** The owner explicitly
+authorized a long-lived environment with public access disabled. `radiant-images-api`,
+the `radiant-images` D1 database and private `radiant-images-media` / `radiant-images-recovery`
+buckets now exist. Normal five-minute maintenance and 03:00 UTC backup/health schedules
+are configured; two actual automatic maintenance runs succeeded. A manual call to the
+production scheduler completed maintenance and a verified backup; Gmail correctly reports
+unavailable. Real Gmail consent/sender and new
+recovery-bucket-only S3 credentials are still required. See acceptance.md for current
+scheduled-execution and metering evidence. **T001/T058 remain unchecked; 55/64 complete.**
+
+**2026-11-16 owner-directed deferral:** Continue private acceptance using the newly granted
+Testing consent. T065–T067 below track the remaining Google production setup for later;
+final photos/content remain under T063. R2 credentials are being prepared by the owner.
+**55/67 tasks complete, 12 open.** Testing consent does not close a production release gate.
+
+**Gmail dependency clarification:** The owner's Google console requires genuine homepage
+and privacy-policy URLs plus valid branding before External production publication. These
+pages now gate long-lived Gmail consent. Approved-test-user consent in Testing is only a
+seven-day acceptance credential, not completion of the persistent Gmail-health requirement.
+
+The focused operational sequence is tracked within T001/T058:
+
+- [X] Establish the persistent API/D1/R2 target and verify public ingress is disabled.
+- [X] Configure the normal maintenance and daily backup schedules.
+- [X] Verify two automatic maintenance invocations and their successful production DO calls.
+- [X] Verify automatic maintenance, automatic daily backup, and real Gmail health together (temporary Testing consent; T067 remains deferred).
+- [X] Configure and enable GitHub monitoring with verified recovery-bucket-only Object Read Only S3 credentials.
+- [X] Verify healthy → fault → recovered monitoring and scheduled notification receipt (actual scheduled run `44010000756`, owner-confirmed receipt, successful recovery `44010074349`).
+- [X] Recheck active-environment DO usage and retain the investigation packet: account and namespace counts match 70 captured calls through 03:25 UTC; historical reporting remains unresolved.
+
 **2026-11-16 T001 checkpoint (R-29):** Committed storage guard `c23c943` passes private
 application uploads/deletion with real paginated R2 inventory; production backup helper
 also succeeds. All 92 tail samples are `ok`, front CPU at most 7 ms. Temporary resources
@@ -323,10 +388,17 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 
 - [x] T064 Connect a Cloudflare API token limited to Account > Billing > Read for the Radiant Images account, using the token-authenticated Cloudflare API MCP connection or an approved secure read-only API session. Follow `quickstart.md`'s Billing Read procedure; do not put the token in chat, source, CI artifacts or evidence. Verify successful live subscription and explicit billing-period usage reads, separately inspect available spend controls, and record only sanitized plan, usage, allowance and alert/control evidence in `research.md` and `acceptance.md`. Treat unsupported metrics or still-denied controls as explicit gaps. Reassess T001 after verification; do not infer a billing cap, paid-plan approval or production acceptance. Completed 2026-11-16 through the approved secure read-only API fallback; research R-27 and `evidence/cloudflare-billing-read-20261116.json` record successful reads and explicit remaining gaps.
 
+## Deferred Google production setup (owner-requested 2026-11-16)
+
+- [ ] T065 Prepare owner-approved application homepage and privacy-policy content for Google's Branding requirements. Use an owned domain and accurately describe Radiant Images, the Gmail scopes/data use, retention/deletion, and contact details; implement the approved pages in `apps/web/app/routes/` and record their real URLs and domain-verification evidence in `specs/001-radiant-images-website/quickstart.md`. Coordinate with T023/T063; placeholder URLs or unapproved privacy copy do not satisfy this task. Keep the acceptance API private; any public page publication requires its own authorized scope.
+- [ ] T066 After T065, complete Google Auth Platform Branding with the valid application name, support email, real homepage/privacy URLs and required domain ownership. Move the external OAuth app to Production and complete any applicable Google verification requirements, recording the actual console status and any remaining limits in `specs/001-radiant-images-website/acceptance.md`. Production publishing and Google verification are separate checks; neither authorizes public application launch.
+- [ ] T067 After T066, obtain fresh owner consent for `gmail.send` and `gmail.settings.basic`, replace the temporary Testing grant through ignored local files and server-side Worker secrets, and verify the intended sender plus a real scheduled Gmail-health run. Record sanitized results and credential-lifecycle handling in `specs/001-radiant-images-website/acceptance.md` and `quickstart.md`; remove transient local token files. Testing grants expire after seven days and must not be recorded as long-lived production acceptance. This is a dependency of the remaining T001/T058/T063 operational and release checks.
+
 ## Dependencies and Execution Order
 
 ```text
 Billing Read follow-up (T064) -> T001 account evidence
+Google homepage/privacy (T065) -> Branding/Production (T066) -> fresh consent and scheduled health (T067)
 Setup (T001–T006)
   -> Foundation (T007–T015)
      -> US1 (T016–T025) -> lead-capture MVP
@@ -348,6 +420,7 @@ All six completed stories -> release checks (T058–T063)
 - Every route task includes mounting its router in `apps/api/src/index.ts` or registering its page in `apps/web/app/routes.ts` as needed. These shared-file edits must be serialized even when endpoint/component bodies are built in parallel. T057 checks the final assembled route inventory.
 - `specs/001-radiant-images-website/acceptance.md` is a shared evidence log: serialize updates. Never mark a real-provider or human acceptance check complete based only on mocks.
 - T064 supplies the remaining account billing evidence for T001. Completing T064 does not by itself close T001 or T058; persistent deployment, monitoring and release acceptance still require their own evidence.
+- T065–T067 are explicitly deferred while private testing proceeds with temporary consent. They gate long-lived Gmail acceptance, not the currently authorized private tests; T063 still owns final photos and broader content/release approval.
 - T001 is a feasibility gate: unresolved provider constraints block dependent production work, but do not justify silently replacing the agreed hosting model. Record required spec/plan/contract adjustments before implementing affected behavior.
 
 ## Parallel Execution Examples

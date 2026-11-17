@@ -119,9 +119,10 @@ export async function senderVerification(
     );
     if (result.status !== 200 || !Array.isArray(result.data.sendAs)) return 'unavailable';
     return result.data.sendAs.some(
-      (alias: { sendAsEmail?: string; verificationStatus?: string }) =>
+      (alias: { sendAsEmail?: string; isPrimary?: boolean; verificationStatus?: string }) =>
         alias.sendAsEmail?.toLowerCase() === email.toLowerCase() &&
-        alias.verificationStatus === 'accepted',
+        // Gmail's verificationStatus applies only to custom aliases, not the primary login.
+        (alias.isPrimary === true || alias.verificationStatus === 'accepted'),
     )
       ? 'verified'
       : 'unverified';

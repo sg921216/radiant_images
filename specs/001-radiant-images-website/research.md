@@ -1,5 +1,81 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-30: Persistent private operations and active-namespace metering — 2026-11-16
+
+**Final private-testing checkpoint, November 17 03:29 UTC:** The normal 03:00 UTC daily
+cron completed a verified backup and real Gmail health; five-minute maintenance continues.
+Actual scheduled GitHub failure `44010000756` was owner-received, the bucket reference was
+restored, and recovery `44010074349` passed. Monitoring remains enabled, public ingress
+disabled, and temporary operators removed. Account/namespace aggregates match all 70 DO
+calls captured through 03:25 UTC; historical November 14/15 usage remains absent. The
+separate Billing Read feed still lacks the current execution period. The investigation
+packet preserves these limits. All five focused tests pass with temporary Testing consent;
+T065–T067 and the broader T001/T058/release gates remain open. Detailed evidence and exact
+manual-versus-scheduled distinctions are recorded in acceptance.md.
+
+**November 17 02:38 UTC follow-up:** Complete temporary Google Testing consent is installed
+as Worker secrets, and a manual production scheduler invocation now reports verified Gmail
+health and a read-back-verified backup. Live Google data exposed a primary-address bug:
+`verificationStatus` is specified only for custom aliases; primary addresses have the
+read-only `isPrimary` flag. The adapter now accepts the matching primary address or an
+accepted custom alias, with two reproduced failing assertions followed by 33 passing
+focused tests. [Google SendAs semantics](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs).
+The owner deferred real branding/privacy pages, Production publication/applicable verification
+and fresh durable consent as T065–T067. The current Testing grant remains limited to seven days.
+
+The new recovery S3 pair is verified bucket-only and read-only, installed in GitHub, and
+hourly monitoring is enabled. Real manual GitHub runs pass healthy → expected configuration
+fault → recovered, with the actual recovery bucket restored. Automatic daily execution and
+scheduled alert receipt are still awaiting their normal upcoming runs. Current account and
+namespace metrics agree on all 57 captured DO calls as of 02:27 UTC; November 14/15 history
+remains absent. These observations supersede the pending-credential and cross-query mismatch
+states below, which are retained as the initial observations.
+
+The owner authorized the next operational sequence independently of final copy/photos.
+The private API, dedicated D1 and two private Standard R2 buckets are now persistent,
+with normal five-minute maintenance and 03:00 UTC backup/health schedules. The deployment
+uses the tested application implementation and compatibility date, all four production
+SQLite DO classes, and no public routing. `apps/api/wrangler.acceptance.toml` records the
+exact target; the public release generator and task gate remain unchanged.
+
+A manual invocation of the actual production scheduler completed maintenance and a
+read-back-verified empty-data backup. It correctly reports Gmail unavailable: the local
+Google/Gmail credentials are placeholders and the intended sender is missing. No synthetic
+Gmail adapter was substituted and no email was sent. Normal cron configuration, manual
+completion, automatic invocation and verified Gmail health are separate acceptance claims.
+Cloudflare documents up to 15 minutes for cron changes to propagate; do not infer execution
+from a successful deployment. [Cron propagation](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
+
+The old recovery credentials cannot read the new bucket (403), and the connected OAuth
+cannot manage account API tokens (403/code 9109). Fresh **Object Read Only** credentials
+restricted to `radiant-images-recovery` are required, independently of Billing Read.
+GitHub's bucket/account settings and notification actor are staged, but the monitor remains
+explicitly disabled and both S3 secrets absent. Activation requires scope proof and a healthy
+real check, followed by healthy/fault/recovered outcomes and actual scheduled receipt.
+[R2 permissions](https://developers.cloudflare.com/r2/api/tokens/),
+[scheduled notification routing](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).
+
+The production `ScheduledOperations` namespace remains active. Initially both account-wide
+November 14–16 and namespace-specific November 16 GraphQL queries returned empty invocation
+and periodic aggregates with `errors: null`. Live introspection confirms the requested
+fields and filters. Dataset settings remain enabled with a 90-day lookback. In contrast,
+tail and persisted Workers Observability report a successful production scheduler invocation
+with 49 ms CPU / 4,462 ms wall time, plus actual D1/R2 work and completion signals.
+Two subsequent real five-minute cron invocations succeeded, with front CPU 0/0 ms at
+provider resolution and DO CPU 16/12 ms. At 21:57 UTC the namespace aggregates reported
+three requests, matching these three captured DO calls, with zero errors. The account-wide
+query reported two requests and no November 14/15 rows. Metrics are now appearing, so
+the original zero/empty observation is not the final state of this persistent namespace.
+Cross-query ingestion latency/sampling remains possible; previous-day missing rows and
+the owner's prior dashboard zeros are retained as separate historical evidence. No zero
+consumption, measured quota headroom or root cause is inferred.
+
+[The investigation packet](./evidence/cloudflare-do-investigation-20261116.md) includes
+account/namespace/version/trace identities and a reconciliation request. It is prepared
+for Cloudflare, not submitted. [Operational evidence](./evidence/cloudflare-private-operations-20261116.json)
+and acceptance.md track actual schedule observations, pending credentials and verification.
+T001/T058 remain open; no paid upgrade or public launch was performed.
+
 ## R-29: Committed storage guard under real pagination — 2026-11-16
 
 **T001 advanced; remains open.** The owner committed R-28 as `c23c943`. A new private
