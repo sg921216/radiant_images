@@ -26,6 +26,8 @@ test('rehearsal binds separate storage and the real production entry point, with
       bindings: [
         { name: 'JPEG_VALIDATOR', class_name: 'JpegValidator' },
         { name: 'GALLERY_MUTATIONS', class_name: 'GalleryMutations' },
+        { name: 'SCHEDULED_OPERATIONS', class_name: 'ScheduledOperations' },
+        { name: 'BULK_READS', class_name: 'BulkReads' },
       ],
     },
     observability: { enabled: true, traces: { enabled: true } },

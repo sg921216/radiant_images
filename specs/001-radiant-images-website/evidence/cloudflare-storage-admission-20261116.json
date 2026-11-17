@@ -1,0 +1,470 @@
+{
+  "task": "T001",
+  "recorded_at": "2026-11-16 20:39:36 UTC",
+  "base_commit": "637f345",
+  "uncommitted_source_sha256": {
+    "apps/api/src/services/storageCapacity.ts": "1eca48e2ab674807cb4a227b547d4ea68d7ffde8c9fa000708d2962d3613e454",
+    "apps/api/src/services/images.ts": "5130ef917ec425b272812da1c61a5ed53010f9f422e77cb7eba6856c05b479ae",
+    "apps/api/src/services/backup.ts": "4ae93cf6788ed3d4eeb685c3bda22a4884defeef1b14a8d2802f95def66db666",
+    "apps/api/tests/gallery.test.ts": "7b2c31aa1f960d630890edbf3b2fd6b5485c06b38cb6c6a6a2d0a2964ec41dbe",
+    "apps/api/tests/operations.test.ts": "4765ef92656276119b2874a0bc55e9e0c01be95f6e86aacff98d0a1db77d0c43"
+  },
+  "change": {
+    "summary": "Fail closed before image processing or a new backup when combined MEDIA and RECOVERY storage cannot safely accommodate the bounded write.",
+    "application_envelope_bytes": 6442450944,
+    "headroom_bytes": 33554432,
+    "max_list_pages_per_bucket": 20,
+    "page_size": 1000,
+    "per_list_timeout_ms": 8000,
+    "overall_inventory_timeout_ms": 30000,
+    "upload_response_status": 503,
+    "upload_error_code": "storage_capacity_unavailable",
+    "backup_failure_code": "storage_capacity_unavailable",
+    "not_atomic_reservation": true,
+    "not_account_spend_cap": true,
+    "deletion_reads_and_recovery_paths_remain_available": true
+  },
+  "validation": {
+    "red": {
+      "upload": "Valid upload returned 201 under exhausted or unavailable inventory; expected 503 before image provider invocation.",
+      "backup": "Backup creation resolved with an object key under exhausted combined inventory; expected refusal.",
+      "tests": 3
+    },
+    "focused_green": {
+      "passed": 5,
+      "skipped_other_cases": 19
+    },
+    "full_check": {
+      "format": true,
+      "lint": true,
+      "types": true,
+      "unit_integration_contract_files": 64,
+      "tests_passed": 290,
+      "api_build": true,
+      "web_build": true
+    },
+    "gallery_browser": {
+      "project": "chromium-desktop",
+      "passed": 2,
+      "failed": 0,
+      "retries": 0,
+      "duration_seconds": 59.9,
+      "scope": "Upload/orientation/edit/reorder/delete journey and 60-image filtering/responsive layouts; not a full new browser matrix"
+    }
+  },
+  "provider_probe": {
+    "isolation": "Private Worker, SQLite DO, two disposable Standard R2 buckets; service-binding-only local proxy. workers.dev and preview URLs verified disabled.",
+    "application_guard_imported": true,
+    "full_application_rehearsal": false,
+    "images_calls": 0,
+    "mail_sends": 0,
+    "r2_objects_written": 0,
+    "synthetic_do_counter_only": true,
+    "started_at": "2026-11-16T20:35:00.134769+00:00",
+    "ended_at": "2026-11-16T20:35:05.241073+00:00",
+    "requests": [
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 1,
+        "elapsed_ms": 541
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 2,
+        "elapsed_ms": 366
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 3,
+        "elapsed_ms": 189
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 4,
+        "elapsed_ms": 172
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 5,
+        "elapsed_ms": 184
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 6,
+        "elapsed_ms": 189
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 7,
+        "elapsed_ms": 170
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 8,
+        "elapsed_ms": 317
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 9,
+        "elapsed_ms": 169
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 10,
+        "elapsed_ms": 213
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 11,
+        "elapsed_ms": 173
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 12,
+        "elapsed_ms": 228
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 13,
+        "elapsed_ms": 175
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 14,
+        "elapsed_ms": 242
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 15,
+        "elapsed_ms": 167
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 16,
+        "elapsed_ms": 176
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 17,
+        "elapsed_ms": 199
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 18,
+        "elapsed_ms": 169
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 19,
+        "elapsed_ms": 168
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 20,
+        "elapsed_ms": 187
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 21,
+        "elapsed_ms": 154
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 22,
+        "elapsed_ms": 204
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 23,
+        "elapsed_ms": 164
+      },
+      {
+        "status": 200,
+        "ok": true,
+        "buckets": 2,
+        "invocation": 24,
+        "elapsed_ms": 188
+      }
+    ],
+    "passed": 24,
+    "tail_cohort": {
+      "responses": [
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 25
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 28
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 29
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 30
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 31
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 32
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 33
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "checkedBuckets": 2,
+          "invocation": 34
+        }
+      ],
+      "completed_at": "2026-11-16T20:36:23.104048+00:00"
+    },
+    "sanitized_tail": [
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 230,
+        "eventTimestamp": 1794861381685
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 200,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861381735
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 141,
+        "eventTimestamp": 1794861381964
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 133,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861381973
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 136,
+        "eventTimestamp": 1794861382138
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 129,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861382144
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 127,
+        "eventTimestamp": 1794861382314
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 120,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861382317
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 132,
+        "eventTimestamp": 1794861382472
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 125,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861382475
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 115,
+        "eventTimestamp": 1794861382636
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 110,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861382636
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 143,
+        "eventTimestamp": 1794861382785
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 138,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861382785
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 118,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861382958
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 121,
+        "eventTimestamp": 1794861382960
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 122,
+        "eventTimestamp": 1794861383114
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 118,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861383111
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 0,
+        "wallTime": 143,
+        "eventTimestamp": 1794861383268
+      },
+      {
+        "outcome": "ok",
+        "cpuTime": 1,
+        "wallTime": 138,
+        "entrypoint": "CapacityProbe",
+        "eventTimestamp": 1794861383266
+      }
+    ],
+    "tail_units": {
+      "cpuTime": "milliseconds",
+      "wallTime": "milliseconds"
+    },
+    "aggregate_metrics": {
+      "data": {
+        "viewer": {
+          "accounts": [
+            {
+              "durableObjectsInvocationsAdaptiveGroups": [],
+              "durableObjectsPeriodicGroups": []
+            }
+          ]
+        }
+      },
+      "errors": null
+    },
+    "aggregate_window": {
+      "start": "2026-11-16T20:34:00Z",
+      "end": "2026-11-16T20:40:00Z"
+    },
+    "cleanup": {
+      "probeWorkerAbsent": true,
+      "probeNamespaceAbsent": true,
+      "probeBucketsAbsent": true,
+      "workersCount": 0,
+      "namespacesCount": 0,
+      "bucketsCount": 1,
+      "existingBucketPreserved": true
+    }
+  },
+  "limitations": [
+    "Tail records are scoped samples, not absolute peaks or account-wide metering.",
+    "Empty fresh DO aggregates were observed before deletion; the prior missing historical rows cannot be attributed solely to namespace deletion on this evidence.",
+    "The provider probe covers the production inventory helper on empty real buckets and includes a synthetic DO counter. Large/paginated/failed inventories and upload/backup integration are tested locally.",
+    "Full application capacity and eventual-commit CI/release checks remain open."
+  ]
+}

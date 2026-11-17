@@ -1,0 +1,126 @@
+{
+  "startedAt": "2026-11-16T20:57:29.712Z",
+  "completedAt": "2026-11-16T20:58:12.810Z",
+  "worker": "radiant-rehearsal-20261116-9c17e4",
+  "scope": "Deployed private production API entry point, D1, R2, Images and SQLite Durable Object; invoked through a local service-binding proxy. Synthetic session/data only.",
+  "node": "v24.14.0",
+  "sharp": "0.35.5",
+  "results": [
+    {
+      "label": "unauthorized-upload",
+      "startedAt": "2026-11-16T20:57:30.711Z",
+      "status": 401,
+      "passed": true,
+      "elapsedMs": 241
+    },
+    {
+      "label": "png",
+      "startedAt": "2026-11-16T20:57:30.953Z",
+      "inputBytes": 176,
+      "inputSha256": "9eceb7bdf1a2700f5f74593869cce1391feee53876bc73bac2214cc2d1e2b79c",
+      "expectedStatus": 201,
+      "status": 201,
+      "requestId": "8e8f0c95-a6d4-431d-9da4-2013fe356f68",
+      "uploadMs": 2528,
+      "outputs": {
+        "full": {
+          "bytes": 76,
+          "width": 60,
+          "height": 40,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb"
+        },
+        "card": {
+          "bytes": 76,
+          "width": 60,
+          "height": 40,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb"
+        },
+        "thumb": {
+          "bytes": 76,
+          "width": 60,
+          "height": 40,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb"
+        }
+      },
+      "originalPrivate": true,
+      "deleted": true,
+      "passed": true,
+      "elapsedMs": 8495
+    },
+    {
+      "label": "jpeg-10mib",
+      "startedAt": "2026-11-16T20:57:39.447Z",
+      "inputBytes": 10485760,
+      "inputSha256": "890a028856e3add4501f7d3c92dac5381a4905bd67c7f7dea8bc43058f17450e",
+      "expectedStatus": 201,
+      "status": 201,
+      "requestId": "beea1aa4-fb1e-4ef1-bdf8-37fe2e6bb2c1",
+      "uploadMs": 8859,
+      "outputs": {
+        "full": {
+          "bytes": 76,
+          "width": 60,
+          "height": 40,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb"
+        },
+        "card": {
+          "bytes": 76,
+          "width": 60,
+          "height": 40,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb"
+        },
+        "thumb": {
+          "bytes": 76,
+          "width": 60,
+          "height": 40,
+          "sha256": "fb7daaf2f916104891a70c8aa126582ca319be5ca57b90ff6fbce669642fd8bb"
+        }
+      },
+      "originalPrivate": true,
+      "deleted": true,
+      "passed": true,
+      "elapsedMs": 15547
+    },
+    {
+      "label": "jpeg-40mp-detailed",
+      "startedAt": "2026-11-16T20:57:54.994Z",
+      "inputBytes": 6998671,
+      "inputSha256": "ffb241c5ddce1f7f8a9b26930bb76a9e97dbc4acb37cb4d4d45f91b9c0ac2dc1",
+      "expectedStatus": 201,
+      "status": 201,
+      "requestId": "9b44a168-96cd-4aa6-a65e-f0bf2e08c66a",
+      "uploadMs": 9354,
+      "outputs": {
+        "full": {
+          "bytes": 813894,
+          "width": 2000,
+          "height": 1250,
+          "sha256": "402d60f23a8f4e1d8f9b0cb2dbee54719527661ca9313f84aa1f03fbac927b8d"
+        },
+        "card": {
+          "bytes": 45578,
+          "width": 800,
+          "height": 500,
+          "sha256": "e8c58c8ba69c7b59991eed09d16641de32d01b8994ec001e00d78d671ce8ce70"
+        },
+        "thumb": {
+          "bytes": 426,
+          "width": 320,
+          "height": 200,
+          "sha256": "6d148584febbcd92c963e0fd7a6d03e774cb61d4a00ddb35f1ddfecbdcf04e12"
+        }
+      },
+      "originalPrivate": true,
+      "deleted": true,
+      "passed": true,
+      "elapsedMs": 17087
+    }
+  ],
+  "failures": 0,
+  "finalStorage": {
+    "mediaObjects": 0,
+    "mediaBytes": 0,
+    "recoveryObjects": 1516,
+    "recoveryBytes": 18360338
+  }
+}

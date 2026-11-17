@@ -1,0 +1,72 @@
+# Long-lived private operational acceptance. Public release still uses prepare-release.ts.
+# Keep every ingress mechanism disabled until the release gates are satisfied.
+name = "radiant-images-api"
+account_id = "c99576a777ec2286fcd04b8433231159"
+main = "src/index.ts"
+compatibility_date = "2026-11-13"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+preview_urls = false
+routes = []
+
+[images]
+binding = "IMAGES"
+
+[[durable_objects.bindings]]
+name = "JPEG_VALIDATOR"
+class_name = "JpegValidator"
+[[durable_objects.bindings]]
+name = "GALLERY_MUTATIONS"
+class_name = "GalleryMutations"
+[[durable_objects.bindings]]
+name = "SCHEDULED_OPERATIONS"
+class_name = "ScheduledOperations"
+[[durable_objects.bindings]]
+name = "BULK_READS"
+class_name = "BulkReads"
+
+[[migrations]]
+tag = "jpeg-validator-v1"
+new_sqlite_classes = ["JpegValidator"]
+[[migrations]]
+tag = "gallery-mutations-v1"
+new_sqlite_classes = ["GalleryMutations"]
+[[migrations]]
+tag = "scheduled-operations-v1"
+new_sqlite_classes = ["ScheduledOperations"]
+[[migrations]]
+tag = "bulk-reads-v1"
+new_sqlite_classes = ["BulkReads"]
+
+# Browser acceptance uses the authenticated remote binding from loopback gateways.
+# These origins do not enable Worker ingress; public routes remain disabled above.
+[vars]
+WEB_ORIGIN = "http://127.0.0.1:4273"
+API_ORIGIN = "http://127.0.0.1:8793"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "radiant-images"
+database_id = "003885df-e1f5-4bc1-acf6-8a21915e7406"
+migrations_dir = "src/db/migrations"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "radiant-images-media"
+[[r2_buckets]]
+binding = "RECOVERY"
+bucket_name = "radiant-images-recovery"
+
+[triggers]
+crons = ["*/5 * * * *", "0 3 * * *"]
+
+# Retain sanitized application logs and independent R2/GitHub monitoring. Automatic
+# invocation URLs and traces could capture OAuth codes or questionnaire tokens.
+[observability]
+enabled = true
+head_sampling_rate = 1
+[observability.logs]
+enabled = true
+invocation_logs = false
+[observability.traces]
+enabled = false

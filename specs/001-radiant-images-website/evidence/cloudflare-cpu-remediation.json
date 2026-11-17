@@ -1,0 +1,145 @@
+{
+  "observedAt": "2026-11-15T03:57:17.083708+00:00",
+  "scope": "Private disposable Worker/D1/two R2 buckets; actual accelerated cron; production dispatch/queue and recovery services with a synthetic no-send Gmail provider boundary. No public launch.",
+  "worker": "radiant-recovery-20261115-c4e91a",
+  "version": "57cfe04e-f0c3-401c-aaab-19fac45b88bb",
+  "baselineCronCpuMs": [
+    32,
+    34,
+    30,
+    43
+  ],
+  "samples": [
+    {
+      "at": 1794714672596,
+      "cpuMs": 30,
+      "wallMs": 14175,
+      "executionModel": "durableObject",
+      "outcome": "ok",
+      "exceptions": 0,
+      "version": {
+        "id": "57cfe04e-f0c3-401c-aaab-19fac45b88bb"
+      },
+      "event": {
+        "rpcMethod": "run"
+      }
+    },
+    {
+      "at": 1794714672187,
+      "cpuMs": 0,
+      "wallMs": 14456,
+      "executionModel": "stateless",
+      "outcome": "ok",
+      "exceptions": 0,
+      "version": {
+        "id": "57cfe04e-f0c3-401c-aaab-19fac45b88bb"
+      },
+      "event": {
+        "cron": "* * * * *",
+        "scheduledTime": 1794714671041
+      }
+    },
+    {
+      "at": 1794714732607,
+      "cpuMs": 28,
+      "wallMs": 12706,
+      "executionModel": "durableObject",
+      "outcome": "ok",
+      "exceptions": 0,
+      "version": {
+        "id": "57cfe04e-f0c3-401c-aaab-19fac45b88bb"
+      },
+      "event": {
+        "rpcMethod": "run"
+      }
+    },
+    {
+      "at": 1794714731933,
+      "cpuMs": 0,
+      "wallMs": 13115,
+      "executionModel": "stateless",
+      "outcome": "ok",
+      "exceptions": 0,
+      "version": {
+        "id": "57cfe04e-f0c3-401c-aaab-19fac45b88bb"
+      },
+      "event": {
+        "cron": "* * * * *",
+        "scheduledTime": 1794714731041
+      }
+    },
+    {
+      "at": 1794714792482,
+      "cpuMs": 18,
+      "wallMs": 12706,
+      "executionModel": "durableObject",
+      "outcome": "ok",
+      "exceptions": 0,
+      "version": {
+        "id": "57cfe04e-f0c3-401c-aaab-19fac45b88bb"
+      },
+      "event": {
+        "rpcMethod": "run"
+      }
+    },
+    {
+      "at": 1794714791960,
+      "cpuMs": 0,
+      "wallMs": 13043,
+      "executionModel": "stateless",
+      "outcome": "ok",
+      "exceptions": 0,
+      "version": {
+        "id": "57cfe04e-f0c3-401c-aaab-19fac45b88bb"
+      },
+      "event": {
+        "cron": "* * * * *",
+        "scheduledTime": 1794714791041
+      }
+    }
+  ],
+  "frontCpuNote": "All three cron samples report 0 ms at provider resolution, not zero computation. Coordinator uses 18\u201330 ms within the documented DO allowance. Bounded synthetic recovery dataset; no claim about worst-case backup size or general HTTP CPU.",
+  "independentMonitor": {
+    "at": "2026-11-15T03:54:42.754Z",
+    "ok": true,
+    "issues": [],
+    "counts": {
+      "overdueRecovery": 0,
+      "missedRemovalTarget": 0,
+      "overdueReceipts": 0,
+      "recoveryBytes": 29178
+    }
+  },
+  "privateIngress": {
+    "workersDev": false,
+    "previews": false,
+    "r2ManagedDomains": false,
+    "r2CustomDomains": 0
+  },
+  "cleanup": {
+    "at": "2026-11-15T03:55:18.018Z",
+    "scheduleRemoved": true,
+    "bucketsEmptiedAndVerified": true,
+    "remainingMatchingWorkers": 0,
+    "remainingMatchingDatabases": 0,
+    "remainingMatchingBuckets": 0,
+    "remainingMatchingNamespaces": 0
+  },
+  "usageControl": {
+    "installedAccountWarningUSD": 1,
+    "policyId": "b1da001a3a8f443eb6ece0281f70dee6",
+    "enabledVerified": true,
+    "existingRecipientsReused": true,
+    "existing10DollarWarningPreserved": true,
+    "subscriptionApiStatus": 403,
+    "spendPolicyApiStatus": 403,
+    "applicationUploadAttemptsPerRolling30Days": 300,
+    "quotaValidation": "local real-DO integration; not deployed portfolio proof",
+    "billingCap": false
+  },
+  "sourceHashes": {
+    "apps\\api\\src\\scheduled.ts": "d42abd31102e87c7514fb1083d836af1f6891a37e033dbf9bccd74fca3960894",
+    "apps\\api\\src\\services\\scheduledOperations.ts": "1567e8f5c50146d7fa7428d50a1c88b41c207fab31f63f1a16735621869d507a",
+    "scripts\\cloudflare-recovery-rehearsal\\worker.ts": "891d77566d3854bfabb41742171f3d0abaaae02dc88219fcc306591cdb3be51a"
+  }
+}

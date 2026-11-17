@@ -59,7 +59,37 @@ wired in, with protected-upload tests and ten passing synthetic cases through li
 measurement in the deployed environment and other release gates remain open; no application
 deployment or paid activation was performed.
 
+## Moodboard theme (FR-007)
+
+The application imports `brand.css` through `theme.css`. The standalone build combines
+the same base stylesheet with `branding.css`. Display text uses local Bodoni Moda,
+Bodoni MT or Didot with a Times fallback. Body text uses local Lora, Source Serif 4 or
+Georgia with a generic serif fallback. The approved logo supplies the script signature.
+
+Both homepages render `HomeIntro` with their own contact action. The decorative image
+has empty alt text and 480- and 960-pixel WebP sources. At 700 CSS pixels and below
+the image appears above the text. The standalone asset allowlist includes both sizes
+and the lavender sprig used on wider screens. Print pricing uses a white background
+and dark text. The PDF uses Times-Roman, Espresso text, a Vintage Wine brand line and
+Mushroom Taupe rules. All formats still use one published pricing revision.
+[Shared styles](../../apps/web/app/styles/brand.css) · [Artwork sources](../../apps/web/assets/README.md#moodboard-artwork-on-the-homepage)
+
 ## Summary
+
+**2026-11-17 bounded branding implementation (T065):** The owner confirms domain
+connection for `radiantimagesct.com` and supplies public contact `radiantimages.ct@gmail.com`.
+Prepare a separate static-only Worker for the informational homepage/privacy pages while
+the React application/API stay private. React server rendering at build time produces a
+small allow-listed asset directory; no browser JavaScript, runtime code, resource bindings,
+sign-in flow or application data is included. This temporary publication boundary follows
+T065's existing permission to host branding separately and does not replace the two-deployable
+application design. The build uses `apps/web/branding.json`; the dedicated Wrangler config
+selects `radiant-images-branding` and only the connected apex custom domain. Output lives
+in `apps/web/dist/branding` so ordinary React Router builds cannot erase it. The owner
+approved the content and publication; both public URLs pass HTTPS/browser checks on
+version `b5082e76-8a73-4a20-8a75-ca903bcab0ed`, with recursive negative-cache limitations
+recorded in acceptance.md. Google Search Console verification and T066/T067 remain open.
+Manual acceptance is deferred as requested. No application release gate is waived.
 
 **Controlled provider rehearsal (2026-11-14)**: The owner asked to continue with the next
 step after the scoped proposal to verify the deployed upload pipeline. Use a temporary
@@ -112,6 +142,97 @@ Target $0 usage within included allowances; R2 enrollment is owner-completed and
 upgrade is selected. Usage/overage controls remain T001 work. Full reasoning in [research.md](./research.md).
 
 ## Technical Context
+
+**Persistent private operational setup (2026-11-16, R-30):** The owner's next focused
+sequence authorizes a long-lived private target while final copy/photos proceed separately.
+Use `apps/api/wrangler.acceptance.toml` for the existing production API entry point,
+four SQLite DO classes, dedicated D1 and two private Standard R2 buckets. Keep workers.dev,
+preview URLs and routes disabled. Preserve the tested compatibility date and normal cron
+expressions. This configuration is separate from public `prepare-release.ts`; existing
+public-release gates remain unchanged. Record manual scheduler calls separately from
+actual Cloudflare cron invocations, and genuine Gmail health separately from backup success.
+Do not replace missing consent with a provider double. GitHub receives only S3 Object
+Read Only credentials verified for the recovery bucket, never the Billing Read token.
+The owner explicitly deferred Google production setup as T065–T067: approved real
+homepage/privacy pages, Branding/Production and applicable verification, then fresh
+production consent and actual scheduled health. Private testing may use an approved
+test-user grant with both Gmail scopes, recorded as temporary (seven-day Testing lifetime).
+Keep final photos and broader content approval under T063.
+
+**2026-11-16 committed guard rehearsal (R-29):** `c23c943` passes private deployed
+upload/read/delete checks with 1,501 synthetic recovery keys forcing real pagination;
+the unchanged backup helper also verifies a 17-table snapshot. Maximum sampled front
+CPU is 7 ms across 63 records; all 29 DO records are `ok`. Every temporary provider
+resource was removed and absence verified. The owner's monthly DO Usage screen shows
+zeros, which does not reconcile with execution logs; empty aggregate queries remain a
+metering gap. Persistent monitoring is confirmed unconfigured. Exact-head CI now passes
+290 tests and 163 browser/performance checks across five projects (12 expected skips),
+with an identical tested merge tree. Keep T001/T058 and deployment/release gates open;
+see research R-29.
+
+**2026-11-16 T001 continuation (R-28):** Images Free is now explicitly confirmed by
+the owner from the account page. Account GraphQL supplies daily Workers/D1 observations
+below included quotas; missing DO aggregates remain a metering limitation. Gallery
+uploads and new backups now inventory combined MEDIA/RECOVERY storage before provider
+processing/export and refuse when the bounded new write does not fit within six GiB
+minus 32 MiB headroom or inventory cannot be verified. Existing gallery/scheduled DO
+execution paths keep this scan off the front Worker. Lists are bounded by page count
+and timeout. This is conservative admission, not an atomic or account-wide cap.
+Local quality and a private production-helper probe pass; persistent monitoring and
+eventual-commit CI/release acceptance remain open. See research R-28 and acceptance.md.
+
+**2026-11-16 delivery follow-up:** The R-25 source passes full remote CI on `e1cea09`.
+Local workflows now pin verified Node 24 action commits and `ubuntu-26.04`, matching the
+successful runner family; Node 24.14.0 and pnpm 12.18.0 remain the application toolchain.
+T061 now moves keyboard focus to public main content after client-side pathname changes,
+including Back/Forward, while initial loads and hash-only navigation keep native focus.
+T064 is now complete through the approved secure Billing Read API fallback (R-27).
+Subscriptions and explicit-period usage reads succeed; reported November 14–15 R2/Images
+charges are $0, spend policies are empty and existing $1/$10 budget warnings are enabled.
+Daily Workers/D1/DO usage and the Images plan's Free overage cutoff remain unverified;
+T001 retains these and wider capacity/control gates. This does not authorize a paid
+upgrade or close persistent monitoring and release gates. See quickstart.md and R-27.
+
+**Bulk-read CPU remediation (2026-11-15, R-25):** The private 60-image/200-client
+baseline reproduces a 14-ms first gallery read. Incremental Hono routing reduces that
+sample to 8 ms, but fresh public-bootstrap and client-list reads still take 16/15 ms.
+Keep the incremental router and delegate only these three bulk reads (GET/HEAD) to
+`BulkReads` Durable Objects, keyed separately as `public`, `gallery` and `clients`.
+Each object coordinates admission of at most eight reads (including the five-request
+acceptance profile); excess work returns temporary 503/Retry-After, with no unbounded
+queue. This is a scoped CPU/admission boundary under
+the existing Free-tier constraint, not a single object for all API traffic. The front
+Worker retains restore/owner checks and streams the result; the object repeats those
+checks and queries D1 afresh. It caches no content, sessions or client data and has no
+durable state to restore. Keep HTTP forwarding to preserve response/body semantics.
+Verify CPU, duration/usage impact, authorization, freshness and overload behavior before
+claiming the sampled read headroom is resolved. Account-wide billing and persistent
+monitoring gates remain separate.
+
+**CPU and usage remediation (2026-11-14, R-24):** Both production cron schedules now
+await one `ScheduledOperations` Durable Object for the recovery ledger. It serializes
+maintenance and daily backup/health, permits at most two outstanding jobs, propagates
+failure, and leaves completion evidence in the existing private R2 signals. The front
+Worker only dispatches RPC; it no longer executes the 30–43 ms recovery workload.
+Production, local and private rehearsal configs include a SQLite-class migration.
+The portfolio coordinator also persists a reservation for at most 300 owner-authorized
+upload attempts per rolling 30 days. Failed attempts count; reads/deletion do not consume
+that allowance. This bounds application churn, not total account billing. A verified $1
+account-wide budget warning supplements the existing $10 alert. Billing subscription and
+spend-policy APIs remain inaccessible to this OAuth connection. See acceptance.md for
+the actual deployed measurements and remaining persistent-monitor/general API gates.
+
+**Recovery rehearsal (2026-11-14, R-23)**: The private disposable operator in
+`scripts/cloudflare-recovery-rehearsal/` imports the shipped backup, deletion, media and
+scheduled services without adding application routes. Real D1/R2 checks cover deletion
+reconciliation after both application snapshots and D1 Time Travel. Public ingress stays
+detached during provider restores because Time Travel can reset the D1 maintenance flag.
+An accelerated every-minute cron exercises the daily branch using a clearly labeled synthetic
+Gmail sender adapter; it is not live Gmail acceptance or the production schedule. Independent
+monitor observations, rollback and cleanup receipts are retained in acceptance.md. The first
+observed cron exceeded the Free CPU budget despite completing; production resource headroom,
+persistent monitoring and scheduled-recipient routing remain explicit release gates. The
+user confirmed receipt of the manually triggered GitHub rehearsal notification.
 
 **Monitoring correction (2026-11-14, R-22)**: The independent GitHub monitor uses
 bucket-scoped R2 Object Read Only credentials through S3 SigV4, with pinned signing/XML
@@ -409,10 +530,11 @@ apps/
 │   │   │   └── admin/            # login, dashboard, gallery, banners, pricing, settings,
 │   │   │                         #   clients, clients.$id, templates, checklist, questionnaire
 │   │   ├── components/           # Header, Banner, Gallery, PricingSection, BookNow, forms…
-│   │   ├── lib/                  # api client, auth session store, pdf renderer, print styles
-│   │   ├── styles/               # tailwind theme (palette tokens), print.css
+│   │   ├── lib/                  # api client, auth session store, pricing PDF renderer
+│   │   ├── styles/               # brand.css, theme.css, branding.css, print.css
 │   │   └── root.tsx
-│   ├── public/                   # logo, favicon, _headers
+│   ├── assets/                   # approved logo and local design references
+│   ├── public/                   # decorative WebP assets and _headers
 │   ├── worker.ts                 # HTML fallback routing/security headers only; no domain API
 │   ├── wrangler.toml             # build/client assets binding; separate frontend Worker
 │   ├── react-router.config.ts    # ssr:false, prerender list, basename
@@ -428,7 +550,7 @@ apps/
 │   ├── wrangler.toml             # D1, R2, rate-limit bindings
 │   └── tests/                    # vitest-pool-workers integration + contract tests
 packages/
-└── shared/                       # Zod schemas, types, constants (palette, limits, enums)
+└── shared/                       # Zod schemas, types, limits, enums
     └── src/
 e2e/                              # Playwright scenarios (quickstart.md maps to these)
 .github/workflows/

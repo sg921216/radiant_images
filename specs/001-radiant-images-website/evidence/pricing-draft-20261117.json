@@ -1,0 +1,47 @@
+{
+  "packages": [
+    {
+      "shootType": "maternity",
+      "sortOrder": 0,
+      "name": "Maternity",
+      "priceCents": 32500,
+      "description": "45–60 minutes · 30+ edited high-resolution images",
+      "inclusions": [
+        "Partner and children welcome",
+        "One location",
+        "Up to 2 outfits",
+        "Private online gallery",
+        "Personal printing rights"
+      ]
+    },
+    {
+      "shootType": "newborn",
+      "sortOrder": 0,
+      "name": "Lifestyle Newborn",
+      "priceCents": 42500,
+      "description": "Up to 90 minutes · 35+ edited high-resolution images",
+      "inclusions": [
+        "In-home session",
+        "Baby, parents and siblings",
+        "Natural lifestyle posing",
+        "Nursery and detail images",
+        "Private online gallery",
+        "Personal printing rights"
+      ]
+    },
+    {
+      "shootType": "family",
+      "sortOrder": 0,
+      "name": "Family",
+      "priceCents": 32500,
+      "description": "45–60 minutes · 30+ edited high-resolution images",
+      "inclusions": [
+        "Immediate family",
+        "One outdoor or in-home location",
+        "Styling guidance",
+        "Private online gallery",
+        "Personal printing rights"
+      ]
+    }
+  ]
+}

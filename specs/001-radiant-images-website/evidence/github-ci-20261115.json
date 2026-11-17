@@ -1,0 +1,133 @@
+{
+  "observedAt": "2026-11-15T04:07:03.655Z",
+  "source": "GitHub Actions run, jobs API and completed verify-job log; retained only step outcomes and test-count summaries",
+  "url": "https://github.com/sg921216/radiant_images/actions/runs/43673720689",
+  "runId": 43673720689,
+  "event": "workflow_dispatch",
+  "branch": "001-radiant-images-website",
+  "headSha": "48d5ee3032ee1ad9587b18bbc2588d6b86d394db",
+  "status": "completed",
+  "conclusion": "success",
+  "startedAt": "2026-11-15T03:44:50Z",
+  "completedAt": "2026-11-15T04:05:17Z",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm/action-setup@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm install --frozen-lockfile",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm format:check",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm lint",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm typecheck",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm security:dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm security:secrets",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm test",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm test:setup",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm exec playwright install --with-deps chromium firefox webkit",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Main branch Chromium smoke",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Pull request, nightly and release browser matrix",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify diagnostic privacy",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run pnpm/action-setup@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "testSummaries": [
+    "Test Files  60 passed (60)",
+    "Tests  271 passed (271)",
+    "12 skipped",
+    "153 passed (17.5m)"
+  ],
+  "skipReason": "Three performance profiles run once under chromium-desktop; their duplicate cells in the other four projects are explicitly skipped. All 150 functional browser cases passed, plus the three performance profiles. No functional quarantine.",
+  "scope": "Latest pushed baseline only. Local R-24 CPU, usage, contract and pricing changes are not present in this run."
+}

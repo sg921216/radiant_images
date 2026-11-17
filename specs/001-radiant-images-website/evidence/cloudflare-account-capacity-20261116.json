@@ -1,0 +1,157 @@
+{
+  "task": "T001",
+  "source_commit": "637f345",
+  "account": "Radiant Images",
+  "recorded_at": "2026-11-16 20:35:41 UTC",
+  "source": "Cloudflare GraphQL and SQL analytics via existing operational OAuth; public Images rate-plan catalogue",
+  "query_window": {
+    "utc_date_geq": "2026-11-14",
+    "utc_date_leq": "2026-11-16",
+    "limit": 10000,
+    "current_day_is_partial": true
+  },
+  "daily_analytics": {
+    "d1AnalyticsAdaptiveGroups": [
+      {
+        "dimensions": {
+          "date": "2026-11-14"
+        },
+        "sum": {
+          "readQueries": 610,
+          "rowsRead": 1234,
+          "rowsWritten": 698,
+          "writeQueries": 400
+        }
+      },
+      {
+        "dimensions": {
+          "date": "2026-11-15"
+        },
+        "sum": {
+          "readQueries": 4564,
+          "rowsRead": 94023,
+          "rowsWritten": 2511,
+          "writeQueries": 1267
+        }
+      }
+    ],
+    "durableObjectsInvocationsAdaptiveGroups": [],
+    "durableObjectsPeriodicGroups": [],
+    "imagesUniqueTransformationsAccumulatedSinceStartOfMonth": [
+      {
+        "date": "2026-11-14",
+        "transformations": 49
+      },
+      {
+        "date": "2026-11-15",
+        "transformations": 49
+      }
+    ],
+    "workersInvocationsAdaptive": [
+      {
+        "dimensions": {
+          "date": "2026-11-14"
+        },
+        "sum": {
+          "clientDisconnects": 48,
+          "cpuTimeUs": 2243552,
+          "errors": 0,
+          "requests": 715
+        }
+      },
+      {
+        "dimensions": {
+          "date": "2026-11-15"
+        },
+        "sum": {
+          "clientDisconnects": 396,
+          "cpuTimeUs": 3379747,
+          "errors": 0,
+          "requests": 1890
+        }
+      }
+    ]
+  },
+  "graphql_errors": null,
+  "dataset_settings": {
+    "d1AnalyticsAdaptiveGroups": {
+      "enabled": true,
+      "maxDuration": 2764800,
+      "maxPageSize": 10000,
+      "notOlderThan": 7776000
+    },
+    "durableObjectsInvocationsAdaptiveGroups": {
+      "enabled": true,
+      "maxDuration": 2764800,
+      "maxPageSize": 10000,
+      "notOlderThan": 7776000
+    },
+    "durableObjectsPeriodicGroups": {
+      "enabled": true,
+      "maxDuration": 2764800,
+      "maxPageSize": 10000,
+      "notOlderThan": 7776000
+    },
+    "workersInvocationsAdaptive": {
+      "enabled": true,
+      "maxDuration": 2764800,
+      "maxPageSize": 10000,
+      "notOlderThan": 7776000
+    }
+  },
+  "do_sql_fallback": {
+    "data": [],
+    "rows": 0,
+    "statistics": {
+      "elapsed_ms": 48,
+      "rows_read": 2708748,
+      "bytes_read": 31892598
+    }
+  },
+  "images_catalogue": {
+    "id": "IMAGES_V2_STREAM_BASIC",
+    "public_name": "Cloudflare Images + Stream",
+    "transformation_component": {
+      "name": "image_unique_transformations",
+      "publicName": "Images Transformed",
+      "kind": "usage",
+      "type": "tieredPricingComponent",
+      "metric": "image_unique_transformations",
+      "aggregate": "sum",
+      "chargeType": "usage",
+      "chargeModel": "tiered",
+      "defaultQuantity": 0,
+      "tiers": [
+        {
+          "lowerThreshold": 0,
+          "upperThreshold": 0,
+          "pricingType": "unit",
+          "price": 1,
+          "bucketSize": 0
+        }
+      ],
+      "discounts": {},
+      "cfUOM": "COUNT",
+      "cfQuantityLabel": "{{comma .}} images transformed",
+      "cfStartOfFirstUnit": 1,
+      "cfUsageDivisor": 1,
+      "cfUsageID": "image_unique_transformations"
+    }
+  },
+  "interpretation": [
+    "Adaptive analytics are operational usage observations, not an invoice or exact billable usage.",
+    "Workers/D1 rows were returned for November 14 and 15; missing November 16 rows are not interpreted as zero.",
+    "Workers client disconnects were reported separately from errors: 48 and 396. These totals do not demonstrate every request completed successfully.",
+    "Both DO datasets and the independent SQL aggregate returned no rows despite preserved R-20/R-21 rehearsal metrics. Settings report enabled with 90-day lookback, so a 24-hour retention limit does not explain the missing rows. Root cause is not established.",
+    "Images month-to-date values of 49 on two dates are cumulative snapshots and must not be summed.",
+    "The public rate-plan catalogue is ambiguous about a Free cutoff. The owner subsequently confirmed the account page explicitly shows Free; use documented Free overage behavior with that owner-attested plan."
+  ],
+  "images_plan_owner_confirmation": {
+    "date": "2026-11-16",
+    "account_page_label": "Free",
+    "owner_statement": "My account page shows Free",
+    "provenance": "Owner dashboard observation, not independently viewed by the agent",
+    "documented_behavior": "5,000 included unique transformations per calendar month; new transformations rejected after allowance on Free; no paid upgrade selected",
+    "source": "https://developers.cloudflare.com/images/pricing/"
+  }
+}

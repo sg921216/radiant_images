@@ -1,5 +1,325 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 moodboard update (FR-007).** T015 and T022 share the brand styles and
+homepage introduction with T065's standalone pages. T029 and T030 carry the serif
+treatment into print and PDF pricing. The updated theme passed local build and
+public-page checks. T061 retains the screen-reader and performance checks. T063
+retains the real-device and final print/PDF reviews. [Theme verification](acceptance.md#moodboard-theme-verification)
+
+**2026-11-17 supplied-content intake:** Reviewed the portfolio, business card, sprig,
+moodboard, pricing guide and both READMEs; preserved originals. Prepared 17 local,
+metadata-stripped JPEG upload candidates with draft alt text and a schema-valid draft
+for the three supported pricing categories. See [content-intake.md](content-intake.md)
+and `evidence/content-intake-20261117.json`. Eleven originals exceed 10 MiB; all photos
+are maternity. Website/contact discrepancies, conditional deposit/fee wording, extra
+service categories and missing permission/newborn/family inputs remain explicit.
+Nothing was published or written to live application data. T061/T063 remain open;
+**57/67 full tasks complete**. DOCX review was text/structure only, not rendered layout.
+
+- [X] Inventory and analyze supplied brand/content materials (T063 content substep).
+- [X] Prepare and locally validate 17 upload candidates and draft alt descriptions (T061/T063 substep).
+- [X] Transcribe and schema-check supported pricing draft; record unsupported categories and policy conflicts (T063 substep).
+- [ ] Confirm final content/fees, photo selection/usage permission, additional gallery coverage and treatment of extra services (T063 remaining).
+
+**2026-11-17 owner handoff:** The owner confirms submission and reports Google's exact
+data-access status: **“Your app's data access is under review.”** This supersedes the
+unsaved-form checkpoint below. Pause interactive work at the owner's request; resume
+when Google approves or requests additional information. T066 remains open for the
+review outcome/applicable requirements and limits; T067 still requires the normal
+post-rotation scheduled health evidence. **57/67 complete**.
+
+- [X] Submit the Google data-access verification package (owner-confirmed).
+- [ ] Record Google's review decision/required follow-up and applicable limits (T066 remaining).
+
+**2026-11-17 verification-form follow-up:** Requirements checklist passes 16/16.
+Read-only S3 monitoring at 19:06 UTC passes, retaining the 18:56 manual Gmail-health
+timestamp; the normal November 18 03:00 UTC daily run is still future evidence.
+Owner reports and subsequent native Chrome inspection confirm unverified data access
+and missing scope justifications/intended usage/demo video. Both justifications are now
+entered in the open form and Email productivity is selected. Save is disabled without
+the demo YouTube URL, so no saved configuration/review submission is claimed. Draft text
+and a recording outline are in quickstart.md. T066/T067 remain open; **57/67 complete**.
+
+- [X] Inspect actual Google data-access requirements and prepare/enter scope explanations (T066 partial).
+- [ ] Obtain applicable Google approval/requirements and record actual limits (T066 remaining; owner confirms the verification package is submitted).
+
+**2026-11-17 18:56 UTC production consent:** Owner confirms verified published Branding
+and Audience **In production**. Fresh consent grants both Gmail scopes; replacement
+Worker secret is installed and deployed manual daily Gmail health verifies the intended
+sender. Independent monitoring passes. Temporary operator/local token are removed.
+T066 remains open for the scope-verification warning/applicable limits; T067 awaits
+the normal November 18 03:00 UTC scheduled health. **57/67 complete**. See acceptance.md.
+
+- [X] Obtain both scopes with fresh consent while Audience is In production (T067 partial).
+- [X] Install replacement secret, verify deployed manual Gmail health, and remove transient token (T067 partial).
+- [ ] Verify normal post-rotation daily scheduled Gmail health at/after November 18 03:00 UTC (T067 remaining).
+
+**2026-11-17 Google production continuation:** The owner resumed T066 then T067;
+earlier Google deferrals below are historical. Manual checks stay deferred. Browser
+access is unavailable and selecting Chrome was denied, so no console state/change or
+new consent is established. Quickstart contains the exact Branding/ownership and
+secure consent handoff. Both tasks remain open; **57/67 complete**. See acceptance.md.
+
+**2026-11-17 T065 homepage/privacy implementation:** The owner confirms domain connection
+complete for `radiantimagesct.com` (Cloudflare and Google public DNS nameservers) and selects
+`radiantimages.ct@gmail.com` as public contact. Standalone React-rendered informational pages
+are implemented in `apps/web/app/routes/branding.tsx`; `pnpm branding:build` produces only
+the two pages, 404, styles, logo assets, headers, robots and sitemap. Separate
+`apps/web/wrangler.branding.jsonc` targets only the branding Worker/custom domain, with no
+API, D1, R2, Gmail secrets or application fallback. The production application remains private.
+Eleven focused tests have demonstrated red/green, including preservation across ordinary
+application builds. Six local and six public page/viewport checks pass without JavaScript;
+automated axe finds no violations at 320/768/1280px. The owner explicitly approved wording
+and publication. Both URLs are deployed on version `b5082e76-8a73-4a20-8a75-ca903bcab0ed`.
+The public check caught automatic Cloudflare analytics injection; `no-transform` prevents
+it without changing zone-wide settings. Cloudflare authoritative DNS/1.1.1.1 resolve the new
+hostname; Google public DNS now also resolves it. Local upstream negative caching is disclosed in acceptance.md. Public TLS/browser
+checks use that verified address with normal certificate validation. T065 is complete;
+T066/T067 remain open and **57/67 complete**. Search Console ownership, broader manual
+checks and Google console changes are deferred. See quickstart.md for actual URLs/evidence.
+
+- [X] Implement and automate checks for isolated homepage/privacy assets using the selected domain/contact (T065 follow-up).
+- [X] Approve policy wording and publish/verify the genuine public URLs; Google Search Console ownership remains T066 (T065 follow-up).
+
+**2026-11-17 local logo follow-up:** The supplied `apps/web/assets/Logo.jpg` is now
+integrated into the public header through responsive 320/640-pixel WebP assets. The
+original is unchanged; the header retains its Home link, accessible brand name,
+centered desktop placement and narrow-screen menu. Local quality passes **65 files /
+305 tests**, and **80 selected browser checks** pass across the five configured
+projects using this workstation's existing Firefox launch configuration. All **40 mobile
+profile samples** pass with logo transfers included. The owner confirmed using this logo.
+The loopback-only frontend copy now includes it; **19 read-only HTTP checks** pass.
+The deployed API and live acceptance data are unchanged. Evidence is in
+`evidence/local-logo-implementation-20261117.json` and `acceptance.md`.
+**56/67 tasks complete.** Remaining content approval, manual/human/device acceptance and
+Google production remain deferred; this partial content work does not close T063.
+
+- [X] Integrate and verify the supplied logo in the local public header (T020/T063 follow-up).
+- [X] Include static logo image responses in the mobile transfer-budget measurement (T061 follow-up).
+
+**2026-11-17 CI/private-update follow-up:** Quality run `44108958097` passes for the current
+source head `aebde5d`, including unit tests and the full browser matrix. The private API
+and isolated loopback frontend now include the required-answer feedback fix. All 20
+read-only HTTP checks pass; public ingress stays disabled and recorded test-data counts
+are unchanged. See `evidence/github-ci-private-update-20261117.json` and
+`evidence/private-build-update-20261117.json`. No manual test or owner timing has started.
+
+**2026-11-17 manual-testing deferral and automated follow-up:** The owner requested holding
+manual testing until the end. The prepared `owner-timed-01` attempt never started. Human
+timings, screen-reader review and manual device checks remain deferred, as do Google
+production and final content. A live-observed required-question error was reproduced by
+failing component/API regressions and fixed locally with clear, accessible feedback.
+All **65 local test files / 305 tests**, lint, type checking and production builds pass.
+The fix was subsequently committed in `aebde5d`, passed CI and updated privately as above.
+**56/67 tasks complete**; no human or production gate is closed by this follow-up.
+
+**2026-11-17 private-browser sequence:** Committed `7b6e88c` passes Quality run
+`44011757954`: 64 files / 292 tests and 163 browser/performance passes, with 12 declared
+duplicate performance skips and identical head/merge trees. Loopback-only web/API gateways
+are running on this Windows computer; real D1/R2/API ingress remains private. The designated
+owner allow-list and loopback Turnstile widget are installed. Labelled test content resolves
+the previously empty pricing/bootstrap data. The owner confirms successful Google login;
+04:12 UTC read-only D1 verification finds one session created at 04:10:00 UTC and used at
+04:11:03 UTC. The earlier `redirect_uri_mismatch` is resolved. Windows Computer Use now
+operates visible Chrome; the browser extension host remains unavailable. At 04:44 UTC,
+the initial cohort passes **10 submitted / 10 accepted / 10 received**, each observed in the
+recipient Inbox within 300 seconds (28.869–151.182 seconds). At 05:38 UTC, the changed-recipient
+run is complete with **10 submitted / 10 accepted / 10 received**: three Inbox
+and seven Spam messages, all within 300 seconds (1.745–254.786 seconds). Raw Yahoo receipt
+headers resolve the earlier search-based uncertainty; Spam classification remains a
+delivery-quality finding. No cases were retried or excluded.
+At 13:50 UTC, both designated clients' template/questionnaire emails and two additional
+snapshot-test invitations have actual receipt evidence within 300 seconds. Responses stay
+isolated; original questions/choices survive master edits, reordering and an approved
+question deletion. Checklist add/rename/reorder/repeat-save/new-client/removal checks pass
+without lost progress. Invalid sender rejection passes. The removed location appeared
+unavailable on the open form within 14.713 seconds; after the approved CAPTCHA, Submit
+rejected it with reselect guidance and retained the draft. The negative case sent no email.
+A Chrome FAQ keyboard/200% zoom sample adds partial manual evidence.
+The two predeclared inquiry cohorts and subsequent cases are recorded in
+`evidence/private-browser-live-runs-20261117.json`. Settings acceptance is complete;
+screen-reader review and human/device acceptance remain open. Gateway changes passed 15
+focused tests, typecheck, lint, formatting and privacy checks at the initial checkpoint;
+they are now included in the later passing `44108958097` CI run above.
+**56/67 tasks complete. T046 is complete; T025/T057/T061/T063 remain unchecked.**
+Google production T065–T067 and final content remain deferred. Replace temporary Gmail
+consent before approximately **November 23, 2026, 9:28 p.m. Eastern**.
+
+Focused browser sequence progress (does not close the full task gates):
+
+- [X] Confirm CI for the committed operational/Gmail changes.
+- [X] Prepare and verify loopback-only access while public API/R2 access stays disabled.
+- [X] Verify the designated owner's actual Google login (owner report plus live session metadata).
+- [X] Complete the two predeclared real-mail inquiry cohorts and receipt timings.
+- [X] Verify settings changes, both client workflows and questionnaire receipt/submission.
+- [ ] Finish manual accessibility, unassisted owner/participant timing and actual-device checks.
+
+Client email receipt, questionnaire submission/isolation, master snapshot behavior and
+checklist propagation/removal are verified. The under-three-minute owner timing remains
+a separate human gate under T057; preparing its dashboard does not start or satisfy it.
+
+**2026-11-17 03:29 UTC focused operational acceptance complete:** The normal daily
+backup/Gmail health run passes. Actual scheduled GitHub run `44010000756` detects the
+controlled fault; the owner confirms receiving its alert. The correct bucket reference
+is restored, recovery run `44010074349` passes, and normal monitoring remains enabled.
+Public API/R2 access is still disabled; temporary operators and token files are removed.
+Current account/namespace usage agrees with all 70 DO calls captured through 03:25 UTC;
+historical missing usage remains documented for Cloudflare. **55/67 tasks complete.**
+The focused private tests pass with temporary consent; T001/T058 and broader release
+acceptance remain open, including deferred Google production work T065–T067.
+
+**2026-11-17 03:01 UTC scheduled backup checkpoint:** The normal `0 3 * * *` invocation
+completed backup/read-back verification and real Gmail health (`verified`, zero failures).
+Persisted provider logs show the actual scheduled front invocation and production DO,
+both `ok` on version `5868ab73-0666-4598-a8dc-dd759e9579ff`; five-minute maintenance
+also continues successfully. Scheduled alert receipt/recovery is the remaining focused
+test. Temporary Testing consent and the broader T001/T058 production gates remain tracked.
+
+**2026-11-17 02:38 UTC Gmail/monitoring checkpoint:** Complete temporary Testing consent
+is now installed. A reproduced primary-address verification bug is fixed and deployed;
+33 focused tests pass. The production DO completes backup and real Gmail health, and
+GitHub's manual healthy → controlled fault → recovered cycle passes with the correct
+bucket reference restored and hourly monitoring enabled. Actual 03:00 UTC daily execution
+and 03:17 UTC scheduled notification receipt remain pending. T065–T067 still gate durable
+production consent; the Testing grant has a seven-day lifetime from about November 17
+02:28 UTC. **55/67 tasks complete; T001/T058 remain unchecked.**
+
+**2026-11-17 02:27 UTC R2 follow-up (November 16 local):** The new credentials pass
+recovery listing/operational reads; media and unrelated-bucket reads and a recovery write
+probe all return 403. The exact verified pair is now staged in GitHub secrets for
+`radiant-images-recovery`. Activation awaits a healthy baseline: the live S3 monitor's
+only issue is `gmail_unavailable`, and complete two-scope Gmail consent is still pending.
+The selected R2 credential expiry is November 16, 2027; rotate before then. Persisted
+observability shows 56 successful maintenance crons plus the initial manual DO call;
+account and namespace metrics agree on 57 calls. **55/67 tasks complete; T001/T058 open.**
+
+**2026-11-16 persistent operational setup (R-30):** The owner explicitly
+authorized a long-lived environment with public access disabled. `radiant-images-api`,
+the `radiant-images` D1 database and private `radiant-images-media` / `radiant-images-recovery`
+buckets now exist. Normal five-minute maintenance and 03:00 UTC backup/health schedules
+are configured; two actual automatic maintenance runs succeeded. A manual call to the
+production scheduler completed maintenance and a verified backup; Gmail correctly reports
+unavailable. Real Gmail consent/sender and new
+recovery-bucket-only S3 credentials are still required. See acceptance.md for current
+scheduled-execution and metering evidence. **T001/T058 remain unchecked; 55/64 complete.**
+
+**2026-11-16 owner-directed deferral:** Continue private acceptance using the newly granted
+Testing consent. T065–T067 below track the remaining Google production setup for later;
+final photos/content remain under T063. R2 credentials are being prepared by the owner.
+**55/67 tasks complete, 12 open.** Testing consent does not close a production release gate.
+
+**Gmail dependency clarification:** The owner's Google console requires genuine homepage
+and privacy-policy URLs plus valid branding before External production publication. These
+pages now gate long-lived Gmail consent. Approved-test-user consent in Testing is only a
+seven-day acceptance credential, not completion of the persistent Gmail-health requirement.
+
+The focused operational sequence is tracked within T001/T058:
+
+- [X] Establish the persistent API/D1/R2 target and verify public ingress is disabled.
+- [X] Configure the normal maintenance and daily backup schedules.
+- [X] Verify two automatic maintenance invocations and their successful production DO calls.
+- [X] Verify automatic maintenance, automatic daily backup, and real Gmail health together (temporary Testing consent; T067 remains deferred).
+- [X] Configure and enable GitHub monitoring with verified recovery-bucket-only Object Read Only S3 credentials.
+- [X] Verify healthy → fault → recovered monitoring and scheduled notification receipt (actual scheduled run `44010000756`, owner-confirmed receipt, successful recovery `44010074349`).
+- [X] Recheck active-environment DO usage and retain the investigation packet: account and namespace counts match 70 captured calls through 03:25 UTC; historical reporting remains unresolved.
+
+**2026-11-16 T001 checkpoint (R-29):** Committed storage guard `c23c943` passes private
+application uploads/deletion with real paginated R2 inventory; production backup helper
+also succeeds. All 92 tail samples are `ok`, front CPU at most 7 ms. Temporary resources
+are removed and absence verified. Owner-reported DO dashboard zeros conflict with live
+execution; aggregate metering remains unresolved. Persistent monitor is unconfigured.
+Exact-head Quality run 43953953193 passes 290 tests and 163 browser/performance checks
+across five projects (12 expected duplicate performance skips), with an identical tested
+tree. **55/64 complete, nine open; T001 unchecked.**
+
+**2026-11-16 T001 checkpoint (R-28):** Owner confirms the account Images page shows
+Free; daily Workers/D1 analytics are below included allowances in the returned rehearsal
+cohorts. Added fail-closed combined R2 capacity checks before image processing and new
+backups. Local quality: 64 files / 290 tests and both builds pass; Chromium gallery
+2/2 passes. Private provider helper probe: 34/34 checks; resources removed and verified.
+DO aggregate metering, persistent recovery monitoring and eventual-commit CI/release
+acceptance remain open. **T001 remains unchecked; 55/64 complete, 9 open.**
+
+**2026-11-16 Billing Read checkpoint (R-27): T064 complete.** The scoped token is
+active; approved read-only API verification succeeds for subscriptions, explicit-period
+usage and spend policies. Supplemental billing records report $0 for the returned
+November 14–15 R2/Images usage. No spend policy is configured; $1/$10 budget warnings
+remain enabled. T001 retains daily Workers/D1/DO usage, Images plan/cutoff and wider
+capacity/control gaps; persistent monitoring and release gates remain open.
+**55/64 tasks complete, 9 open.** See acceptance.md and the sanitized billing evidence.
+
+**2026-11-16 CI and follow-up checkpoint (historical):** Quality run
+[43934376056](https://github.com/sg921216/radiant_images/actions/runs/43934376056/job/133534973000)
+passes on committed R-25 head `e1cea09a750bfa91808dbbef237560aa4cf2cc5c`; the tested PR
+merge tree matches exactly. All 287 tests and 158 browser/performance cases pass, with
+12 declared duplicate performance-profile skips. New local work updates the deprecated
+action runtimes and corrects public-route keyboard focus under T061. The owner explicitly
+requested account-scoped Billing Read connection as a follow-up: **T064 is added and
+open**, supporting T001 and the dependent persistent monitoring/deployment/release gates.
+This adds one tracked dependency without completing any existing gate:
+**54/64 tasks complete, 10 open.** See acceptance.md and the T064 quickstart procedure.
+
+**2026-11-15 HTTP CPU checkpoint (R-25):** Incremental routing plus three bounded
+bulk-read coordinators resolves the reproduced 14–16-ms cold-read overruns in the sampled
+60-photo/200-client workload. Final samples cover all 13 JSON GET operations: front CPU
+peaks at 8 ms, with 15 ms inside the read objects. All 117 final contract probes pass;
+300 measured bulk reads at concurrency five pass with p95 349/369/385 ms. The final
+local quality check passes 64 files / 287 tests and both builds; all 50 smoke cases
+across five browser projects pass without retries or skips. Temporary Cloudflare
+resources were removed and absence verified, preserving the unrelated existing bucket.
+See acceptance.md and `evidence/cloudflare-api-cpu-remediation.json` for sample limits,
+browser results and source identity. These source changes need remote CI after commit.
+T001 remains open for account-wide usage/plan and wider capacity evidence; T058 needs
+persistent monitoring. T059's committed R-24 acceptance remains complete.
+**54/63 tasks complete, 9 open.**
+
+**2026-11-14 committed R-24 CI checkpoint:** T059 is complete. PR Quality run
+[43675695318](https://github.com/sg921216/radiant_images/actions/runs/43675695318/job/132695230356)
+passes for `c00eaab40235185e7d320176986ccdf3fe4bc334`; the tested PR merge tree exactly
+matches that feature head. Results: 63 files / 281 tests; 158 browser passes and 12 declared
+duplicate performance-profile skips, with all five functional projects covered. Quality,
+security, builds and diagnostic privacy gates pass. R-24's 40-operation success/error and
+31-operation authorization evidence is retained. **54/63 tasks complete, 9 open.** The
+actual-device matrix remains T063; T001/T058 and the other release gates stay open.
+See acceptance.md and `evidence/github-ci-r24-20261115.json`.
+
+**Earlier 2026-11-14 CPU, usage and pricing checkpoint (R-24):** Scheduled recovery now runs in
+one private Durable Object. Three actual accelerated cron samples report 0/0/0 ms front
+CPU at provider resolution, versus the earlier 30–43 ms; coordinator work completes at
+30/28/18 ms and the independent observer reports healthy. Temporary resources were
+removed and absence verified. Portfolio uploads now have a persistent 300-attempt rolling
+30-day allowance, with local integration proof. An enabled $1 account budget warning
+supplements the existing $10 warning; neither stops billing. T001 remains open for general
+HTTP CPU and account-wide usage/plan evidence; billing reads return 403. T058 still needs
+the persistent deployment and scheduled monitoring/recipient configuration.
+
+T031's pricing checks are complete: 20/20 browser cases across all five configured
+projects, successful publication/rollback integration tests, and visual/text inspection
+of all 12 pages from initial/updated download and browser-print PDFs. Prices and revision
+IDs match. Overall SC-001 human timings remain with T025/T063; final-content/physical-device
+acceptance is not inferred. **53/63 tasks complete, 10 open.** Contract observation now
+covers all 40 operations with success/error and all 31 protected operations with 401/403.
+The latest pushed baseline `48d5ee3` passes remote Quality run 43673720689: 271 tests,
+153 browser passes and 12 declared non-target performance-profile skips. T059 remains
+open for remote CI on the current local changes. See acceptance.md and the sanitized
+evidence records. No public release occurred.
+
+**2026-11-14 recovery rehearsal checkpoint (R-23):** On the feature branch fast-forwarded
+to merged main `d4e8aee`, a private temporary Worker/D1/two-R2-bucket rehearsal now verifies
+application backup/restore, deleted-client cascades, media byte recovery, blocked unsafe/expired
+restores, failed cleanup with receipt preservation and successful retry. Actual D1 Time Travel
+and independent-ledger reconciliation, compatible Worker rollback and an actual accelerated
+Cloudflare cron invocation pass. An independent binding reader detects injected stale jobs and
+overdue recovery objects and returns healthy after recovery. The GitHub notification test ran
+and failed at its intended synthetic step; recipient receipt is separate. The first tailed cron
+used 32 ms CPU, above the Workers Free 10-ms limit: T001 CPU headroom remains open.
+Replacement bucket-only read credentials passed live S3 checks, real GitHub healthy/failure
+runs and a recovered healthy run executed, and the user confirmed notification receipt.
+All temporary Cloudflare resources and GitHub monitor settings were removed and verified;
+details and token-revocation follow-up are in acceptance.md.
+T058 remains open for persistent deployment/monitor activation and unresolved operational
+acceptance; **52/63 tasks complete, 11 open**. No public release is authorized by this rehearsal.
+
 **2026-11-14 remote PR CI checkpoint:** GitHub run 43666811821 passes the Quality job
 on commit `358277e17d486dec15f2733778792e37f5b95c17`, including frozen install,
 quality/security checks, tests/builds and Chromium smoke. Its full browser suite was
@@ -159,7 +479,7 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 - [x] T028 [P] [US2] Build package add/remove/reorder/edit and publish UI with atomic failure feedback in `apps/web/app/routes/admin/pricing.tsx` (FR-011/030).
 - [x] T029 [P] [US2] Build one-revision pricing state, service-type sections, Book Now, and full-schedule print layout in `apps/web/app/lib/pricing.ts`, `apps/web/app/components/PricingSection.tsx`, and `apps/web/app/styles/print.css`; never mix bootstrap and separately fetched revisions (FR-006/008/009).
 - [x] T030 [US2] Build lazy-loaded full-schedule PDF generation with revision/publish footer, download and retryable error state in `apps/web/app/lib/PricingPdf.tsx`; bind page, print, and PDF to the same revision and integrate pricing into the three service routes in `apps/web/app/routes/public/maternity.tsx`, `apps/web/app/routes/public/newborn.tsx`, and `apps/web/app/routes/public/family.tsx` (FR-010/011).
-- [ ] T031 [US2] Run pricing suites and quickstart steps 3–5 (including their deferred US2 assertions) and 22–23. Verify Home-to-pricing navigation in fewer than three clicks, the Pricing-section Book Now CTA, and service readiness including loaded pricing; combine with T025's evidence to complete SC-001. Visually inspect print/PDF for clipping/pagination and record price/revision parity in `specs/001-radiant-images-website/acceptance.md`; full SC-004 benchmarking remains T061 (SC-001/006/011).
+- [x] T031 [US2] Run pricing suites and quickstart steps 3–5 (including their deferred US2 assertions) and 22–23. Verify Home-to-pricing navigation in fewer than three clicks, the Pricing-section Book Now CTA, and service readiness including loaded pricing; combine with T025's evidence to complete SC-001. Visually inspect print/PDF for clipping/pagination and record price/revision parity in `specs/001-radiant-images-website/acceptance.md`; full SC-004 benchmarking remains T061 (SC-001/006/011).
 
 ## Phase 5: US3 — Owner Manages the Gallery (P3)
 
@@ -192,7 +512,7 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 - [x] T043 [P] [US5] Write configuration contract/integration and contact interaction cases in `apps/api/tests/config.test.ts` and `e2e/settings.spec.ts` for sender verification failure, malformed addresses, empty/duplicate options, atomic saves, stale forms, and subsequent inquiry delivery. Cover required/nonempty valid publicContactEmail, explicit public labeling, independence from private recipient/sender, safe public bootstrap projection, failed-save preservation, and 60-second recovery-address propagation (FR-028/029/030, SC-005).
 - [x] T044 [US5] Implement shared configuration validation and protected GET/PUT /admin/config in `packages/shared/src/schemas/config.ts` and `apps/api/src/routes/admin/config.ts`; verify sender using T013, persist all-or-nothing, audit outcomes, and validate required publicContactEmail independently and expose it through bootstrap without deriving/exposing private sender/recipient values (FR-028/029/032).
 - [x] T045 [US5] Build recipient/sender, required publicContactEmail explicitly labeled as publicly displayed and monitored for recovery, ordered location/referral, and IANA-timezone settings with saved-state/error feedback in `apps/web/app/routes/admin/settings.tsx`; retain previous settings on failed saves (FR-028/029).
-- [ ] T046 [US5] Run settings suites and quickstart steps 19–21; repeat SC-002's predeclared healthy-provider run of at least 10 distinct inquiries to the updated real mailbox, retain submitted/accepted/received counts and timings, verify an independent public-contact update reaches Contact/recovery within 60 seconds without exposing/changing private addresses, and record stale-form behavior and 60-second propagation in `specs/001-radiant-images-website/acceptance.md` (SC-002/005).
+- [X] T046 [US5] Run settings suites and quickstart steps 19–21; repeat SC-002's predeclared healthy-provider run of at least 10 distinct inquiries to the updated real mailbox, retain submitted/accepted/received counts and timings, verify an independent public-contact update reaches Contact/recovery within 60 seconds without exposing/changing private addresses, and record stale-form behavior and 60-second propagation in `specs/001-radiant-images-website/acceptance.md` (SC-002/005).
 
 ## Phase 8: US6 — Owner Manages Clients and Session Workflows (P6)
 
@@ -216,15 +536,27 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 **Goal**: Validate full-product accessibility, security, operations, performance, and release readiness.
 
 - [ ] T058 First write/run failing backup/restore, retention/cleanup, and health-signal tests in `apps/api/tests/operations.test.ts`. Restore a pre-deletion backup and prove deleted clients and dependent data stay inaccessible after replaying T050's independent deletion ledger; unavailable/incomplete receipts must block reopening. Implement daily private D1 backups excluding transient auth/dedupe state, day-28 recovery-copy restore expiry and verified deletion attempts, a day-30 removal target, and day-31 receipt cleanup only after overdue recovery copies are verified removed. Retry delayed deletion, independently monitor missed cleanup/stale backups/target misses, notify the configured owner channel with sanitized alerts, disclose provider delays, and refuse expired or unsafe restores. Preserve required receipts while recovery cleanup is unverified. Implement offline restore/reconciliation, Gmail health and inquiry/auth/image failure signals, and expired session/state/code/dedupe/rate-window cleanup in `apps/api/src/scheduled.ts` and `apps/api/src/services/backup.ts`. Inspect backup/restore email-history records for omission markers and preserved invitation associations, proving no raw questionnaire tokens are retained. Wire handlers in `apps/api/src/index.ts`, implement portfolio original/variant recovery, and document restore/rollback rehearsal, actual deletion/alert evidence and sanitized monitoring in `specs/001-radiant-images-website/quickstart.md`. Pixieset client-delivery collections remain a separate lifecycle boundary (QR-002).
-- [ ] T059 [P] Complete T006's CI gates in `.github/workflows/ci.yml`: formatting/lint, types, production builds, unit/component/integration/contract/E2E, dependency vulnerabilities, and secret checks. Verify the PR/nightly/release browser matrix, focused/flaky-test rejection, sanitized seven-day artifacts, live-secret exclusion, and success/error/auth coverage for every implemented contract operation. Reject OpenAPI operations missing applicable 400/401/403/404/413/429/500/502/504 declarations; validate observed statuses and bodies against their operation, including unauthenticated, expired-session and removed/non-owner allow-list cases for every protected operation. Verify the three email error schemas enforce their code/retryable combinations. The actual browser/version release matrix remains T063, separate from these pinned-engine CI jobs. Quarantines require owner/issue/expiry/alternative evidence and cannot silently omit critical journeys.
+- [x] T059 [P] Complete T006's CI gates in `.github/workflows/ci.yml`: formatting/lint, types, production builds, unit/component/integration/contract/E2E, dependency vulnerabilities, and secret checks. Verify the PR/nightly/release browser matrix, focused/flaky-test rejection, sanitized seven-day artifacts, live-secret exclusion, and success/error/auth coverage for every implemented contract operation. Reject OpenAPI operations missing applicable 400/401/403/404/413/429/500/502/504 declarations; validate observed statuses and bodies against their operation, including unauthenticated, expired-session and removed/non-owner allow-list cases for every protected operation. Verify the three email error schemas enforce their code/retryable combinations. The actual browser/version release matrix remains T063, separate from these pinned-engine CI jobs. Quarantines require owner/issue/expiry/alternative evidence and cannot silently omit critical journeys.
 - [ ] T060 [P] Prepare separate API migration/deploy and web Workers Static Assets deployment workflows in `.github/workflows/deploy-api.yml` and `.github/workflows/deploy-web.yml`, plus frontend asset/fallback routing in `apps/web/wrangler.toml` and `apps/web/worker.ts`. First add failing built-deployment cases in `e2e/deployment.spec.ts`; then verify prerendered public HTML, root basename `/`, direct loads/refreshes of admin, callback and questionnaire URLs using React Router's generated `__spa-fallback.html`, missing-asset 404s, HTTPS and rollback. Use pinned Wrangler for web deployment; preserve separate configured frontend/API origins and exact-origin CORS. No deployment is performed during task generation.
 - [ ] T061 Add/run public/admin/questionnaire WCAG 2.2 AA axe checks, keyboard and representative screen-reader review in `e2e/accessibility.spec.ts`; manually review meaningful portfolio alt text and legitimate decorative non-gallery exceptions. Verify crawlable content, canonical/metadata/sitemap and private noindex in `e2e/seo.spec.ts`. Version the Mobile Acceptance Profile fixture manifest/assets in `e2e/fixtures/performance/`; measure five independent cold-cache runs per public route (including the valid questionnaire fixture with token-redacted results), assert the visible/interactive `public-usable` milestone and ≤3-second median, and retain all results in `e2e/performance.spec.ts`. Also verify 320/768/1280px layouts, JS/image budgets, lab LCP/CLS and interaction latency. Implement plan.md's API/inquiry latency profile: enumerate all JSON GETs, ten warm-ups plus 100 samples at concurrency five per operation, strict nearest-rank p95 <500 ms, and 20 independent mobile-profile inquiries each strictly <5 seconds. Retain all samples and fail on unexpected statuses/slow samples; use the specified cache, provider-delay, cold-token and rate-limit fixtures. Record runner/browser/fixture versions, CAPTCHA substitution, separate deployed samples and field-data limitations in `specs/001-radiant-images-website/acceptance.md`. Reproduce defects before fixing them (SC-004/009, QR-003/004/005).
 - [x] T062 Add/run cross-route authorization, injection, session expiry, rate-limit, backup privacy, token-redaction (including auth exchange, questionnaire subject/body, owner-history responses and backups), and PII-log checks in `apps/api/tests/security.test.ts` and `e2e/security.spec.ts`; configure CSP/security headers for Workers Static Assets in `apps/web/public/_headers`, equivalent headers on fallback responses in `apps/web/worker.ts`, and API security headers in `apps/api/src/index.ts`, permitting only required Turnstile/API/PDF sources; verify noindex/no-referrer on private/tokenized routes and do not rely on `_headers` for Worker-generated responses (FR-025/032–035, SC-003).
 - [ ] T063 Run all quickstart suites and manual acceptance, rehearse restore/rollback, verify real-email receipt and all 60-second freshness budgets, and record browser versions, red/green evidence, manual accessibility/print/PDF review, and participant/owner timings using plan.md's human acceptance protocol in `specs/001-radiant-images-website/acceptance.md`. Freeze and execute every N/N-1 browser/OS cell in plan.md's release matrix using actual desktop browsers and physical mobile devices or a real-device service; record exact versions and per-journey evidence. Missing/failed cells are BLOCKED, not satisfied by emulation. Record the predeclared SC-002 denominator and every started SC-008 participant, device split, first-Submit result, assistance and ceil(0.9 × started) threshold. Obtain final logo/photos/copy/pricing/privacy/deposit terms and photo usage/guardian permission; confirm owner approval and actual monitoring of publicContactEmail, exercise the uncertain-delivery recovery instructions, reject local/test placeholder addresses, and replace launch placeholder addresses via `specs/001-radiant-images-website/quickstart.md` before release (SC-001/008/010/012, QR-001–005).
 
+## Owner-requested dependency follow-up (2026-11-16)
+
+- [x] T064 Connect a Cloudflare API token limited to Account > Billing > Read for the Radiant Images account, using the token-authenticated Cloudflare API MCP connection or an approved secure read-only API session. Follow `quickstart.md`'s Billing Read procedure; do not put the token in chat, source, CI artifacts or evidence. Verify successful live subscription and explicit billing-period usage reads, separately inspect available spend controls, and record only sanitized plan, usage, allowance and alert/control evidence in `research.md` and `acceptance.md`. Treat unsupported metrics or still-denied controls as explicit gaps. Reassess T001 after verification; do not infer a billing cap, paid-plan approval or production acceptance. Completed 2026-11-16 through the approved secure read-only API fallback; research R-27 and `evidence/cloudflare-billing-read-20261116.json` record successful reads and explicit remaining gaps.
+
+## Deferred Google production setup (owner-requested 2026-11-16)
+
+- [X] T065 Prepare owner-approved application homepage and privacy-policy content for Google's Branding requirements. Use an owned domain and accurately describe Radiant Images, the Gmail scopes/data use, retention/deletion, and contact details; implement the approved pages in `apps/web/app/routes/` and record their real URLs and domain-verification evidence in `specs/001-radiant-images-website/quickstart.md`. Coordinate with T023/T063; placeholder URLs or unapproved privacy copy do not satisfy this task. Keep the acceptance API private; any public page publication requires its own authorized scope.
+- [ ] T066 After T065, complete Google Auth Platform Branding with the valid application name, support email, real homepage/privacy URLs and required domain ownership. Move the external OAuth app to Production and complete any applicable Google verification requirements, recording the actual console status and any remaining limits in `specs/001-radiant-images-website/acceptance.md`. Production publishing and Google verification are separate checks; neither authorizes public application launch.
+- [ ] T067 After T066, obtain fresh owner consent for `gmail.send` and `gmail.settings.basic`, replace the temporary Testing grant through ignored local files and server-side Worker secrets, and verify the intended sender plus a real scheduled Gmail-health run. Record sanitized results and credential-lifecycle handling in `specs/001-radiant-images-website/acceptance.md` and `quickstart.md`; remove transient local token files. Testing grants expire after seven days and must not be recorded as long-lived production acceptance. This is a dependency of the remaining T001/T058/T063 operational and release checks.
+
 ## Dependencies and Execution Order
 
 ```text
+Billing Read follow-up (T064) -> T001 account evidence
+Google homepage/privacy (T065) -> Branding/Production (T066) -> fresh consent and scheduled health (T067)
 Setup (T001–T006)
   -> Foundation (T007–T015)
      -> US1 (T016–T025) -> lead-capture MVP
@@ -245,6 +577,8 @@ All six completed stories -> release checks (T058–T063)
   Independent tests can be authored concurrently, but their implementations wait for red.
 - Every route task includes mounting its router in `apps/api/src/index.ts` or registering its page in `apps/web/app/routes.ts` as needed. These shared-file edits must be serialized even when endpoint/component bodies are built in parallel. T057 checks the final assembled route inventory.
 - `specs/001-radiant-images-website/acceptance.md` is a shared evidence log: serialize updates. Never mark a real-provider or human acceptance check complete based only on mocks.
+- T064 supplies the remaining account billing evidence for T001. Completing T064 does not by itself close T001 or T058; persistent deployment, monitoring and release acceptance still require their own evidence.
+- T065–T067 are explicitly deferred while private testing proceeds with temporary consent. They gate long-lived Gmail acceptance, not the currently authorized private tests; T063 still owns final photos and broader content/release approval.
 - T001 is a feasibility gate: unresolved provider constraints block dependent production work, but do not justify silently replacing the agreed hosting model. Record required spec/plan/contract adjustments before implementing affected behavior.
 
 ## Parallel Execution Examples
@@ -275,7 +609,8 @@ T059 and T060 can run concurrently after T058; their first successful execution 
 | FR-001/002                   | T017, T020                                                |
 | FR-003/004                   | T007, T022, T024                                          |
 | FR-005                       | T014, T021, T032–T036                                     |
-| FR-006/007                   | T015, T020, T022, T029                                    |
+| FR-006                       | T020, T022, T029                                          |
+| FR-007                       | T015, T022, T029, T030, T061, T063, T065                  |
 | FR-008–011                   | T026–T031                                                 |
 | FR-012–014                   | T037–T042                                                 |
 | FR-015–017                   | T016–T019, T023                                           |
@@ -297,7 +632,7 @@ T059 and T060 can run concurrently after T058; their first successful execution 
 | SC-007/010                   | T037–T042, T063                                           |
 | SC-012                       | T048, T057, T063                                          |
 | QR-001                       | T001, T032–T036, T063                                     |
-| QR-002                       | T001, T007, T047/T050, T052, T058, T062/T063              |
+| QR-002                       | T001/T064, T007, T047/T050, T052, T058, T062/T063              |
 | QR-003/004                   | T003, T021, T061                                          |
 | QR-005 / Constitution III–IV | T006, all behavior tasks, T025–T057, T058–T063            |
 

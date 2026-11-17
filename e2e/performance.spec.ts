@@ -102,7 +102,7 @@ test('five cold mobile runs per public route record visible usable, LCP, CLS and
         page = await context.newPage();
       const imageResponses = new Map<string, Promise<number>>();
       page.on('response', (response) => {
-        if (new URL(response.url()).pathname.startsWith('/images/'))
+        if (response.request().resourceType() === 'image')
           imageResponses.set(
             response.url(),
             response

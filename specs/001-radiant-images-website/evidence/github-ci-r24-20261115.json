@@ -1,0 +1,143 @@
+{
+  "observedAt": "2026-11-15T04:31:59.031Z",
+  "source": "GitHub Actions run, jobs and Git commit APIs plus completed verify-job log; no raw log or credential retained",
+  "url": "https://github.com/sg921216/radiant_images/actions/runs/43675695318",
+  "jobUrl": "https://github.com/sg921216/radiant_images/actions/runs/43675695318/job/132695230356",
+  "runId": 43675695318,
+  "jobId": 132695230356,
+  "event": "pull_request",
+  "branch": "001-radiant-images-website",
+  "headSha": "c00eaab40235185e7d320176986ccdf3fe4bc334",
+  "checkoutSha": "ce7ca2c7a7d227cfc618a6645778fa5d739e241e",
+  "checkoutParents": [
+    "d4e8aee8cfc172c6e91ba4838fe648cd17f9ce61",
+    "c00eaab40235185e7d320176986ccdf3fe4bc334"
+  ],
+  "headTreeSha": "e2ef3326e26b3060b790c7edb418488b98580f8c",
+  "checkoutTreeSha": "e2ef3326e26b3060b790c7edb418488b98580f8c",
+  "checkoutTreeMatchesHead": true,
+  "status": "completed",
+  "conclusion": "success",
+  "startedAt": "2026-11-15T04:11:58Z",
+  "completedAt": "2026-11-15T04:29:52Z",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm/action-setup@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm install --frozen-lockfile",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm format:check",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm lint",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm typecheck",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm security:dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm security:secrets",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm test",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm test:setup",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run pnpm exec playwright install --with-deps chromium firefox webkit",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Main branch Chromium smoke",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Pull request, nightly and release browser matrix",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Verify diagnostic privacy",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Run pnpm/action-setup@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "testSummaries": [
+    "Test Files  63 passed (63)",
+    "Tests  281 passed (281)",
+    "12 skipped",
+    "158 passed (15.7m)"
+  ],
+  "skipReason": "Three performance profiles run once in chromium-desktop; duplicate cells in the other four projects are explicitly skipped. Functional journeys are not quarantined.",
+  "scope": "R-24 CPU, usage controls, contract coverage and expanded pricing tests are committed in the run head. The PR merge checkout tree is compared with that exact head. This is pinned-engine CI acceptance, not public deployment, live-provider, human or physical-device acceptance."
+}

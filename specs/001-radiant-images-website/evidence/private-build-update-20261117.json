@@ -1,0 +1,437 @@
+{
+  "observedAt": "2026-11-17T15:29:21.916Z",
+  "sourceHead": "aebde5d5b47a7209b32d8f274276d72948814925",
+  "scope": "CI-approved private API update and isolated loopback frontend refresh; no public release, manual tests, data mutations or live email sends.",
+  "ciEvidence": "github-ci-private-update-20261117.json",
+  "api": {
+    "worker": "radiant-images-api",
+    "config": "apps/api/wrangler.acceptance.toml",
+    "cli": "wrangler 4.162.0",
+    "dryRun": "passed",
+    "deployment": {
+      "id": "a7c51b64-3baf-44ce-80ed-6f5e2b96fc72",
+      "createdAt": "2026-11-17T15:27:54.3314Z",
+      "versions": [
+        {
+          "version_id": "5684931a-d5f1-4ff7-9055-8eba1210904a",
+          "percentage": 100
+        }
+      ]
+    },
+    "previousDeployment": {
+      "id": "d0c9c5b1-ef15-4820-ae20-860f6a02bc7f",
+      "versions": [
+        {
+          "version_id": "ca0c731b-763a-4fa9-99af-17785aa4ed45",
+          "percentage": 100
+        }
+      ],
+      "created_on": "2026-11-17T04:02:26.206444Z"
+    },
+    "settingsPreserved": {
+      "bindings": true,
+      "compatibilityDate": true,
+      "observability": true,
+      "schedules": true
+    },
+    "bindings": [
+      {
+        "name": "API_ORIGIN",
+        "text": "http://127.0.0.1:8793",
+        "type": "plain_text"
+      },
+      {
+        "name": "AUTH_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "BULK_READS",
+        "type": "durable_object_namespace",
+        "namespace_id": "dfbe36245d36432ead412c456914a8fe",
+        "class_name": "BulkReads"
+      },
+      {
+        "name": "DB",
+        "type": "d1",
+        "id": "003885df-e1f5-4bc1-acf6-8a21915e7406"
+      },
+      {
+        "name": "GALLERY_MUTATIONS",
+        "type": "durable_object_namespace",
+        "namespace_id": "70ebe406aa8d4144a8fdeb743a41e173",
+        "class_name": "GalleryMutations"
+      },
+      {
+        "name": "GMAIL_REFRESH_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "GOOGLE_CLIENT_ID",
+        "type": "secret_text"
+      },
+      {
+        "name": "GOOGLE_CLIENT_SECRET",
+        "type": "secret_text"
+      },
+      {
+        "name": "IMAGES",
+        "type": "images"
+      },
+      {
+        "name": "JPEG_VALIDATOR",
+        "type": "durable_object_namespace",
+        "namespace_id": "b03ad31fdbbd4d83b91761ef0aed45b4",
+        "class_name": "JpegValidator"
+      },
+      {
+        "name": "MEDIA",
+        "type": "r2_bucket",
+        "bucket_name": "radiant-images-media"
+      },
+      {
+        "name": "OWNER_ALLOWLIST",
+        "type": "secret_text"
+      },
+      {
+        "name": "RATE_LIMIT_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "RECOVERY",
+        "type": "r2_bucket",
+        "bucket_name": "radiant-images-recovery"
+      },
+      {
+        "name": "SCHEDULED_OPERATIONS",
+        "type": "durable_object_namespace",
+        "namespace_id": "22cf4ea67a7f4cc6bc8a172621a398e6",
+        "class_name": "ScheduledOperations"
+      },
+      {
+        "name": "TURNSTILE_SECRET",
+        "type": "secret_text"
+      },
+      {
+        "name": "WEB_ORIGIN",
+        "text": "http://127.0.0.1:4273",
+        "type": "plain_text"
+      }
+    ],
+    "schedules": [
+      "*/5 * * * *",
+      "0 3 * * *"
+    ],
+    "observability": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "redact_query_string": false,
+      "logs": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "persist": true,
+        "invocation_logs": false
+      },
+      "traces": {
+        "enabled": false,
+        "persist": true,
+        "head_sampling_rate": 1
+      }
+    },
+    "secretsUpdated": false,
+    "migrationsApplied": false
+  },
+  "privacy": {
+    "workerPublic": {
+      "enabled": false,
+      "previews_enabled": false
+    },
+    "customWorkerDomains": 0,
+    "workerRoutes": [],
+    "zoneInventory": {
+      "count": 0,
+      "total": 0
+    },
+    "r2": [
+      {
+        "bucket": "radiant-images-media",
+        "publicEnabled": false,
+        "customDomainCount": 0
+      },
+      {
+        "bucket": "radiant-images-recovery",
+        "publicEnabled": false,
+        "customDomainCount": 0
+      }
+    ],
+    "gatewayDeployments": false,
+    "publicFrontendDeployment": false,
+    "loopbackListeners": [
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 4273
+      },
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 8793
+      },
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 9253
+      },
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 9254
+      }
+    ]
+  },
+  "frontend": {
+    "directory": ".wrangler/private-browser/web-client",
+    "rollbackDirectory": ".wrangler/private-browser/web-client-before-aebde5d-20261117",
+    "build": "passed",
+    "publicBuildVariables": {
+      "VITE_API_ORIGIN": "http://127.0.0.1:8793",
+      "VITE_WEB_ORIGIN": "http://127.0.0.1:4273",
+      "VITE_TURNSTILE_SITE_KEY": "0x4AAAAAAGEioZgDan3nTzgi",
+      "VITE_PUBLIC_CONTACT_EMAIL": "hello@example.invalid"
+    },
+    "buildWarnings": [
+      "Existing envFile deprecation",
+      "Existing large dynamically loaded PDF chunk",
+      "Existing ineffective dynamic import",
+      "React Router future-flag notices"
+    ],
+    "copyMatchesBuild": true,
+    "fileCount": 55,
+    "treeSha256": "2be68f981b83443c08eca3943edfebddc40824f42668ad348290091991444000",
+    "fingerprintMethod": "SHA-256 of sorted compact JSON mapping POSIX relative file paths to SHA-256 byte hashes."
+  },
+  "data": {
+    "before": {
+      "observedAt": "2026-11-17T15:27:43.494Z",
+      "data": [
+        {
+          "clients": 3,
+          "client_emails": 6,
+          "questionnaire_invites": 4,
+          "questionnaire_responses": 4,
+          "checklist_items": 1,
+          "checklist_states": 3,
+          "questionnaire_questions": 1,
+          "site_config_updated_at": "2026-11-17T13:34:58.471Z",
+          "owner_timed_clients": 0
+        }
+      ]
+    },
+    "after": {
+      "observedAt": "2026-11-17T15:30:23.879Z",
+      "data": [
+        {
+          "clients": 3,
+          "client_emails": 6,
+          "questionnaire_invites": 4,
+          "questionnaire_responses": 4,
+          "checklist_items": 1,
+          "checklist_states": 3,
+          "questionnaire_questions": 1,
+          "site_config_updated_at": "2026-11-17T13:34:58.471Z",
+          "owner_timed_clients": 0,
+          "inquiry_sends": 20,
+          "latest_inquiry_send": "2026-11-17T05:35:43.700Z"
+        }
+      ]
+    },
+    "allBaselineAggregatesUnchanged": true,
+    "interpretation": "Counts and settings timestamp match; this is not a full database diff. Inquiry send count/latest time match earlier live acceptance evidence."
+  },
+  "manualTesting": {
+    "status": "deferred_until_end_by_user",
+    "ownerAttemptsStarted": 0
+  },
+  "temporaryGmailConsentReplacementDue": "2026-11-23T21:28:00-05:00",
+  "http": {
+    "observedAt": "2026-11-17T15:30:57.171377+00:00",
+    "source": "Read-only loopback HTTP checks; no browser automation or live message sends.",
+    "checks": [
+      {
+        "name": "public route /",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "name": "public route /maternity",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "name": "public route /newborn",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "name": "public route /family",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "name": "public route /about",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "name": "public route /faq",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "name": "public route /contact",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "name": "private fallback /admin/login",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "private fallback /admin",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "private questionnaire fallback (synthetic path segment omitted)",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "missing asset",
+        "status": 404,
+        "expectedStatus": 404,
+        "passed": true
+      },
+      {
+        "name": "public bootstrap",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "cors": "http://127.0.0.1:4273",
+        "privateRecipientAndSenderAbsent": true
+      },
+      {
+        "name": "anonymous owner API",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "name": "web foreign Origin rejected",
+        "status": 403,
+        "expectedStatus": 403,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "web foreign Host rejected",
+        "status": 403,
+        "expectedStatus": 403,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "web cross-site fetch rejected",
+        "status": 403,
+        "expectedStatus": 403,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "API foreign Origin rejected",
+        "status": 403,
+        "expectedStatus": 403,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "API foreign Host rejected",
+        "status": 403,
+        "expectedStatus": 403,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "API cross-site fetch rejected",
+        "status": 403,
+        "expectedStatus": 403,
+        "passed": true,
+        "headers": {
+          "cache-control": "no-store",
+          "x-robots-tag": "noindex, nofollow",
+          "referrer-policy": "no-referrer",
+          "x-content-type-options": "nosniff"
+        }
+      },
+      {
+        "name": "questionnaire asset matches current isolated build",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "sha256": "e59d8abd88d18d27dd2bbe62bc97889a3e4dab90499800d7b29d905a27e9da85"
+      }
+    ],
+    "passed": true,
+    "manualRetest": "deferred_by_user"
+  },
+  "recordedAt": "2026-11-17T15:32:57.722493+00:00"
+}

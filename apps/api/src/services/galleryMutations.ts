@@ -11,7 +11,26 @@ export function isGalleryMutation(method: string, path: string) {
 
 export class GalleryMutations extends DurableObject<Env> {
   private busy = false;
-  private readonly app = createApp();
+  private readonly app = createApp(undefined, false, () => this.reserveUpload());
+
+  private async reserveUpload(): Promise<number> {
+    const now = Date.now();
+    const window = 30 * 86400000;
+    const saved = (await this.ctx.storage.get<unknown>('upload-attempts')) ?? [];
+    if (
+      !Array.isArray(saved) ||
+      saved.length > 300 ||
+      saved.some((at) => !Number.isSafeInteger(at) || at < 0 || at > now)
+    )
+      throw new Error('upload_budget_invalid');
+    const recent: number[] = saved.filter((at: number) => at > now - window);
+    if (recent.length >= 300)
+      return Math.max(1, Math.ceil((Math.min(...recent) + window - now) / 1000));
+    // The existing single-mutation gate serializes this durable reservation. Failed
+    // attempts remain charged: decoding failures can still consume provider usage.
+    await this.ctx.storage.put('upload-attempts', [...recent, now]);
+    return 0;
+  }
 
   async fetch(request: Request): Promise<Response> {
     if (!isGalleryMutation(request.method, new URL(request.url).pathname))

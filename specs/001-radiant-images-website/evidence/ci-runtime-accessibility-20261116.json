@@ -1,0 +1,133 @@
+{
+  "checkedAt": "2026-11-16T19:26:33.778Z",
+  "reports": [
+    {
+      "file": "ci.yml",
+      "node24Actions": 4,
+      "runner": "ubuntu-26.04",
+      "allOtherGatesAndCommandsPreserved": true
+    },
+    {
+      "file": "deploy-api.yml",
+      "node24Actions": 3,
+      "runner": "ubuntu-26.04",
+      "allOtherGatesAndCommandsPreserved": true
+    },
+    {
+      "file": "deploy-web.yml",
+      "node24Actions": 3,
+      "runner": "ubuntu-26.04",
+      "allOtherGatesAndCommandsPreserved": true
+    },
+    {
+      "file": "operations-monitor.yml",
+      "node24Actions": 3,
+      "runner": "ubuntu-26.04",
+      "allOtherGatesAndCommandsPreserved": true
+    }
+  ],
+  "actions": [
+    {
+      "repo": "actions/checkout",
+      "tag": "v7.0.1",
+      "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "runtime": "node24",
+      "url": "https://github.com/actions/checkout/releases/tag/v7.0.1"
+    },
+    {
+      "repo": "actions/setup-node",
+      "tag": "v7.1.0",
+      "sha": "949feb2413d6458794dcd2491c4babbbce0c15c1",
+      "runtime": "node24",
+      "url": "https://github.com/actions/setup-node/releases/tag/v7.1.0"
+    },
+    {
+      "repo": "pnpm/action-setup",
+      "tag": "v6.1.1",
+      "sha": "73e46992e05b19abd31f2f3c20e0e7370d762115",
+      "runtime": "node24",
+      "url": "https://github.com/pnpm/action-setup/releases/tag/v6.1.1"
+    },
+    {
+      "repo": "actions/upload-artifact",
+      "tag": "v7.0.2",
+      "sha": "cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "runtime": "node24",
+      "url": "https://github.com/actions/upload-artifact/releases/tag/v7.0.2"
+    }
+  ],
+  "baseCommit": "e1cea09a750bfa91808dbbef237560aa4cf2cc5c",
+  "newWorkflowExecution": "Not yet committed or run on GitHub; static manifest and unchanged-gate comparison passed.",
+  "navigation": {
+    "redCommand": "pnpm exec playwright test --config .wrangler/implementation-matrix.config.ts --project=chromium-desktop --grep 'public navigation moves focus'",
+    "redResult": "One failure: main remained inactive after keyboard navigation to Maternity.",
+    "fix": "Focus public main content on pathname changes only, including Back/Forward; preserve initial/hash focus and scroll behavior.",
+    "finalBrowserResult": {
+      "passed": 15,
+      "failed": 0,
+      "flaky": 0,
+      "skipped": 0,
+      "retries": 0,
+      "durationMs": 64589.157,
+      "projects": [
+        "chromium-desktop",
+        "chromium-mobile",
+        "firefox-desktop",
+        "webkit-desktop",
+        "webkit-mobile"
+      ]
+    }
+  },
+  "quality": {
+    "format": "passed",
+    "lint": "passed",
+    "types": "passed",
+    "testFiles": 64,
+    "tests": 287,
+    "builds": [
+      "API dry-run passed",
+      "frontend production build passed"
+    ],
+    "sourcePrivacy": {
+      "checked": 460,
+      "blocked": 0
+    },
+    "finalMatrixListed": {
+      "tests": 175,
+      "files": 13,
+      "listingOnly": true
+    },
+    "artifactPrivacy": {
+      "checked": 11,
+      "blocked": 0
+    }
+  },
+  "billingFollowup": {
+    "task": "T064",
+    "ownerRequested": true,
+    "permission": "Account Billing Read",
+    "scope": "Radiant Images account only",
+    "connected": false,
+    "currentOAuthResults": {
+      "subscriptions": 403,
+      "billingUsage": 403,
+      "spendPolicies": 403
+    },
+    "workersPresent": 0,
+    "dependentTasks": [
+      "T001",
+      "T058",
+      "T060",
+      "T063"
+    ],
+    "noAutomaticClosure": true
+  },
+  "sha256": {
+    "apps/web/app/components/PublicLayout.tsx": "bd02af65f88bfc03ec31718279b8df7edc9e0a701b3ce49fab02dce05f15112f",
+    "e2e/navigation-focus.spec.ts": "e040f2875072667406cc85b25a61fee48ab90e52ed60fe22d192525d48c75859",
+    ".github/workflows/ci.yml": "6f6c82201a7d7f488c4fb3ab80075b94f57c18a67b8b8911bbc55b3d268b054b",
+    ".github/workflows/deploy-api.yml": "59f0ca189786f4c6ebd2163ab3421414f4b44f0e3bcb78e4aefc638e4e0ec259",
+    ".github/workflows/deploy-web.yml": "cf5867ba010247e3ed96e28b95515c6bc192efdd373f54f3e3d87c8815c6402a",
+    ".github/workflows/operations-monitor.yml": "5fb8cfda583fd762af4ae0e6a1e25e0e7e69ea56e769b4a479c578d113011de6"
+  }
+}

@@ -1,0 +1,442 @@
+{
+  "date": "2026-11-17",
+  "status": "prepared-locally-not-published",
+  "sources": [
+    {
+      "file": "apps/web/assets/Business card.pdf",
+      "bytes": 92151,
+      "sha256": "c89327fc7ecf5b5ae101d84d77406963e391694d25d6f061e9b9a912c261395f"
+    },
+    {
+      "file": "apps/web/assets/Monochrome Lavender Sprig Sketch.png",
+      "bytes": 1543458,
+      "sha256": "9f587649cf1dba555df3f761963421c574bafefe3bc1d07fc3c973b9982d8fa4"
+    },
+    {
+      "file": "apps/web/assets/Radiant Images Brand Moodboard.png",
+      "bytes": 2410266,
+      "sha256": "997b34c147b6099ef4642a8258a41fba77e9a774d4442afa9441d454f8683ec4"
+    },
+    {
+      "file": "apps/web/assets/Radiant_Images_Session_Pricing_Guide.docx",
+      "bytes": 33189,
+      "sha256": "b5a4ee1115c69c5554dd2bb3844f46bca093f2ee5907fd0197f5af3d75dc1871"
+    },
+    {
+      "file": "apps/web/assets/README.md",
+      "bytes": 1135,
+      "sha256": "bed9a142bf6e67be3356ee7431dec6617c9f03544836e98fdf44d8ed53ec3176"
+    },
+    {
+      "file": "apps/web/assets/Water Mark .jpg",
+      "bytes": 112561,
+      "sha256": "1e8c81b4683f3ae877bb4710c0d0261ad97c7b66a84120b57127510a5475e9d0"
+    },
+    {
+      "file": "README.md",
+      "bytes": 10381,
+      "sha256": "06806d0dfa1da8314ba911ceb8251098c1a212b3adca8d2d270df5d8341c6dc4"
+    }
+  ],
+  "portfolio": [
+    {
+      "file": "2.png",
+      "bytes": 18567119,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "e5162b994bf1a7ddf417cdfacc6c7556a3dc0124e794b6fcd1ef111eea8d35be",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white maternity portrait of a seated couple holding their dog at home.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-01.jpg",
+        "bytes": 1322774,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "52fe658bea5fd8240149e226f063995c52f2393c26898d95e9a5759e575dd20d",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "22.png",
+      "bytes": 21179900,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "fc58d41bbb4f12b6c063bcc9121a649f662db9cd0f8217e900a107aa2a40c2e5",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white portrait of an expectant couple leaning together, hands resting on the baby bump.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-02.jpg",
+        "bytes": 1637635,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "1788aeec6ba5fab890c23f07eee4a7f33c7fb690e3bbeeeeac74d1955ef96e70",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "25.png",
+      "bytes": 20906221,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "dd6a0393712f876769751855b943238a7db40731a24b11acd82efa473debbc60",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white maternity portrait of a smiling couple seated together at home.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-03.jpg",
+        "bytes": 1571962,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "17d3ecf5cb5ca9614c5f747f6c3e0434e037e8f53076a8a73ab404c11efa23a9",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "29.png",
+      "bytes": 37157630,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "d036a9ab6514fc15d4cb6340c20ffb6bbf8c458559bc72f7623d0b1f86a15905",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "An expectant couple sharing a kiss during an indoor maternity session.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-04.jpg",
+        "bytes": 1634516,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "0dca1061e91460f1510435277848af0e6f64e53ecbd8f3706a9f7bf5a43e3fa1",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "33.png",
+      "bytes": 19416902,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "d5ae7a008ab0abe75b7d465b1f25b6417c7a42c21e0aaab359d5d1e9888e4056",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white portrait of an expectant couple looking at one another at home.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-05.jpg",
+        "bytes": 1412029,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "b05fb96b83fd6d35ee5dd8b459f19327e7ce35d1bd418b9ae6ebf3723fa4648c",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "35.png",
+      "bytes": 20559050,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "1824452e26bd090520d2bc603dbafdbb53e68ba7264e9df13df2f32710296164",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white maternity portrait beside a wall, with hands resting on the baby bump.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-06.jpg",
+        "bytes": 1573922,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "0dc5af663b740d5fb6c98c46b10d3997236f274305a131e75a4c4bc632dd2c0a",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "46.png",
+      "bytes": 20216225,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "57c05c7a0400a1b34ae832cad199f11466f13b391e66eb69b55a04272af20bf8",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white portrait of an expectant couple embracing at home.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-07.jpg",
+        "bytes": 1478167,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "451b9b314329a9ef16359be10d6ab96ac5a772f9e835fb61b57e5e83216b314b",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "7.png",
+      "bytes": 19758451,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "d0e94f76c475a493c4629765526772669c291f6e2e6334e7c30e6b6c6e4a0c8a",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white maternity silhouette beside a softly lit window.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-08.jpg",
+        "bytes": 1396847,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "40c5141ea54007da43fc03768e7be6f28f01c3fe5b34f5d97fdd5a588b6b96ce",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "9.png",
+      "bytes": 20514505,
+      "width": 3456,
+      "height": 5184,
+      "format": "png",
+      "orientation": 1,
+      "exifPresent": false,
+      "iccPresent": false,
+      "sha256": "2f2eb5f366d33a4a741da0c40e1cda3e17102c32c32723f3bf46e773d1a01aa4",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Black-and-white close-up of an expectant couple with hands resting on the baby bump.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-09.jpg",
+        "bytes": 1526202,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "b648b9adf3a60aabeb6b9066643059e2b709f3d35ab33e2a9a58a13713f10fe3",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Amanda standing 1.jpg",
+      "bytes": 3769423,
+      "width": 5184,
+      "height": 3456,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "698413292247594381783647c58f1e62b385070cfeb81866fb63bc00c40c3311",
+      "overUploadByteLimit": false,
+      "tag": "maternity",
+      "altText": "An expectant mother in a floral dress standing beside sunlit pink roses.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-10.jpg",
+        "bytes": 891646,
+        "width": 3000,
+        "height": 2000,
+        "sha256": "56913a4d59ebc797ccaac66b4653f7ec50be59aafde662579a8363e949dbcc5c",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Belly profile 1.jpg",
+      "bytes": 4281916,
+      "width": 3456,
+      "height": 5184,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "bf06e74144577d4ee4b238b76689c3b3ae75b1dcb9e6cc60e7a4a16ab9cca938",
+      "overUploadByteLimit": false,
+      "tag": "maternity",
+      "altText": "Close-up of hands resting on a baby bump in a floral dress beside roses.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-11.jpg",
+        "bytes": 888159,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "68199a530546bfc1c8cd42d6f416101cbf79e3d0b241accf34d613379073ca6b",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Belly profile 2 (color).jpg",
+      "bytes": 23552249,
+      "width": 3456,
+      "height": 5184,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "0264e21fc8a4ba4da3dc5f604f39e438d1c0e567795fd8e0f9da2f66965de250",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "Side view of a baby bump in a floral dress against pink roses.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-12.jpg",
+        "bytes": 1464079,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "9c8fe771164d6f50590cb327cb4ae53cbe2133443ff3e9b7cc2cb9a8e1ca4e11",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Forhead kiss hazy.jpg",
+      "bytes": 20003559,
+      "width": 3456,
+      "height": 5184,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "792bd2a999c9d437f521d8386cc27a0fbb18acc5560b6630b48f51378611bfef",
+      "overUploadByteLimit": true,
+      "tag": "maternity",
+      "altText": "An expectant couple sharing a forehead kiss in a rose garden.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-13.jpg",
+        "bytes": 1243545,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "dae8efc9e052cb28d4f9dac655866fde69d054ec0a63e3e8dde94f614a0335a7",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Laughing on ground 1.jpeg",
+      "bytes": 5414762,
+      "width": 5184,
+      "height": 3456,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "f22e476d5914dd6ec0876760936ba9a4554b47c0e335aa9fa3766f40a4554cfb",
+      "overUploadByteLimit": false,
+      "tag": "maternity",
+      "altText": "An expectant couple laughing together while seated on the grass by a rose garden.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-14.jpg",
+        "bytes": 1208941,
+        "width": 3000,
+        "height": 2000,
+        "sha256": "cdcd5a9f8c6fea303840f25374d847a452f39a00943411c01aeae18492b6c239",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Laughing on ground B&W 2.jpg",
+      "bytes": 4840044,
+      "width": 5184,
+      "height": 3456,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "508019d8f25a80a690645b1cd3706c4833a70ac5d96dcc21c6a4563f55266f1a",
+      "overUploadByteLimit": false,
+      "tag": "maternity",
+      "altText": "Black-and-white portrait of an expectant couple laughing together on the grass.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-15.jpg",
+        "bytes": 1082154,
+        "width": 3000,
+        "height": 2000,
+        "sha256": "b39ca6704b265ea116cdc14872441d93eebe3bdd8bd7f57acc1f887b977faf8d",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Looks 1 copy.jpg",
+      "bytes": 5253290,
+      "width": 3456,
+      "height": 5184,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "44e6c35e0681146b538aca66e6476aa3067b1deda30cf1d603d8745e946069aa",
+      "overUploadByteLimit": false,
+      "tag": "maternity",
+      "altText": "An expectant couple facing one another with hands on the baby bump beside roses.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-16.jpg",
+        "bytes": 1336272,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "1d727a2c94ea63dfd1fcf8e6004d398bbf1413da44e54f60c1202414ffd9b8c0",
+        "metadataStripped": true
+      }
+    },
+    {
+      "file": "Prom pose 2 soft lighting copy.jpg",
+      "bytes": 4219477,
+      "width": 3456,
+      "height": 5184,
+      "format": "jpeg",
+      "orientation": 1,
+      "exifPresent": true,
+      "iccPresent": true,
+      "sha256": "b8546d65f71fac772c148081da0442f7339cd733afd31b923b899cc0259baa75",
+      "overUploadByteLimit": false,
+      "tag": "maternity",
+      "altText": "An expectant couple embracing and smiling toward the camera beside roses.",
+      "permission": "pending-owner-confirmation",
+      "prepared": {
+        "file": ".wrangler/asset-review/uploads/maternity-17.jpg",
+        "bytes": 920975,
+        "width": 2000,
+        "height": 3000,
+        "sha256": "21b0ca8f5b2494e318f85943f8595f8c559417f7daae9f0e494d2252a062cadf",
+        "metadataStripped": true
+      }
+    }
+  ],
+  "validation": {
+    "images": 17,
+    "overSourceByteLimit": 11,
+    "preparedBytes": 22589825,
+    "allPreparedDecoded": true,
+    "allPreparedMetadataStripped": true,
+    "providerUploadTest": false
+  }
+}

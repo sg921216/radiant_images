@@ -23,3 +23,5 @@ allowBuilds:
   esbuild: true
   workerd: true
   sharp: true
+patchedDependencies:
+  picomatch@4.0.7: patches/picomatch@4.0.7.patch

@@ -92,6 +92,22 @@ test('send-as lookup accepts only a matching verified address', async () => {
   expect(await verifiedSender(env, r, message.from)).toBe(true);
   expect(await verifiedSender(env, r, 'unverified@example.invalid')).toBe(false);
 });
+
+test('send-as lookup accepts the primary address without alias-only verification status', async () => {
+  const r = runtime(async () =>
+    Response.json({
+      sendAs: [
+        { sendAsEmail: message.from, isPrimary: true },
+        { sendAsEmail: 'pending@example.invalid', isPrimary: false, verificationStatus: 'pending' },
+        { sendAsEmail: 'missing@example.invalid', isPrimary: false },
+        { sendAsEmail: 'malformed@example.invalid', isPrimary: 'true' },
+      ],
+    }),
+  );
+  expect(await verifiedSender(env, r, message.from.toUpperCase())).toBe(true);
+  for (const address of ['pending', 'missing', 'malformed', 'absent'])
+    expect(await verifiedSender(env, r, `${address}@example.invalid`)).toBe(false);
+});
 test('CAPTCHA validates action and hostname, and fails closed on expiry/outage', async () => {
   const r = runtime(async () =>
     Response.json({ success: true, hostname: new URL(env.WEB_ORIGIN).hostname, action: 'inquiry' }),

@@ -113,6 +113,19 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
 
+    BulkReadUnavailable:
+      description: Recovery is in progress, or this read model already has eight
+        active bulk reads. No stale content is served. Retry-After is present
+        when temporary read admission is exhausted.
+      headers:
+        Retry-After:
+          description: Suggested delay in seconds when read admission is exhausted.
+          schema: { type: integer, minimum: 1 }
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
   schemas:
     Error:
       type: object
@@ -572,7 +585,7 @@ paths:
           }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          $ref: "#/components/responses/BulkReadUnavailable"
   /pricing:
     get:
       tags: [ public ]
@@ -779,7 +792,7 @@ paths:
         '403': { "$ref": "#/components/responses/Forbidden" }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          $ref: "#/components/responses/BulkReadUnavailable"
     post:
       tags: [ admin-gallery ]
       security: [ { ownerSession: [] } ]
@@ -796,6 +809,17 @@ paths:
         objects exist; failed writes require cleanup/reconciliation with no partial publication.
         Byte ceilings are enforced while reading, regardless of Content-Length. Oversized
         requests return 413; invalid content/dimensions/claims return 400 with field errors.
+        The private portfolio coordinator reserves at most 300 admitted owner-authorized
+        upload attempts per rolling 30 days; failures after reservation consume a slot.
+        Authentication and byte-limit rejections precede reservation. Exhaustion returns
+        429 with Retry-After before image processing. Reads and deletion remain available.
+        This application allowance is not an account-wide billing cap.
+        Before provider processing, enumerate both application R2 buckets, including
+        staged and recovery objects. Refuse with 503 storage_capacity_unavailable if
+        current bytes plus the maximum new object bytes exceed 6 GiB minus 32 MiB
+        headroom, or inventory cannot be verified. Enumeration is limited to 20 pages
+        per bucket and 30 seconds overall. This is admission control, not an atomic
+        storage reservation. Existing reads, deletion and recovery remain available.
         T001's bounded decoder feasibility proof is still required before implementation.
         Header inspection alone does not establish full decoding. Flattening an animation
         is not rejection of animated input. Provider failure must never publish unvalidated
@@ -904,7 +928,11 @@ paths:
         '429': { "$ref": "#/components/responses/TooManyRequests" }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          description: Restore is in progress, or combined storage capacity is exhausted
+            or cannot be verified (storage_capacity_unavailable).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
   /admin/gallery/order:
     put:
       tags: [ admin-gallery ]
@@ -1260,7 +1288,7 @@ paths:
         '403': { "$ref": "#/components/responses/Forbidden" }
         '500': { "$ref": "#/components/responses/InternalError" }
         "503":
-          $ref: "#/components/responses/Maintenance"
+          $ref: "#/components/responses/BulkReadUnavailable"
     post:
       tags: [ admin-clients ]
       security: [ { ownerSession: [] } ]

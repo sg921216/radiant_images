@@ -19,6 +19,20 @@ below (2026-11-14). Production verification remains open. The separate local-dev
 
 ## Public-content entities
 
+### Operational coordinator state (2026-11-14, R-24)
+
+`GalleryMutations` stores `upload-attempts` in its SQLite-backed Durable Object storage:
+at most 300 UTC epoch-millisecond timestamps, with no identities, credentials or image
+bytes. Admission drops timestamps older than 30 days and durably reserves one slot before
+image processing; failed validation/provider attempts stay charged. It is independent of
+D1 restore and the gallery's current item count. Missing state starts empty; malformed or
+future state fails closed. This is an application quota, not an account spending cap.
+
+`ScheduledOperations` serializes the site's two cron schedules. Its bounded in-memory
+queue is coordination only; the existing R2 job signals, backup objects and independent
+deletion ledger remain the durable evidence. An interrupted invocation is not treated as
+complete. The next cron can retry and the independent monitor detects stale completion.
+
 ### `gallery_images` (FR-005, FR-027)
 
 | Field                            | Type    | Rules                                                                                                                                 |
@@ -52,6 +66,24 @@ rejection. A complete 40-megapixel RGBA frame alone exceeds Workers' isolate mem
 the external-transform candidate must establish private-byte access, output safety and
 the approved cost constraints. Keep staged/recovery objects in the total storage budget;
 the 60-row publication limit does not bound storage churn.
+
+Storage admission (R-28): before provider processing, an upload inventories all objects
+in both MEDIA and RECOVERY, including staged/orphaned and recovery keys. Require the
+observed total plus original bytes and maximum regenerated variants to fit within
+6 GiB minus 32 MiB headroom. New daily backups use the same check with their 16 MiB
+maximum before reading/exporting tables. Read inventories in pages of 1,000, at most
+20 pages per bucket, with an eight-second request and 30-second overall deadline;
+unknown sizes, broken pagination, unavailable inventory or exhausted headroom fail
+closed. Upload refusal is HTTP 503 `storage_capacity_unavailable`; backup refusal
+fails the scheduled job so independent monitoring can detect it. Once cleanup restores
+headroom, ordinary admission resumes. The rolling upload-attempt allowance is still
+consumed after its earlier reservation, including a later capacity refusal.
+
+This is a conservative application admission threshold, not an atomic storage
+reservation or account spending cap. Concurrent jobs, deletion receipts and necessary
+recovery writes can change storage after enumeration. Existing reads, deletion and
+restore/cleanup paths remain available; monitoring and verified cleanup are still
+required, and unrelated account buckets are outside this check.
 
 Queries: home gallery = all ordered by `sort_order`; service page = `WHERE tag = :shootType` ordered.
 
@@ -471,3 +503,14 @@ Running states retain `lastSucceededAt` from the preceding successful completion
 in-progress record; an error record does not qualify as a success. The independent
 monitor requires a recent successful completion as well as a fresh start. These files
 contain no client identifiers, contact details, credentials or recovery payloads.
+
+### Bulk-read admission (2026-11-15, R-25)
+
+The `BulkReads` Durable Object namespace has three named instances: `public`, `gallery`
+and `clients`. Each holds only an in-memory count of active reads, capped at eight.
+Completion or failure releases a slot; restart resets this ephemeral count. It stores
+no durable rows, content cache, session or authorization decision. D1 remains authoritative
+and every admitted request repeats restore/auth checks and reads current data. Excess
+admission returns a contract-valid 503 with `Retry-After: 2` and `Cache-Control: no-store`.
+The `bulk-reads-v1` SQLite-class migration establishes the namespace; there is no extra
+application-data recovery or retention policy for this coordinator.

@@ -21,7 +21,7 @@
   - Owner administration protected by authentication and an OAuth login, accessed through a private route.
   - Admin sections for email templates, session checklist, and client questionnaire.
   - Owner-controlled gallery additions/removals and configurable contact-form options.
-  - The warm organic visual palette specified below.
+  - The moodboard palette and typography specified below.
 - **Out of scope:** No additional capabilities are authorized by this brief. Online payment processing, confirmed appointment booking, availability calendars, client accounts, client proofing/delivery galleries, and automated marketing campaigns are **not specified** and require separate scope approval.
 - **Existing behavior that must remain unchanged:** No existing implementation or migration requirements were provided. Existing URLs, content, customer records, integrations, or search rankings to preserve are **TBD** if this replaces a live site.
 
@@ -179,17 +179,12 @@ The brief does not define a complete failure contract. The following behaviors a
 
 ### Visual design requirements
 
-Use a soft, warm, organic green palette that conveys comfort, tenderness, and natural warmth for families and expecting mothers. Keep backgrounds bright and airy. Use muted sage and olive for subtle accents, buttons, and borders.
-
-| Element          | Color name            | Hex code  | Purpose                                                           |
-| ---------------- | --------------------- | --------- | ----------------------------------------------------------------- |
-| Primary accent   | Soft Sage             | `#9CAF88` | Booking buttons, main navigation links, or active states          |
-| Secondary accent | Muted Olive           | `#6E7A5F` | Footer backgrounds, contact forms, or structural subheadings      |
-| Light background | Warm Cream / Linen    | `#F9F6F0` | Main website background; bright and soft                          |
-| Dark neutral     | Charcoal / Soft Slate | `#2F3431` | Body text and main logo                                           |
-| Highlight        | Soft Linen Rose       | `#EADBC8` | Soft borders or backdrop overlays behind selected portfolio cards |
-
-Typography, final logo, spacing, component states, and responsive compositions are **TBD**.
+Use the moodboard's six colors and their roles for the application and standalone
+informational pages. Pair serif headings and body text with the approved signature logo.
+Carry that typography into pricing, with a paper-friendly print layout and wine and
+taupe accents in the downloadable PDF. The homepage stationery and lavender artwork
+are decorative. The gallery uses owner-selected session photographs.
+[Palette and visual reference](radiant-images-website-brief.md#look-and-feel)
 
 ## Examples and representative data
 
@@ -243,7 +238,7 @@ These criteria cover confirmed brief requirements. Criteria depending on missing
 | AC-16 | A visitor has not passed CAPTCHA verification                                | The visitor attempts to submit an inquiry                           | The inquiry is not dispatched by bypassing CAPTCHA.                                                                                                                    |
 | AC-17 | An unauthenticated visitor or an authenticated non-owner knows the admin URL | They request the admin page or an owner operation                   | Private owner access and modification are denied.                                                                                                                      |
 | AC-18 | Rebekah completes the configured OAuth login and owner authorization         | She opens Admin                                                     | The protected admin area is accessible and includes Email templates, Session checklist, and Client questionnaire sections.                                             |
-| AC-19 | Approved design assets and content are available                             | Public pages are reviewed                                           | They use the specified warm organic palette and bright, airy presentation.                                                                                             |
+| AC-19 | Approved design assets and content are available                             | Public pages are reviewed                                           | They show the moodboard colors, serif typography and approved logo. The homepage artwork reflows on narrow screens.                                                    |
 
 ## Known unknowns and clarification need
 

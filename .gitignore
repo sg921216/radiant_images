@@ -37,3 +37,14 @@ Thumbs.db
 .idea/
 
 *.secret
+
+# macOS AppleDouble sidecars accompanying supplied photos
+._*
+
+# Local source/reference materials; portfolio uploads are managed through R2
+/apps/web/assets/Portfolio/
+/apps/web/assets/Business card.pdf
+/apps/web/assets/Monochrome Lavender Sprig Sketch.png
+/apps/web/assets/Radiant Images Brand Moodboard.png
+/apps/web/assets/Radiant_Images_Session_Pricing_Guide.docx
+/apps/web/assets/Water Mark .jpg

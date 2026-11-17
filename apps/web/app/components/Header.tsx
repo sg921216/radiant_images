@@ -1,5 +1,7 @@
 import { useRef, useState, useSyncExternalStore } from 'react';
 import { Link, NavLink } from 'react-router';
+import logo from '../../assets/logo-320.webp';
+import logoLarge from '../../assets/logo-640.webp';
 const links = [
   ['Maternity', '/maternity'],
   ['Newborn', '/newborn'],
@@ -26,7 +28,14 @@ export function Header() {
       }}
     >
       <Link className="brand" to="/">
-        Radiant Images<span>Photography by Rebekah</span>
+        <img
+          src={logo}
+          srcSet={`${logo} 320w, ${logoLarge} 640w`}
+          sizes="(max-width: 700px) 160px, 260px"
+          width={320}
+          height={160}
+          alt="Radiant Images Photography by Rebekah Galarza"
+        />
       </Link>
       <button
         ref={toggle}

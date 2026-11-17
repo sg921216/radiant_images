@@ -1,0 +1,1100 @@
+{
+  "runner": {
+    "os": "win32 10.0.26200",
+    "cpu": "12th Gen Intel(R) Core(TM) i9-12900K",
+    "logicalCpus": 24,
+    "memoryGiB": 64,
+    "playwright": "1.65.1",
+    "fixture": "synthetic-load-only; approved-photo gate OPEN",
+    "captcha": "deterministic adapter; 200 ms readiness; not live Turnstile",
+    "fixtureClock": "API date fixed to runner time at each reset; native browser clocks"
+  },
+  "browser": "159.0.8154.6",
+  "results": [
+    {
+      "route": "/",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:47:15.942Z",
+      "usable": 1846.5797999999995,
+      "interactionMs": 66.14960000000065,
+      "lcp": 836,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3821,
+      "navigation": {
+        "requestStart": 4.100000001490116,
+        "responseStart": 154.40000000596046,
+        "responseEnd": 191.90000000596046,
+        "domContentLoaded": 835.9000000059605
+      },
+      "jsBytes": 150844,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:47:19.891Z",
+      "usable": 1834.4985000000006,
+      "interactionMs": 62.41650000000027,
+      "lcp": 844,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3821,
+      "navigation": {
+        "requestStart": 2.3000000044703484,
+        "responseStart": 152.5,
+        "responseEnd": 184.90000000596046,
+        "domContentLoaded": 831.4000000059605
+      },
+      "jsBytes": 150844,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:47:23.302Z",
+      "usable": 1872.3150000000005,
+      "interactionMs": 61.34770000000026,
+      "lcp": 848,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3821,
+      "navigation": {
+        "requestStart": 2,
+        "responseStart": 152.29999999701977,
+        "responseEnd": 192.10000000149012,
+        "domContentLoaded": 847
+      },
+      "jsBytes": 150844,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:47:27.303Z",
+      "usable": 1856.1689000000006,
+      "interactionMs": 66.03850000000057,
+      "lcp": 844,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3821,
+      "navigation": {
+        "requestStart": 1.7999999970197678,
+        "responseStart": 152,
+        "responseEnd": 192.29999999701977,
+        "domContentLoaded": 845.1999999955297
+      },
+      "jsBytes": 150844,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:47:30.678Z",
+      "usable": 1847.6643000000004,
+      "interactionMs": 62.92989999999918,
+      "lcp": 840,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3821,
+      "navigation": {
+        "requestStart": 2,
+        "responseStart": 152.10000000149012,
+        "responseEnd": 185.10000000149012,
+        "domContentLoaded": 837
+      },
+      "jsBytes": 150844,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/maternity",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:47:34.467Z",
+      "usable": 2514.1962999999996,
+      "interactionMs": 64.69350000000122,
+      "lcp": 2324,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3840,
+      "navigation": {
+        "requestStart": 173.89999999850988,
+        "responseStart": 324.1000000014901,
+        "responseEnd": 357.5,
+        "domContentLoaded": 975.1000000014901
+      },
+      "jsBytes": 187771,
+      "imageBytes": 65172
+    },
+    {
+      "route": "/maternity",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:47:39.061Z",
+      "usable": 2547.010299999998,
+      "interactionMs": 63.71480000000156,
+      "lcp": 2360,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3840,
+      "navigation": {
+        "requestStart": 184.5,
+        "responseStart": 334.70000000298023,
+        "responseEnd": 364.5,
+        "domContentLoaded": 996.3999999985099
+      },
+      "jsBytes": 187771,
+      "imageBytes": 65172
+    },
+    {
+      "route": "/maternity",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:47:43.470Z",
+      "usable": 2532.5564000000013,
+      "interactionMs": 62.6919999999991,
+      "lcp": 2332,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3840,
+      "navigation": {
+        "requestStart": 178.30000000447035,
+        "responseStart": 328.6000000014901,
+        "responseEnd": 358.30000000447035,
+        "domContentLoaded": 992.7000000029802
+      },
+      "jsBytes": 187771,
+      "imageBytes": 65172
+    },
+    {
+      "route": "/maternity",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:47:47.866Z",
+      "usable": 2553.323900000003,
+      "interactionMs": 65.06560000000172,
+      "lcp": 2348,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3840,
+      "navigation": {
+        "requestStart": 182.19999999552965,
+        "responseStart": 332.6000000014901,
+        "responseEnd": 364.19999999552965,
+        "domContentLoaded": 1033.7999999970198
+      },
+      "jsBytes": 187771,
+      "imageBytes": 65172
+    },
+    {
+      "route": "/maternity",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:47:51.956Z",
+      "usable": 2567.2177999999985,
+      "interactionMs": 66.76030000000173,
+      "lcp": 2364,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3840,
+      "navigation": {
+        "requestStart": 177.89999999850988,
+        "responseStart": 328.1000000014901,
+        "responseEnd": 357.1000000014901,
+        "domContentLoaded": 1034
+      },
+      "jsBytes": 187771,
+      "imageBytes": 65172
+    },
+    {
+      "route": "/newborn",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:47:56.450Z",
+      "usable": 2524.8487000000023,
+      "interactionMs": 64.33060000000114,
+      "lcp": 2352,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 178.5,
+        "responseStart": 328.6000000014901,
+        "responseEnd": 357.80000000447035,
+        "domContentLoaded": 999.3999999985099
+      },
+      "jsBytes": 187765,
+      "imageBytes": 63180
+    },
+    {
+      "route": "/newborn",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:48:00.640Z",
+      "usable": 2558.0955999999933,
+      "interactionMs": 64.13420000000042,
+      "lcp": 2340,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 173.5,
+        "responseStart": 323.70000000298023,
+        "responseEnd": 357.20000000298023,
+        "domContentLoaded": 1005.6000000014901
+      },
+      "jsBytes": 187765,
+      "imageBytes": 63180
+    },
+    {
+      "route": "/newborn",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:48:05.427Z",
+      "usable": 2550.046699999999,
+      "interactionMs": 63.67179999999644,
+      "lcp": 2348,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 176.5,
+        "responseStart": 326.70000000298023,
+        "responseEnd": 357,
+        "domContentLoaded": 1026.2999999970198
+      },
+      "jsBytes": 187765,
+      "imageBytes": 63180
+    },
+    {
+      "route": "/newborn",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:48:09.580Z",
+      "usable": 2534.227200000001,
+      "interactionMs": 62.91189999999915,
+      "lcp": 2328,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 172.19999999552965,
+        "responseStart": 322.3999999985099,
+        "responseEnd": 350.5,
+        "domContentLoaded": 976.3999999985099
+      },
+      "jsBytes": 187765,
+      "imageBytes": 63180
+    },
+    {
+      "route": "/newborn",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:48:13.649Z",
+      "usable": 2562.277799999996,
+      "interactionMs": 63.43839999999909,
+      "lcp": 2328,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 179.30000000447035,
+        "responseStart": 329.3999999985099,
+        "responseEnd": 357.20000000298023,
+        "domContentLoaded": 1027
+      },
+      "jsBytes": 187765,
+      "imageBytes": 63180
+    },
+    {
+      "route": "/family",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:48:17.798Z",
+      "usable": 2523.244900000005,
+      "interactionMs": 63.159599999999045,
+      "lcp": 2372,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3831,
+      "navigation": {
+        "requestStart": 184,
+        "responseStart": 334.1000000014901,
+        "responseEnd": 364.6000000014901,
+        "domContentLoaded": 995.1999999955297
+      },
+      "jsBytes": 187762,
+      "imageBytes": 65404
+    },
+    {
+      "route": "/family",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:48:21.882Z",
+      "usable": 2554.387600000002,
+      "interactionMs": 64.09889999999723,
+      "lcp": 2404,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3831,
+      "navigation": {
+        "requestStart": 172.89999999850988,
+        "responseStart": 323.1000000014901,
+        "responseEnd": 357.20000000298023,
+        "domContentLoaded": 975.8000000044703
+      },
+      "jsBytes": 187762,
+      "imageBytes": 65404
+    },
+    {
+      "route": "/family",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:48:26.498Z",
+      "usable": 2546.903999999995,
+      "interactionMs": 62.59449999999197,
+      "lcp": 2348,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3831,
+      "navigation": {
+        "requestStart": 174.60000000149012,
+        "responseStart": 324.79999999701977,
+        "responseEnd": 357,
+        "domContentLoaded": 1004.6000000014901
+      },
+      "jsBytes": 187762,
+      "imageBytes": 65404
+    },
+    {
+      "route": "/family",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:48:30.922Z",
+      "usable": 2545.5929000000033,
+      "interactionMs": 63.59130000000005,
+      "lcp": 2380,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3831,
+      "navigation": {
+        "requestStart": 176.5,
+        "responseStart": 326.6000000014901,
+        "responseEnd": 357.40000000596046,
+        "domContentLoaded": 1007.6000000014901
+      },
+      "jsBytes": 187762,
+      "imageBytes": 65404
+    },
+    {
+      "route": "/family",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:48:35.353Z",
+      "usable": 2529.4024000000063,
+      "interactionMs": 63.67729999999574,
+      "lcp": 2360,
+      "cls": 0.05448021537315878,
+      "lcpElement": "IMG.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3831,
+      "navigation": {
+        "requestStart": 174.79999999701977,
+        "responseStart": 325,
+        "responseEnd": 357.29999999701977,
+        "domContentLoaded": 988.3999999985099
+      },
+      "jsBytes": 187762,
+      "imageBytes": 65404
+    },
+    {
+      "route": "/about",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:48:39.433Z",
+      "usable": 2079.694199999998,
+      "interactionMs": 62.6417999999976,
+      "lcp": 992,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN.",
+            "FOOTER.site-footer"
+          ]
+        }
+      ],
+      "inlineJsBytes": 3828,
+      "navigation": {
+        "requestStart": 182.60000000149012,
+        "responseStart": 332.6000000014901,
+        "responseEnd": 364.1000000014901,
+        "domContentLoaded": 993.6000000014901
+      },
+      "jsBytes": 185128,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/about",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:48:43.247Z",
+      "usable": 2499.6814000000013,
+      "interactionMs": 61.16009999999369,
+      "lcp": 992,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN.",
+            "FOOTER.site-footer"
+          ]
+        }
+      ],
+      "inlineJsBytes": 3828,
+      "navigation": {
+        "requestStart": 174.29999999701977,
+        "responseStart": 324.3999999985099,
+        "responseEnd": 357,
+        "domContentLoaded": 980.1999999955297
+      },
+      "jsBytes": 185128,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/about",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:48:47.397Z",
+      "usable": 2527.555999999997,
+      "interactionMs": 64.59849999999278,
+      "lcp": 988,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN.",
+            "FOOTER.site-footer"
+          ]
+        }
+      ],
+      "inlineJsBytes": 3828,
+      "navigation": {
+        "requestStart": 169.89999999850988,
+        "responseStart": 320.09999999403954,
+        "responseEnd": 350.69999999552965,
+        "domContentLoaded": 984
+      },
+      "jsBytes": 185128,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/about",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:48:51.937Z",
+      "usable": 2514.6013999999996,
+      "interactionMs": 63.96099999999569,
+      "lcp": 972,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN.",
+            "FOOTER.site-footer"
+          ]
+        }
+      ],
+      "inlineJsBytes": 3828,
+      "navigation": {
+        "requestStart": 184.20000000298023,
+        "responseStart": 334.29999999701977,
+        "responseEnd": 364.6000000014901,
+        "domContentLoaded": 976.2000000029802
+      },
+      "jsBytes": 185128,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/about",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:48:56.033Z",
+      "usable": 2454.3561999999947,
+      "interactionMs": 66.59590000000026,
+      "lcp": 932,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN.",
+            "FOOTER.site-footer"
+          ]
+        }
+      ],
+      "inlineJsBytes": 3828,
+      "navigation": {
+        "requestStart": 170.5,
+        "responseStart": 320.6000000014901,
+        "responseEnd": 351.1000000014901,
+        "domContentLoaded": 934.2999999970198
+      },
+      "jsBytes": 185128,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/faq",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:49:00.347Z",
+      "usable": 2516.5743999999977,
+      "interactionMs": 83.16009999999369,
+      "lcp": 976,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3822,
+      "navigation": {
+        "requestStart": 183.39999999850988,
+        "responseStart": 333.5,
+        "responseEnd": 364.1000000014901,
+        "domContentLoaded": 974.8999999985099
+      },
+      "jsBytes": 185026,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/faq",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:49:04.543Z",
+      "usable": 2076.130999999994,
+      "interactionMs": 64.87159999999858,
+      "lcp": 984,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3822,
+      "navigation": {
+        "requestStart": 174.10000000149012,
+        "responseStart": 324.20000000298023,
+        "responseEnd": 356.80000000447035,
+        "domContentLoaded": 986.2000000029802
+      },
+      "jsBytes": 185026,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/faq",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:49:08.583Z",
+      "usable": 2073.789300000004,
+      "interactionMs": 60.91559999999299,
+      "lcp": 968,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3822,
+      "navigation": {
+        "requestStart": 169.79999999701977,
+        "responseStart": 320,
+        "responseEnd": 349.79999999701977,
+        "domContentLoaded": 966.3999999985099
+      },
+      "jsBytes": 185026,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/faq",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:49:12.680Z",
+      "usable": 2098.487399999998,
+      "interactionMs": 63.12029999999504,
+      "lcp": 988,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3822,
+      "navigation": {
+        "requestStart": 174.60000000149012,
+        "responseStart": 324.79999999701977,
+        "responseEnd": 356.69999999552965,
+        "domContentLoaded": 985.6000000014901
+      },
+      "jsBytes": 185026,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/faq",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:49:16.371Z",
+      "usable": 2108.3657999999996,
+      "interactionMs": 64.48029999999562,
+      "lcp": 1000,
+      "cls": 0.05448021537315878,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3822,
+      "navigation": {
+        "requestStart": 182.60000000149012,
+        "responseStart": 332.80000000447035,
+        "responseEnd": 364.1000000014901,
+        "domContentLoaded": 987.8000000044703
+      },
+      "jsBytes": 185026,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/contact",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:49:20.289Z",
+      "usable": 2232.8448999999964,
+      "interactionMs": 59.58999999999651,
+      "lcp": 972,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 183.40000000596046,
+        "responseStart": 333.6000000014901,
+        "responseEnd": 363.40000000596046,
+        "domContentLoaded": 973.3000000044703
+      },
+      "jsBytes": 154622,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/contact",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:49:24.097Z",
+      "usable": 2159.633400000006,
+      "interactionMs": 60.78620000000228,
+      "lcp": 1000,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 182.20000000298023,
+        "responseStart": 332.30000000447035,
+        "responseEnd": 364.70000000298023,
+        "domContentLoaded": 992.7000000029802
+      },
+      "jsBytes": 154622,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/contact",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:49:28.249Z",
+      "usable": 2227.227099999989,
+      "interactionMs": 61.072099999990314,
+      "lcp": 968,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 177.39999999850988,
+        "responseStart": 327.5,
+        "responseEnd": 356.8999999985099,
+        "domContentLoaded": 972.3999999985099
+      },
+      "jsBytes": 154622,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/contact",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:49:32.008Z",
+      "usable": 2151.5780000000086,
+      "interactionMs": 62.28080000000773,
+      "lcp": 992,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 182.39999999850988,
+        "responseStart": 332.6000000014901,
+        "responseEnd": 364.20000000298023,
+        "domContentLoaded": 992.8999999985099
+      },
+      "jsBytes": 154622,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/contact",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:49:35.853Z",
+      "usable": 2134.4616000000096,
+      "interactionMs": 61.51980000000913,
+      "lcp": 976,
+      "cls": 0.05448021537315878,
+      "lcpElement": "P.",
+      "shifts": [
+        {
+          "value": 0.05448021537315878,
+          "nodes": [
+            "MAIN."
+          ]
+        }
+      ],
+      "inlineJsBytes": 3834,
+      "navigation": {
+        "requestStart": 183.29999999701977,
+        "responseStart": 333.3999999985099,
+        "responseEnd": 364.1000000014901,
+        "domContentLoaded": 976.8999999985099
+      },
+      "jsBytes": 154622,
+      "imageBytes": 5600
+    },
+    {
+      "route": "/q/{token}",
+      "run": 0,
+      "fixtureAt": "2026-11-17T15:49:39.589Z",
+      "usable": 1888.8506000000052,
+      "interactionMs": 21.223100000002887,
+      "lcp": 1608,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": [
+            "BODY."
+          ]
+        }
+      ],
+      "inlineJsBytes": 189,
+      "navigation": {
+        "requestStart": 2,
+        "responseStart": 152.10000000149012,
+        "responseEnd": 186,
+        "domContentLoaded": 211.70000000298023
+      },
+      "jsBytes": 147427,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 1,
+      "fixtureAt": "2026-11-17T15:49:43.529Z",
+      "usable": 1890.4023999999918,
+      "interactionMs": 17.921699999977136,
+      "lcp": 1616,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": [
+            "BODY."
+          ]
+        }
+      ],
+      "inlineJsBytes": 189,
+      "navigation": {
+        "requestStart": 1.9000000059604645,
+        "responseStart": 152,
+        "responseEnd": 183.90000000596046,
+        "domContentLoaded": 213.70000000298023
+      },
+      "jsBytes": 147427,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 2,
+      "fixtureAt": "2026-11-17T15:49:47.192Z",
+      "usable": 1880.7037000000128,
+      "interactionMs": 17.452599999989616,
+      "lcp": 1612,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": [
+            "BODY."
+          ]
+        }
+      ],
+      "inlineJsBytes": 189,
+      "navigation": {
+        "requestStart": 2,
+        "responseStart": 152.10000000149012,
+        "responseEnd": 184.80000000447035,
+        "domContentLoaded": 210.5
+      },
+      "jsBytes": 147427,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 3,
+      "fixtureAt": "2026-11-17T15:49:50.687Z",
+      "usable": 1891.1300000000047,
+      "interactionMs": 17.802599999995437,
+      "lcp": 1616,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": [
+            "BODY."
+          ]
+        }
+      ],
+      "inlineJsBytes": 189,
+      "navigation": {
+        "requestStart": 2,
+        "responseStart": 152.10000000149012,
+        "responseEnd": 190.79999999701977,
+        "domContentLoaded": 213.5
+      },
+      "jsBytes": 147427,
+      "imageBytes": 0
+    },
+    {
+      "route": "/q/{token}",
+      "run": 4,
+      "fixtureAt": "2026-11-17T15:49:54.639Z",
+      "usable": 1861.6480000000156,
+      "interactionMs": 17.18059999999241,
+      "lcp": 1596,
+      "cls": 0.005908903394889466,
+      "lcpElement": "H1.",
+      "shifts": [
+        {
+          "value": 0.005908903394889466,
+          "nodes": [
+            "BODY."
+          ]
+        }
+      ],
+      "inlineJsBytes": 189,
+      "navigation": {
+        "requestStart": 2,
+        "responseStart": 152.10000000149012,
+        "responseEnd": 178.39999999850988,
+        "domContentLoaded": 199.29999999701977
+      },
+      "jsBytes": 147427,
+      "imageBytes": 0
+    }
+  ]
+}

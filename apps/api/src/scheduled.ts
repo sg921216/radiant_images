@@ -1,6 +1,5 @@
 import type { Env } from './env';
 import type { Runtime } from './services/runtime';
-import { productionRuntime } from './services/runtime';
 import { createBackup, restoreStatus } from './services/backup';
 import { expireDeletionReceipts, reconcileDeletions } from './services/clientDeletion';
 import { allObjects, maintainMedia, removeVerified } from './services/mediaRecovery';
@@ -127,5 +126,5 @@ export async function runScheduled(cron: string, env: Env, runtime: Runtime): Pr
 }
 
 export async function scheduled(event: ScheduledController, env: Env): Promise<void> {
-  await runScheduled(event.cron, env, productionRuntime);
+  await env.SCHEDULED_OPERATIONS.getByName('recovery').run(event.cron);
 }

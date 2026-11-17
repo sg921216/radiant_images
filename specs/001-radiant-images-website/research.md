@@ -1,5 +1,460 @@
 # Phase 0 Research: Radiant Images Photography Website
 
+## R-30: Persistent private operations and active-namespace metering — 2026-11-16
+
+**Final private-testing checkpoint, November 17 03:29 UTC:** The normal 03:00 UTC daily
+cron completed a verified backup and real Gmail health; five-minute maintenance continues.
+Actual scheduled GitHub failure `44010000756` was owner-received, the bucket reference was
+restored, and recovery `44010074349` passed. Monitoring remains enabled, public ingress
+disabled, and temporary operators removed. Account/namespace aggregates match all 70 DO
+calls captured through 03:25 UTC; historical November 14/15 usage remains absent. The
+separate Billing Read feed still lacks the current execution period. The investigation
+packet preserves these limits. All five focused tests pass with temporary Testing consent;
+T065–T067 and the broader T001/T058/release gates remain open. Detailed evidence and exact
+manual-versus-scheduled distinctions are recorded in acceptance.md.
+
+**November 17 02:38 UTC follow-up:** Complete temporary Google Testing consent is installed
+as Worker secrets, and a manual production scheduler invocation now reports verified Gmail
+health and a read-back-verified backup. Live Google data exposed a primary-address bug:
+`verificationStatus` is specified only for custom aliases; primary addresses have the
+read-only `isPrimary` flag. The adapter now accepts the matching primary address or an
+accepted custom alias, with two reproduced failing assertions followed by 33 passing
+focused tests. [Google SendAs semantics](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.sendAs).
+The owner deferred real branding/privacy pages, Production publication/applicable verification
+and fresh durable consent as T065–T067. The current Testing grant remains limited to seven days.
+
+The new recovery S3 pair is verified bucket-only and read-only, installed in GitHub, and
+hourly monitoring is enabled. Real manual GitHub runs pass healthy → expected configuration
+fault → recovered, with the actual recovery bucket restored. Automatic daily execution and
+scheduled alert receipt are still awaiting their normal upcoming runs. Current account and
+namespace metrics agree on all 57 captured DO calls as of 02:27 UTC; November 14/15 history
+remains absent. These observations supersede the pending-credential and cross-query mismatch
+states below, which are retained as the initial observations.
+
+The owner authorized the next operational sequence independently of final copy/photos.
+The private API, dedicated D1 and two private Standard R2 buckets are now persistent,
+with normal five-minute maintenance and 03:00 UTC backup/health schedules. The deployment
+uses the tested application implementation and compatibility date, all four production
+SQLite DO classes, and no public routing. `apps/api/wrangler.acceptance.toml` records the
+exact target; the public release generator and task gate remain unchanged.
+
+A manual invocation of the actual production scheduler completed maintenance and a
+read-back-verified empty-data backup. It correctly reports Gmail unavailable: the local
+Google/Gmail credentials are placeholders and the intended sender is missing. No synthetic
+Gmail adapter was substituted and no email was sent. Normal cron configuration, manual
+completion, automatic invocation and verified Gmail health are separate acceptance claims.
+Cloudflare documents up to 15 minutes for cron changes to propagate; do not infer execution
+from a successful deployment. [Cron propagation](https://developers.cloudflare.com/workers/configuration/cron-triggers/).
+
+The old recovery credentials cannot read the new bucket (403), and the connected OAuth
+cannot manage account API tokens (403/code 9109). Fresh **Object Read Only** credentials
+restricted to `radiant-images-recovery` are required, independently of Billing Read.
+GitHub's bucket/account settings and notification actor are staged, but the monitor remains
+explicitly disabled and both S3 secrets absent. Activation requires scope proof and a healthy
+real check, followed by healthy/fault/recovered outcomes and actual scheduled receipt.
+[R2 permissions](https://developers.cloudflare.com/r2/api/tokens/),
+[scheduled notification routing](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).
+
+The production `ScheduledOperations` namespace remains active. Initially both account-wide
+November 14–16 and namespace-specific November 16 GraphQL queries returned empty invocation
+and periodic aggregates with `errors: null`. Live introspection confirms the requested
+fields and filters. Dataset settings remain enabled with a 90-day lookback. In contrast,
+tail and persisted Workers Observability report a successful production scheduler invocation
+with 49 ms CPU / 4,462 ms wall time, plus actual D1/R2 work and completion signals.
+Two subsequent real five-minute cron invocations succeeded, with front CPU 0/0 ms at
+provider resolution and DO CPU 16/12 ms. At 21:57 UTC the namespace aggregates reported
+three requests, matching these three captured DO calls, with zero errors. The account-wide
+query reported two requests and no November 14/15 rows. Metrics are now appearing, so
+the original zero/empty observation is not the final state of this persistent namespace.
+Cross-query ingestion latency/sampling remains possible; previous-day missing rows and
+the owner's prior dashboard zeros are retained as separate historical evidence. No zero
+consumption, measured quota headroom or root cause is inferred.
+
+[The investigation packet](./evidence/cloudflare-do-investigation-20261116.md) includes
+account/namespace/version/trace identities and a reconciliation request. It is prepared
+for Cloudflare, not submitted. [Operational evidence](./evidence/cloudflare-private-operations-20261116.json)
+and acceptance.md track actual schedule observations, pending credentials and verification.
+T001/T058 remain open; no paid upgrade or public launch was performed.
+
+## R-29: Committed storage guard under real pagination — 2026-11-16
+
+**T001 advanced; remains open.** The owner committed R-28 as `c23c943`. A new private
+rehearsal deploys that application source with real D1, Standard R2, Images and its four
+production Durable Object classes. workers.dev and preview URLs are verified disabled;
+Wrangler reports no deployment targets and the schedule list is empty. The local
+service-binding proxy is not deployed. No real client data or email is used.
+
+### Application and backup observations
+
+Seeded **1,501 tiny synthetic recovery objects** (13,509 payload bytes) outside normal
+recovery prefixes. This forces the admission guard to inventory unrelated keys and follow
+real R2 pagination. The first application run overlaps seeding and is retained as a warm-up;
+the second starts after all fixture objects are present. Both runs pass their four cases:
+unauthorized upload refusal, PNG, a 10 MiB JPEG and a detailed 40-megapixel JPEG. Each valid
+case verifies regenerated derivatives, metadata removal, private originals, publication,
+deletion and the subsequent public 404. The post-seed upload latencies are 1,783 / 8,081 /
+10,490 ms through the local proxy. No memory-peak or maximum-load claim is made.
+
+After six successful uploads/deletions across the two runs, the recovery inventory holds
+**1,531 objects / 36,707,167 payload bytes**, returned over two pages. A private diagnostic
+DO then imports the unchanged production `createBackup` helper. It creates and verifies a
+7,862-byte, 17-table snapshot against that inventory: 31 ms DO CPU / 2,737 ms wall time,
+with 1 ms front CPU. This is manually invoked helper evidence, not production cron,
+scheduled health or Gmail acceptance. The diagnostic entry point never enters application
+source or the public deployment configuration.
+
+The combined tail contains **92 records, all `ok`, with no recorded exceptions**:
+
+| Execution | Samples | Maximum observed CPU |
+| --- | ---: | ---: |
+| Front Worker | 63 | 7 ms |
+| GalleryMutations | 12 | 195 ms |
+| BulkReads | 12 | 7 ms |
+| JpegValidator | 4 | 1,300 ms |
+| Diagnostic backup DO | 1 | 31 ms |
+
+The front sample stays below the Workers Free 10-ms allowance; DO samples stay below
+their 30-second allowance. The fixture exercises pagination at about 35 MiB of recovery
+payload, not six GiB, twenty pages, provider failure or peak concurrent demand. R-28's
+local refusal tests remain the evidence for exhausted/unavailable storage. Tail CPU and
+wall time cannot substitute for account-wide request/duration metering.
+
+### Account evidence and persistent monitor
+
+At 20:53 UTC, account Workers analytics now includes November 16: 69 requests, zero errors
+and zero client disconnects. This is a partial observation before this new rehearsal,
+not the day's final total. DO invocation/periodic queries remain empty at 21:00 UTC while
+the rehearsal namespaces still exist; SQL-storage aggregates also return no rows.
+
+The owner reports the account Durable Objects Usage screen for **November 14–December
+14** shows duration **0 GB-sec**, requests **0**, SQL/KV storage **0 B**, SQL rows read and
+written **0**, and KV storage operations **0**. Record these as owner-attested displayed
+values. They do not reconcile with direct execution logs and are not accepted as zero
+operational consumption or proof of a daily Free allowance. The display period is monthly;
+the cause of the missing metering remains unestablished. Do not request another Images
+plan confirmation: that separate Free-plan question was resolved in R-28.
+
+Cloudflare documents that DO Free limits reset at 00:00 UTC and exceeding a limit rejects
+further operations of that type. Missing usage observations do not imply permission to
+upgrade, disable controls or label available headroom measured. The documented cutoffs
+and the unresolved observability discrepancy are separate facts.
+[Durable Objects pricing and Free-limit behavior](https://developers.cloudflare.com/durable-objects/platform/pricing/).
+
+GitHub API inspection confirms the recovery workflow is active but its enablement variable
+is false/absent, its bucket variable is absent, and all three required repository secrets
+are absent. No configuration was changed. A persistent recovery target, normal schedules,
+independent monitoring and scheduled recipient proof remain T058/release prerequisites.
+
+### Cleanup and acceptance boundary
+
+Deleted all 1,533 disposable recovery objects, verified both buckets empty, stopped the
+proxy/tail, and removed the Worker, all five associated DO namespaces, D1 and both buckets.
+Provider inventory confirms zero Workers/databases/namespaces and the single pre-existing
+bucket preserved. Removed the temporary local session/secrets and unsanitized tail.
+
+Quality [run 43953953193](https://github.com/sg921216/radiant_images/actions/runs/43953953193)
+**passes** for exact head `c23c9431b94a0221d06392725c948832e5f1585e`. Tested PR merge
+`0f1eaf99649f897deb30e1b6a71491ee0d048724` has the identical tree. Formatting, lint, types,
+dependency/privacy checks, **64 files / 290 tests**, builds and **163 browser/performance
+checks across all five projects** pass. Twelve skips are the expected duplicate cells
+for three once-per-run performance profiles; no functional case is quarantined. Browser
+time is 18.4 minutes; the job completes 20:50:43–21:12:08 UTC with no warnings. Source
+privacy scans 462 files and diagnostic privacy scans ten files, both with zero blocked.
+This closes the changed-source CI gate, including the earlier workflow-runtime and
+navigation-focus changes. The new R-29 evidence-only edits are outside that tested tree.
+[Exact-head CI evidence](./evidence/github-ci-r29-20261116.json).
+
+Evidence: [post-seed application checks](./evidence/cloudflare-gallery-rehearsal-paginated-storage-20261116.json),
+[warm-up checks](./evidence/cloudflare-gallery-rehearsal-storage-admission-20261116.json),
+[source hashes, tail, account/dashboard observations and verified cleanup](./evidence/cloudflare-t001-r29-20261116.json).
+No tracked application behavior changed during R-29. **T001/T058/T060/T063 remain open;
+55/64 tasks complete, nine open.**
+
+## R-28: Daily usage evidence and storage admission — 2026-11-16
+
+**T001 advanced; remains open.** The owner explicitly confirmed: “My account page
+shows Free.” This resolves R-27's Images plan ambiguity as owner-attested dashboard
+evidence. The documented Free plan includes 5,000 unique transformations per calendar
+month and rejects new transformations beyond that allowance. Both Free and Paid include
+5,000; the allowance alone would not have established the account plan. No subscription
+was changed. The account's two Images analytics values of 49 are cumulative snapshots,
+not 98 transformations. [Images pricing](https://developers.cloudflare.com/images/pricing/).
+
+Existing operational OAuth can query GraphQL analytics. Requested UTC dates November
+14–16, daily groups, limit 10,000, without filtering to a particular Worker or D1 database:
+
+| UTC date | Workers requests | D1 rows read | D1 rows written |
+| --- | ---: | ---: | ---: |
+| November 14 | 715 | 1,234 | 698 |
+| November 15 | 1,890 | 94,023 | 2,511 |
+
+The largest observations are 1.89% of Workers' 100,000/day, 1.88% of D1's five million
+reads/day and 2.511% of its 100,000 writes/day. They describe these rehearsal days, not
+future peak demand. Workers reports zero errors but 48/396 client disconnects; do not
+claim every request completed. No November 16 row was returned at collection time.
+Adaptive operational analytics are not an exact billing ledger.
+[Workers metrics](https://developers.cloudflare.com/analytics/graphql-api/tutorials/querying-workers-metrics/),
+[D1 metrics](https://developers.cloudflare.com/d1/observability/metrics-analytics/),
+[analytics limits](https://developers.cloudflare.com/analytics/graphql-api/).
+
+Both DO invocation and periodic aggregate datasets return no rows for the same dates.
+A separate SQL aggregate also returns none. Dataset settings report enabled, 90-day
+lookback, 32-day query range and a 10,000-row limit, so the gap is not explained by a
+24-hour retention allowance. R-20/R-21 retained provider metrics and the new live probe
+below prove execution; empty current queries are not zero usage. Root cause remains
+unestablished. [Account observations and limits](./evidence/cloudflare-account-capacity-20261116.json).
+
+### Storage-control defect and fix
+
+R-24 limits upload churn, and the independent monitor alerts on recovery storage, but
+neither stopped uploads/new backups when delayed cleanup accumulated actual objects.
+New regression tests first demonstrate valid uploads returning 201 under exhausted or
+unreadable inventory and backup creation succeeding with six GiB already observed.
+
+`requireStorageCapacity` now streams inventory metadata from both MEDIA and RECOVERY,
+including all staged, orphaned and recovery objects. Before image-provider processing,
+require current bytes plus the original and maximum regenerated variants to fit within
+**6 GiB minus 32 MiB headroom**. Backup creation checks with its 16 MiB maximum before
+exporting tables. Inventory is bounded to 1,000 objects/page and 20 pages/bucket; each
+list has an eight-second deadline, with 30 seconds overall. Unverifiable sizes, broken
+pagination, unavailable inventory, or insufficient room fail closed. Upload refusal is
+HTTP 503 `storage_capacity_unavailable`; backup refusal fails the scheduled job.
+
+Tests prove pagination, combined bucket accounting, refusal before Images calls/no
+publication, recovery after cleanup, no new backup at capacity, and continued public
+reads/photo deletion during pressure. The earlier rolling upload reservation still
+counts a later capacity refusal. This is an admission threshold, not an atomic storage
+reservation or an account cap: concurrent operations, preserved deletion receipts,
+necessary recovery writes and unrelated buckets remain operational considerations.
+The 32 MiB reserve reduces overlap exposure; it does not prove a maximum invoice.
+
+### Validation and scoped provider evidence
+
+`pnpm check` passes formatting, lint, types, **64 files / 290 tests** and both builds.
+The Chromium desktop gallery suite passes **2/2**, with no retry, covering the full
+upload/edit/reorder/delete journey plus 60-image filtering/responsive layouts. Other
+browser projects were not rerun for this backend-only change; eventual-commit CI remains
+required.
+
+A disposable private Worker imported the production capacity helper and invoked it
+inside a SQLite DO against two empty real Standard R2 buckets. **34/34 checks pass**:
+24 initial requests plus ten while tailing. The twenty tail records cover ten front
+and ten DO executions, all `ok`; front CPU is 0 ms at provider resolution, DO CPU 1 ms,
+and DO wall time 110–200 ms. This narrow probe includes a synthetic invocation counter;
+it is not a full application capacity rehearsal, absolute peak or large-bucket test.
+No Images or email calls were made and no R2 objects were written. Fresh DO aggregate
+queries still returned no rows before deletion, with ingestion delay not ruled out.
+
+workers.dev and preview URLs were verified disabled; only a local service-binding proxy
+invoked the probe. The Worker, DO namespace and both buckets were deleted and absence
+verified. The pre-existing R2 bucket remains. No persistent deployment exists.
+[Guard source hashes, red/green checks, probe/tail and cleanup evidence](./evidence/cloudflare-storage-admission-20261116.json).
+
+**Remaining gates:** DO aggregate metering is unavailable; T058 still needs the
+persistent recovery target, production schedules, independent monitoring and scheduled
+recipient proof. The changed application source needs its eventual-commit CI/release
+acceptance. Preserve the accepted R-23 private restore/retry/manual-notification proof
+and R-25 sampled CPU results without extending them to unmeasured production demand.
+T001/T058/T060/T063 remain unchecked; **55/64 tasks complete, 9 open**.
+
+## R-27: Billing Read verified and account evidence — 2026-11-16
+
+**T064 is complete.** The owner-created account token verifies as active, expiring
+2026-11-24 04:59:59 UTC. The separate token-backed MCP configuration exists, but this
+host did not expose that connection or inherit the newly saved environment variable.
+Used T064's approved read-only REST fallback with the secret loaded from the Windows
+User environment into a scoped child process. No secret is retained in repository
+evidence. Verification proves target-account access; it does not independently attest
+every token-policy permission. The operational OAuth connection remains unchanged.
+
+Subscriptions, explicit-period billing usage, spend policies and billing history all
+return HTTP 200. Two subscriptions report `R2 Paid` and `Images Stream Basic`, each
+with `state: Paid`, base price USD 0 and current period November 14–December 14.
+Their component values describe subscription settings, not measured consumption.
+No Workers paid subscription is returned. Workers' `standard` usage-model setting
+does not by itself establish a paid subscription.
+
+The generic usage request explicitly spans `2026-11-14T02:45:48Z` through
+`2026-11-16T20:12:26Z`, daily aggregation, limit 10,000. Its actual response differs
+from the OpenAPI array: zero rows, null data and empty totals, with the echoed end
+rounded to `2026-11-16T23:59:59Z`. Missing data is **not zero usage**. Supplemented
+with the account billable-usage v1 alpha API: coverage is true; the billing period
+starts November 14 00:00 UTC, and the explicit November 14–16 query returns seven
+records covering November 14–15 (latest exclusive end November 16 00:00 UTC).
+
+| Returned metric | Recorded consumption | Included monthly allowance | Reported charge |
+| --- | ---: | ---: | ---: |
+| R2 Standard storage | 0.0040398683 GB-month | 10 GB-month | $0 |
+| R2 Class A operations | 831 | 1,000,000 | $0 |
+| R2 Class B operations | 850 | 10,000,000 | $0 |
+| Images transformations | 49 | 5,000 | $0 |
+
+These are account totals for the returned records, including earlier rehearsals;
+they are not current storage size, today's full usage or a final invoice. Billing
+history is empty. Restricted billable-usage v2 returns HTTP 403/code 1171. Historical
+daily Workers, D1 and DO totals are absent from these billing reads and remain a gap.
+[R2 allowances](https://developers.cloudflare.com/r2/pricing/),
+[Images pricing](https://developers.cloudflare.com/images/pricing/).
+
+The spend-policy list succeeds and is empty. Separate OAuth reads confirm the
+existing **$1 and $10 account budget warnings**, both enabled with one email recipient;
+recipient details are omitted. Current spend-management documentation supports
+Workers and Durable Objects separately, excludes R2/Images from those controls,
+and does not guarantee an invoice ceiling even when a limit is enabled. No limit,
+subscription, recipient or billing setting was changed.
+[Spending controls](https://developers.cloudflare.com/billing/manage/spend-management/).
+
+Rechecked documented Free allowances: Workers 100,000 requests/day and 10-ms HTTP CPU;
+D1 five million rows read/day, 100,000 written/day and 5 GB; SQLite DO 100,000
+requests/day and 13,000 GB-s/day. These are planning limits, not measured remaining
+account headroom. R2's included tier applies only to Standard storage; Infrequent
+Access is enabled on this account but has no included free tier.
+[Workers/D1 pricing](https://developers.cloudflare.com/workers/platform/pricing/),
+[DO pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/).
+
+**T001 remains open.** Images and transformations are enabled, with zero hosted-image
+storage allowance. The returned subscription does not verify the earlier owner-reported
+Images Free cutoff. Reconcile that account plan before assuming new transformations
+will stop at 5,000; the documented paid alternative charges $0.50/1,000 beyond the
+included amount. R-24's application upload/retention limits still apply, but are not
+an account-wide cap. Current inventory is zero Workers, zero D1 databases, zero DO
+namespaces and one preserved R2 bucket. T058 has no persistent application to monitor;
+T060/T063 retain their release prerequisites. No infrastructure or token policy changed.
+
+[Sanitized API evidence, windows, allowances and limitations](./evidence/cloudflare-billing-read-20261116.json).
+The register is now **55/64 complete, 9 open**. Temporary access can be revoked after
+remaining billing verification; token revocation was not performed with this read-only credential.
+
+## R-26: Account-scoped Billing Read follow-up — 2026-11-16
+
+Historical pre-connection checkpoint; superseded by verified R-27 above.
+
+The owner requested a separate Billing Read connection to complete the account evidence
+needed by T001 and dependent operational/release work. Live subscription and billing-usage
+GETs return 403 with the existing OAuth connection; these endpoints require an API token
+with Billing Read. Spend-policy GET also returns 403, and its current API schema does not
+declare accepted permissions. Reconnecting the same OAuth scopes is not a resolution.
+
+T064 records the concrete follow-up. Limit its token to Account > Billing > Read and the
+Radiant Images account, with a finite expiry; no Billing Edit or deployment authority is
+needed. Cloudflare documents account-owned token support for Billing and bearer API-token
+support on its official API MCP server. The connection must be verified before claiming
+access or task completion. No token was created in this session.
+[Billing permissions](https://developers.cloudflare.com/billing/understand/billing-permissions/),
+[account token support](https://developers.cloudflare.com/fundamentals/api/get-started/account-owned-tokens/),
+[API MCP authentication](https://developers.cloudflare.com/agents/model-context-protocol/cloudflare/servers-for-cloudflare/).
+
+Read subscriptions and an explicit billing-period usage window; the generic usage API's
+default is only six hours and limited results can truncate without error. Its metric list
+is not comprehensive for R2, D1 and Durable Objects, so retain gaps or supplement through
+appropriate authorized read-only sources. Record only sanitized plan/allowance/usage/control
+facts. A successful Billing Read connection does not establish an enforced spend cap,
+zero cost, persistent monitoring or release acceptance. The existing $1/$10 budget warnings
+remain unchanged; no upgrade or billing-write permission is selected.
+
+## R-25: HTTP read CPU and bounded admission — 2026-11-15
+
+The private production-code baseline reproduced a 14-ms first gallery request with
+60 synthetic gallery records and 200 clients. Replacing Hono's default SmartRouter with
+its incremental TrieRouter reduced the first gallery sample to 8 ms, but separate fresh
+deployments still used 16 ms for public bootstrap and 15 ms for the client list. Routing
+alone did not resolve the Free Worker's 10-ms budget. Hono documents the router choices
+and configurable router constructor; the installed SmartRouter implementation builds
+its optimized matcher on the first match.
+[Hono routers](https://hono.dev/docs/concepts/routers),
+[Hono constructor](https://hono.dev/docs/api/hono).
+
+Keep TrieRouter and delegate just GET/HEAD for `/public/bootstrap`, `/admin/gallery`
+and `/admin/clients` to separate `BulkReads` Durable Object instances. Each coordinates
+eight active requests, rejects excess work with 503/Retry-After, and releases admission
+on success or failure. This adds bounded coordination for the measured bulk operations;
+other API routes retain their execution paths. The front Worker preserves restore/owner
+checks and streams the response. The object repeats those checks and queries D1 on every
+read. No content, session or authorization cache can delay an owner removal or recovery
+gate. Updated bindings, generated types, release/rehearsal configuration and the three
+503 contracts travel with the code.
+
+The final eight-slot version passed 100 measured reads per delegated operation at
+concurrency five, after ten warm-ups each. Every complete body was received successfully
+and validated against its contract. Nearest-rank p95 through the local binding proxy to
+the private deployed Worker was 349 ms (bootstrap), 369 ms (gallery) and 385 ms (clients).
+These are network-inclusive supplemental measurements, not the prescribed isolated
+loopback performance fixture. Raw timings and sampled CPU, including cold probes, are
+in [the sanitized R-25 record](./evidence/cloudflare-api-cpu-remediation.json).
+
+This change moves CPU rather than eliminating it. Cloudflare documents 10 ms CPU for
+Free Workers and 30 seconds per DO invocation. DO requests and duration, including I/O
+waits, count toward their own allowances; repeated front/object auth and restore checks
+also add D1 work. The final latency cohort's sampled DO wall time peaked at 282 ms;
+5,000 non-overlapping reads at that observed duration and 128 MB would be about 181 GB-s.
+That is a workload estimate, not measured daily billing or a worst-case cap. The
+13,000 GB-s/day Free allowance is shared with other objects and applications; request,
+D1, storage and other account limits still apply.
+[Workers limits](https://developers.cloudflare.com/workers/platform/limits/),
+[DO limits](https://developers.cloudflare.com/durable-objects/platform/limits/),
+[DO pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/).
+
+Two production CPU-profile requests during healthy private traffic returned 404/code
+10393, "No recent executions were found for this Worker." No function-level profile
+was obtained; the diagnosis uses source inspection and controlled deploy/tail comparisons.
+Tail records are partial observations, not an exhaustive invocation census. Some front
+records say `canceled` despite status 200 and successfully consumed/validated bodies;
+the cause is unestablished and no zero-cancellation claim is made. No CPU-limit outcome
+or exception was captured in the final cohort. The private ingress remained disabled
+throughout. T001 stays open for account-wide usage/plan evidence and wider capacity;
+T058 still needs a persistent monitor target and scheduled operation/recipient proof.
+
+## R-24: Scheduled CPU remediation and upload usage controls — 2026-11-14
+
+The R-23 cron baseline used 32/34/30/43 ms in the ordinary Free Worker. Scheduled
+dispatch now awaits a private SQLite-backed `ScheduledOperations` Durable Object, which
+serializes the two schedules over the single recovery ledger. At most two jobs are
+outstanding; unknown schedules and excess queueing fail explicitly. A failed operation
+does not poison the next invocation. The existing private R2 records preserve last
+completion, failure and stale-work monitoring across restarts.
+
+Three actual accelerated Cloudflare cron invocations on version
+`57cfe04e-f0c3-401c-aaab-19fac45b88bb` completed with **0/0/0 ms** front-Worker CPU at
+provider resolution and **30/28/18 ms** coordinator CPU. Front wall times were
+14,456/13,115/13,043 ms. The independent binding observer reported healthy with no issues.
+This establishes headroom for the sampled synthetic recovery workload, not zero CPU,
+worst-case backup sizing, general HTTP CPU or live Gmail acceptance. The source hashes,
+private-ingress checks and verified teardown are in
+[the sanitized CPU record](./evidence/cloudflare-cpu-remediation.json).
+
+Cloudflare documents [10 ms Free Worker CPU](https://developers.cloudflare.com/workers/platform/limits/#cpu-time)
+and [30 seconds per Durable Object invocation](https://developers.cloudflare.com/durable-objects/platform/limits/).
+DO duration includes waiting for I/O; the sample's ~13–14 seconds is not its CPU cost.
+At 128 MB allocated, 289 invocations/day of the sampled daily workload would use roughly
+520 GB-s/day, before other DO work, versus the documented 13,000 GB-s/day Free allowance.
+This conservative extrapolation is not an account-wide usage measurement.
+[DO pricing](https://developers.cloudflare.com/durable-objects/platform/pricing/)
+
+The portfolio coordinator now persists at most **300 owner-authorized upload attempts
+per rolling 30 days**, charging failures after admission and returning 429 plus
+Retry-After at exhaustion. Authentication/byte-limit rejections precede reservation.
+Reads and deletion are unaffected. Local real-DO tests verify
+the final admitted attempt, refusal, unauthorized access and expiry. This closes the
+unbounded upload/delete churn path left by the 60-current-image cap. At the existing
+13.25-MiB maximum per upload, 300 recovery copies plus 60 live images and 28 maximum
+16-MiB backups total about 5.10 GiB, excluding receipts, overhead, delayed cleanup and
+other account resources. A 31-day calendar month can contain two boundary bursts, up to
+600 admitted uploads / 3,600 transformation calls. Neither calculation guarantees $0.
+
+Account controls inspected: only the existing $10 budget warning was installed. Added
+and re-read an enabled **$1 account-wide budget warning** using its existing recipient;
+the $10 warning remains. No notification test, subscription change or paid upgrade was
+performed. Budget warnings notify without stopping usage. Current spending limits cover
+Workers and Durable Objects, exclude R2, and explicitly do not guarantee the invoice.
+Both subscription and spend-policy reads return 403 for the current OAuth connection.
+[Budget alerts](https://developers.cloudflare.com/billing/manage/budget-alerts/),
+[spending limits](https://developers.cloudflare.com/billing/manage/spend-management/).
+
+T001 remains open for general API CPU headroom and account-wide usage evidence. T058
+remains open for the persistent deployment, bucket-scoped read credentials, schedule and
+recipient routing. All temporary Worker/DO/D1/R2 resources were removed and their absence
+verified; the account budget warning is the only persistent provider change.
+
 **Feature**: [spec.md](./spec.md) | **Plan**: [plan.md](./plan.md) | **Date**: 2026-10-17
 
 **Constitution reconciliation (2026-11-13)**: React + Cloudflare Workers is confirmed.
@@ -914,3 +1369,81 @@ remote workflow state was not inspected. No credentials were created, remote res
 changed, notifications sent, or release gates closed. T001/T058 remain open; the feature
 still has **52/63 tasks complete**. Account usage controls, general API CPU headroom,
 deployed recovery/cron proof and actual notification receipt remain separate requirements.
+
+## R-23 Private recovery and monitoring rehearsals — 2026-11-14
+
+The owner requested this next implementation step after merging the feature to main. The
+existing feature branch was fast-forwarded to `d4e8aee`; pre-existing local Spec Kit/toolchain
+configuration changes were preserved. New private rehearsal resources used only synthetic
+data. They were provisioned with D1 in ENAM, two private R2 buckets and a Worker with
+workers.dev and preview URLs disabled and no routes. Cloudflare API reads confirmed those
+privacy settings. No production resource or client record was restored or deleted.
+
+`scripts/cloudflare-recovery-rehearsal/` provides the separate operator, fixed resource
+configuration, local service-binding proxy and sanitized result recorder. It imports the
+shipped backup/deletion/media/scheduler services; the production application does not import
+the operator. Local tests first failed for missing isolation/driver behavior, then passed.
+See acceptance.md for the exact commands, final validation and sanitized evidence.
+
+Verified against deployed D1/R2:
+
+- Private snapshots omit transient auth/dedupe/rate/lifecycle state, retain omission markers
+  and same-client invitation associations, and restore retained data.
+- Client deletion cascades remove dependent email/checklist/invite/response data. Restoring
+  a pre-deletion application snapshot replays the independent ledger and does not resurrect
+  deleted data. All four portfolio original/variant byte fixtures recover exactly.
+  Review found the initial seed lacked checklist master rows; a failing 0-versus-2 assertion
+  caught the vacuous checklist test. The corrected seed and a separate deployed populated
+  checklist backup/delete/restore proof passed, preserving the retained completion time.
+- Missing indexed receipts and copies at day-28 expiry refuse restore/reopen and keep API
+  reads at 503. Successful reconciliation precedes explicit reopening.
+- An injected R2 delete failure under a 32-day fixture clock preserves the expired backup
+  and required receipt. Independent monitoring reports the failed job, overdue recovery,
+  missed day-30 target and overdue receipt. A subsequent retry verifies object removal before
+  retiring the receipt. This is fault injection/controlled time, not an observed 32-day outage.
+- Actual D1 Time Travel restored the selected pre-deletion bookmark. With ingress detached
+  and cron paused, the operator verified the deleted synthetic client had returned to offline
+  D1, restored the maintenance gate, replayed the independently retained R2 ledger, cleared
+  transient credentials and verified dependent cascades before reopening. Time Travel can
+  reset the maintenance flag, which is why detached ingress is essential.
+  [D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/).
+- A compatible Worker version rollback returned 100% of traffic to the recorded earlier
+  version, and recovery/monitor checks passed afterward. It did not roll back D1 or R2.
+  This is private operator rollback evidence, not the full application release matrix.
+  [Worker rollback behavior](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/).
+- Cloudflare actually invoked the temporary every-minute cron. The first successful receipt
+  completed at `2026-11-15T03:09:23.653Z`; four captured runs returned `ok`, without exceptions,
+  using 30–43 ms CPU and 7,757–10,880 ms wall time. The daily branch and storage were real;
+  Gmail sender verification used a labeled synthetic no-send adapter. This does not establish
+  actual Gmail health, production cadence or ongoing monitoring.
+
+The independent observer first used a separate remote R2 binding, then the shipped S3 SigV4
+checker against real R2. It downloaded only operational signals and metadata. The S3 sequence
+was healthy → stale maintenance/overdue recovery/missed removal target → healthy after
+cleanup. Initial user-provided credentials also allowed a media-bucket listing and an empty
+write probe, so their scope was rejected for GitHub use; the probe was removed. The owner was
+asked to replace them with recovery-bucket-only Object Read Only credentials. Final scope,
+GitHub execution, owner receipt and cleanup outcomes are recorded in acceptance.md.
+The replacement credentials subsequently denied both unrelated-bucket listing and recovery
+writes (403) while permitting healthy S3 inspection. Only that replacement was copied into
+temporary GitHub secrets. The real monitor passed against R2, then correctly failed on the
+injected stale maintenance/overdue backup/target miss. The user explicitly confirmed receipt
+of the synthetic notification retry; this is actual human receipt evidence for manual runs.
+The recovered GitHub run `43672158050` returned healthy with no issues. Temporary repository
+settings/secrets and all four Cloudflare resources were removed and their absence verified.
+The user retains responsibility for revoking the temporary R2 token because the connection
+has no token-management permission. No persistent monitor or public deployment remains.
+
+GitHub's intended synthetic notification failure ran on merged main as `sg921216` in runs
+[43670559798](https://github.com/sg921216/radiant_images/actions/runs/43670559798) and, at the
+owner's request, [43671241481](https://github.com/sg921216/radiant_images/actions/runs/43671241481).
+Both failed at the labeled first step and skipped checkout/Cloudflare access. They need no
+R2 credentials. Actual owner notification receipt is a separate human observation.
+[GitHub notification routing](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).
+
+**Release boundary:** functional completion is not a Free-plan resource pass. Cloudflare
+documents 10 ms CPU per Free Cron invocation and permits occasional over-limit execution;
+all four captured full-job samples exceeded 10 ms. Production scheduling needs resource
+headroom/remediation evidence before release. The existing T001/T058 gates remain open;
+no paid upgrade, production deployment, or permanent monitoring activation is inferred.
+[Workers CPU limits](https://developers.cloudflare.com/workers/platform/limits/#cpu-time).

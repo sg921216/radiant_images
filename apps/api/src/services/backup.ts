@@ -7,6 +7,7 @@ import * as schema from '../db/schema';
 import { sha256 } from './crypto';
 import { ensureDeletionLedger, readDeletionLedger, reconcileDeletions } from './clientDeletion';
 import { restoreMedia } from './mediaRecovery';
+import { requireStorageCapacity } from './storageCapacity';
 const DAY = 86400000;
 export const BACKUP_MAX_BYTES = 16 * 1024 * 1024;
 // Parent-first order; restore deletes in reverse order. Identifiers never come from a backup.
@@ -61,6 +62,7 @@ export async function restoreStatus(env: Env) {
 }
 export async function createBackup(env: Env, now: Date): Promise<string> {
   if (await restoreStatus(env)) throw new Error('restore_in_progress');
+  await requireStorageCapacity(env, BACKUP_MAX_BYTES);
   await ensureDeletionLedger(env);
   const ledger = await reconcileDeletions(env);
   const values = await env.DB.batch<Record<string, string | number | null>>(
