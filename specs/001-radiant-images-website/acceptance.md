@@ -1,5 +1,118 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-17 18:56 UTC — Production Gmail grant installed and deployed health verified
+
+The owner explicitly confirms Audience publishing status **In production**, following
+the reported successful brand verification. Fresh consent completed around 18:53 UTC
+with both required scopes, and direct refresh/send-as checks confirm the intended
+primary sender. This is a production-mode grant; the prior Testing expiry estimate
+does not describe this replacement. No fixed lifetime or immunity from revocation is
+claimed. The Google unverified-app warning persists; scope verification/exemption and
+actual console limits remain unresolved under T066. Brand approval is not scope approval.
+
+Using the existing authenticated Wrangler identity with Workers Scripts write access,
+only `GMAIL_REFRESH_TOKEN` was supplied through protected stdin to the existing private
+`radiant-images-api` Worker. Version **2ecf83f7-00c0-4471-a2bf-aca16112359b** became active
+at 18:54:45.110 UTC. No application code or other secret was replaced. Connected API
+reads confirm workers.dev/preview URLs disabled, no API custom domains and unchanged
+`*/5 * * * *` / `0 3 * * *` schedules.
+
+A temporary private operator called the deployed `ScheduledOperations` coordinator's
+daily branch through a loopback remote service binding. This is explicitly a **manual
+production-DO invocation**, not an actual Cloudflare cron. Independent bucket-scoped
+S3 readback at 18:56:16.465 UTC confirms maintenance/backup status `ok`, Gmail `verified`
+at **18:56:10.936 UTC**, and zero inquiry/auth/image errors. Four backups total 26,738
+bytes; the full recovery inventory is 27,122 bytes with no monitor issues or overdue
+cleanup. No email was sent. The initial inline Node invocation failed before calling
+the operator because Wrangler's helper requires a file entry point; running the same
+SDK operation from an ignored `.mjs` file succeeded.
+
+The temporary `radiant-images-acceptance-operator` was deleted after readback. The local
+refresh-token file was removed, absence confirmed, and `.env.acceptance` contains no
+duplicate refresh token. The only installed replacement is the server-side Worker secret.
+The operator contained no credentials or public routes. Existing manual checks remain deferred.
+
+T067 is **partially complete**: fresh production consent, provisioning, intended sender
+and deployed manual health pass. Await the next normal **2026-11-18 03:00 UTC /
+November 17 22:00 EST** scheduled health, and distinguish its evidence from the manual
+run above. T066 remains open for the reported permission-verification warning and
+applicable limits/exemption. **57/67 tasks complete**; public application launch gates
+are unchanged. Existing consent tests and whitespace checks pass; optional commit hooks
+were not run. Sanitized evidence: `evidence/google-production-consent-20261117.json`.
+
+## 2026-11-17 18:53 UTC — Fresh Gmail consent received; scope warning remains
+
+The consent helper saved a fresh token in ignored `.gmail-refresh-token.secret`.
+A direct server-side refresh succeeds and reports both `gmail.send` and
+`gmail.settings.basic`. A read-only Gmail send-as lookup returns HTTP 200 and confirms
+the configured intended sender matches Google's primary account address. No email was
+sent and no token/provider response was exposed in output.
+
+The owner reports “This app hasn't been verified by Google” and a warning about possible
+loss of Google-data access. Brand approval therefore does not establish Gmail scope
+verification. Google's current scope table classifies send as sensitive and basic
+settings as restricted. Its personal-use exception is conditional; no applicability or
+scope approval is inferred. Exact Audience **In production** status was requested before
+provisioning. The new token is held locally in the ignored file pending that answer;
+the deployed Testing credential remains unchanged. No absent expiry field is treated
+as proof of permanent authorization. T066/T067 remain open.
+
+Sources: [Gmail scopes](https://developers.google.com/workspace/gmail/api/auth/scopes)
+and [verification exceptions](https://support.google.com/cloud/answer/13464323?hl=en).
+
+## 2026-11-17 — Google branding verified; fresh consent started
+
+After reporting Branding/Audience configuration complete, the owner reported the exact
+Google status: “Your branding has been verified and is being shown to users.” This
+supersedes the earlier homepage-ownership rejection and unobserved branding state.
+Evidence is owner-reported console status, not an automated console read. Scope
+verification/exemption and any remaining user limits are separate from brand approval;
+confirmation of those and the exact **In production** Audience status was requested.
+T066 remains open for that final status clarification.
+
+The existing consent helper was started for the production-bound client with loopback
+callback, offline access, state/PKCE and both Gmail scopes. The owner received its fresh
+link and is completing sign-in/consent. No new token has yet been provisioned. T067 stays
+open for fresh consent, secret rotation, sender verification and post-rotation actual
+daily scheduled Gmail health. Manual acceptance checks remain deferred.
+
+Both existing consent-helper tests pass. The independent read-only operations monitor
+passes with no issues and 2,856 recovery bytes using explicit account/bucket arguments
+plus ignored local S3 credentials. The first call omitted account/bucket and failed
+configuration validation; supplying the documented target resolves it. This healthy
+baseline predates rotation and does not satisfy T067.
+
+## 2026-11-17 — T066/T067 resumed; console access unavailable
+
+The owner reconfirms correct nameservers in Cloudflare and Google public DNS and
+requests Google Branding/Production followed by fresh Gmail consent. This supersedes
+the earlier Google-work deferral; manual human/device checks remain deferred.
+The requirements checklist passes (16/16). Existing ignore/configuration files cover
+generated output, local environment files and `*.secret`; the package is private.
+
+Browser discovery returned `The browser access host is unavailable`. Attempting to
+select the existing Chrome window returned `Computer Use was not approved to use
+Google Chrome`. No Google console interaction or change occurred. Search Console
+ownership, Branding draft/published/verification state, Audience production state,
+verification applicability and console limits remain unobserved. T066 is open.
+
+Quickstart now includes the approved exact Branding fields, Search Console TXT flow,
+separate brand/scope/publication evidence, and the secure consent/rotation/normal-cron
+sequence. Google's current documentation was checked; the personal-use exception is
+documented as conditional, not asserted for this business deployment. The owner was
+asked to report the existing project's actual console statuses or blocker.
+
+No fresh consent command was started before establishing the production prerequisite.
+No credentials were read into output, provisioned, revoked or replaced. The prior
+Testing grant and scheduled-health evidence remain historical evidence only; T067
+is open. **57/67 tasks complete.** No task is closed by preparing this handoff.
+
+Validation: `pnpm exec vitest run --project tooling scripts/tests/consent.test.ts`
+passes both existing tests (loopback/offline/state/PKCE/scopes and partial-grant
+rejection). `git diff --check` passes. These checks establish helper readiness only,
+not live consent or production acceptance. No executable behavior changed. Both
+implementation extension hooks are optional Git commits and were left unrun.
+
 ## 2026-11-17 — T065 approved and published
 
 The owner explicitly selected “Approve wording and publish these pages” after receiving

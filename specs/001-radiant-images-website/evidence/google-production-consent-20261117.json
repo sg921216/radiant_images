@@ -1,0 +1,40 @@
+{
+  "observedAt": "2026-11-17T18:56:16.465Z",
+  "branding": { "status": "verified and shown to users", "evidence": "owner-reported" },
+  "audience": { "status": "In production", "evidence": "owner-reported" },
+  "scopeVerification": {
+    "warning": "This app hasn't been verified by Google",
+    "resolution": "pending"
+  },
+  "consent": {
+    "scopes": ["gmail.send", "gmail.settings.basic"],
+    "refreshStatus": 200,
+    "sendAsStatus": 200,
+    "intendedPrimarySenderVerified": true
+  },
+  "worker": {
+    "name": "radiant-images-api",
+    "version": "2ecf83f7-00c0-4471-a2bf-aca16112359b",
+    "changedSecrets": ["GMAIL_REFRESH_TOKEN"],
+    "workersDev": false,
+    "previewUrls": false,
+    "customDomains": [],
+    "schedules": ["*/5 * * * *", "0 3 * * *"]
+  },
+  "verification": {
+    "invocation": "manual-production-do",
+    "gmail": "verified",
+    "healthAt": "2026-11-17T18:56:10.936Z",
+    "maintenance": "ok",
+    "backup": "ok",
+    "monitorIssues": [],
+    "recoveryBytes": 27122,
+    "realEmailSent": false,
+    "normalPostRotationCron": "pending"
+  },
+  "cleanup": {
+    "localTokenRemoved": true,
+    "localEnvContainsRefreshToken": false,
+    "temporaryOperatorDeleted": true
+  }
+}

@@ -2,6 +2,99 @@
 
 This guide proves the feature works against the [spec](./spec.md) acceptance scenarios. It is a run/validation guide — implementation detail lives in `tasks.md` and the code.
 
+## 2026-11-17 — Google production handoff (T066 → T067)
+
+**18:56 UTC installed state (supersedes pending-token notes below):** Owner confirms
+Audience **In production** and verified published branding. Both Gmail scopes were
+granted freshly and `GMAIL_REFRESH_TOKEN` was installed on private API version
+`2ecf83f7-00c0-4471-a2bf-aca16112359b` via stdin. Real deployed manual daily health
+reports Gmail `verified` at 18:56:10.936 UTC; independent S3 monitoring passes. The
+temporary operator and local token file are removed; no duplicate token remains in
+`.env.acceptance`. The old Testing grant's November 23 expiry is superseded by this
+replacement. Production tokens remain revocable; keep existing failure monitoring.
+
+T066 still needs resolution/documentation of the unverified-app scope warning and
+applicable limits/exemption. T067 awaits the normal November 18 03:00 UTC scheduled
+Gmail-health run (November 17 22:00 EST); a manual DO invocation is not that evidence.
+Recheck using `node --import tsx .wrangler/acceptance/s3-snapshot.mjs latest` with the
+existing ignored local read-only S3 setup, and retain sanitized health/backup timestamps.
+
+**Latest owner report:** Branding/Audience were configured, the ownership issue was
+resolved, and Google now says “Your branding has been verified and is being shown to
+users.” Brand approval is established by that owner report. Exact Audience production
+status, remaining scope-verification requirements and limits still need confirmation;
+brand verification alone does not establish them. A fresh local consent helper is
+running for owner completion. No replacement grant is installed yet. The unavailable
+console state described below is historical, before this owner report.
+
+**18:53 UTC consent update:** The new grant was received locally, refresh succeeds,
+both scopes are present and the intended primary sender is confirmed via HTTP 200
+send-as lookup. The owner still sees Google's unverified-app access warning. Exact
+Audience publishing status and the applicable scope-verification path remain unresolved.
+The fresh token is in ignored `.gmail-refresh-token.secret`, not yet provisioned;
+preserve it until provisioning succeeds, then remove it. The deployed grant is unchanged.
+
+The owner has resumed Google production setup; the earlier deferral of T066/T067 is
+superseded. Manual human/device acceptance remains deferred. In this session browser
+discovery reported `The browser access host is unavailable`, and selecting Chrome
+returned `Computer Use was not approved to use Google Chrome`. No Google console
+status, ownership verification, production publication or new grant was observed.
+
+In the **existing production-bound Google Cloud project**, open Google Auth Platform
+→ Branding and use these approved values:
+
+| Field | Value |
+| --- | --- |
+| App name | Radiant Images |
+| User support email | `radiantimages.ct@gmail.com`, if available to the project's signed-in administrator |
+| Application home page | `https://radiantimagesct.com/` |
+| Application privacy policy | `https://radiantimagesct.com/privacy` |
+| Authorized domain | `radiantimagesct.com` |
+
+If the support address is unavailable, resolve project/account access or obtain an
+owner-selected monitored support address; do not substitute another address by guess.
+Keep the existing developer contact unless the owner changes it. No terms URL has been
+approved; do not invent one or reuse the privacy URL as a terms page.
+
+1. Verify `radiantimagesct.com` in Google Search Console with the Google account that
+   manages the project. For a Domain property, use Google's exact generated TXT record
+   in Cloudflare DNS and return to Search Console to verify. Nameserver correctness is
+   separate from Google ownership. Record the actual verified status; no TXT value is
+   available in this session.
+2. Save Branding. If the console offers Draft Branding, Verify Branding or Publish
+   branding, record each actual status and complete the applicable flow. Saving fields
+   alone does not establish published/verified branding.
+3. Confirm Data Access contains `gmail.send` and `gmail.settings.basic`, and preserve
+   the existing web-client callback `http://127.0.0.1:8085/callback` plus its existing
+   private-login redirect. Set Audience to **In production** and read back the status.
+4. Record Verification Center's exact requirements, pending reviews, warnings and user
+   cap. Google lists a personal-use exception for fewer than 100 users; applicability
+   to this deployment is not established. An ordinary Gmail account is not an Internal
+   Workspace app. `gmail.settings.basic` remains restricted. Production publishing,
+   brand approval and scope verification are separate evidence items.
+5. Once T066's requirements are resolved, run
+   `node --env-file=.env.acceptance --import tsx scripts/gmail-consent.ts` from this
+   repository. The owner opens the newly printed URL, signs into the intended sender
+   and grants **both** permissions. The helper requires state/PKCE and both scopes and
+   writes only the ignored `.gmail-refresh-token.secret`. Do not paste tokens into chat.
+6. Provision the new refresh token through protected file/stdin as `GMAIL_REFRESH_TOKEN`
+   on `apps/api/wrangler.acceptance.toml`; preserve existing Google client credentials
+   and sender configuration. Verify the intended send-as address. Then record a real
+   normal `0 3 * * *` UTC scheduled Gmail-health result after the rotation, including
+   its timestamp/version. A manual scheduler call is preliminary evidence only.
+7. After successful provisioning, remove transient local token files. Record consent
+   time, scope names and sanitized health outcomes only. Production refresh tokens can
+   still be revoked/expire; retain existing failure monitoring and recovery procedures.
+
+T066/T067 remain unchecked until the respective evidence exists. The old Testing grant
+still has its recorded November 23, 21:28 EST expiry estimate. No private application
+release or real email send is required for this handoff.
+
+Checked against Google's [brand verification guidance](https://developers.google.com/identity/verification/authentication-verification),
+[verification exceptions](https://support.google.com/cloud/answer/13464323?hl=en),
+[Gmail scopes](https://developers.google.com/workspace/gmail/api/auth/scopes) and
+[token expiry guidance](https://developers.google.com/identity/protocols/oauth2#expiration).
+
 ## 2026-11-17 — Homepage/privacy preparation for Google (T065)
 
 The owner confirms the domain connection is complete for `radiantimagesct.com`, including

@@ -1,5 +1,22 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 18:56 UTC production consent:** Owner confirms verified published Branding
+and Audience **In production**. Fresh consent grants both Gmail scopes; replacement
+Worker secret is installed and deployed manual daily Gmail health verifies the intended
+sender. Independent monitoring passes. Temporary operator/local token are removed.
+T066 remains open for the scope-verification warning/applicable limits; T067 awaits
+the normal November 18 03:00 UTC scheduled health. **57/67 complete**. See acceptance.md.
+
+- [X] Obtain both scopes with fresh consent while Audience is In production (T067 partial).
+- [X] Install replacement secret, verify deployed manual Gmail health, and remove transient token (T067 partial).
+- [ ] Verify normal post-rotation daily scheduled Gmail health at/after November 18 03:00 UTC (T067 remaining).
+
+**2026-11-17 Google production continuation:** The owner resumed T066 then T067;
+earlier Google deferrals below are historical. Manual checks stay deferred. Browser
+access is unavailable and selecting Chrome was denied, so no console state/change or
+new consent is established. Quickstart contains the exact Branding/ownership and
+secure consent handoff. Both tasks remain open; **57/67 complete**. See acceptance.md.
+
 **2026-11-17 T065 homepage/privacy implementation:** The owner confirms domain connection
 complete for `radiantimagesct.com` (Cloudflare and Google public DNS nameservers) and selects
 `radiantimages.ct@gmail.com` as public contact. Standalone React-rendered informational pages
