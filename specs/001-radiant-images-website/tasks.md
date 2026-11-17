@@ -1,5 +1,10 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 moodboard update (FR-007).** T015 and T022 share the brand styles and
+homepage introduction with T065's standalone pages. T029 and T030 carry the serif
+treatment into print and PDF pricing. The updated theme passed local build and
+public-page checks. T061 retains the screen-reader and performance checks. T063
+retains the real-device and final print/PDF reviews. [Theme verification](acceptance.md#moodboard-theme-verification)
 
 **2026-11-17 supplied-content intake:** Reviewed the portfolio, business card, sprig,
 moodboard, pricing guide and both READMEs; preserved originals. Prepared 17 local,
@@ -604,7 +609,8 @@ T059 and T060 can run concurrently after T058; their first successful execution 
 | FR-001/002                   | T017, T020                                                |
 | FR-003/004                   | T007, T022, T024                                          |
 | FR-005                       | T014, T021, T032–T036                                     |
-| FR-006/007                   | T015, T020, T022, T029                                    |
+| FR-006                       | T020, T022, T029                                          |
+| FR-007                       | T015, T022, T029, T030, T061, T063, T065                  |
 | FR-008–011                   | T026–T031                                                 |
 | FR-012–014                   | T037–T042                                                 |
 | FR-015–017                   | T016–T019, T023                                           |

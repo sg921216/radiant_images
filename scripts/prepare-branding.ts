@@ -9,6 +9,7 @@ validateBrandingConfig(config);
 const output = resolve('apps/web/dist/branding');
 await mkdir(output, { recursive: true });
 // Refuse stale or unrelated output instead of accidentally publishing application files.
+const themeImages = ['lavender-sprig.webp', 'stationery-480.webp', 'stationery-960.webp'];
 const allowed = [
   'index.html',
   'privacy.html',
@@ -16,6 +17,7 @@ const allowed = [
   'styles.css',
   'logo-320.webp',
   'logo-640.webp',
+  ...themeImages,
   '_headers',
   'robots.txt',
   'sitemap.xml',
@@ -32,9 +34,13 @@ for (const [path, file] of [
 }
 await writeFile(
   resolve(output, '404.html'),
-  '<!doctype html><html lang="en"><meta charset="utf-8"><title>Page not found | Radiant Images</title><h1>Page not found</h1><a href="/">Return home</a></html>',
+  '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | Radiant Images</title><link rel="stylesheet" href="/styles.css"></head><body><main><h1>Page not found</h1><a href="/">Return home</a></main></body></html>',
 );
-await copyFile('apps/web/app/styles/branding.css', resolve(output, 'styles.css'));
+const styles = await Promise.all(
+  ['brand.css', 'branding.css'].map((name) => readFile(`apps/web/app/styles/${name}`, 'utf-8')),
+);
+await writeFile(resolve(output, 'styles.css'), styles.join('\n'));
+for (const file of themeImages) await copyFile(`apps/web/public/${file}`, resolve(output, file));
 for (const size of [320, 640])
   await copyFile(`apps/web/assets/logo-${size}.webp`, resolve(output, `logo-${size}.webp`));
 await writeFile(

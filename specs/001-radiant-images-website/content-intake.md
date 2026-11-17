@@ -18,7 +18,7 @@ Scope: local preparation for T063, with candidate alt-text evidence for T061. Th
 
 The moodboard labels: Warm Linen `#F3EDE4`, Vintage Wine `#814F5A`, Dusty Sage `#9AA092`, Antique Olive `#777D6D`, Mushroom Taupe `#B9A99E`, Espresso `#403A38`. Typography references are Bodoni Moda (or similar serif), Brittany Signature (or similar script), and Lora or Source Serif for readable body text. These are references, not bundled/licensed font files.
 
-Current theme uses sage `#9CAF88`, olive `#6E7A5F`, cream `#F9F6F0`, ink `#2F3431`, and rose `#EADBC8`: broadly compatible, but not the exact moodboard. A palette change needs contrast verification across controls, focus, text and errors; no untested global recoloring is included in this intake.
+After intake, the owner selected the moodboard as the theme reference. The local builds now use its six colors and serif typography. The supplied sprig provides a decorative accent. A generated stationery still life illustrates both homepages. Photo selection and permission tracking continue through the portfolio intake below. [Artwork provenance](../../apps/web/assets/README.md#moodboard-artwork-on-the-homepage) · [Theme verification](acceptance.md#moodboard-theme-verification)
 
 The business card and prior owner-selected contact take precedence over decorative moodboard mockup contact details. Keep the approved logo and domain pending an explicit correction.
 
@@ -60,7 +60,7 @@ Upload only approved selections through the authenticated gallery pipeline so th
 
 Completed content substeps: source inventory and visual brand/card/photo review; 17 bounded metadata-stripped upload candidates and draft alt text; supported pricing draft and mismatch/policy register. T061/T063 remain open for final selection, permissions, content/policy decisions and existing human/device/release gates. Existing Google review, scheduled-health and operations tasks are unaffected. Overall full-task count remains 57/67.
 
-## Validation recorded
+## Validation recorded at intake
 
 - 17/17 original and candidate SHA-256 pairs verified after preparation; candidates total 22,589,825 bytes.
 - 17/17 prepared JPEGs fully decoded and passed byte/pixel/metadata checks; 17/17 alt descriptions passed 1–200 character bounds.

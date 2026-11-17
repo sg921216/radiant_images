@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import * as React from 'react';
+import { HomeIntro } from '../components/HomeIntro';
 
 export interface BrandingConfig {
   origin: string;
@@ -158,21 +159,16 @@ export function PrivacyPolicy({ contactEmail }: { contactEmail: string }) {
 function BrandingHome({ contactEmail }: { contactEmail: string }) {
   return (
     <>
-      <section className="hero">
-        <p className="eyebrow">Maternity · Newborn · Family</p>
-        <h1>
-          The days are fleeting.
-          <br />
-          <em>Keep the feeling.</em>
-        </h1>
-        <p>Photography by Rebekah, celebrating the people and moments you hold close.</p>
+      <HomeIntro>
         <a className="button" href={`mailto:${contactEmail}`}>
           Let’s plan your session
         </a>
-      </section>
+      </HomeIntro>
       <section>
-        <p className="eyebrow">Your next chapter</p>
-        <h2>A little of life, kept forever.</h2>
+        <div className="section-heading">
+          <p className="eyebrow">Your next chapter</p>
+          <h2>A little of life, kept forever.</h2>
+        </div>
         <div className="collections">
           <article>
             <h3>Maternity</h3>
@@ -252,12 +248,18 @@ export function renderBrandingPage(path: string, config: BrandingConfig): string
               />
             </a>
             <nav aria-label="Main navigation">
-              <a href="/">Home</a>
-              <a href="/privacy">Privacy</a>
+              <a href="/" aria-current={path === '/' ? 'page' : undefined}>
+                Home
+              </a>
+              <a href="/privacy" aria-current={path === '/privacy' ? 'page' : undefined}>
+                Privacy
+              </a>
               <a href={`mailto:${config.contactEmail}`}>Contact</a>
             </nav>
           </header>
-          <main id="main">{content}</main>
+          <main id="main" className={path === '/privacy' ? 'policy' : undefined}>
+            {content}
+          </main>
           <footer>
             <a href="/">Radiant Images</a>
             <p>Maternity · Newborn · Family</p>

@@ -59,6 +59,21 @@ wired in, with protected-upload tests and ten passing synthetic cases through li
 measurement in the deployed environment and other release gates remain open; no application
 deployment or paid activation was performed.
 
+## Moodboard theme (FR-007)
+
+The application imports `brand.css` through `theme.css`. The standalone build combines
+the same base stylesheet with `branding.css`. Display text uses local Bodoni Moda,
+Bodoni MT or Didot with a Times fallback. Body text uses local Lora, Source Serif 4 or
+Georgia with a generic serif fallback. The approved logo supplies the script signature.
+
+Both homepages render `HomeIntro` with their own contact action. The decorative image
+has empty alt text and 480- and 960-pixel WebP sources. At 700 CSS pixels and below
+the image appears above the text. The standalone asset allowlist includes both sizes
+and the lavender sprig used on wider screens. Print pricing uses a white background
+and dark text. The PDF uses Times-Roman, Espresso text, a Vintage Wine brand line and
+Mushroom Taupe rules. All formats still use one published pricing revision.
+[Shared styles](../../apps/web/app/styles/brand.css) · [Artwork sources](../../apps/web/assets/README.md#moodboard-artwork-on-the-homepage)
+
 ## Summary
 
 **2026-11-17 bounded branding implementation (T065):** The owner confirms domain
@@ -515,10 +530,11 @@ apps/
 │   │   │   └── admin/            # login, dashboard, gallery, banners, pricing, settings,
 │   │   │                         #   clients, clients.$id, templates, checklist, questionnaire
 │   │   ├── components/           # Header, Banner, Gallery, PricingSection, BookNow, forms…
-│   │   ├── lib/                  # api client, auth session store, pdf renderer, print styles
-│   │   ├── styles/               # tailwind theme (palette tokens), print.css
+│   │   ├── lib/                  # api client, auth session store, pricing PDF renderer
+│   │   ├── styles/               # brand.css, theme.css, branding.css, print.css
 │   │   └── root.tsx
-│   ├── public/                   # logo, favicon, _headers
+│   ├── assets/                   # approved logo and local design references
+│   ├── public/                   # decorative WebP assets and _headers
 │   ├── worker.ts                 # HTML fallback routing/security headers only; no domain API
 │   ├── wrangler.toml             # build/client assets binding; separate frontend Worker
 │   ├── react-router.config.ts    # ssr:false, prerender list, basename
@@ -534,7 +550,7 @@ apps/
 │   ├── wrangler.toml             # D1, R2, rate-limit bindings
 │   └── tests/                    # vitest-pool-workers integration + contract tests
 packages/
-└── shared/                       # Zod schemas, types, constants (palette, limits, enums)
+└── shared/                       # Zod schemas, types, limits, enums
     └── src/
 e2e/                              # Playwright scenarios (quickstart.md maps to these)
 .github/workflows/

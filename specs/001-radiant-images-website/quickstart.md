@@ -154,7 +154,9 @@ The owner confirms the domain connection is complete for `radiantimagesct.com`, 
 correct nameservers seen in Cloudflare and Google public DNS. Public contact is
 `radiantimages.ct@gmail.com`. This report is not Google Search Console ownership evidence.
 
-The isolated informational site uses the approved logo and the existing cream/sage palette.
+The local informational build uses the approved logo and shares the application's moodboard
+palette, serif typography and responsive homepage artwork. The production evidence below
+records the earlier T065 deployment.
 Its homepage describes photography and the private owner application; its privacy policy
 explains actual Google sign-in/Gmail use, both Gmail scopes, send-as verification, revocation,
 client information, recovery-copy retention, provider delays and separate mailbox/Pixieset
@@ -572,9 +574,9 @@ full SC-004 benchmark. Step 2 verifies layout only, not the three-second timing 
 ### Public site (User Stories 1, 2)
 
 1. Open `http://localhost:5173/`. Header shows centered logo, Maternity/Newborn/Family left, About/Contact/FAQ right. — US1-AS1
-2. Resize to 375 px: menu collapses to a toggle exposing all six links; gallery has no horizontal scroll. — US1-AS10, SC-004
+2. Check both homepages at 320, 768 and 1280 px. The stationery image appears above the introduction at 320 px and beside it at 768 and 1280 px. Verify the linen page, espresso text, wine primary action and visible keyboard focus. On the application homepage at 375 px, open the menu, reach all six links and check that the gallery fits the viewport. — US1-AS10/12, FR-007/033, SC-004
 3. **US1**: Open `/newborn` and verify intro, "How It Works" steps, and newborn-tagged gallery. **US2 / T031**: Also verify its Pricing section lists current packages; repeat on the other service pages and confirm Home-to-pricing takes fewer than three clicks. — US1-AS2, US2-AS1, SC-001
-4. In the Pricing section click **Print** → print preview shows all three shoot types, no nav. Click **Download PDF** → PDF opens; footer shows revision id matching `GET /pricing`. — US2-AS2/3, SC-006
+4. In the Pricing section click **Print** → print preview shows all three shoot types, no nav. Click **Download PDF** → PDF opens; footer shows revision id matching `GET /pricing`. Check legibility, page breaks and clipping in print and PDF. The PDF uses espresso text, wine branding and taupe dividers. — US2-AS2/3, FR-007, SC-006
 5. **US1**: Click **Book Now** on Home and each service page → `/contact`. **US2 / T031**: Repeat from each Pricing section. — US1-AS3, US2-AS5
 6. Open `/faq`: entries for what to expect, what to wear, payment timing, deposits. — US1-AS4
 

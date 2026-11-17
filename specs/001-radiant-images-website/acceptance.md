@@ -1,7 +1,23 @@
 # Implementation evidence: Radiant Images
 
+## Moodboard theme verification
 
-**2026-11-17 supplied-content intake:** Reviewed the portfolio, business card, sprig,
+On 2026-11-17, local verification covered FR-007 on the seven prerendered public app
+routes and the standalone homepage and privacy page. At 320, 768 and 1280 CSS pixels,
+Chrome reported the Warm Linen page background, no horizontal overflow and zero
+violations in the automated axe scans. The homepage still life decoded in both
+builds. Keyboard checks reached the skip link on both homepages. The mobile menu button opened the navigation,
+and Escape closed it. Desktop and mobile screenshots were reviewed.
+
+The web build, standalone build, web type check, 55 web tests and two branding-build
+tests passed. These local checks cover the theme revision. The recorded T065
+deployment predates it. T061 and T063 still cover screen-reader, real-device,
+performance and final printed/downloaded pricing review.
+[Review steps](quickstart.md#public-site-user-stories-1-2)
+
+## Supplied-content intake (2026-11-17)
+
+Reviewed the portfolio, business card, sprig,
 moodboard, pricing guide and both READMEs; preserved originals. Prepared 17 local,
 metadata-stripped JPEG upload candidates with draft alt text and a schema-valid draft
 for the three supported pricing categories. See [content-intake.md](content-intake.md)

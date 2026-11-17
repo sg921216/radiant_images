@@ -87,14 +87,21 @@ Use the following websites for content ideas. Pay particular attention to how th
 
 ## Look and Feel
 
-Use a soft, warm, organic green palette to create a welcoming sense of comfort, tenderness, and natural warmth for families and expecting mothers. Keep the background bright, clean, and airy so the photography stands out. Use muted sage or olive as subtle anchors for buttons, accents, and borders.
+Use the supplied `apps/web/assets/Radiant Images Brand Moodboard.png` as the visual reference.
+Keep pages light and let photography lead. Pair Bodoni-style serif headings with readable
+Lora- or Source Serif-style body text and letter-spaced navigation. The signature appears
+in the approved Radiant Images logo.
 
-### Warm Organic Palette
+| Color | Hex | Role |
+| --- | --- | --- |
+| Warm Linen | `#F3EDE4` | Page background and light text on dark surfaces |
+| Vintage Wine | `#814F5A` | Primary actions, active links and focus on light surfaces |
+| Dusty Sage | `#9AA092` | Tinted collection and announcement backgrounds |
+| Antique Olive | `#777D6D` | Field borders and secondary accents |
+| Mushroom Taupe | `#B9A99E` | Dividers and neutral collection tints |
+| Espresso | `#403A38` | Body text and dark footers |
 
-| Element | Color name | Hex code | Purpose |
-| --- | --- | --- | --- |
-| Primary accent | Soft Sage | `#9CAF88` | Booking buttons, main navigation links, or active states |
-| Secondary accent | Muted Olive | `#6E7A5F` | Footer backgrounds, contact forms, or structural subheadings |
-| Light background | Warm Cream / Linen | `#F9F6F0` | Main website background; keeps the site bright and soft |
-| Dark neutral | Charcoal / Soft Slate | `#2F3431` | Body text and main logo; easier on the eyes than pure black |
-| Highlight | Soft Linen Rose | `#EADBC8` | Soft borders or backdrop overlays behind favorite portfolio cards |
+The application and informational homepages pair introductory text with a decorative
+stationery still life. On narrow screens the image sits above the text. A lavender sprig
+accents section headings on wider screens. The portfolio shows the owner's selected
+session photographs. [Artwork sources](../apps/web/assets/README.md#moodboard-artwork-on-the-homepage)

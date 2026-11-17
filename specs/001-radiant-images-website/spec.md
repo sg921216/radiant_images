@@ -53,6 +53,7 @@ A prospective client (typically an expecting mother or a parent) lands on the Ra
 9. **Given** email dispatch is definitely rejected before provider acceptance, **When** a visitor submits a valid inquiry, **Then** the visitor is shown a clear "we couldn't send your inquiry, please try again" message rather than a success confirmation, and their entered values are preserved.
 10. **Given** a visitor is on a narrow (mobile) viewport, **When** they load any public page, **Then** the gallery reflows to fit the screen and navigation remains usable via a collapsed menu.
 11. **Given** a send may have reached the provider but its result is lost or times out, **When** the visitor receives feedback, **Then** the form preserves their values, states that delivery cannot be confirmed, and displays the owner's approved public contact email as selectable text and an email link without inquiry content. Submit stays disabled while receipt is unknown. After Rebekah checks, the visitor can finish if it arrived, or acknowledge that she asked them to send again and select **Start a new submission**; this retains the draft, requires a fresh CAPTCHA and manual Submit, and preserves server validation/duplicate/rate-limit checks. Opening the email link or waiting alone never enables resend.
+12. **Given** either homepage is open, **When** a visitor views it on desktop or mobile, **Then** the introductory text appears beside the stationery image on desktop and below it on mobile. The primary action remains visible and keyboard accessible, and decorative artwork is skipped by assistive technology (FR-007, FR-033).
 
 ---
 
@@ -179,7 +180,7 @@ Within the admin area Rebekah maintains a lightweight list of clients (people sh
 - **FR-004**: System MUST provide an About page and an FAQ page; the FAQ MUST cover what to expect, what to wear, when payment is due, and deposits.
 - **FR-005**: System MUST display a responsive image gallery on the home page showing all published gallery images, and a responsive gallery on each service page showing only the images tagged with that shoot type; all galleries adapt to desktop, tablet, and mobile viewports.
 - **FR-006**: System MUST display a **Book Now** control on the home page and on each service page (including within its Pricing section), which routes to the Contact page.
-- **FR-007**: System MUST render all public pages using the specified warm organic palette (Soft Sage `#9CAF88`, Muted Olive `#6E7A5F`, Warm Cream `#F9F6F0`, Charcoal `#2F3431`, Soft Linen Rose `#EADBC8`) with a bright, airy presentation that emphasizes photography.
+- **FR-007**: The application and standalone informational pages MUST follow the Radiant Images brand moodboard. Use Warm Linen `#F3EDE4` for page backgrounds, Espresso `#403A38` for text, Vintage Wine `#814F5A` for primary actions, and Dusty Sage `#9AA092`, Antique Olive `#777D6D` and Mushroom Taupe `#B9A99E` for supporting surfaces and borders. Use serif headings and readable serif body text. Both homepages MUST show the approved logo and a responsive decorative stationery image. Print and PDF pricing MUST retain the serif treatment and remain legible on paper. Owner-selected session photographs remain subject to QR-001. [Design brief](../../intent/radiant-images-website-brief.md#look-and-feel)
 
 **Pricing**
 

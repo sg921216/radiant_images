@@ -108,7 +108,7 @@ invitation and require the existing manual reconciliation without blind resend.
 | FR-004          | `/about` `/faq`; `PUT /admin/faq`                                                                                                     |
 | FR-005          | `GET /public/bootstrap.gallery` filtered client-side by tag                                                                           |
 | FR-006          | `BookNow` component → `/contact`                                                                                                      |
-| FR-007          | Tailwind theme tokens (palette)                                                                                                       |
+| FR-007          | Shared moodboard styles and homepage artwork (presentation only)                                                                      |
 | FR-008–010      | `GET /pricing`; `PricingSection`, `print.css`, `PricingPdf`                                                                           |
 | FR-011          | `GET/PUT /admin/pricing`                                                                                                              |
 | FR-012, 013     | `GET /public/bootstrap.banner` (null when none)                                                                                       |

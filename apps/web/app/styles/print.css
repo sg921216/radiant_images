@@ -9,7 +9,7 @@
 }
 .price-card {
   padding: 2rem;
-  background: #fffdf9;
+  background: var(--paper);
   border: 1px solid var(--line);
 }
 .price-card ul {
@@ -17,7 +17,7 @@
   padding-left: 1.25rem;
 }
 .price {
-  font-family: Georgia, serif;
+  font-family: var(--display);
   font-size: 2rem;
 }
 .pricing-tools {

@@ -36,3 +36,16 @@ gaps. Originals remain unchanged and must not be copied into public assets. Prep
 upload candidates live only in ignored `.wrangler/asset-review/uploads/`; the tracked
 evidence manifest records their hashes and proposed alt text. All 17 supplied photos
 are maternity images. Final selection and usage permission remain T063 gates.
+
+## Moodboard artwork on the homepage
+
+The collection heading uses a 200-pixel WebP detail from the supplied
+`Monochrome Lavender Sprig Sketch.png`. The decorative stationery still life was
+created with the built-in ImageGen tool. Both homepages use the same responsive
+480- and 960-pixel WebP versions.
+
+[Lavender drawing](../public/lavender-sprig.webp) · [Small still life](../public/stationery-480.webp) · [Large still life](../public/stationery-960.webp)
+
+Generation prompt:
+
+> A warm, natural-light editorial still life for a photography studio. Close-up of a deckle-edged ivory envelope on loosely folded dusty sage linen, sealed with a vintage wine wax seal embossed with a lavender sprig. A few dried lavender stems rest diagonally across the envelope. Square composition, rich tactile detail, soft afternoon shadows, quiet nostalgic mood. No lettering or people.
