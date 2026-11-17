@@ -61,6 +61,21 @@ deployment or paid activation was performed.
 
 ## Summary
 
+**2026-11-17 bounded branding implementation (T065):** The owner confirms domain
+connection for `radiantimagesct.com` and supplies public contact `radiantimages.ct@gmail.com`.
+Prepare a separate static-only Worker for the informational homepage/privacy pages while
+the React application/API stay private. React server rendering at build time produces a
+small allow-listed asset directory; no browser JavaScript, runtime code, resource bindings,
+sign-in flow or application data is included. This temporary publication boundary follows
+T065's existing permission to host branding separately and does not replace the two-deployable
+application design. The build uses `apps/web/branding.json`; the dedicated Wrangler config
+selects `radiant-images-branding` and only the connected apex custom domain. Output lives
+in `apps/web/dist/branding` so ordinary React Router builds cannot erase it. The owner
+approved the content and publication; both public URLs pass HTTPS/browser checks on
+version `b5082e76-8a73-4a20-8a75-ca903bcab0ed`, with recursive negative-cache limitations
+recorded in acceptance.md. Google Search Console verification and T066/T067 remain open.
+Manual acceptance is deferred as requested. No application release gate is waived.
+
 **Controlled provider rehearsal (2026-11-14)**: The owner asked to continue with the next
 step after the scoped proposal to verify the deployed upload pipeline. Use a temporary
 private Worker (workers.dev, preview URLs and routes disabled), disposable D1/R2 and the

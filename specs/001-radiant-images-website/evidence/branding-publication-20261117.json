@@ -1,0 +1,86 @@
+{
+  "target": "https://radiantimagesct.com",
+  "resolvedAddress": "104.21.96.36",
+  "results": [
+    {
+      "path": "/",
+      "width": 320,
+      "accessibilityViolations": 0
+    },
+    {
+      "path": "/privacy",
+      "width": 320,
+      "accessibilityViolations": 0
+    },
+    {
+      "path": "/",
+      "width": 768,
+      "accessibilityViolations": 0
+    },
+    {
+      "path": "/privacy",
+      "width": 768,
+      "accessibilityViolations": 0
+    },
+    {
+      "path": "/",
+      "width": 1280,
+      "accessibilityViolations": 0
+    },
+    {
+      "path": "/privacy",
+      "width": 1280,
+      "accessibilityViolations": 0
+    }
+  ],
+  "manualReview": "deferred",
+  "deployed": true,
+  "recordedAt": "2026-11-17T18:13:01.361004+00:00",
+  "worker": "radiant-images-branding",
+  "version": "b5082e76-8a73-4a20-8a75-ca903bcab0ed",
+  "ownerContentAndPublicationApproved": true,
+  "homepage": "https://radiantimagesct.com/",
+  "privacy": "https://radiantimagesct.com/privacy",
+  "domainConnection": "active Cloudflare zone; owner-confirmed nameservers",
+  "dns": {
+    "authoritativeAndCloudflareResolver": "resolved",
+    "googleAndLocalRecursive": "negative cache observed at initial verification",
+    "tlsCertificateVerification": true,
+    "googlePublicResolver": "resolved after initial negative cache; 8.8.8.8 and DoH observed",
+    "localRecursive": "upstream negative cache still observed; clearing workstation cache did not change upstream response"
+  },
+  "privateApi": {
+    "workersDev": false,
+    "previewUrls": false,
+    "customDomains": []
+  },
+  "googleSearchConsole": "not verified",
+  "googleProduction": "pending T066",
+  "freshConsent": "pending T067",
+  "focusedTests": {
+    "files": 2,
+    "passed": 11
+  },
+  "manualChecks": "deferred",
+  "assetsSha256": {
+    "404.html": "0c220d0de1b0fec12003ef6837f2a6e89f7d160ef8f9d342c5f78f934ef98ea8",
+    "_headers": "019a3395958ed2d35358e6b00f20deaebe08d7630a072e4b4d8e7a53212bb6c0",
+    "index.html": "645f090f889ebe512efb1ba5e9f64b022241a6d50cb7febc844d0b8b73d141c3",
+    "logo-320.webp": "1afb073bbb46db289338bbe8ef608a6e2e009972c86d1a96f21e80f93ae726c8",
+    "logo-640.webp": "9d726aff762a9dbc1061e04c4b544fd152cf3b60633affbd2e56627a8afa815b",
+    "privacy.html": "22a7c52a1559b48fe122a827c37bb5d59f039b660d594e70248723f7e33f8a37",
+    "robots.txt": "bf4d9e242b9807cb48f5c2df0aa1eba18f961841c2a1c125628f070b5cb2b160",
+    "sitemap.xml": "4c6dad3312e9be82825f81a4ffd5b90229422b65346996235171ab97e059b7c7",
+    "styles.css": "8758831eeee9303867d2edf44660f8e92b399d3a90a5cb5a103c1cb9413e9cfa"
+  },
+  "zoneRoutes": [],
+  "finalQuality": {
+    "command": "pnpm check",
+    "passed": true,
+    "testFiles": 67,
+    "tests": 316,
+    "formatLintTypesBuilds": "pass",
+    "sourcePrivacy": "pass",
+    "artifactPrivacy": "pass"
+  }
+}

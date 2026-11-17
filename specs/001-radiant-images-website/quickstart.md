@@ -2,6 +2,71 @@
 
 This guide proves the feature works against the [spec](./spec.md) acceptance scenarios. It is a run/validation guide — implementation detail lives in `tasks.md` and the code.
 
+## 2026-11-17 — Homepage/privacy preparation for Google (T065)
+
+The owner confirms the domain connection is complete for `radiantimagesct.com`, including
+correct nameservers seen in Cloudflare and Google public DNS. Public contact is
+`radiantimages.ct@gmail.com`. This report is not Google Search Console ownership evidence.
+
+The isolated informational site uses the approved logo and the existing cream/sage palette.
+Its homepage describes photography and the private owner application; its privacy policy
+explains actual Google sign-in/Gmail use, both Gmail scopes, send-as verification, revocation,
+client information, recovery-copy retention, provider delays and separate mailbox/Pixieset
+lifecycle boundaries. It has no forms, application bundles, third-party scripts or API calls.
+
+Configuration: `apps/web/branding.json`. Build from the repository root:
+
+```powershell
+pnpm branding:build
+pnpm exec wrangler deploy --config apps/web/wrangler.branding.jsonc --dry-run
+pnpm exec wrangler dev --config apps/web/wrangler.branding.jsonc --ip 127.0.0.1 --port 4193
+```
+
+Local review: `http://127.0.0.1:4193/` and `http://127.0.0.1:4193/privacy`.
+While that loopback server runs, `pnpm branding:verify` checks both pages at 320/768/1280px,
+JavaScript-disabled content, automated axe accessibility, metadata/security headers and
+404 responses for application/API URLs. Screenshots and machine-readable results go to
+ignored `.wrangler/branding-review/`. Automated checks do not replace deferred manual review.
+
+**Published, owner-approved production URLs (T065 complete):**
+
+- Homepage: `https://radiantimagesct.com/`
+- Privacy policy: `https://radiantimagesct.com/privacy`
+
+The dedicated `apps/web/wrangler.branding.jsonc` names `radiant-images-branding`, enables
+only the apex custom domain and uploads only `apps/web/dist/branding`. It contains no
+resource bindings or secrets. Both workers.dev and preview URLs are disabled. Unknown
+routes use a genuine 404; there is no SPA fallback into the private application.
+
+The owner explicitly approved the wording and publication. Version
+`b5082e76-8a73-4a20-8a75-ca903bcab0ed` serves the dedicated custom domain. Six public
+page/viewport checks pass, with normal TLS validation. `Cache-Control: no-transform`
+prevents automatically injected analytics/email transformations. For future updates,
+use the installed Wrangler identity/account checks, inspect custom-domain routing, build,
+dry-run and deploy **only** this dedicated configuration, then verify HTTPS/headers/404s.
+Do not use the
+full-application release configuration or alter the private API, CORS, OAuth callbacks,
+Gmail credentials or R2 visibility as part of branding publication.
+
+Cloudflare authoritative DNS and 1.1.1.1 return `104.21.96.36` / `172.67.172.66`.
+At the initial live check Google/local recursive resolvers cached the prior empty response. Google public DNS subsequently refreshed; the local upstream cache still returned no address.
+The public check used the independently verified address with the real hostname and TLS
+certificate checks enabled. Once recursive caches refresh, `pnpm branding:verify --public`
+uses ordinary DNS. During the recorded cache window, the reproducible PowerShell command was:
+
+```powershell
+$env:BRANDING_VERIFY_ADDRESS = '104.21.96.36'
+pnpm branding:verify --public
+Remove-Item Env:BRANDING_VERIFY_ADDRESS
+```
+
+Re-resolve before using any address override in a later run; Cloudflare addresses can change.
+T066 still requires Google Search Console ownership,
+Branding fields (including the selected support email and authorized domain), Production
+status and applicable verification. T067 requires fresh production Gmail consent and
+actual scheduled Gmail health. Domain connection and informational-page implementation
+do not establish those outcomes. T063's final photos/content and human/device checks remain deferred.
+
 **Status (2026-11-14)**: Local application, migration, synthetic provider adapters and automated
 suites are implemented under the approved T001 exception. See acceptance.md for actual
 commands/results and remaining gates. Deployed image-resource/operational-retention proof, owner content,

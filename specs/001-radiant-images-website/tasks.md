@@ -1,5 +1,26 @@
 # Tasks: Radiant Images Photography Website
 
+**2026-11-17 T065 homepage/privacy implementation:** The owner confirms domain connection
+complete for `radiantimagesct.com` (Cloudflare and Google public DNS nameservers) and selects
+`radiantimages.ct@gmail.com` as public contact. Standalone React-rendered informational pages
+are implemented in `apps/web/app/routes/branding.tsx`; `pnpm branding:build` produces only
+the two pages, 404, styles, logo assets, headers, robots and sitemap. Separate
+`apps/web/wrangler.branding.jsonc` targets only the branding Worker/custom domain, with no
+API, D1, R2, Gmail secrets or application fallback. The production application remains private.
+Eleven focused tests have demonstrated red/green, including preservation across ordinary
+application builds. Six local and six public page/viewport checks pass without JavaScript;
+automated axe finds no violations at 320/768/1280px. The owner explicitly approved wording
+and publication. Both URLs are deployed on version `b5082e76-8a73-4a20-8a75-ca903bcab0ed`.
+The public check caught automatic Cloudflare analytics injection; `no-transform` prevents
+it without changing zone-wide settings. Cloudflare authoritative DNS/1.1.1.1 resolve the new
+hostname; Google public DNS now also resolves it. Local upstream negative caching is disclosed in acceptance.md. Public TLS/browser
+checks use that verified address with normal certificate validation. T065 is complete;
+T066/T067 remain open and **57/67 complete**. Search Console ownership, broader manual
+checks and Google console changes are deferred. See quickstart.md for actual URLs/evidence.
+
+- [X] Implement and automate checks for isolated homepage/privacy assets using the selected domain/contact (T065 follow-up).
+- [X] Approve policy wording and publish/verify the genuine public URLs; Google Search Console ownership remains T066 (T065 follow-up).
+
 **2026-11-17 local logo follow-up:** The supplied `apps/web/assets/Logo.jpg` is now
 integrated into the public header through responsive 320/640-pixel WebP assets. The
 original is unchanged; the header retains its Home link, accessible brand name,
@@ -467,7 +488,7 @@ input-loss investigation and T059 remain OPEN.** No product code changed. See ac
 
 ## Deferred Google production setup (owner-requested 2026-11-16)
 
-- [ ] T065 Prepare owner-approved application homepage and privacy-policy content for Google's Branding requirements. Use an owned domain and accurately describe Radiant Images, the Gmail scopes/data use, retention/deletion, and contact details; implement the approved pages in `apps/web/app/routes/` and record their real URLs and domain-verification evidence in `specs/001-radiant-images-website/quickstart.md`. Coordinate with T023/T063; placeholder URLs or unapproved privacy copy do not satisfy this task. Keep the acceptance API private; any public page publication requires its own authorized scope.
+- [X] T065 Prepare owner-approved application homepage and privacy-policy content for Google's Branding requirements. Use an owned domain and accurately describe Radiant Images, the Gmail scopes/data use, retention/deletion, and contact details; implement the approved pages in `apps/web/app/routes/` and record their real URLs and domain-verification evidence in `specs/001-radiant-images-website/quickstart.md`. Coordinate with T023/T063; placeholder URLs or unapproved privacy copy do not satisfy this task. Keep the acceptance API private; any public page publication requires its own authorized scope.
 - [ ] T066 After T065, complete Google Auth Platform Branding with the valid application name, support email, real homepage/privacy URLs and required domain ownership. Move the external OAuth app to Production and complete any applicable Google verification requirements, recording the actual console status and any remaining limits in `specs/001-radiant-images-website/acceptance.md`. Production publishing and Google verification are separate checks; neither authorizes public application launch.
 - [ ] T067 After T066, obtain fresh owner consent for `gmail.send` and `gmail.settings.basic`, replace the temporary Testing grant through ignored local files and server-side Worker secrets, and verify the intended sender plus a real scheduled Gmail-health run. Record sanitized results and credential-lifecycle handling in `specs/001-radiant-images-website/acceptance.md` and `quickstart.md`; remove transient local token files. Testing grants expire after seven days and must not be recorded as long-lived production acceptance. This is a dependency of the remaining T001/T058/T063 operational and release checks.
 

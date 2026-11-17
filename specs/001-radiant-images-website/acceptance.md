@@ -1,5 +1,95 @@
 # Implementation evidence: Radiant Images
 
+## 2026-11-17 — T065 approved and published
+
+The owner explicitly selected “Approve wording and publish these pages” after receiving
+the concrete homepage/privacy review links. The earlier preparation-only checkpoint below
+is superseded by this publication. T065 is now complete; **57/67 tasks complete**.
+
+- Homepage: `https://radiantimagesct.com/`
+- Privacy: `https://radiantimagesct.com/privacy`
+- Worker: `radiant-images-branding`; active custom domain `radiantimagesct.com`.
+- Final version: `b5082e76-8a73-4a20-8a75-ca903bcab0ed`.
+- workers.dev and preview URLs are disabled for both branding and acceptance API. The API
+  still has no custom domains. Only the isolated static asset package was published.
+
+Before publication, connected Cloudflare reads confirmed the zone is active in the existing
+account, no Worker custom domain occupied the apex and no apex CNAME conflicted. The existing
+Wrangler identity has Workers/Routes write access; the installed 4.162.0 CLI deployed only
+the dedicated configuration. Cloudflare created its managed proxied apex AAAA record.
+No private application/API deployment, mailbox action, credential rotation, R2 exposure or
+Google console change occurred. Search Console ownership remains unverified under T066.
+
+Two observed issues were reproduced and fixed before final acceptance:
+
+1. An ordinary React Router build removed `build/branding`. A new regression reproduced
+   the missing `privacy.html`; moving output to `dist/branding` preserves it. The eleven
+   focused tests now pass, including a real ordinary application build.
+2. Cloudflare injected an analytics beacon into the first deployed HTML for browser requests.
+   The public no-script assertion failed. A failing tooling assertion then required
+   `Cache-Control: no-transform`; the response policy now prevents automatic payload changes
+   without modifying zone-wide settings. Final live checks verify no scripts/iframes/forms.
+   [Cloudflare's documented no-transform behavior](https://developers.cloudflare.com/web-analytics/get-started/).
+
+`pnpm branding:verify` and `pnpm branding:verify --public` each pass six page/viewport
+combinations at 320/768/1280px: full no-JavaScript content, contact links, one H1, no overflow,
+security headers and zero axe WCAG A/AA violations. Public and local admin, questionnaire,
+API and missing-asset paths return 404; HEAD privacy returns 200 and POST homepage returns 405.
+The live public checks use normal certificate validation and the actual HTTPS hostname.
+
+**DNS observation:** authoritative `armando.ns.cloudflare.com` and Cloudflare's 1.1.1.1
+return `104.21.96.36` and `172.67.172.66`. Google 8.8.8.8/DoH and the workstation's recursive
+resolver initially cached the previous no-address response (about 13 minutes remaining at
+18:09 UTC). The public browser run explicitly uses the independently verified Cloudflare
+address while retaining real SNI/certificate validation; it is not evidence that all recursive
+caches have refreshed. No nameserver change is needed or performed. Recheck ordinary DNS
+after its cache expires. Sanitized results are in `evidence/branding-publication-20261117.json`.
+
+The final full `pnpm check` passes 67 files / 316 tests, formatting/lint/types and both
+builds; eleven focused tests include the output-preservation regression.
+Source and artifact privacy scanning pass. Manual device, screen-reader and human timing
+checks remain deferred. T066/T067 and broader release gates remain open.
+
+**DNS follow-up:** Google's DoH and 8.8.8.8 now return both public addresses. The local
+upstream resolver still returns its earlier cached response after a workstation cache
+clear; no system DNS settings were changed. Public checks retain the disclosed address
+override, actual hostname and full certificate validation.
+
+## 2026-11-17 — T065 informational homepage/privacy prepared locally
+
+The owner confirms domain connection complete for `radiantimagesct.com` and supplies
+`radiantimages.ct@gmail.com` as public contact. Nameserver status is recorded as owner
+evidence; Google Search Console ownership is still unverified. Manual checks remain deferred.
+
+Implemented React-rendered static pages in `apps/web/app/routes/branding.tsx`, a separate
+stylesheet/configuration, strict origin/contact validation, an allow-listed asset build
+and dedicated static-only Wrangler configuration. The generated package contains nine
+files and no application scripts, admin/questionnaire fallback, API resource bindings or
+secrets. The Gmail disclosure matches `services/email.ts`: send via Gmail, read send-as
+settings for sender verification, no inbox read/settings modification. Recovery disclosure
+matches the approved 28/30/31-day policy and separates live-record/mailbox/Pixieset deletion.
+
+Red/green evidence:
+
+- `pnpm exec vitest run --project web apps/web/tests/branding.test.tsx`: nine behavior
+  failures with the empty renderer/validator, then nine passes after implementation.
+- CLI publication build initially reproduced `React is not defined` under tsx's JSX
+  transform. A tooling regression reproduced the failure; explicit React import fixes it.
+  Combined focused run: two files / ten tests pass.
+- `pnpm exec wrangler deploy --config apps/web/wrangler.branding.jsonc --dry-run`:
+  nine assets accepted, no bindings, no deployment.
+- `pnpm branding:verify`: six page/viewport combinations pass at 320/768/1280px; complete
+  content without JavaScript, no horizontal overflow, one H1 per page, configured contact,
+  CSP, no application scripts/iframes/forms. Axe WCAG A/AA scans report zero violations.
+  Admin, questionnaire, API and missing-asset requests return 404; HEAD returns 200 and
+  POST returns 405. Screenshots inspected locally; owner/device/screen-reader review deferred.
+
+Production URLs are prepared as `https://radiantimagesct.com/` and
+`https://radiantimagesct.com/privacy`; they were **not published**. Local review is available
+on port 4193. Privacy/content approval, public HTTPS checks, Google ownership and production
+setup remain open under T065–T067. No production API, credentials, client data, mailbox,
+DNS records or Google console settings were changed. **56/67 tasks complete** remains accurate.
+
 ## 2026-11-17 — Supplied logo integrated locally
 
 Implementation resumed on `9676d8a3b33b7647fcd595446720650a5b8319fe` with existing
